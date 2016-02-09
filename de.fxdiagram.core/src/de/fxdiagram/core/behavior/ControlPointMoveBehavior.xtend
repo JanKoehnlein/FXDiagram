@@ -18,6 +18,7 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 
@@ -41,15 +42,39 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 						host.root.commandStack.execute(new AbstractCommand() {
 							
 							override execute(CommandContext context) {
+								val label2position = newHashMap(connection.labels.map[
+									it -> connection.at(position)
+								])
 								siblings.remove(index)
+								connection.labels.forEach [
+									position = label2position.get(it)
+										.getNearestPointOnConnection(siblings.map[toPoint2D], POLYLINE)
+										.parameter
+								]
 							}
 							
 							override undo(CommandContext context) {
+								val label2position = newHashMap(connection.labels.map[
+									it -> connection.at(position)
+								])
 								siblings.add(index, host)
+								connection.labels.forEach [
+									position = label2position.get(it)
+										.getNearestPointOnConnection(siblings.map[toPoint2D], POLYLINE)
+										.parameter
+								]
 							}
 							
 							override redo(CommandContext context) {
+								val label2position = newHashMap(connection.labels.map[
+									it -> connection.at(position)
+								])
 								siblings.remove(index)
+								connection.labels.forEach [
+									position = label2position.get(it)
+										.getNearestPointOnConnection(siblings.map[toPoint2D], POLYLINE)
+										.parameter
+								]
 							}
 						})
 				}

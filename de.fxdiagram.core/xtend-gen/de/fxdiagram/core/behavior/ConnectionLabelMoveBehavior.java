@@ -10,6 +10,7 @@ import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.EmptyTransition;
 import de.fxdiagram.core.extensions.ConnectionExtensions;
+import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -19,6 +20,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -55,8 +58,12 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
     double _sceneY = it.getSceneY();
     final Point2D mouseInLocal = connection.sceneToLocal(_sceneX, _sceneY);
     ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
+    final Function1<XControlPoint, Point2D> _function = (XControlPoint it_1) -> {
+      return ConnectionExtensions.toPoint2D(it_1);
+    };
+    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
     XConnection.Kind _kind = connection.getKind();
-    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnConnection(mouseInLocal, _controlPoints, _kind);
+    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnConnection(mouseInLocal, _map, _kind);
     XConnectionLabel _host_1 = this.getHost();
     double _parameter = nearestPoint.getParameter();
     _host_1.setPosition(_parameter);

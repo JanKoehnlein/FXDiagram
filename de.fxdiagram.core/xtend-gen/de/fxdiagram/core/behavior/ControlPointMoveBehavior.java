@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -15,9 +16,11 @@ import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
+import de.fxdiagram.core.extensions.ConnectionExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +31,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
 public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
@@ -89,18 +97,81 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
             _commandStack.execute(new AbstractCommand() {
               @Override
               public void execute(final CommandContext context) {
+                ObservableList<XConnectionLabel> _labels = connection.getLabels();
+                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
+                  XConnection _connection = it.getConnection();
+                  double _position = it.getPosition();
+                  Point2D _at = _connection.at(_position);
+                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
+                };
+                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
+                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
                 siblings.remove(index);
+                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
+                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
+                  Point2D _get = label2position.get(it);
+                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
+                    return ConnectionExtensions.toPoint2D(it_1);
+                  };
+                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
+                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
+                  double _parameter = _nearestPointOnConnection.getParameter();
+                  it.setPosition(_parameter);
+                };
+                _labels_1.forEach(_function_1);
               }
               
               @Override
               public void undo(final CommandContext context) {
+                ObservableList<XConnectionLabel> _labels = connection.getLabels();
+                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
+                  XConnection _connection = it.getConnection();
+                  double _position = it.getPosition();
+                  Point2D _at = _connection.at(_position);
+                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
+                };
+                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
+                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
                 XControlPoint _host = ControlPointMoveBehavior.this.getHost();
                 siblings.add(index, _host);
+                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
+                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
+                  Point2D _get = label2position.get(it);
+                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
+                    return ConnectionExtensions.toPoint2D(it_1);
+                  };
+                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
+                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
+                  double _parameter = _nearestPointOnConnection.getParameter();
+                  it.setPosition(_parameter);
+                };
+                _labels_1.forEach(_function_1);
               }
               
               @Override
               public void redo(final CommandContext context) {
+                ObservableList<XConnectionLabel> _labels = connection.getLabels();
+                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
+                  XConnection _connection = it.getConnection();
+                  double _position = it.getPosition();
+                  Point2D _at = _connection.at(_position);
+                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
+                };
+                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
+                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
                 siblings.remove(index);
+                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
+                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
+                  Point2D _get = label2position.get(it);
+                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
+                    return ConnectionExtensions.toPoint2D(it_1);
+                  };
+                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
+                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
+                  double _parameter = _nearestPointOnConnection.getParameter();
+                  it.setPosition(_parameter);
+                };
+                _labels_1.forEach(_function_1);
               }
             });
           }

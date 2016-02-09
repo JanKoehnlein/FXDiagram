@@ -19,6 +19,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @FinalFieldsConstructor
 @SuppressWarnings("all")
@@ -48,8 +49,12 @@ public class SetControlPointsCommand extends AbstractCommand {
       this.label2oldPosition.put(it, Double.valueOf(_position));
       double _position_1 = it.getPosition();
       final Point2D oldLocation = this.connection.at(_position_1);
+      final Function1<XControlPoint, Point2D> _function_1 = (XControlPoint it_1) -> {
+        return ConnectionExtensions.toPoint2D(it_1);
+      };
+      List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(this.newControlPoints, _function_1);
       XConnection.Kind _kind = this.connection.getKind();
-      final ConnectionExtensions.PointOnCurve newPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(oldLocation, this.newControlPoints, _kind);
+      final ConnectionExtensions.PointOnCurve newPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(oldLocation, _map, _kind);
       double _parameter = newPointOnCurve.getParameter();
       this.label2newPosition.put(it, Double.valueOf(_parameter));
       double _parameter_1 = newPointOnCurve.getParameter();

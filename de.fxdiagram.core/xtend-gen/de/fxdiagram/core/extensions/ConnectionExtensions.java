@@ -14,7 +14,6 @@ import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
@@ -129,7 +128,7 @@ public class ConnectionExtensions {
     }
   }
   
-  public static ConnectionExtensions.PointOnCurve getNearestPointOnConnection(final Point2D pointInLocal, final List<XControlPoint> controlPoints, final XConnection.Kind kind) {
+  public static ConnectionExtensions.PointOnCurve getNearestPointOnConnection(final Point2D pointInLocal, final List<Point2D> controlPoints, final XConnection.Kind kind) {
     ConnectionExtensions.PointOnCurve _switchResult = null;
     if (kind != null) {
       switch (kind) {
@@ -149,7 +148,7 @@ public class ConnectionExtensions {
     return _switchResult;
   }
   
-  public static ConnectionExtensions.PointOnCurve getNearestPointOnCubicSpline(final Point2D pointInLocal, final List<XControlPoint> controlPoints) {
+  public static ConnectionExtensions.PointOnCurve getNearestPointOnCubicSpline(final Point2D pointInLocal, final List<Point2D> controlPoints) {
     int _size = controlPoints.size();
     int _minus = (_size - 1);
     int _modulo = (_minus % 3);
@@ -162,18 +161,14 @@ public class ConnectionExtensions {
     int _size_2 = controlPoints.size();
     int _minus_1 = (_size_2 - 1);
     final int numSegments = (_minus_1 / 3);
-    final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
-      return ConnectionExtensions.toPoint2D(it);
-    };
-    final List<Point2D> points = ListExtensions.<XControlPoint, Point2D>map(controlPoints, _function);
     ConnectionExtensions.PointOnCurve bestMatch = null;
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        final Point2D start = points.get((3 * (i).intValue()));
-        final Point2D control0 = points.get(((3 * (i).intValue()) + 1));
-        final Point2D control1 = points.get(((3 * (i).intValue()) + 2));
-        final Point2D end = points.get(((3 * (i).intValue()) + 3));
+        final Point2D start = controlPoints.get((3 * (i).intValue()));
+        final Point2D control0 = controlPoints.get(((3 * (i).intValue()) + 1));
+        final Point2D control1 = controlPoints.get(((3 * (i).intValue()) + 2));
+        final Point2D end = controlPoints.get(((3 * (i).intValue()) + 3));
         double _x = start.getX();
         double _y = start.getY();
         double _x_1 = control0.getX();
@@ -183,10 +178,10 @@ public class ConnectionExtensions {
         double _x_3 = end.getX();
         double _y_3 = end.getY();
         final CubicCurve curve = new CubicCurve(_x, _y, _x_1, _y_1, _x_2, _y_2, _x_3, _y_3);
-        final Function1<Double, Point2D> _function_1 = (Double it) -> {
+        final Function1<Double, Point2D> _function = (Double it) -> {
           return BezierExtensions.at(curve, (it).doubleValue());
         };
-        final ConnectionExtensions.PointOnCurve match = ConnectionExtensions.findNearestPoint(_function_1, pointInLocal, (i).intValue(), numSegments);
+        final ConnectionExtensions.PointOnCurve match = ConnectionExtensions.findNearestPoint(_function, pointInLocal, (i).intValue(), numSegments);
         boolean _isBetterThan = match.isBetterThan(bestMatch);
         if (_isBetterThan) {
           bestMatch = match;
@@ -196,7 +191,7 @@ public class ConnectionExtensions {
     return bestMatch;
   }
   
-  public static ConnectionExtensions.PointOnCurve getNearestPointOnQuadraticSpline(final Point2D pointInLocal, final List<XControlPoint> controlPoints) {
+  public static ConnectionExtensions.PointOnCurve getNearestPointOnQuadraticSpline(final Point2D pointInLocal, final List<Point2D> controlPoints) {
     int _size = controlPoints.size();
     int _minus = (_size - 1);
     int _modulo = (_minus % 2);
@@ -209,17 +204,13 @@ public class ConnectionExtensions {
     int _size_2 = controlPoints.size();
     int _minus_1 = (_size_2 - 1);
     final int numSegments = (_minus_1 / 2);
-    final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
-      return ConnectionExtensions.toPoint2D(it);
-    };
-    final List<Point2D> points = ListExtensions.<XControlPoint, Point2D>map(controlPoints, _function);
     ConnectionExtensions.PointOnCurve bestMatch = null;
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        final Point2D start = points.get((2 * (i).intValue()));
-        final Point2D control = points.get(((2 * (i).intValue()) + 1));
-        final Point2D end = points.get(((2 * (i).intValue()) + 2));
+        final Point2D start = controlPoints.get((2 * (i).intValue()));
+        final Point2D control = controlPoints.get(((2 * (i).intValue()) + 1));
+        final Point2D end = controlPoints.get(((2 * (i).intValue()) + 2));
         double _x = start.getX();
         double _y = start.getY();
         double _x_1 = control.getX();
@@ -227,10 +218,10 @@ public class ConnectionExtensions {
         double _x_2 = end.getX();
         double _y_2 = end.getY();
         final QuadCurve curve = new QuadCurve(_x, _y, _x_1, _y_1, _x_2, _y_2);
-        final Function1<Double, Point2D> _function_1 = (Double it) -> {
+        final Function1<Double, Point2D> _function = (Double it) -> {
           return BezierExtensions.at(curve, (it).doubleValue());
         };
-        final ConnectionExtensions.PointOnCurve match = ConnectionExtensions.findNearestPoint(_function_1, pointInLocal, (i).intValue(), numSegments);
+        final ConnectionExtensions.PointOnCurve match = ConnectionExtensions.findNearestPoint(_function, pointInLocal, (i).intValue(), numSegments);
         boolean _isBetterThan = match.isBetterThan(bestMatch);
         if (_isBetterThan) {
           bestMatch = match;
@@ -292,7 +283,7 @@ public class ConnectionExtensions {
     return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
   }
   
-  public static ConnectionExtensions.PointOnCurve getNearestPointOnPolyline(final Point2D pointInLocal, final List<XControlPoint> controlPoints) {
+  public static ConnectionExtensions.PointOnCurve getNearestPointOnPolyline(final Point2D pointInLocal, final List<Point2D> controlPoints) {
     int _size = controlPoints.size();
     final double numSegments = (_size - 1.0);
     ConnectionExtensions.PointOnCurve bestMatch = null;
@@ -301,10 +292,8 @@ public class ConnectionExtensions {
     IntegerRange _upTo = new IntegerRange(0, _minus);
     for (final Integer i : _upTo) {
       {
-        XControlPoint _get = controlPoints.get((i).intValue());
-        final Point2D segmentStart = ConnectionExtensions.toPoint2D(_get);
-        XControlPoint _get_1 = controlPoints.get(((i).intValue() + 1));
-        final Point2D segmentEnd = ConnectionExtensions.toPoint2D(_get_1);
+        final Point2D segmentStart = controlPoints.get((i).intValue());
+        final Point2D segmentEnd = controlPoints.get(((i).intValue() + 1));
         double _distance = pointInLocal.distance(segmentStart);
         boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
         if (_lessThan) {

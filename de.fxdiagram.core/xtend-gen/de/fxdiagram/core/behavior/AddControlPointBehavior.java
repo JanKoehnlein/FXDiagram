@@ -7,8 +7,6 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
-import de.fxdiagram.core.command.AbstractCommand;
-import de.fxdiagram.core.command.AddControlPointCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.SetControlPointsCommand;
 import de.fxdiagram.core.extensions.BezierExtensions;
@@ -24,7 +22,9 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.QuadCurve;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -44,7 +44,7 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
   }
   
   public void addControlPoint(final Point2D newPointLocalPosition) {
-    final AbstractCommand createCommand = this.createAddControlPointCommand(newPointLocalPosition);
+    final SetControlPointsCommand createCommand = this.createAddControlPointCommand(newPointLocalPosition);
     boolean _notEquals = (!Objects.equal(createCommand, null));
     if (_notEquals) {
       XConnection _host = this.getHost();
@@ -54,8 +54,8 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     }
   }
   
-  protected AbstractCommand createAddControlPointCommand(final Point2D localPosition) {
-    AbstractCommand _switchResult = null;
+  protected SetControlPointsCommand createAddControlPointCommand(final Point2D localPosition) {
+    SetControlPointsCommand _switchResult = null;
     XConnection _host = this.getHost();
     XConnection.Kind _kind = _host.getKind();
     if (_kind != null) {
@@ -79,26 +79,50 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     return _switchResult;
   }
   
-  protected AddControlPointCommand createCommandForPolyline(final Point2D localPosition) {
+  protected SetControlPointsCommand createCommandForPolyline(final Point2D localPosition) {
     XConnection _host = this.getHost();
     ObservableList<XControlPoint> _controlPoints = _host.getControlPoints();
-    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnPolyline(localPosition, _controlPoints);
+    final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
+      return ConnectionExtensions.toPoint2D(it);
+    };
+    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
+    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnPolyline(localPosition, _map);
     boolean _equals = Objects.equal(nearestPoint, null);
     if (_equals) {
       return null;
     } else {
       XConnection _host_1 = this.getHost();
+      ObservableList<XControlPoint> _controlPoints_1 = _host_1.getControlPoints();
+      final ArrayList<XControlPoint> newPoints = new ArrayList<XControlPoint>(_controlPoints_1);
       int _segmentIndex = nearestPoint.getSegmentIndex();
       int _plus = (_segmentIndex + 1);
+      XControlPoint _xControlPoint = new XControlPoint();
+      final Procedure1<XControlPoint> _function_1 = (XControlPoint it) -> {
+        Point2D _point = nearestPoint.getPoint();
+        double _x = _point.getX();
+        it.setLayoutX(_x);
+        Point2D _point_1 = nearestPoint.getPoint();
+        double _y = _point_1.getY();
+        it.setLayoutY(_y);
+        it.setType(XControlPoint.Type.DANGLING);
+        it.setSelected(true);
+      };
+      XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_1);
+      newPoints.add(_plus, _doubleArrow);
+      XConnection _host_2 = this.getHost();
       Point2D _point = nearestPoint.getPoint();
-      return new AddControlPointCommand(_host_1, _plus, _point);
+      return new SetControlPointsCommand(_host_2, newPoints, _point);
     }
   }
   
   protected SetControlPointsCommand createCommandForQuadCurve(final Point2D localPosition) {
     XConnection _host = this.getHost();
     ObservableList<XControlPoint> _controlPoints = _host.getControlPoints();
-    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnQuadraticSpline(localPosition, _controlPoints);
+    final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
+      return ConnectionExtensions.toPoint2D(it);
+    };
+    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
+    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnQuadraticSpline(localPosition, _map);
     XConnection _host_1 = this.getHost();
     Node _node = _host_1.getNode();
     ObservableList<Node> _children = ((Group) _node).getChildren();
@@ -125,7 +149,7 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     int _plusPlus = cpIndex++;
     XControlPoint _get = oldControlPoints.get(_plusPlus);
     newControlPoints.add(_get);
-    final Procedure1<ArrayList<XControlPoint>> _function = (ArrayList<XControlPoint> it) -> {
+    final Procedure1<ArrayList<XControlPoint>> _function_1 = (ArrayList<XControlPoint> it) -> {
       final QuadCurve seg0 = IterableExtensions.<QuadCurve>head(splitSegments);
       double _controlX = seg0.getControlX();
       double _controlY = seg0.getControlY();
@@ -134,15 +158,15 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
       double _startX = seg1.getStartX();
       double _startY = seg1.getStartY();
       XControlPoint _add = this.add(it, _startX, _startY, XControlPoint.Type.INTERPOLATED);
-      final Procedure1<XControlPoint> _function_1 = (XControlPoint it_1) -> {
+      final Procedure1<XControlPoint> _function_2 = (XControlPoint it_1) -> {
         it_1.setSelected(true);
       };
-      ObjectExtensions.<XControlPoint>operator_doubleArrow(_add, _function_1);
+      ObjectExtensions.<XControlPoint>operator_doubleArrow(_add, _function_2);
       double _controlX_1 = seg1.getControlX();
       double _controlY_1 = seg1.getControlY();
       this.add(it, _controlX_1, _controlY_1, XControlPoint.Type.CONTROL_POINT);
     };
-    ObjectExtensions.<ArrayList<XControlPoint>>operator_doubleArrow(newControlPoints, _function);
+    ObjectExtensions.<ArrayList<XControlPoint>>operator_doubleArrow(newControlPoints, _function_1);
     int _cpIndex = cpIndex;
     cpIndex = (_cpIndex + 1);
     while ((cpIndex < oldControlPoints.size())) {
@@ -159,7 +183,11 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
   protected SetControlPointsCommand createCommandForCubicCurve(final Point2D localPosition) {
     XConnection _host = this.getHost();
     ObservableList<XControlPoint> _controlPoints = _host.getControlPoints();
-    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnCubicSpline(localPosition, _controlPoints);
+    final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
+      return ConnectionExtensions.toPoint2D(it);
+    };
+    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
+    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnCubicSpline(localPosition, _map);
     XConnection _host_1 = this.getHost();
     Node _node = _host_1.getNode();
     ObservableList<Node> _children = ((Group) _node).getChildren();
@@ -189,7 +217,7 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     int _plusPlus = cpIndex++;
     XControlPoint _get = oldControlPoints.get(_plusPlus);
     newControlPoints.add(_get);
-    final Procedure1<ArrayList<XControlPoint>> _function = (ArrayList<XControlPoint> it) -> {
+    final Procedure1<ArrayList<XControlPoint>> _function_1 = (ArrayList<XControlPoint> it) -> {
       final CubicCurve seg0 = IterableExtensions.<CubicCurve>head(splitSegments);
       double _controlX1 = seg0.getControlX1();
       double _controlY1 = seg0.getControlY1();
@@ -201,10 +229,10 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
       double _startX = seg1.getStartX();
       double _startY = seg1.getStartY();
       XControlPoint _add = this.add(it, _startX, _startY, XControlPoint.Type.INTERPOLATED);
-      final Procedure1<XControlPoint> _function_1 = (XControlPoint it_1) -> {
+      final Procedure1<XControlPoint> _function_2 = (XControlPoint it_1) -> {
         it_1.setSelected(true);
       };
-      ObjectExtensions.<XControlPoint>operator_doubleArrow(_add, _function_1);
+      ObjectExtensions.<XControlPoint>operator_doubleArrow(_add, _function_2);
       double _controlX1_1 = seg1.getControlX1();
       double _controlY1_1 = seg1.getControlY1();
       this.add(it, _controlX1_1, _controlY1_1, XControlPoint.Type.CONTROL_POINT);
@@ -212,7 +240,7 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
       double _controlY2_1 = seg1.getControlY2();
       this.add(it, _controlX2_1, _controlY2_1, XControlPoint.Type.CONTROL_POINT);
     };
-    ObjectExtensions.<ArrayList<XControlPoint>>operator_doubleArrow(newControlPoints, _function);
+    ObjectExtensions.<ArrayList<XControlPoint>>operator_doubleArrow(newControlPoints, _function_1);
     int _cpIndex = cpIndex;
     cpIndex = (_cpIndex + 2);
     while ((cpIndex < oldControlPoints.size())) {

@@ -1,14 +1,14 @@
 package de.fxdiagram.core.command
 
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.ArrayList
 import java.util.List
+import java.util.Map
 import javafx.geometry.Point2D
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import java.util.Map
-import de.fxdiagram.core.XConnectionLabel
 
 import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 
@@ -29,7 +29,7 @@ class SetControlPointsCommand extends AbstractCommand {
 		connection.labels.forEach[
 			label2oldPosition.put(it, position)
 			val oldLocation = connection.at(position)
-			val newPointOnCurve = oldLocation.getNearestPointOnConnection(newControlPoints, connection.kind)
+			val newPointOnCurve = oldLocation.getNearestPointOnConnection(newControlPoints.map[toPoint2D], connection.kind)
 			label2newPosition.put(it, newPointOnCurve.parameter)
 			position = newPointOnCurve.parameter
 		]	

@@ -4,19 +4,19 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import java.util.List
 import javafx.geometry.Point2D
+import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.QuadCurve
 import org.eclipse.xtend.lib.annotations.Data
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
-import javafx.scene.shape.CubicCurve
-import static java.lang.Math.*
 
 class ConnectionExtensions {
 	
-	static def PointOnCurve getNearestPointOnConnection(Point2D pointInLocal, List<XControlPoint> controlPoints, XConnection.Kind kind) {
+	static def PointOnCurve getNearestPointOnConnection(Point2D pointInLocal, List<Point2D> controlPoints, XConnection.Kind kind) {
 		switch kind {
 			case POLYLINE:
 				getNearestPointOnPolyline(pointInLocal, controlPoints)
@@ -27,17 +27,16 @@ class ConnectionExtensions {
 		}
 	}
 	
-	def static PointOnCurve getNearestPointOnCubicSpline(Point2D pointInLocal, List<XControlPoint> controlPoints) {
+	def static PointOnCurve getNearestPointOnCubicSpline(Point2D pointInLocal, List<Point2D> controlPoints) {
 		if((controlPoints.size - 1) % 3 != 0) 
 			throw new IllegalArgumentException('Invalid number of points for a cubic spline curve: ' + controlPoints.size)
 		val numSegments = (controlPoints.size - 1) / 3
-		val points = controlPoints.map[toPoint2D]
 		var PointOnCurve bestMatch = null
 		for(i: 0..<numSegments) {
-			val start = points.get(3 * i)
-			val control0 = points.get(3 * i + 1)
-			val control1 = points.get(3 * i + 2)
-			val end = points.get(3 * i + 3)
+			val start = controlPoints.get(3 * i)
+			val control0 = controlPoints.get(3 * i + 1)
+			val control1 = controlPoints.get(3 * i + 2)
+			val end = controlPoints.get(3 * i + 3)
 			val curve = new CubicCurve(start.x, start.y, control0.x, control0.y, control1.x, control1.y, end.x, end.y)
 			val match = findNearestPoint([curve.at(it)], pointInLocal, i, numSegments)
 			if(match.isBetterThan(bestMatch))
@@ -47,16 +46,15 @@ class ConnectionExtensions {
 	}
 	
 	
-	def static PointOnCurve getNearestPointOnQuadraticSpline(Point2D pointInLocal, List<XControlPoint> controlPoints) {
+	def static PointOnCurve getNearestPointOnQuadraticSpline(Point2D pointInLocal, List<Point2D> controlPoints) {
 		if((controlPoints.size - 1) % 2 != 0) 
 			throw new IllegalArgumentException('Invalid number of points for a quadratic spline curve: ' + controlPoints.size)
 		val numSegments = (controlPoints.size - 1) / 2
-		val points = controlPoints.map[toPoint2D]
 		var PointOnCurve bestMatch = null
 		for(i: 0..<numSegments) {
-			val start = points.get(2 * i)
-			val control = points.get(2 * i + 1)
-			val end = points.get(2 * i + 2)
+			val start = controlPoints.get(2 * i)
+			val control = controlPoints.get(2 * i + 1)
+			val end = controlPoints.get(2 * i + 2)
 			val curve = new QuadCurve(start.x, start.y, control.x, control.y, end.x, end.y)
 			val match = findNearestPoint([curve.at(it)], pointInLocal, i, numSegments)
 			if(match.isBetterThan(bestMatch))
@@ -99,12 +97,12 @@ class ConnectionExtensions {
 	}
 	
 	
-	def static PointOnCurve getNearestPointOnPolyline(Point2D pointInLocal, List<XControlPoint> controlPoints) {
+	def static PointOnCurve getNearestPointOnPolyline(Point2D pointInLocal, List<Point2D> controlPoints) {
 		val numSegments =  controlPoints.size - 1.0
 		var PointOnCurve bestMatch = null 
 		for(i: 0..controlPoints.size-2) {
-			val segmentStart = controlPoints.get(i).toPoint2D
-			val segmentEnd = controlPoints.get(i+1).toPoint2D
+			val segmentStart = controlPoints.get(i)
+			val segmentEnd = controlPoints.get(i+1)
 			if(pointInLocal.distance(segmentStart) < EPSILON) 
 				return new PointOnCurve(segmentStart, 0, i / numSegments, i, pointInLocal.distance(segmentStart))
 			if(pointInLocal.distance(segmentEnd) < EPSILON)

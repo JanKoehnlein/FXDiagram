@@ -2,7 +2,6 @@ package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
-import de.fxdiagram.core.command.AddControlPointCommand
 import de.fxdiagram.core.command.SetControlPointsCommand
 import java.util.ArrayList
 import java.util.List
@@ -50,15 +49,23 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 	}
 	
 	protected def createCommandForPolyline(Point2D localPosition) {
-		val nearestPoint = localPosition.getNearestPointOnPolyline(host.controlPoints)
-		if(nearestPoint == null)
+		val nearestPoint = localPosition.getNearestPointOnPolyline(host.controlPoints.map[toPoint2D])
+		if(nearestPoint == null) {
 			return null
-		else
-			return new AddControlPointCommand(host, nearestPoint.segmentIndex + 1, nearestPoint.point)
+		} else {
+			val newPoints = new ArrayList(host.controlPoints)
+			newPoints.add(nearestPoint.segmentIndex + 1, new XControlPoint => [
+				layoutX = nearestPoint.point.x
+				layoutY = nearestPoint.point.y
+				type = DANGLING
+				selected = true
+			])
+			return new SetControlPointsCommand(host, newPoints, nearestPoint.point)
+		}
 	}
 	
 	protected def createCommandForQuadCurve(Point2D localPosition) {
-		val nearestPoint = localPosition.getNearestPointOnQuadraticSpline(host.controlPoints)
+		val nearestPoint = localPosition.getNearestPointOnQuadraticSpline(host.controlPoints.map[toPoint2D])
 		val splineSegment = (host.node as Group).children.filter(QuadCurve).get(nearestPoint.segmentIndex)
 		val splitSegments = splineSegment.splitAt(nearestPoint.localParameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
@@ -85,7 +92,7 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 	}
 	
 	protected def createCommandForCubicCurve(Point2D localPosition) {
-		val nearestPoint = localPosition.getNearestPointOnCubicSpline(host.controlPoints)
+		val nearestPoint = localPosition.getNearestPointOnCubicSpline(host.controlPoints.map[toPoint2D])
 		val splineSegment = (host.node as Group).children.filter(CubicCurve).get(nearestPoint.segmentIndex)
 		val splitSegments = splineSegment.splitAt(nearestPoint.localParameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
