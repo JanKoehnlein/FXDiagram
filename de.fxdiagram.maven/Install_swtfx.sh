@@ -1,1 +1,0 @@
-mvn install:install-file -Dfile=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre/lib/jfxswt.jar -DgroupId=com.oracle -DartifactId=javafx.embedd.swt -Dversion=8.0.0-SNAPSHOT -Dpackaging=jar
