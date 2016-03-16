@@ -7,15 +7,12 @@ import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.EntryCall;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @Logging
@@ -41,16 +38,8 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   protected abstract <ARG extends Object> void entryCalls(final ARG domainArgument, final MappingAcceptor<ARG> acceptor);
   
   @Override
-  public <ARG extends Object> Iterable<? extends AbstractMapping<ARG>> getMappings(final ARG domainObject) {
-    Collection<AbstractMapping<?>> _values = this.mappings.values();
-    final Function1<AbstractMapping<?>, Boolean> _function = (AbstractMapping<?> it) -> {
-      return Boolean.valueOf(it.isApplicable(domainObject));
-    };
-    Iterable<AbstractMapping<?>> _filter = IterableExtensions.<AbstractMapping<?>>filter(_values, _function);
-    final Function1<AbstractMapping<?>, AbstractMapping<ARG>> _function_1 = (AbstractMapping<?> it) -> {
-      return ((AbstractMapping<ARG>) it);
-    };
-    return IterableExtensions.<AbstractMapping<?>, AbstractMapping<ARG>>map(_filter, _function_1);
+  public Iterable<? extends AbstractMapping<?>> getMappings() {
+    return this.mappings.values();
   }
   
   @Override

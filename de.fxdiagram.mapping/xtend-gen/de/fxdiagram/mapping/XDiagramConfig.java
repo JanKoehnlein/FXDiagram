@@ -106,7 +106,7 @@ public interface XDiagramConfig {
    */
   public abstract <ARG extends Object> Iterable<? extends EntryCall<ARG>> getEntryCalls(final ARG domainObject);
   
-  public abstract <ARG extends Object> Iterable<? extends AbstractMapping<ARG>> getMappings(final ARG domainObject);
+  public abstract Iterable<? extends AbstractMapping<?>> getMappings();
   
   public abstract AbstractMapping<?> getMappingByID(final String mappingID);
   

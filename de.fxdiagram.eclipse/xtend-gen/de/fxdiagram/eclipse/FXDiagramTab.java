@@ -327,37 +327,28 @@ public class FXDiagramTab {
     entryCall.execute(element, this.configInterpreter, interpreterContext);
     CommandStack _commandStack = this.root.getCommandStack();
     interpreterContext.executeCommands(_commandStack);
-    final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
     XDiagram _diagram_1 = interpreterContext.getDiagram();
-    ObservableList<XNode> _nodes = _diagram_1.getNodes();
-    XDiagram _diagram_2 = interpreterContext.getDiagram();
-    ObservableList<XConnection> _connections = _diagram_2.getConnections();
-    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
-    final Function1<XDomainObjectShape, Boolean> _function = (XDomainObjectShape it) -> {
-      DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
-      return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
-    };
-    final XDomainObjectShape centerShape = IterableExtensions.<XDomainObjectShape>findFirst(_plus, _function);
+    final XDomainObjectShape centerShape = this.<T, Object>findShape(_diagram_1, element);
     CommandStack _commandStack_1 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-    final Procedure1<ParallelAnimationCommand> _function_1 = (ParallelAnimationCommand it) -> {
+    final Procedure1<ParallelAnimationCommand> _function = (ParallelAnimationCommand it) -> {
       boolean _needsLayoutCommand = interpreterContext.needsLayoutCommand();
       if (_needsLayoutCommand) {
         Layouter _layouter = new Layouter();
-        XDiagram _diagram_3 = this.root.getDiagram();
-        LayoutParameters _layoutParameters = _diagram_3.getLayoutParameters();
-        XDiagram _diagram_4 = interpreterContext.getDiagram();
+        XDiagram _diagram_2 = this.root.getDiagram();
+        LayoutParameters _layoutParameters = _diagram_2.getLayoutParameters();
+        XDiagram _diagram_3 = interpreterContext.getDiagram();
         Duration _millis = DurationExtensions.millis(500);
-        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(_layoutParameters, _diagram_4, _millis, centerShape);
+        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(_layoutParameters, _diagram_3, _millis, centerShape);
         it.operator_add(_createLayoutCommand);
       }
-      final Function1<XShape, Boolean> _function_2 = (XShape it_1) -> {
+      final Function1<XShape, Boolean> _function_1 = (XShape it_1) -> {
         return Boolean.valueOf(Objects.equal(it_1, centerShape));
       };
-      SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_2);
+      SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_1);
       it.operator_add(_selectAndRevealCommand);
     };
-    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_1);
+    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function);
     _commandStack_1.execute(_doubleArrow);
   }
   
@@ -382,22 +373,34 @@ public class FXDiagramTab {
     return this.canvas.setFocus();
   }
   
-  protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject) {
-    IMappedElementDescriptor<T> _xblockexpression = null;
-    {
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>> _function = (XDiagramConfig it) -> {
-        return it.<T>getMappings(domainObject);
-      };
-      Iterable<Iterable<? extends AbstractMapping<T>>> _map = IterableExtensions.map(_configurations, _function);
-      Iterable<AbstractMapping<T>> _flatten = Iterables.<AbstractMapping<T>>concat(_map);
-      final AbstractMapping<T> mapping = IterableExtensions.<AbstractMapping<T>>head(_flatten);
-      XDiagramConfig _config = mapping.getConfig();
-      IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
-      _xblockexpression = _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, mapping);
-    }
-    return _xblockexpression;
+  protected <T extends Object, U extends Object> XDomainObjectShape findShape(final XDiagram diagram, final T domainObject) {
+    XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+    Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+    final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<?>>> _function = (XDiagramConfig it) -> {
+      return it.getMappings();
+    };
+    Iterable<Iterable<? extends AbstractMapping<?>>> _map = IterableExtensions.map(_configurations, _function);
+    Iterable<AbstractMapping<?>> _flatten = Iterables.<AbstractMapping<?>>concat(_map);
+    final Function1<AbstractMapping<?>, XDomainObjectShape> _function_1 = (AbstractMapping<?> it) -> {
+      XDomainObjectShape _xblockexpression = null;
+      {
+        XDiagramConfig _config = it.getConfig();
+        IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
+        final IMappedElementDescriptor<Object> descriptor = _domainObjectProvider.<Object>createMappedElementDescriptor(domainObject, it);
+        ObservableList<XNode> _nodes = diagram.getNodes();
+        ObservableList<XConnection> _connections = diagram.getConnections();
+        Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+        final Function1<XDomainObjectShape, Boolean> _function_2 = (XDomainObjectShape it_1) -> {
+          DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+          return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
+        };
+        _xblockexpression = IterableExtensions.<XDomainObjectShape>findFirst(_plus, _function_2);
+      }
+      return _xblockexpression;
+    };
+    Iterable<XDomainObjectShape> _map_1 = IterableExtensions.<AbstractMapping<?>, XDomainObjectShape>map(_flatten, _function_1);
+    Iterable<XDomainObjectShape> _filterNull = IterableExtensions.<XDomainObjectShape>filterNull(_map_1);
+    return IterableExtensions.<XDomainObjectShape>head(_filterNull);
   }
   
   public void setLinkWithEditor(final boolean linkWithEditor) {

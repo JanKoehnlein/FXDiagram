@@ -168,11 +168,7 @@ class FXDiagramTab {
 		val interpreterContext = new InterpreterContext(root.diagram)
 		entryCall.execute(element, configInterpreter, interpreterContext)
 		interpreterContext.executeCommands(root.commandStack)
-
-		val descriptor = createMappedDescriptor(element)
-		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst [
-			domainObjectDescriptor == descriptor
-		]
+		val centerShape = findShape(interpreterContext.diagram, element)
 		root.commandStack.execute(
 			new ParallelAnimationCommand =>
 				[
@@ -195,9 +191,19 @@ class FXDiagramTab {
 		canvas.setFocus
 	}
 
-	protected def <T, U> createMappedDescriptor(T domainObject) {
-		val mapping = XDiagramConfig.Registry.instance.configurations.map[getMappings(domainObject)].flatten.head
-		mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping)
+	protected def <T, U> findShape(XDiagram diagram, T domainObject) {
+		XDiagramConfig.Registry.instance
+			.configurations
+			.map[mappings]
+			.flatten
+			.map[
+				val descriptor = config.domainObjectProvider.createMappedElementDescriptor(domainObject, it)
+				(diagram.nodes + diagram.connections).findFirst[
+					domainObjectDescriptor == descriptor
+				]
+			]
+			.filterNull
+			.head
 	}
 
 	def void setLinkWithEditor(boolean linkWithEditor) {

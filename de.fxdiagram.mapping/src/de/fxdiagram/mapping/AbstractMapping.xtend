@@ -35,6 +35,9 @@ abstract class AbstractMapping<T> {
 	 */
 	protected def void calls() {}
 		 
+	/**
+	 * TODO: Think about removing this as it requires reified generics
+	 */
 	def boolean isApplicable(Object domainObject) {
 		true	
 	}

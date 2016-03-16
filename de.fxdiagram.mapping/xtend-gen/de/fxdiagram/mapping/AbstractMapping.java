@@ -47,6 +47,9 @@ public abstract class AbstractMapping<T extends Object> {
   protected void calls() {
   }
   
+  /**
+   * TODO: Think about removing this as it requires reified generics
+   */
   public boolean isApplicable(final Object domainObject) {
     return true;
   }

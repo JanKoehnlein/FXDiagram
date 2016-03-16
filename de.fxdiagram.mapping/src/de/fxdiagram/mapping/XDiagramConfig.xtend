@@ -30,7 +30,7 @@ interface XDiagramConfig {
 	 */
 	def <ARG> Iterable<? extends EntryCall<ARG>> getEntryCalls(ARG domainObject)
 
-	def <ARG> Iterable<? extends AbstractMapping<ARG>> getMappings(ARG domainObject)
+	def Iterable<? extends AbstractMapping<?>> getMappings()
 	
 	def AbstractMapping<?> getMappingByID(String mappingID)
 	
@@ -107,10 +107,10 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	
 	protected abstract def <ARG> void entryCalls(ARG domainArgument, MappingAcceptor<ARG> acceptor)
 
-	override <ARG> getMappings(ARG domainObject) {
-		mappings.values.filter[isApplicable(domainObject)].map[it as AbstractMapping<ARG>]
-	}
-	
+	override getMappings() {
+ 		mappings.values
+    }
+    
 	override <ARG> getEntryCalls(ARG domainArgument) {
 		val acceptor = new MappingAcceptor<ARG>
 		entryCalls(domainArgument, acceptor)
