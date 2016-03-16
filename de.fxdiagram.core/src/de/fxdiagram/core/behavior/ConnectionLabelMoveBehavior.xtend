@@ -32,7 +32,8 @@ class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
 		val connection = host.connection
 		val mouseInLocal = connection.sceneToLocal(sceneX, sceneY)
 		val nearestPoint = mouseInLocal.getNearestPointOnConnection(connection.controlPoints.map[toPoint2D], connection.kind)
-		host.position = nearestPoint.parameter
+		if(nearestPoint != null)
+			host.position = nearestPoint.parameter
 	}
 	
 	override startDrag(double screenX, double screenY) {

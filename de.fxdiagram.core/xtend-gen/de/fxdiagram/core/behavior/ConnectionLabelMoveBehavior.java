@@ -64,9 +64,12 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
     List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
     XConnection.Kind _kind = connection.getKind();
     final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnConnection(mouseInLocal, _map, _kind);
-    XConnectionLabel _host_1 = this.getHost();
-    double _parameter = nearestPoint.getParameter();
-    _host_1.setPosition(_parameter);
+    boolean _notEquals = (!Objects.equal(nearestPoint, null));
+    if (_notEquals) {
+      XConnectionLabel _host_1 = this.getHost();
+      double _parameter = nearestPoint.getParameter();
+      _host_1.setPosition(_parameter);
+    }
   }
   
   @Override
