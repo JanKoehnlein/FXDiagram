@@ -711,7 +711,6 @@ public class XConnection extends XDomainObjectShape {
         String _message = exc.getMessage();
         String _plus_1 = (_plus + _message);
         XConnection.LOG.severe(_plus_1);
-        exc.printStackTrace();
       } else {
         throw Exceptions.sneakyThrow(_t);
       }

@@ -337,7 +337,7 @@ class XConnection extends XDomainObjectShape {
 			targetArrowHead?.place
 		} catch(Exception exc) {
 			LOG.severe(exc.class.simpleName + " in XConnection.layoutChildren() " + exc.message)
-			exc.printStackTrace
+			//exc.printStackTrace
 		}
 	}
 	
