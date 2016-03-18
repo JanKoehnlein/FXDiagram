@@ -8,14 +8,9 @@ import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.eclipse.actions.FileExtensions;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.StringWriter;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -24,9 +19,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class EclipseSaveAction implements DiagramAction {
@@ -84,20 +79,19 @@ public class EclipseSaveAction implements DiagramAction {
       } else {
         IFile _xblockexpression = null;
         {
-          IPath _location = workspaceDir.getLocation();
-          final File workspaceJavaFile = _location.toFile();
-          FileChooser _fileChooser = new FileChooser();
-          final Procedure1<FileChooser> _function = (FileChooser it) -> {
-            ObservableList<FileChooser.ExtensionFilter> _extensionFilters = it.getExtensionFilters();
-            FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
-            _extensionFilters.add(_extensionFilter);
-            it.setInitialDirectory(workspaceJavaFile);
-          };
-          final FileChooser fileChooser = ObjectExtensions.<FileChooser>operator_doubleArrow(_fileChooser, _function);
-          Scene _scene = root.getScene();
-          Window _window = _scene.getWindow();
-          File _showSaveDialog = fileChooser.showSaveDialog(_window);
-          _xblockexpression = FileExtensions.toWorkspaceFile(_showSaveDialog);
+          Display _default = Display.getDefault();
+          Shell _activeShell = _default.getActiveShell();
+          final SaveAsDialog saveAsDialog = new SaveAsDialog(_activeShell);
+          saveAsDialog.setOriginalName("Diagram.fxd");
+          final int result = saveAsDialog.open();
+          IFile _xifexpression_1 = null;
+          if ((result == SaveAsDialog.OK)) {
+            IPath _result = saveAsDialog.getResult();
+            _xifexpression_1 = workspaceDir.getFile(_result);
+          } else {
+            _xifexpression_1 = null;
+          }
+          _xblockexpression = _xifexpression_1;
         }
         _xifexpression = _xblockexpression;
       }

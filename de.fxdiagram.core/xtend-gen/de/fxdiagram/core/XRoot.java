@@ -408,7 +408,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   private SimpleStringProperty fileNameProperty = new SimpleStringProperty(this, "fileName",_initFileName());
   
   private static final String _initFileName() {
-    return "Untitled.fxd";
+    return null;
   }
   
   public String getFileName() {

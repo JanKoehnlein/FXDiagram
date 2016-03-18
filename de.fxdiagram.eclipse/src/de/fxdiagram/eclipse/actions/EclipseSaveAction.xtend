@@ -8,11 +8,11 @@ import java.io.ByteArrayInputStream
 import java.io.StringWriter
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
-import javafx.stage.FileChooser
 import org.eclipse.core.resources.ResourcesPlugin
 import org.eclipse.core.runtime.NullProgressMonitor
 import org.eclipse.core.runtime.Path
 import org.eclipse.swt.widgets.Display
+import org.eclipse.ui.dialogs.SaveAsDialog
 
 import static extension de.fxdiagram.eclipse.actions.FileExtensions.*
 
@@ -46,12 +46,14 @@ class EclipseSaveAction implements DiagramAction {
 		val file = if(root.fileName != null) {
 			workspaceDir.getFile(new Path(root.fileName))
 		} else {
-			val workspaceJavaFile = workspaceDir.location.toFile
-			val fileChooser = new FileChooser() => [
-				extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
-				initialDirectory = workspaceJavaFile
-			]
-			fileChooser.showSaveDialog(root.scene.window).toWorkspaceFile
+			val saveAsDialog = new SaveAsDialog(Display.^default.activeShell)
+			saveAsDialog.originalName = 'Diagram.fxd'
+			val result = saveAsDialog.open
+			if(result == SaveAsDialog.OK) {
+				workspaceDir.getFile(saveAsDialog.result)
+			} else {
+				null
+			}
 		} 
 		if(file != null) {
 			file.createParents
@@ -66,6 +68,4 @@ class EclipseSaveAction implements DiagramAction {
 			root.needsSave = false
 		}
 	}
-	
-	
 }
