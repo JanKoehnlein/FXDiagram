@@ -8,10 +8,12 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.naming.QualifiedName
+import org.eclipse.xtext.resource.IResourceDescriptions
+import org.eclipse.xtext.resource.XtextResource
 
 import static javafx.collections.FXCollections.*
-import org.eclipse.xtext.resource.IResourceDescriptions
 
 @ModelNode('nameSegments')
 class DefaultXtextEObjectID extends AbstractXtextEObjectID {
@@ -51,8 +53,19 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 		val resourceDescription = resourceServiceProvider.resourceDescriptionManager.
 			getResourceDescription(resource)
 		val eObjectDescriptions = resourceDescription.getExportedObjects(EClass, getQualifiedName(), false)
-		if (eObjectDescriptions.size != 1)
+		if (eObjectDescriptions.size > 1) 
 			throw new NoSuchElementException('Expected a single element but got ' + eObjectDescriptions.size)
+		if(eObjectDescriptions.empty) {
+			if(resource instanceof XtextResource) {
+				val extension qualifiedNameProvider = (resource as XtextResource).resourceServiceProvider.get(IQualifiedNameProvider)
+				val elementByName = resource.allContents
+					.filter[eClass == this.EClass]
+					.findFirst[fullyQualifiedName == this.qualifiedName]
+				if(elementByName != null)
+					return elementByName
+			}
+			throw new NoSuchElementException('''Cannot find element named «qualifiedName» of type «EClass.name» in «resource.URI»''')
+		}
 		val eObjectDescription = eObjectDescriptions.head
 		val element = EcoreUtil.resolve(eObjectDescription.EObjectOrProxy, resource)
 		if (element == null || element.eIsProxy)

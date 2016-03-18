@@ -5,24 +5,32 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.ids.AbstractXtextEObjectID;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
+import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
 @ModelNode("nameSegments")
 @SuppressWarnings("all")
@@ -101,11 +109,46 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     QualifiedName _qualifiedName = this.getQualifiedName();
     final Iterable<IEObjectDescription> eObjectDescriptions = resourceDescription.getExportedObjects(_eClass, _qualifiedName, false);
     int _size = IterableExtensions.size(eObjectDescriptions);
-    boolean _notEquals = (_size != 1);
-    if (_notEquals) {
+    boolean _greaterThan = (_size > 1);
+    if (_greaterThan) {
       int _size_1 = IterableExtensions.size(eObjectDescriptions);
       String _plus = ("Expected a single element but got " + Integer.valueOf(_size_1));
       throw new NoSuchElementException(_plus);
+    }
+    boolean _isEmpty = IterableExtensions.isEmpty(eObjectDescriptions);
+    if (_isEmpty) {
+      if ((resource instanceof XtextResource)) {
+        IResourceServiceProvider _resourceServiceProvider_1 = ((XtextResource) resource).getResourceServiceProvider();
+        @Extension
+        final IQualifiedNameProvider qualifiedNameProvider = _resourceServiceProvider_1.<IQualifiedNameProvider>get(IQualifiedNameProvider.class);
+        TreeIterator<EObject> _allContents = ((XtextResource)resource).getAllContents();
+        final Function1<EObject, Boolean> _function = (EObject it) -> {
+          EClass _eClass_1 = it.eClass();
+          EClass _eClass_2 = this.getEClass();
+          return Boolean.valueOf(Objects.equal(_eClass_1, _eClass_2));
+        };
+        Iterator<EObject> _filter = IteratorExtensions.<EObject>filter(_allContents, _function);
+        final Function1<EObject, Boolean> _function_1 = (EObject it) -> {
+          QualifiedName _fullyQualifiedName = qualifiedNameProvider.getFullyQualifiedName(it);
+          return Boolean.valueOf(Objects.equal(_fullyQualifiedName, this.qualifiedName));
+        };
+        final EObject elementByName = IteratorExtensions.<EObject>findFirst(_filter, _function_1);
+        boolean _notEquals = (!Objects.equal(elementByName, null));
+        if (_notEquals) {
+          return elementByName;
+        }
+      }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("Cannot find element named ");
+      _builder.append(this.qualifiedName, "");
+      _builder.append(" of type ");
+      EClass _eClass_1 = this.getEClass();
+      String _name = _eClass_1.getName();
+      _builder.append(_name, "");
+      _builder.append(" in ");
+      URI _uRI_1 = resource.getURI();
+      _builder.append(_uRI_1, "");
+      throw new NoSuchElementException(_builder.toString());
     }
     final IEObjectDescription eObjectDescription = IterableExtensions.<IEObjectDescription>head(eObjectDescriptions);
     EObject _eObjectOrProxy = eObjectDescription.getEObjectOrProxy();
