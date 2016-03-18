@@ -637,7 +637,10 @@ public class SvgExporter {
         SvgLink _xblockexpression_1 = null;
         {
           SvgLink _elvis = null;
-          SvgLink _link = this.linkProvider.getLink(node);
+          SvgLink _link = null;
+          if (this.linkProvider!=null) {
+            _link=this.linkProvider.getLink(node);
+          }
           if (_link != null) {
             _elvis = _link;
           } else {

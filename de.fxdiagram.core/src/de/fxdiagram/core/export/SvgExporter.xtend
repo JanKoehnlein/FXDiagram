@@ -224,7 +224,7 @@ class SvgExporter {
 		if(link != null)
 			link 
 		else {
-			val newLink = linkProvider.getLink(node) ?: SvgLink.NONE
+			val newLink = linkProvider?.getLink(node) ?: SvgLink.NONE
 			linkCache.put(node, newLink)
 			newLink
 		}
