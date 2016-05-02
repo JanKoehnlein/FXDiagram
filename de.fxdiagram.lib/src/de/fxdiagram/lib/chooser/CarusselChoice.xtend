@@ -55,7 +55,7 @@ class CarusselChoice extends AbstractChoiceGraphics {
 
 	override relocateButtons(Node minusButton, Node plusButton) {
 		minusButton.layoutX = choiceGroup.layoutX - 0.5 * minusButton.layoutBounds.width
-		minusButton.layoutY = choiceGroup.layoutY + radius
+		minusButton.layoutY = choiceGroup.layoutY + radius + 0.5 * minusButton.layoutBounds.height
 		plusButton.layoutX = choiceGroup.layoutX - 0.5 * plusButton.layoutBounds.width
 		plusButton.layoutY = choiceGroup.layoutY - radius - plusButton.layoutBounds.height
 	}

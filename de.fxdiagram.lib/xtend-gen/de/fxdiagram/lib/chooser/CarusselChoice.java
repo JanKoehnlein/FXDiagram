@@ -109,20 +109,24 @@ public class CarusselChoice extends AbstractChoiceGraphics {
     Group _choiceGroup_1 = this.getChoiceGroup();
     double _layoutY = _choiceGroup_1.getLayoutY();
     double _plus = (_layoutY + this.radius);
-    minusButton.setLayoutY(_plus);
+    Bounds _layoutBounds_1 = minusButton.getLayoutBounds();
+    double _height = _layoutBounds_1.getHeight();
+    double _multiply_1 = (0.5 * _height);
+    double _plus_1 = (_plus + _multiply_1);
+    minusButton.setLayoutY(_plus_1);
     Group _choiceGroup_2 = this.getChoiceGroup();
     double _layoutX_1 = _choiceGroup_2.getLayoutX();
-    Bounds _layoutBounds_1 = plusButton.getLayoutBounds();
-    double _width_1 = _layoutBounds_1.getWidth();
-    double _multiply_1 = (0.5 * _width_1);
-    double _minus_1 = (_layoutX_1 - _multiply_1);
+    Bounds _layoutBounds_2 = plusButton.getLayoutBounds();
+    double _width_1 = _layoutBounds_2.getWidth();
+    double _multiply_2 = (0.5 * _width_1);
+    double _minus_1 = (_layoutX_1 - _multiply_2);
     plusButton.setLayoutX(_minus_1);
     Group _choiceGroup_3 = this.getChoiceGroup();
     double _layoutY_1 = _choiceGroup_3.getLayoutY();
     double _minus_2 = (_layoutY_1 - this.radius);
-    Bounds _layoutBounds_2 = plusButton.getLayoutBounds();
-    double _height = _layoutBounds_2.getHeight();
-    double _minus_3 = (_minus_2 - _height);
+    Bounds _layoutBounds_3 = plusButton.getLayoutBounds();
+    double _height_1 = _layoutBounds_3.getHeight();
+    double _minus_3 = (_minus_2 - _height_1);
     plusButton.setLayoutY(_minus_3);
   }
   
