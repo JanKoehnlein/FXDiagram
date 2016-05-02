@@ -34,12 +34,12 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.ide.release"
-      value="http://download.eclipse.org/efxclipse/updates-released/2.1.0/site"
+      value="http://download.eclipse.org/efxclipse/updates-released/2.3.0/site"
       label=""/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.runtime.release"
-      value="http://download.eclipse.org/efxclipse/runtime-released/2.1.0/site"
+      value="http://download.eclipse.org/efxclipse/runtime-released/2.3.0/site"
       label=""/>
   <setupTask
       xsi:type="setup:VariableTask"

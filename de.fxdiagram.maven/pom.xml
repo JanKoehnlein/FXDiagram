@@ -49,12 +49,12 @@
 		<repository>
 			<id>efxclipse-runtime-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/runtime-released/2.1.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/runtime-released/2.3.0/site</url>
 		</repository>
 		<repository>
 			<id>efxclipse-ide-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/updates-released/2.1.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/updates-released/2.3.0/site</url>
 		</repository>
 		<repository>
 			<id>kieler</id>
