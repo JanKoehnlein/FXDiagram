@@ -19,6 +19,9 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.scene.Group
+import javafx.scene.Node
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via 
@@ -40,7 +43,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
  * the node.
  */
 @Logging
-@ModelNode('layoutX', 'layoutY', 'width', 'height', 'labels')
+@ModelNode('layoutX', 'layoutY', 'width', 'height', 'labels', 'placementHint')
 class XNode extends XDomainObjectShape {
 
 	@FxProperty double width
@@ -48,7 +51,10 @@ class XNode extends XDomainObjectShape {
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	@FxProperty ObservableList<XLabel> labels = observableArrayList
-	@FxProperty Side placementHint
+	@FxProperty Side placementHint = Side.BOTTOM
+	
+	@Accessors(PUBLIC_GETTER)
+	Group placementGroup = new Group
 	
 	Effect mouseOverEffect
 	Effect selectionEffect
@@ -92,6 +98,12 @@ class XNode extends XDomainObjectShape {
 		selectionEffect = createSelectionEffect
 		anchors = createAnchors
 		node
+	}
+	
+	override protected addNodeAsChild(Node newNode) {
+		children += placementGroup => [
+			children += newNode
+		]
 	}
 	
 	protected override createNode() {

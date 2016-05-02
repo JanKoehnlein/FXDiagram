@@ -31,13 +31,17 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Side;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 /**
  * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via
@@ -59,9 +63,12 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * the node.
  */
 @Logging
-@ModelNode({ "layoutX", "layoutY", "width", "height", "labels" })
+@ModelNode({ "layoutX", "layoutY", "width", "height", "labels", "placementHint" })
 @SuppressWarnings("all")
 public class XNode extends XDomainObjectShape {
+  @Accessors(AccessorType.PUBLIC_GETTER)
+  private Group placementGroup = new Group();
+  
   private Effect mouseOverEffect;
   
   private Effect selectionEffect;
@@ -127,6 +134,17 @@ public class XNode extends XDomainObjectShape {
       _xblockexpression = node;
     }
     return _xblockexpression;
+  }
+  
+  @Override
+  protected boolean addNodeAsChild(final Node newNode) {
+    ObservableList<Node> _children = this.getChildren();
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children_1 = it.getChildren();
+      _children_1.add(newNode);
+    };
+    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.placementGroup, _function);
+    return _children.add(_doubleArrow);
   }
   
   @Override
@@ -323,6 +341,7 @@ public class XNode extends XDomainObjectShape {
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
     modelElement.addProperty(labelsProperty, XLabel.class);
+    modelElement.addProperty(placementHintProperty, Side.class);
   }
   
   public String toString() {
@@ -402,7 +421,11 @@ public class XNode extends XDomainObjectShape {
     return this.labelsProperty;
   }
   
-  private SimpleObjectProperty<Side> placementHintProperty = new SimpleObjectProperty<Side>(this, "placementHint");
+  private SimpleObjectProperty<Side> placementHintProperty = new SimpleObjectProperty<Side>(this, "placementHint",_initPlacementHint());
+  
+  private static final Side _initPlacementHint() {
+    return Side.BOTTOM;
+  }
   
   public Side getPlacementHint() {
     return this.placementHintProperty.get();
@@ -414,5 +437,10 @@ public class XNode extends XDomainObjectShape {
   
   public ObjectProperty<Side> placementHintProperty() {
     return this.placementHintProperty;
+  }
+  
+  @Pure
+  public Group getPlacementGroup() {
+    return this.placementGroup;
   }
 }

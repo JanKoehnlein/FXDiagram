@@ -53,13 +53,17 @@ public abstract class XShape extends Parent implements XActivatable {
         boolean _notEquals = (!Objects.equal(newNode, null));
         if (_notEquals) {
           this.nodeProperty.set(newNode);
-          ObservableList<Node> _children = this.getChildren();
-          _children.add(newNode);
+          this.addNodeAsChild(newNode);
         }
       }
       _xblockexpression = this.nodeProperty.get();
     }
     return _xblockexpression;
+  }
+  
+  protected boolean addNodeAsChild(final Node newNode) {
+    ObservableList<Node> _children = this.getChildren();
+    return _children.add(newNode);
   }
   
   public ObjectProperty<Node> nodeProperty() {

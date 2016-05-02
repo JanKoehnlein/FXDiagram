@@ -590,9 +590,10 @@ public class ConnectionRouter implements XActivatable {
   
   protected Point2D midPoint(final XNode node) {
     Node _node = node.getNode();
-    Bounds _boundsInLocal = _node.getBoundsInLocal();
+    Node _node_1 = node.getNode();
+    Bounds _boundsInLocal = _node_1.getBoundsInLocal();
     Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    return CoreExtensions.localToRootDiagram(node, _center);
+    return CoreExtensions.localToRootDiagram(_node, _center);
   }
   
   protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint, final ArrowHead arrowHead) {

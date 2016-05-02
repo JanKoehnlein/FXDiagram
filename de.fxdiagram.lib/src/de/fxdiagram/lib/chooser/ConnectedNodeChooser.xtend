@@ -47,7 +47,7 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 	}
 	
 	override getPosition() {
-		new Point2D(host.layoutX, host.layoutY)
+		new Point2D(host.layoutX + host.placementGroup.layoutX, host.layoutY + host.placementGroup.layoutY)
 	}
 
 	def void setConnectionProvider(ChooserConnectionProvider connectionProvider) {
@@ -118,15 +118,16 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 	}
 
 	protected override alignGroup(Group group, double maxWidth, double maxHeight) {
+		val position = getPosition
 		group.layoutX = switch layoutPosition {
-			case LEFT: host.layoutX - getLayoutDistance - 0.5 * maxWidth
-			case RIGHT: host.layoutX + host.layoutBounds.width + getLayoutDistance + 0.5 * maxWidth
-			default: host.layoutX + 0.5 * host.layoutBounds.width
+			case LEFT: position.x - getLayoutDistance - 0.5 * maxWidth
+			case RIGHT: position.x + host.layoutBounds.width + getLayoutDistance + 0.5 * maxWidth
+			default: position.x + 0.5 * host.layoutBounds.width
 		}
 		group.layoutY = switch layoutPosition {
-			case TOP: host.layoutY - getLayoutDistance - 0.5 * maxHeight
-			case BOTTOM: host.layoutY + host.layoutBounds.height + getLayoutDistance + 0.5 * maxHeight
-			default: host.layoutY + 0.5 * host.layoutBounds.height
+			case TOP: position.y - getLayoutDistance - 0.5 * maxHeight
+			case BOTTOM: position.y + host.layoutBounds.height + getLayoutDistance + 0.5 * maxHeight
+			default: position.y + 0.5 * host.layoutBounds.height
 		}
 	}
 }

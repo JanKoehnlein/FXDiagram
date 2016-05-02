@@ -1,10 +1,14 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.behavior.Behavior
+import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.extensions.InitializingMapListener
 import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableMap
+import javafx.geometry.Dimension2D
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
@@ -12,10 +16,6 @@ import javafx.scene.input.MouseEvent
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.annotations.logging.Logging
-import javafx.beans.property.SimpleObjectProperty
-import de.fxdiagram.core.extensions.InitializingListener
-import javafx.geometry.Dimension2D
 
 /**
  * Common superclass of {@link XNode}, {@link XConnection} and {@link XControlPoint}.
@@ -42,10 +42,14 @@ abstract class XShape extends Parent implements XActivatable {
 			val newNode = createNode
 			if(newNode != null) {
 				nodeProperty.set(newNode)
-				children.add(newNode)
+				addNodeAsChild(newNode)
 			}
 		}
 		nodeProperty.get
+	}
+	
+	protected def addNodeAsChild(Node newNode) {
+		children.add(newNode)
 	}	
 	
 	def nodeProperty() {

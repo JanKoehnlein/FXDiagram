@@ -62,8 +62,14 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   @Override
   public Point2D getPosition() {
     double _layoutX = this.host.getLayoutX();
+    Group _placementGroup = this.host.getPlacementGroup();
+    double _layoutX_1 = _placementGroup.getLayoutX();
+    double _plus = (_layoutX + _layoutX_1);
     double _layoutY = this.host.getLayoutY();
-    return new Point2D(_layoutX, _layoutY);
+    Group _placementGroup_1 = this.host.getPlacementGroup();
+    double _layoutY_1 = _placementGroup_1.getLayoutY();
+    double _plus_1 = (_layoutY + _layoutY_1);
+    return new Point2D(_plus, _plus_1);
   }
   
   public void setConnectionProvider(final ChooserConnectionProvider connectionProvider) {
@@ -223,39 +229,40 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   
   @Override
   protected void alignGroup(final Group group, final double maxWidth, final double maxHeight) {
+    final Point2D position = this.getPosition();
     double _switchResult = (double) 0;
     final Side layoutPosition = this.layoutPosition;
     if (layoutPosition != null) {
       switch (layoutPosition) {
         case LEFT:
-          double _layoutX = this.host.getLayoutX();
+          double _x = position.getX();
           double _layoutDistance = this.getLayoutDistance();
-          double _minus = (_layoutX - _layoutDistance);
+          double _minus = (_x - _layoutDistance);
           _switchResult = (_minus - (0.5 * maxWidth));
           break;
         case RIGHT:
-          double _layoutX_1 = this.host.getLayoutX();
+          double _x_1 = position.getX();
           Bounds _layoutBounds = this.host.getLayoutBounds();
           double _width = _layoutBounds.getWidth();
-          double _plus = (_layoutX_1 + _width);
+          double _plus = (_x_1 + _width);
           double _layoutDistance_1 = this.getLayoutDistance();
           double _plus_1 = (_plus + _layoutDistance_1);
           _switchResult = (_plus_1 + (0.5 * maxWidth));
           break;
         default:
-          double _layoutX_2 = this.host.getLayoutX();
+          double _x_2 = position.getX();
           Bounds _layoutBounds_1 = this.host.getLayoutBounds();
           double _width_1 = _layoutBounds_1.getWidth();
           double _multiply = (0.5 * _width_1);
-          _switchResult = (_layoutX_2 + _multiply);
+          _switchResult = (_x_2 + _multiply);
           break;
       }
     } else {
-      double _layoutX_2 = this.host.getLayoutX();
+      double _x_2 = position.getX();
       Bounds _layoutBounds_1 = this.host.getLayoutBounds();
       double _width_1 = _layoutBounds_1.getWidth();
       double _multiply = (0.5 * _width_1);
-      _switchResult = (_layoutX_2 + _multiply);
+      _switchResult = (_x_2 + _multiply);
     }
     group.setLayoutX(_switchResult);
     double _switchResult_1 = (double) 0;
@@ -263,34 +270,34 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     if (layoutPosition_1 != null) {
       switch (layoutPosition_1) {
         case TOP:
-          double _layoutY = this.host.getLayoutY();
+          double _y = position.getY();
           double _layoutDistance_2 = this.getLayoutDistance();
-          double _minus_1 = (_layoutY - _layoutDistance_2);
+          double _minus_1 = (_y - _layoutDistance_2);
           _switchResult_1 = (_minus_1 - (0.5 * maxHeight));
           break;
         case BOTTOM:
-          double _layoutY_1 = this.host.getLayoutY();
+          double _y_1 = position.getY();
           Bounds _layoutBounds_2 = this.host.getLayoutBounds();
           double _height = _layoutBounds_2.getHeight();
-          double _plus_2 = (_layoutY_1 + _height);
+          double _plus_2 = (_y_1 + _height);
           double _layoutDistance_3 = this.getLayoutDistance();
           double _plus_3 = (_plus_2 + _layoutDistance_3);
           _switchResult_1 = (_plus_3 + (0.5 * maxHeight));
           break;
         default:
-          double _layoutY_2 = this.host.getLayoutY();
+          double _y_2 = position.getY();
           Bounds _layoutBounds_3 = this.host.getLayoutBounds();
           double _height_1 = _layoutBounds_3.getHeight();
           double _multiply_1 = (0.5 * _height_1);
-          _switchResult_1 = (_layoutY_2 + _multiply_1);
+          _switchResult_1 = (_y_2 + _multiply_1);
           break;
       }
     } else {
-      double _layoutY_2 = this.host.getLayoutY();
+      double _y_2 = position.getY();
       Bounds _layoutBounds_3 = this.host.getLayoutBounds();
       double _height_1 = _layoutBounds_3.getHeight();
       double _multiply_1 = (0.5 * _height_1);
-      _switchResult_1 = (_layoutY_2 + _multiply_1);
+      _switchResult_1 = (_y_2 + _multiply_1);
     }
     group.setLayoutY(_switchResult_1);
   }

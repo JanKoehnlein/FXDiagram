@@ -270,7 +270,7 @@ class ConnectionRouter implements XActivatable {
 	}
 	
  	protected def midPoint(XNode node) {
-		node.localToRootDiagram(node.node.boundsInLocal.center)
+		node.node.localToRootDiagram(node.node.boundsInLocal.center)
 	}
 
 	protected def getNearestAnchor(XNode node, XControlPoint controlPoint, ArrowHead arrowHead) {
