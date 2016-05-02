@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -20,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MoveCommand extends AbstractAnimationCommand {
-  private XShape shape;
+  private Node node;
   
   private double fromX;
   
@@ -30,8 +31,8 @@ public class MoveCommand extends AbstractAnimationCommand {
   
   private double toY;
   
-  public MoveCommand(final XShape shape, final double toX, final double toY) {
-    this.shape = shape;
+  public MoveCommand(final Node shape, final double toX, final double toY) {
+    this.node = shape;
     double _layoutX = shape.getLayoutX();
     this.fromX = _layoutX;
     double _layoutY = shape.getLayoutY();
@@ -41,7 +42,7 @@ public class MoveCommand extends AbstractAnimationCommand {
   }
   
   public MoveCommand(final XShape shape, final double fromX, final double fromY, final double toX, final double toY) {
-    this.shape = shape;
+    this.node = shape;
     this.fromX = fromX;
     this.fromY = fromY;
     this.toX = toX;
@@ -70,12 +71,12 @@ public class MoveCommand extends AbstractAnimationCommand {
     PathTransition _xblockexpression = null;
     {
       boolean _and = false;
-      double _layoutX = this.shape.getLayoutX();
+      double _layoutX = this.node.getLayoutX();
       boolean _equals = (_layoutX == toX);
       if (!_equals) {
         _and = false;
       } else {
-        double _layoutY = this.shape.getLayoutY();
+        double _layoutY = this.node.getLayoutY();
         boolean _equals_1 = (_layoutY == toY);
         _and = _equals_1;
       }
@@ -88,10 +89,10 @@ public class MoveCommand extends AbstractAnimationCommand {
         it.setTranslateY(fromY);
       };
       final Group dummyNode = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-      DoubleProperty _layoutXProperty = this.shape.layoutXProperty();
+      DoubleProperty _layoutXProperty = this.node.layoutXProperty();
       DoubleProperty _translateXProperty = dummyNode.translateXProperty();
       _layoutXProperty.bind(_translateXProperty);
-      DoubleProperty _layoutYProperty = this.shape.layoutYProperty();
+      DoubleProperty _layoutYProperty = this.node.layoutYProperty();
       DoubleProperty _translateYProperty = dummyNode.translateYProperty();
       _layoutYProperty.bind(_translateYProperty);
       PathTransition _pathTransition = new PathTransition();
@@ -111,7 +112,7 @@ public class MoveCommand extends AbstractAnimationCommand {
         Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function_2);
         it.setPath(_doubleArrow);
         final EventHandler<ActionEvent> _function_3 = (ActionEvent it_1) -> {
-          final Procedure1<XShape> _function_4 = (XShape it_2) -> {
+          final Procedure1<Node> _function_4 = (Node it_2) -> {
             DoubleProperty _layoutXProperty_1 = it_2.layoutXProperty();
             _layoutXProperty_1.unbind();
             DoubleProperty _layoutYProperty_1 = it_2.layoutYProperty();
@@ -119,8 +120,8 @@ public class MoveCommand extends AbstractAnimationCommand {
             it_2.setLayoutX(toX);
             it_2.setLayoutY(toY);
           };
-          ObjectExtensions.<XShape>operator_doubleArrow(
-            this.shape, _function_4);
+          ObjectExtensions.<Node>operator_doubleArrow(
+            this.node, _function_4);
         };
         it.setOnFinished(_function_3);
       };

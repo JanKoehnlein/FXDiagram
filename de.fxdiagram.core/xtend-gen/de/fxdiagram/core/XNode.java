@@ -29,6 +29,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Side;
 import javafx.scene.Group;
@@ -237,11 +238,14 @@ public class XNode extends XDomainObjectShape {
   public Bounds getSnapBounds() {
     Node _node = this.getNode();
     Bounds _boundsInParent = _node.getBoundsInParent();
+    double _layoutX = this.placementGroup.getLayoutX();
+    double _layoutY = this.placementGroup.getLayoutY();
+    BoundingBox _translate = BoundsExtensions.translate(_boundsInParent, _layoutX, _layoutY);
     double _scaleX = this.getScaleX();
     double _divide = (1 / _scaleX);
     double _scaleY = this.getScaleY();
     double _divide_1 = (1 / _scaleY);
-    return BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
+    return BoundsExtensions.scale(_translate, _divide, _divide_1);
   }
   
   public Anchors getAnchors() {

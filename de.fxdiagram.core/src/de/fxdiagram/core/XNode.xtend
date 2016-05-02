@@ -153,7 +153,9 @@ class XNode extends XDomainObjectShape {
 	}
 	
 	override getSnapBounds() {
-		node.boundsInParent.scale(1 / scaleX, 1 / scaleY)
+		node.boundsInParent
+			.translate(placementGroup.layoutX, placementGroup.layoutY)
+			.scale(1 / scaleX, 1 / scaleY)
 	}
 
 	def getAnchors() {

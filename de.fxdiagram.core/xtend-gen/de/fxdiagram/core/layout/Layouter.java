@@ -52,6 +52,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -195,6 +197,12 @@ public class Layouter {
             double _y = correction.getY();
             double _minus_1 = (_ypos - _y);
             ((XNode)xElement).setLayoutY(_minus_1);
+            Group _placementGroup = ((XNode)xElement).getPlacementGroup();
+            final Procedure1<Group> _function = (Group it) -> {
+              it.setLayoutX(0);
+              it.setLayoutY(0);
+            };
+            ObjectExtensions.<Group>operator_doubleArrow(_placementGroup, _function);
           }
         }
         if (!_matched) {
@@ -391,12 +399,33 @@ public class Layouter {
             float _ypos = shapeLayout.getYpos();
             double _y = correction.getY();
             double _minus_1 = (_ypos - _y);
-            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
+            MoveCommand _moveCommand = new MoveCommand(((Node)xElement), _minus, _minus_1);
             final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
               it.setExecuteDuration(duration);
             };
             MoveCommand _doubleArrow = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand, _function);
             composite.operator_add(_doubleArrow);
+            boolean _or = false;
+            Group _placementGroup = ((XNode)xElement).getPlacementGroup();
+            double _layoutX = _placementGroup.getLayoutX();
+            boolean _notEquals = (_layoutX != 0);
+            if (_notEquals) {
+              _or = true;
+            } else {
+              Group _placementGroup_1 = ((XNode)xElement).getPlacementGroup();
+              double _layoutY = _placementGroup_1.getLayoutY();
+              boolean _notEquals_1 = (_layoutY != 0);
+              _or = _notEquals_1;
+            }
+            if (_or) {
+              Group _placementGroup_2 = ((XNode)xElement).getPlacementGroup();
+              MoveCommand _moveCommand_1 = new MoveCommand(_placementGroup_2, 0, 0);
+              final Procedure1<MoveCommand> _function_1 = (MoveCommand it) -> {
+                it.setExecuteDuration(duration);
+              };
+              MoveCommand _doubleArrow_1 = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand_1, _function_1);
+              composite.operator_add(_doubleArrow_1);
+            }
           }
         }
         if (!_matched) {
