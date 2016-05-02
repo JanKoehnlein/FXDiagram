@@ -8,6 +8,7 @@ import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import javafx.util.Duration
 import javafx.scene.Node
+import de.fxdiagram.core.XNode
 
 class MoveCommand extends AbstractAnimationCommand {
 
@@ -35,6 +36,15 @@ class MoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
+		if(node instanceof XNode) {
+			fromX -= node.placementGroup.layoutX
+			fromY -= node.placementGroup.layoutY
+			node.placementGroup => [
+				layoutX = 0
+				layoutY = 0	
+			]
+			node.placementHint = null
+		}
 		createMoveTransition(fromX, fromY, toX, toY, context.executeDuration)
 	}
 	

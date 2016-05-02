@@ -1,5 +1,6 @@
 package de.fxdiagram.core.command;
 
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
@@ -51,8 +52,29 @@ public class MoveCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
-    Duration _executeDuration = this.getExecuteDuration(context);
-    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _executeDuration);
+    PathTransition _xblockexpression = null;
+    {
+      if ((this.node instanceof XNode)) {
+        double _fromX = this.fromX;
+        Group _placementGroup = ((XNode)this.node).getPlacementGroup();
+        double _layoutX = _placementGroup.getLayoutX();
+        this.fromX = (_fromX - _layoutX);
+        double _fromY = this.fromY;
+        Group _placementGroup_1 = ((XNode)this.node).getPlacementGroup();
+        double _layoutY = _placementGroup_1.getLayoutY();
+        this.fromY = (_fromY - _layoutY);
+        Group _placementGroup_2 = ((XNode)this.node).getPlacementGroup();
+        final Procedure1<Group> _function = (Group it) -> {
+          it.setLayoutX(0);
+          it.setLayoutY(0);
+        };
+        ObjectExtensions.<Group>operator_doubleArrow(_placementGroup_2, _function);
+        ((XNode)this.node).setPlacementHint(null);
+      }
+      Duration _executeDuration = this.getExecuteDuration(context);
+      _xblockexpression = this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _executeDuration);
+    }
+    return _xblockexpression;
   }
   
   @Override

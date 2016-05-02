@@ -106,10 +106,6 @@ class Layouter {
 						}
 					xElement.layoutX = shapeLayout.xpos - correction.x
 					xElement.layoutY = shapeLayout.ypos - correction.y
-					xElement.placementGroup => [
-						layoutX = 0
-						layoutY = 0
-					]
 				}
 				XConnection: {
 					xElement.labels.forEach[place(true)]
@@ -187,12 +183,6 @@ class Layouter {
 					) => [
 						executeDuration = duration
 					]
-					if(xElement.placementGroup.layoutX != 0 ||
-						xElement.placementGroup.layoutY != 0) {
-						composite += new MoveCommand(xElement.placementGroup,0,0) => [
-							executeDuration = duration
-						]		
-					}
 				}
 				XConnection: {
 					xElement.labels.forEach[place(true)]

@@ -47,9 +47,9 @@ class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 	@FxProperty boolean showMethods = true
 	@FxProperty Color bgColor
 
-	CheckBox packageBox
-	CheckBox attributesBox
-	CheckBox methodsBox
+	protected CheckBox packageBox
+	protected CheckBox attributesBox
+	protected CheckBox methodsBox
 
 	VBox contentArea
 	VBox packageArea

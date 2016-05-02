@@ -118,11 +118,11 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
   
   public final static String OPERATION = "operation";
   
-  private CheckBox packageBox;
+  protected CheckBox packageBox;
   
-  private CheckBox attributesBox;
+  protected CheckBox attributesBox;
   
-  private CheckBox methodsBox;
+  protected CheckBox methodsBox;
   
   private VBox contentArea;
   
