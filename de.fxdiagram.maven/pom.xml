@@ -7,7 +7,7 @@
 	<version>0.26.0-SNAPSHOT</version>
 	<properties>
 		<tycho-version>0.24.0</tycho-version>
-		<xtext-version>2.9.0</xtext-version>
+		<xtext-version>2.9.2</xtext-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<packaging>pom</packaging>
