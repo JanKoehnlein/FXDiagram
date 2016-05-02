@@ -69,8 +69,14 @@ public interface XDiagramConfig {
             String _attribute = it.getAttribute("label");
             config.setLabel(_attribute);
             this.addConfig(config);
-          } catch (Throwable _e) {
-            throw Exceptions.sneakyThrow(_e);
+          } catch (final Throwable _t) {
+            if (_t instanceof Exception) {
+              final Exception exc = (Exception)_t;
+              String _message = exc.getMessage();
+              XDiagramConfig.Registry.LOG.severe(_message);
+            } else {
+              throw Exceptions.sneakyThrow(_t);
+            }
           }
         };
         ((List<IConfigurationElement>)Conversions.doWrapArray(_configurationElementsFor)).forEach(_function);

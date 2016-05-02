@@ -66,11 +66,15 @@ interface XDiagramConfig {
 		protected def addStaticConfigurations() {
 			if(equinox) {
 				Platform.extensionRegistry.getConfigurationElementsFor('de.fxdiagram.mapping.fxDiagramConfig').forEach[
-					val config = createExecutableExtension('class') as AbstractDiagramConfig
-					val id = getAttribute('id')
-					config.setID(id)
-					config.setLabel(getAttribute('label'))
-					addConfig(config)
+					try {
+						val config = createExecutableExtension('class') as AbstractDiagramConfig
+						val id = getAttribute('id')
+						config.setID(id)
+						config.setLabel(getAttribute('label'))
+						addConfig(config)						
+					} catch (Exception exc) {
+						LOG.severe(exc.message)
+					}
 				]
 			}
 		}
