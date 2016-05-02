@@ -311,10 +311,12 @@ public class Inflator {
           it_1.setAutoReverse(false);
           ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
           Duration _millis = DurationExtensions.millis(200);
-          DoubleProperty _layoutXProperty = this.host.layoutXProperty();
+          Node _node = this.host.getNode();
+          DoubleProperty _layoutXProperty = _node.layoutXProperty();
           double _x = inflatedHostPos.getX();
           KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
-          DoubleProperty _layoutYProperty = this.host.layoutYProperty();
+          Node _node_1 = this.host.getNode();
+          DoubleProperty _layoutYProperty = _node_1.layoutYProperty();
           double _y = inflatedHostPos.getY();
           KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
           KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -376,10 +378,12 @@ public class Inflator {
         it.setAutoReverse(false);
         ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
         Duration _millis = DurationExtensions.millis(200);
-        DoubleProperty _layoutXProperty = this.host.layoutXProperty();
+        Node _node = this.host.getNode();
+        DoubleProperty _layoutXProperty = _node.layoutXProperty();
         double _x = deflatedHostPos.getX();
         KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
-        DoubleProperty _layoutYProperty = this.host.layoutYProperty();
+        Node _node_1 = this.host.getNode();
+        DoubleProperty _layoutYProperty = _node_1.layoutYProperty();
         double _y = deflatedHostPos.getY();
         KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
         KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -495,7 +499,8 @@ public class Inflator {
     Point2D _xblockexpression = null;
     {
       final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
-      double _layoutX = this.host.getLayoutX();
+      Node _node = this.host.getNode();
+      double _layoutX = _node.getLayoutX();
       double _switchResult = (double) 0;
       Side _placementHint = this.host.getPlacementHint();
       if (_placementHint != null) {
@@ -520,7 +525,8 @@ public class Inflator {
         _switchResult = 0;
       }
       double _minus_1 = (_layoutX - _switchResult);
-      double _layoutY = this.host.getLayoutY();
+      Node _node_1 = this.host.getNode();
+      double _layoutY = _node_1.getLayoutY();
       double _switchResult_1 = (double) 0;
       Side _placementHint_1 = this.host.getPlacementHint();
       if (_placementHint_1 != null) {
@@ -553,7 +559,8 @@ public class Inflator {
     Point2D _xblockexpression = null;
     {
       final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
-      double _layoutX = this.host.getLayoutX();
+      Node _node = this.host.getNode();
+      double _layoutX = _node.getLayoutX();
       double _switchResult = (double) 0;
       Side _placementHint = this.host.getPlacementHint();
       if (_placementHint != null) {
@@ -581,7 +588,8 @@ public class Inflator {
         _switchResult = 0;
       }
       double _plus = (_layoutX + _switchResult);
-      double _layoutY = this.host.getLayoutY();
+      Node _node_1 = this.host.getNode();
+      double _layoutY = _node_1.getLayoutY();
       double _switchResult_1 = (double) 0;
       Side _placementHint_1 = this.host.getPlacementHint();
       if (_placementHint_1 != null) {

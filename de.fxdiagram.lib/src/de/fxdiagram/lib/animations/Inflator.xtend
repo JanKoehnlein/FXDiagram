@@ -175,8 +175,8 @@ class Inflator {
 				autoReverse = false
 				keyFrames += new KeyFrame(
 					200.millis,
-					new KeyValue(host.layoutXProperty, inflatedHostPos.x),
-					new KeyValue(host.layoutYProperty, inflatedHostPos.y)
+					new KeyValue(host.node.layoutXProperty, inflatedHostPos.x),
+					new KeyValue(host.node.layoutYProperty, inflatedHostPos.y)
 				)
 			]
 			pt.onFinished = [
@@ -211,8 +211,8 @@ class Inflator {
 				autoReverse = false
 				keyFrames += new KeyFrame(
 					200.millis,
-					new KeyValue(host.layoutXProperty, deflatedHostPos.x),
-					new KeyValue(host.layoutYProperty, deflatedHostPos.y)
+					new KeyValue(host.node.layoutXProperty, deflatedHostPos.x),
+					new KeyValue(host.node.layoutYProperty, deflatedHostPos.y)
 				)
 			]
 		]
@@ -271,7 +271,7 @@ class Inflator {
 
 	protected def getInflatedHostPosition() {
 		val inflatedUnpadded = getInflatedUnpadded
-		new Point2D(host.layoutX - switch host.placementHint {
+		new Point2D(host.node.layoutX - switch host.placementHint {
 			case LEFT:
 				inflatedUnpadded.width - deflatedUnpadded.width
 			case TOP,
@@ -279,7 +279,7 @@ class Inflator {
 				0.5 * (inflatedUnpadded.width - deflatedUnpadded.width)
 			default:
 				0
-		}, host.layoutY - switch host.placementHint {
+		}, host.node.layoutY - switch host.placementHint {
 			case TOP:
 				inflatedUnpadded.height
 			case BOTTOM:
@@ -294,7 +294,7 @@ class Inflator {
 
 	protected def getDeflatedHostPosition() {
 		val inflatedUnpadded = getInflatedUnpadded
-		new Point2D(host.layoutX + switch host.placementHint {
+		new Point2D(host.node.layoutX + switch host.placementHint {
 			case LEFT:
 				inflatedUnpadded.width - deflatedUnpadded.width
 			case RIGHT:
@@ -304,7 +304,7 @@ class Inflator {
 				0.5 * (inflatedUnpadded.width - deflatedUnpadded.width)
 			default:
 				0
-		}, host.layoutY + switch host.placementHint {
+		}, host.node.layoutY + switch host.placementHint {
 			case TOP:
 				inflatedUnpadded.height
 			case BOTTOM:

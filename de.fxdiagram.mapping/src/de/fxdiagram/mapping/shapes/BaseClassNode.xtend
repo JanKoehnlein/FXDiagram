@@ -2,6 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor
 import de.fxdiagram.core.command.AnimationCommand
@@ -31,7 +32,6 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-import de.fxdiagram.core.XDiagram
 
 @ModelNode('showPackage', 'showAttributes', 'showMethods', 'bgColor')
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
@@ -133,7 +133,7 @@ class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 		showPackageProperty.bindCheckbox(packageBox, packageArea, [0], inflator)
 		showAttributesProperty.bindCheckbox(attributesBox, attributeCompartment, [if(showPackage) 2 else 1], inflator)
 		showMethodsProperty.bindCheckbox(methodsBox, methodCompartment, [contentArea.children.size], inflator)
-		inflator.inflateAnimation?.play
+		inflator.inflateAnimation.play
 		addLazyBehavior(domainObjectDescriptor)
 	}
 
