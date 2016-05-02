@@ -3,6 +3,9 @@
    <feature id="de.fxdiagram.sdk.feature">
       <category name="FXDiagram"/>
    </feature>
+   <feature id="de.fxdiagram.eclipse.examples.feature">
+      <category name="FXDiagram"/>
+   </feature>
    <feature id="de.fxdiagram.sdk.feature.source">
       <category name="FXDiagram"/>
    </feature>

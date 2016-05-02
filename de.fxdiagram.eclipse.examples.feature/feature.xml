@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="de.fxdiagram.sdk.feature"
-      label="FXDiagram SDK"
+      id="de.fxdiagram.eclipse.examples.feature"
+      label="FXDiagram Eclipse Examples"
       version="0.26.0.qualifier"
       provider-name="JanKoehnlein">
 
@@ -104,88 +104,42 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <requires>
-      <import plugin="de.cau.cs.kieler.core.kgraph" version="0.4.2" match="greaterOrEqual"/>
-      <import plugin="de.cau.cs.kieler.core" version="0.8.1" match="greaterOrEqual"/>
-      <import plugin="de.cau.cs.kieler.kiml" version="0.12.0" match="greaterOrEqual"/>
-      <import plugin="de.cau.cs.kieler.kiml.graphviz.dot" version="0.6.1" match="greaterOrEqual"/>
-      <import plugin="de.cau.cs.kieler.kiml.graphviz.layouter" version="0.6.2" match="greaterOrEqual"/>
-      <import plugin="de.cau.cs.kieler.kiml.service" version="0.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.domainmodel.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.fowlerdsl.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.domainmodel" version="2.6.2" match="greaterOrEqual"/>
-      <import feature="org.eclipse.fx.ide.basic.feature" version="2.1.0" match="greaterOrEqual"/>
+      <import feature="de.fxdiagram.sdk.feature" version="0.26.0.qualifier"/>
    </requires>
 
    <plugin
-         id="de.fxdiagram.annotations"
+         id="de.fxdiagram.eclipse.pde"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="de.fxdiagram.annotations.tests"
+         id="de.fxdiagram.xtext.domainmodel"
          download-size="0"
          install-size="0"
          version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
    <plugin
-         id="de.fxdiagram.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="de.fxdiagram.core.tests"
+         id="de.fxdiagram.xtext.fowlerdsl"
          download-size="0"
          install-size="0"
          version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
    <plugin
-         id="de.fxdiagram.eclipse"
+         id="de.fxdiagram.xtext.xbase"
          download-size="0"
          install-size="0"
          version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
    <plugin
-         id="de.fxdiagram.examples"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="de.fxdiagram.external"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.swtfx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.mapping"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.eclipse.xtext"
+         id="de.fxdiagram.eclipse.ecore"
          download-size="0"
          install-size="0"
          version="0.0.0"

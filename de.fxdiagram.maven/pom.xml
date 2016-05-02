@@ -23,6 +23,7 @@
 		<module>../de.fxdiagram.eclipse</module>
 		<module>../de.fxdiagram.eclipse.ecore</module>
 		<module>../de.fxdiagram.eclipse.example</module>
+		<module>../de.fxdiagram.eclipse.examples.feature</module>
 		<module>../de.fxdiagram.eclipse.pde</module>
 		<module>../de.fxdiagram.eclipse.xtext</module>
 		<module>../de.fxdiagram.noeclipse</module>
