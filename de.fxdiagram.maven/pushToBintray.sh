@@ -98,8 +98,7 @@ function mirror_updatesite() {
 		popd 
 	fi
 	cp -rn * $COPY_DIR/
-	cp -f content.jar $COPY_DIR/
-	cp -f artifacts.jar $COPY_DIR/
+	cp -f *.jar $COPY_DIR/
 	pushd . 
 	cd $COPY_DIR
 	git add -A 
