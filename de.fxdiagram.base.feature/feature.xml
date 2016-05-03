@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.base.feature"
       label="FXDiagram Base Feature"
-      version="0.27.3"
+      version="0.27.3.qualifier"
       provider-name="JanKoehnlein">
 
    <description>

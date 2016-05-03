@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Ecore Example
 Bundle-SymbolicName: de.fxdiagram.eclipse.ecore;singleton:=true
-Bundle-Version: 0.27.3
+Bundle-Version: 0.27.3.qualifier
 Bundle-Vendor: JanKoehnlein
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: de.fxdiagram.mapping,
