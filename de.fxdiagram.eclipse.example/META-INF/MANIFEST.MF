@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Eclipse Example
 Bundle-SymbolicName: de.fxdiagram.eclipse.example;singleton:=true
-Bundle-Version: 0.27.2.qualifier
+Bundle-Version: 0.27.3
 Bundle-Activator: de.fxdiagram.eclipse.example.Activator
 Require-Bundle: de.fxdiagram.swtfx,
  de.fxdiagram.examples,
