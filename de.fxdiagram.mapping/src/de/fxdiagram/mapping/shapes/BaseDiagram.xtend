@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.reconcile.DiagramReconcileBehavior
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
+import de.fxdiagram.mapping.behavior.ConnectAllBehavior
 
 @ModelNode
 class BaseDiagram<T> extends XDiagram {
@@ -20,6 +21,7 @@ class BaseDiagram<T> extends XDiagram {
 	override doActivate() {
 		super.doActivate
 		addBehavior(new DiagramReconcileBehavior(this))
+		addBehavior(new ConnectAllBehavior(this))
 	}
 	
 }

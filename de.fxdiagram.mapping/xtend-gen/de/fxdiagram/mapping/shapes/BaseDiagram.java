@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.behavior.ConnectAllBehavior;
 import de.fxdiagram.mapping.reconcile.DiagramReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 
@@ -24,6 +25,8 @@ public class BaseDiagram<T extends Object> extends XDiagram {
     super.doActivate();
     DiagramReconcileBehavior<T> _diagramReconcileBehavior = new DiagramReconcileBehavior<T>(this);
     this.addBehavior(_diagramReconcileBehavior);
+    ConnectAllBehavior<Object> _connectAllBehavior = new ConnectAllBehavior<Object>(this);
+    this.addBehavior(_connectAllBehavior);
   }
   
   public void populate(final ModelElementImpl modelElement) {

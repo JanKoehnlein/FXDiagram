@@ -77,7 +77,7 @@ class XDiagramConfigInterpreter {
 		context.isCreateNodes = true
 	}
 
-	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?, T> it, T diagramObject,
+	public def <T> connectNodesEagerly(AbstractNodeMappingCall<?, T> it, T diagramObject,
 		Set<ConnectionMapping<?>> eagerConnections, InterpreterContext context) {
 		val nodeObjects = select(diagramObject)
 		val nodeMappingCasted = nodeMapping as NodeMapping<Object>

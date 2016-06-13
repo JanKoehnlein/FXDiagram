@@ -134,7 +134,7 @@ public class XDiagramConfigInterpreter {
     context.setIsCreateNodes(true);
   }
   
-  protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final Set<ConnectionMapping<?>> eagerConnections, final InterpreterContext context) {
+  public <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final Set<ConnectionMapping<?>> eagerConnections, final InterpreterContext context) {
     final Iterable<?> nodeObjects = this.select(it, diagramObject);
     NodeMapping<?> _nodeMapping = it.getNodeMapping();
     final NodeMapping<Object> nodeMappingCasted = ((NodeMapping<Object>) _nodeMapping);
