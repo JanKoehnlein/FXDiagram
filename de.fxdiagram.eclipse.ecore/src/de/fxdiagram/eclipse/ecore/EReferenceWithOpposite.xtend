@@ -17,7 +17,7 @@ class EReferenceWithOpposite {
 	
 	override equals(Object obj) {
 		if(obj instanceof EReferenceWithOpposite) 
-			(obj.to == to && obj.fro == this.fro)
+			(obj.to == to && obj.fro == fro)
 			|| (obj.fro == to && obj.to == fro)  
 		else
 			false

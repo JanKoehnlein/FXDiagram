@@ -43,7 +43,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
@@ -64,7 +63,39 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
         return it.getESubpackages();
       };
       this.<EPackage>nodeForEach(EcoreDiagramConfig.this.ePackageNode, _function_1);
-      this.eagerly(EcoreDiagramConfig.this.eSuperTypeConnection, EcoreDiagramConfig.this.eReferenceConnection);
+      this.eagerly(EcoreDiagramConfig.this.eSuperTypeConnection, EcoreDiagramConfig.this.eReferenceConnection, EcoreDiagramConfig.this.eContainmentReferenceConnection);
+    }
+  };
+  
+  private final DiagramMapping<EPackage> ePackageInheritanceDiagram = new DiagramMapping<EPackage>(this, "ePackageInheritanceDiagram", "EPackage inheritance diagram") {
+    @Override
+    public void calls() {
+      final Function1<EPackage, Iterable<? extends EClass>> _function = (EPackage it) -> {
+        EList<EClassifier> _eClassifiers = it.getEClassifiers();
+        return Iterables.<EClass>filter(_eClassifiers, EClass.class);
+      };
+      this.<EClass>nodeForEach(EcoreDiagramConfig.this.eClassNode, _function);
+      final Function1<EPackage, Iterable<? extends EPackage>> _function_1 = (EPackage it) -> {
+        return it.getESubpackages();
+      };
+      this.<EPackage>nodeForEach(EcoreDiagramConfig.this.ePackageNode, _function_1);
+      this.eagerly(EcoreDiagramConfig.this.eSuperTypeConnection);
+    }
+  };
+  
+  private final DiagramMapping<EPackage> ePackageContainmentDiagram = new DiagramMapping<EPackage>(this, "ePackageContainmentDiagram", "EPackage containment diagram") {
+    @Override
+    public void calls() {
+      final Function1<EPackage, Iterable<? extends EClass>> _function = (EPackage it) -> {
+        EList<EClassifier> _eClassifiers = it.getEClassifiers();
+        return Iterables.<EClass>filter(_eClassifiers, EClass.class);
+      };
+      this.<EClass>nodeForEach(EcoreDiagramConfig.this.eClassNode, _function);
+      final Function1<EPackage, Iterable<? extends EPackage>> _function_1 = (EPackage it) -> {
+        return it.getESubpackages();
+      };
+      this.<EPackage>nodeForEach(EcoreDiagramConfig.this.ePackageNode, _function_1);
+      this.eagerly(EcoreDiagramConfig.this.eContainmentReferenceConnection);
     }
   };
   
@@ -117,38 +148,76 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
       this.<EOperation>labelForEach(EcoreDiagramConfig.this.eOperation, _function_2);
       final Function1<EClass, Iterable<? extends EReferenceWithOpposite>> _function_3 = (EClass it) -> {
         EList<EReference> _eReferences = it.getEReferences();
-        final Function1<EReference, EReferenceWithOpposite> _function_4 = (EReference it_1) -> {
+        final Function1<EReference, Boolean> _function_4 = (EReference it_1) -> {
+          boolean _and = false;
+          boolean _isContainment = it_1.isContainment();
+          boolean _not = (!_isContainment);
+          if (!_not) {
+            _and = false;
+          } else {
+            boolean _isContainer = it_1.isContainer();
+            boolean _not_1 = (!_isContainer);
+            _and = _not_1;
+          }
+          return Boolean.valueOf(_and);
+        };
+        Iterable<EReference> _filter = IterableExtensions.<EReference>filter(_eReferences, _function_4);
+        final Function1<EReference, EReferenceWithOpposite> _function_5 = (EReference it_1) -> {
           return new EReferenceWithOpposite(it_1);
         };
-        return ListExtensions.<EReference, EReferenceWithOpposite>map(_eReferences, _function_4);
+        return IterableExtensions.<EReference, EReferenceWithOpposite>map(_filter, _function_5);
       };
       MultiConnectionMappingCall<EReferenceWithOpposite, EClass> _outConnectionForEach = this.<EReferenceWithOpposite>outConnectionForEach(EcoreDiagramConfig.this.eReferenceConnection, _function_3);
       final Function1<Side, Node> _function_4 = (Side it) -> {
-        return ButtonExtensions.getArrowButton(it, "Add EReference");
+        return ButtonExtensions.getArrowButton(it, "Add cross EReference");
       };
       _outConnectionForEach.asButton(_function_4);
-      final Function1<EClass, Iterable<? extends ESuperType>> _function_5 = (EClass subType) -> {
+      final Function1<EClass, Iterable<? extends EReferenceWithOpposite>> _function_5 = (EClass it) -> {
+        EList<EReference> _eReferences = it.getEReferences();
+        final Function1<EReference, Boolean> _function_6 = (EReference it_1) -> {
+          boolean _or = false;
+          boolean _isContainment = it_1.isContainment();
+          if (_isContainment) {
+            _or = true;
+          } else {
+            boolean _isContainer = it_1.isContainer();
+            _or = _isContainer;
+          }
+          return Boolean.valueOf(_or);
+        };
+        Iterable<EReference> _filter = IterableExtensions.<EReference>filter(_eReferences, _function_6);
+        final Function1<EReference, EReferenceWithOpposite> _function_7 = (EReference it_1) -> {
+          return new EReferenceWithOpposite(it_1);
+        };
+        return IterableExtensions.<EReference, EReferenceWithOpposite>map(_filter, _function_7);
+      };
+      MultiConnectionMappingCall<EReferenceWithOpposite, EClass> _outConnectionForEach_1 = this.<EReferenceWithOpposite>outConnectionForEach(EcoreDiagramConfig.this.eContainmentReferenceConnection, _function_5);
+      final Function1<Side, Node> _function_6 = (Side it) -> {
+        return ButtonExtensions.getArrowButton(it, "Add containment EReference");
+      };
+      _outConnectionForEach_1.asButton(_function_6);
+      final Function1<EClass, Iterable<? extends ESuperType>> _function_7 = (EClass subType) -> {
         ArrayList<ESuperType> _xblockexpression = null;
         {
           final ArrayList<ESuperType> superTypes = CollectionLiterals.<ESuperType>newArrayList();
           EList<EClass> _eSuperTypes = subType.getESuperTypes();
-          final Procedure2<EClass, Integer> _function_6 = (EClass superType, Integer i) -> {
+          final Procedure2<EClass, Integer> _function_8 = (EClass superType, Integer i) -> {
             boolean _notEquals = (!Objects.equal(subType, superType));
             if (_notEquals) {
               ESuperType _eSuperType = new ESuperType(subType, superType);
               superTypes.add(_eSuperType);
             }
           };
-          IterableExtensions.<EClass>forEach(_eSuperTypes, _function_6);
+          IterableExtensions.<EClass>forEach(_eSuperTypes, _function_8);
           _xblockexpression = superTypes;
         }
         return _xblockexpression;
       };
-      MultiConnectionMappingCall<ESuperType, EClass> _outConnectionForEach_1 = this.<ESuperType>outConnectionForEach(EcoreDiagramConfig.this.eSuperTypeConnection, _function_5);
-      final Function1<Side, Node> _function_6 = (Side it) -> {
+      MultiConnectionMappingCall<ESuperType, EClass> _outConnectionForEach_2 = this.<ESuperType>outConnectionForEach(EcoreDiagramConfig.this.eSuperTypeConnection, _function_7);
+      final Function1<Side, Node> _function_8 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add ESuperClass");
       };
-      _outConnectionForEach_1.asButton(_function_6);
+      _outConnectionForEach_2.asButton(_function_8);
     }
   };
   
@@ -167,7 +236,10 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
       _builder.append(_name, "");
       _builder.append(": ");
       EClassifier _eType = it.getEType();
-      String _name_1 = _eType.getName();
+      String _name_1 = null;
+      if (_eType!=null) {
+        _name_1=_eType.getName();
+      }
       _builder.append(_name_1, "");
       return _builder.toString();
     }
@@ -193,7 +265,45 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<EReferenceWithOpposite> eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, "eReferenceConnection", "EReference") {
+  private final ConnectionMapping<EReferenceWithOpposite> eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, "crossReferenceConnection", "Cross EReference") {
+    @Override
+    public XConnection createConnection(final IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
+      BaseConnection<EReferenceWithOpposite> _baseConnection = new BaseConnection<EReferenceWithOpposite>(descriptor);
+      final Procedure1<BaseConnection<EReferenceWithOpposite>> _function = (BaseConnection<EReferenceWithOpposite> conn) -> {
+        final Function1<EReferenceWithOpposite, Object> _function_1 = (EReferenceWithOpposite it) -> {
+          Object _xblockexpression = null;
+          {
+            LineArrowHead _lineArrowHead = new LineArrowHead(conn, false);
+            conn.setTargetArrowHead(_lineArrowHead);
+            _xblockexpression = null;
+          }
+          return _xblockexpression;
+        };
+        descriptor.<Object>withDomainObject(_function_1);
+      };
+      return ObjectExtensions.<BaseConnection<EReferenceWithOpposite>>operator_doubleArrow(_baseConnection, _function);
+    }
+    
+    @Override
+    public void calls() {
+      final Function1<EReferenceWithOpposite, EReference> _function = (EReferenceWithOpposite it) -> {
+        return it.getTo();
+      };
+      this.<EReference>labelFor(EcoreDiagramConfig.this.eReferenceToName, _function);
+      final Function1<EReferenceWithOpposite, EReference> _function_1 = (EReferenceWithOpposite it) -> {
+        return it.getFro();
+      };
+      this.<EReference>labelFor(EcoreDiagramConfig.this.eReferenceFroName, _function_1);
+      final Function1<EReferenceWithOpposite, EClass> _function_2 = (EReferenceWithOpposite it) -> {
+        EReference _to = it.getTo();
+        EClassifier _eType = _to.getEType();
+        return ((EClass) _eType);
+      };
+      this.<EClass>target(EcoreDiagramConfig.this.eClassNode, _function_2);
+    }
+  };
+  
+  private final ConnectionMapping<EReferenceWithOpposite> eContainmentReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, "containmentReferenceConnection", "Containment EReference") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
       BaseConnection<EReferenceWithOpposite> _baseConnection = new BaseConnection<EReferenceWithOpposite>(descriptor);
@@ -204,17 +314,16 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
             EReference _to = it.getTo();
             boolean _isContainment = _to.isContainment();
             if (_isContainment) {
-              DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(conn, false);
-              conn.setTargetArrowHead(_diamondArrowHead);
+              DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(conn, true);
+              conn.setSourceArrowHead(_diamondArrowHead);
+              conn.setTargetArrowHead(null);
             } else {
               EReference _to_1 = it.getTo();
               boolean _isContainer = _to_1.isContainer();
               if (_isContainer) {
-                DiamondArrowHead _diamondArrowHead_1 = new DiamondArrowHead(conn, true);
-                conn.setSourceArrowHead(_diamondArrowHead_1);
-              } else {
-                LineArrowHead _lineArrowHead = new LineArrowHead(conn, false);
-                conn.setTargetArrowHead(_lineArrowHead);
+                DiamondArrowHead _diamondArrowHead_1 = new DiamondArrowHead(conn, false);
+                conn.setTargetArrowHead(_diamondArrowHead_1);
+                conn.setSourceArrowHead(null);
               }
             }
             _xblockexpression = null;
@@ -250,7 +359,13 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
     public XConnectionLabel createLabel(final IMappedElementDescriptor<EReference> descriptor, final EReference labelElement) {
       XConnectionLabel _createLabel = super.createLabel(descriptor, labelElement);
       final Procedure1<XConnectionLabel> _function = (XConnectionLabel it) -> {
-        it.setPosition((1 - EcoreDiagramConfig.EREFERENCE_LABEL_POS));
+        EReference _eOpposite = labelElement.getEOpposite();
+        boolean _equals = Objects.equal(_eOpposite, null);
+        if (_equals) {
+          it.setPosition(0.5);
+        } else {
+          it.setPosition((1 - EcoreDiagramConfig.EREFERENCE_LABEL_POS));
+        }
       };
       return ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_createLabel, _function);
     }
@@ -266,7 +381,13 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
     public XConnectionLabel createLabel(final IMappedElementDescriptor<EReference> descriptor, final EReference labelElement) {
       XConnectionLabel _createLabel = super.createLabel(descriptor, labelElement);
       final Procedure1<XConnectionLabel> _function = (XConnectionLabel it) -> {
-        it.setPosition(EcoreDiagramConfig.EREFERENCE_LABEL_POS);
+        EReference _eOpposite = labelElement.getEOpposite();
+        boolean _equals = Objects.equal(_eOpposite, null);
+        if (_equals) {
+          it.setPosition(0.5);
+        } else {
+          it.setPosition(EcoreDiagramConfig.EREFERENCE_LABEL_POS);
+        }
       };
       return ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_createLabel, _function);
     }
@@ -311,6 +432,8 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
         _matched=true;
         acceptor.add(this.ePackageNode);
         acceptor.add(this.ePackageDiagram);
+        acceptor.add(this.ePackageInheritanceDiagram);
+        acceptor.add(this.ePackageContainmentDiagram);
       }
     }
     if (!_matched) {

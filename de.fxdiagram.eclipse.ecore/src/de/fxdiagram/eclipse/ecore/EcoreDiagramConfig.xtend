@@ -34,7 +34,23 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 		override calls() {
 			eClassNode.nodeForEach[EClassifiers.filter(EClass)]
 			ePackageNode.nodeForEach[ESubpackages]
-			eagerly(eSuperTypeConnection, eReferenceConnection)
+			eagerly(eSuperTypeConnection, eReferenceConnection, eContainmentReferenceConnection)
+		}
+	}
+
+	val ePackageInheritanceDiagram = new DiagramMapping<EPackage>(this, 'ePackageInheritanceDiagram', 'EPackage inheritance diagram') {
+		override calls() {
+			eClassNode.nodeForEach[EClassifiers.filter(EClass)]
+			ePackageNode.nodeForEach[ESubpackages]
+			eagerly(eSuperTypeConnection)
+		}
+	}
+
+	val ePackageContainmentDiagram = new DiagramMapping<EPackage>(this, 'ePackageContainmentDiagram', 'EPackage containment diagram') {
+		override calls() {
+			eClassNode.nodeForEach[EClassifiers.filter(EClass)]
+			ePackageNode.nodeForEach[ESubpackages]
+			eagerly(eContainmentReferenceConnection)
 		}
 	}
 
@@ -64,7 +80,16 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 			eClassName.labelFor[it]
 			eAttribute.labelForEach[EAttributes]
 			eOperation.labelForEach[EOperations]
-			eReferenceConnection.outConnectionForEach[EReferences.map[new EReferenceWithOpposite(it)]].asButton[getArrowButton("Add EReference")]
+			eReferenceConnection.outConnectionForEach[
+				EReferences
+					.filter[!containment && !container]
+					.map[new EReferenceWithOpposite(it)]
+			].asButton[getArrowButton("Add cross EReference")]
+			eContainmentReferenceConnection.outConnectionForEach[
+				EReferences
+					.filter[containment || container]
+					.map[new EReferenceWithOpposite(it)]
+			].asButton[getArrowButton("Add containment EReference")]
 			eSuperTypeConnection.outConnectionForEach[ subType |
 				val superTypes = newArrayList
 				subType.ESuperTypes.forEach[ superType, i |
@@ -84,7 +109,7 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 
 	val eAttribute = new NodeLabelMapping<EAttribute>(this, ATTRIBUTE) {
 		override getText(EAttribute it) {
-			'''«name»: «EType.name»'''
+			'''«name»: «EType?.name»'''
 		}
 	}
 
@@ -94,16 +119,34 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 		}
 	}
 
-	val eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, 'eReferenceConnection', 'EReference') {
+	val eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, 'crossReferenceConnection', 'Cross EReference') {
 		override createConnection(IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
 			new BaseConnection(descriptor) => [ conn |
 				descriptor.withDomainObject[
-					if(to.containment)
-						conn.targetArrowHead = new DiamondArrowHead(conn, false)
-					else if(to.container)
+					conn.targetArrowHead = new LineArrowHead(conn, false)
+					null
+				]
+			]
+		}
+
+		override calls() {
+			eReferenceToName.labelFor[to]
+			eReferenceFroName.labelFor[fro]
+			eClassNode.target[to.EType as EClass]
+		}
+	}
+	
+	val eContainmentReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, 'containmentReferenceConnection', 'Containment EReference') {
+		override createConnection(IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
+			new BaseConnection(descriptor) => [ conn |
+				descriptor.withDomainObject[
+					if(to.containment) {
 						conn.sourceArrowHead = new DiamondArrowHead(conn, true)
-					else	
-						conn.targetArrowHead = new LineArrowHead(conn, false)
+						conn.targetArrowHead = null						
+					} else if(to.container){
+						conn.targetArrowHead = new DiamondArrowHead(conn, false)
+						conn.sourceArrowHead = null						
+					}						
 					null
 				]
 			]
@@ -119,7 +162,10 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 	val eReferenceToName = new ConnectionLabelMapping<EReference>(this, 'eReferenceToName') {
 		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
 			super.createLabel(descriptor, labelElement) => [ 
-				position = 1 - EREFERENCE_LABEL_POS
+				if(labelElement.EOpposite == null)
+					position = 0.5
+				else
+					position = 1 - EREFERENCE_LABEL_POS
 			]
 		}
 		
@@ -131,7 +177,10 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 	val eReferenceFroName = new ConnectionLabelMapping<EReference>(this, 'eReferenceFroName') {
 		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
 			super.createLabel(descriptor, labelElement) => [ 
-				position = EREFERENCE_LABEL_POS
+				if(labelElement.EOpposite == null)
+					position = 0.5
+				else
+					position = EREFERENCE_LABEL_POS
 			]
 		}
 		
@@ -159,6 +208,8 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 			EPackage: {
 				add(ePackageNode)
 				add(ePackageDiagram)
+				add(ePackageInheritanceDiagram)
+				add(ePackageContainmentDiagram)
 			}
 			EReference:
 				add(eReferenceConnection)

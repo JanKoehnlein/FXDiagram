@@ -21,7 +21,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
-@ModelNode("uri")
+@ModelNode({ "uri", "name" })
 @SuppressWarnings("all")
 public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObject> {
   public EcoreDomainObjectDescriptor(final String uri, final String name, final String mappingConfigID, final String mappingID) {
@@ -128,6 +128,7 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(uriProperty, String.class);
+    modelElement.addProperty(nameProperty, String.class);
   }
   
   public String toString() {

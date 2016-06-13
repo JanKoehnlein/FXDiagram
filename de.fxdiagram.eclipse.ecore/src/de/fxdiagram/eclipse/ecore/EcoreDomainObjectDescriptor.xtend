@@ -10,7 +10,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.ui.IEditorPart
 
-@ModelNode('uri')
+@ModelNode('uri', 'name')
 class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObject> {
 
 	@FxProperty(readOnly = true) val String uri
