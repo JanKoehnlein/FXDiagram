@@ -8,6 +8,7 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
+import de.fxdiagram.core.anchors.ControlPointCorrector;
 import de.fxdiagram.core.anchors.SplineShapeKeeper;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -51,6 +52,8 @@ public class ConnectionRouter implements XActivatable {
   
   private SplineShapeKeeper shapeKeeper;
   
+  private ControlPointCorrector controlPointCorrector;
+  
   @Accessors(AccessorType.PUBLIC_GETTER)
   private boolean splineShapeKeeperEnabled = false;
   
@@ -66,6 +69,8 @@ public class ConnectionRouter implements XActivatable {
       connection.requestLayout();
     };
     this.boundsListener = _function_1;
+    SplineShapeKeeper _splineShapeKeeper = new SplineShapeKeeper(connection);
+    this.shapeKeeper = _splineShapeKeeper;
     InitializingListener<XNode> _initializingListener = new InitializingListener<XNode>();
     final Procedure1<InitializingListener<XNode>> _function_2 = (InitializingListener<XNode> it) -> {
       final Procedure1<XNode> _function_3 = (XNode it_1) -> {
@@ -80,8 +85,8 @@ public class ConnectionRouter implements XActivatable {
     };
     InitializingListener<XNode> _doubleArrow = ObjectExtensions.<InitializingListener<XNode>>operator_doubleArrow(_initializingListener, _function_2);
     this.connectionEndListener = _doubleArrow;
-    SplineShapeKeeper _splineShapeKeeper = new SplineShapeKeeper(connection);
-    this.shapeKeeper = _splineShapeKeeper;
+    ControlPointCorrector _controlPointCorrector = new ControlPointCorrector();
+    this.controlPointCorrector = _controlPointCorrector;
   }
   
   public ObservableList<XControlPoint> getControlPoints() {
@@ -405,6 +410,7 @@ public class ConnectionRouter implements XActivatable {
       };
       _controlPoints_7.forEach(_function_4);
     }
+    this.controlPointCorrector.correctControlPoints(this.connection);
   }
   
   protected boolean calculateSelfEdge() {

@@ -32,6 +32,7 @@ class ConnectionRouter implements XActivatable {
 	InitializingListener<XNode> connectionEndListener
 	
 	SplineShapeKeeper shapeKeeper
+	ControlPointCorrector controlPointCorrector
 	
 	@Accessors(PUBLIC_GETTER)
 	boolean splineShapeKeeperEnabled = false
@@ -46,6 +47,7 @@ class ConnectionRouter implements XActivatable {
 		boundsListener = [ prop, oldVal, newVal |
 			connection.requestLayout
 		]
+ 		shapeKeeper = new SplineShapeKeeper(connection)
 		connectionEndListener = new InitializingListener<XNode>() => [
  			set = [ bindNode(it) ]
  			unset = [ 
@@ -53,7 +55,7 @@ class ConnectionRouter implements XActivatable {
  				shapeKeeper.reset
  			]
  		]
- 		shapeKeeper = new SplineShapeKeeper(connection)
+ 		controlPointCorrector = new ControlPointCorrector
 	}
 	
 	def getControlPoints() {
@@ -200,6 +202,7 @@ class ConnectionRouter implements XActivatable {
 			}
 			controlPoints.forEach[update(controlPoints)]
 		}
+		controlPointCorrector.correctControlPoints(connection)
 	}
 	
 	protected def calculateSelfEdge() {
