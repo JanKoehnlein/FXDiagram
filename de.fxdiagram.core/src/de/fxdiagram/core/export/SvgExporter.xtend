@@ -24,6 +24,9 @@ import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javafx.scene.transform.Translate
 import javax.imageio.ImageIO
+import javafx.geometry.Insets
+
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 /**
  * Exports a given diagram to SVG.
@@ -45,6 +48,8 @@ import javax.imageio.ImageIO
 class SvgExporter {
 	
 	static val PT_TO_PX = 2.0/3.0
+	
+	static val EXTRA_BORDER = 10
 	 
 	int currentID
 	
@@ -63,7 +68,7 @@ class SvgExporter {
 		this.linkProvider = linkProvider
 		defs = newArrayList
 		currentID = 0
-		val bounds = diagram.boundsInParent
+		val bounds = diagram.boundsInParent + new Insets(EXTRA_BORDER)
 		'''
 			<?xml version="1.0" standalone="no"?>
 			<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 

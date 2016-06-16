@@ -7,6 +7,7 @@ import de.fxdiagram.core.export.ShapeConverterExtensions;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgLink;
 import de.fxdiagram.core.export.SvgLinkProvider;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -66,6 +69,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class SvgExporter {
   private final static double PT_TO_PX = (2.0 / 3.0);
   
+  private final static int EXTRA_BORDER = 10;
+  
   private int currentID;
   
   private int imageCounter;
@@ -86,7 +91,9 @@ public class SvgExporter {
       ArrayList<String> _newArrayList = CollectionLiterals.<String>newArrayList();
       this.defs = _newArrayList;
       this.currentID = 0;
-      final Bounds bounds = diagram.getBoundsInParent();
+      Bounds _boundsInParent = diagram.getBoundsInParent();
+      Insets _insets = new Insets(SvgExporter.EXTRA_BORDER);
+      final BoundingBox bounds = BoundsExtensions.operator_plus(_boundsInParent, _insets);
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<?xml version=\"1.0\" standalone=\"no\"?>");
       _builder.newLine();
