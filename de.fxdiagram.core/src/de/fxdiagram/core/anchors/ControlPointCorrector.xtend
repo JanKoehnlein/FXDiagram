@@ -28,7 +28,7 @@ class ControlPointCorrector {
 	}
 	
 	protected def correct(XControlPoint criticalPoint, Point2D arrowEnd, Point2D arrowTip, ArrowHead arrowHead) {
-		if(norm(criticalPoint.toPoint2D - arrowTip) < arrowHead.lineCut) {
+		if(arrowTip != null && norm(criticalPoint.toPoint2D - arrowTip) < arrowHead.lineCut) {
 			var delta = arrowTip - arrowEnd
 			delta = delta / norm(delta)  
 			criticalPoint.layoutXProperty.setSafely(arrowEnd.x - delta.x)

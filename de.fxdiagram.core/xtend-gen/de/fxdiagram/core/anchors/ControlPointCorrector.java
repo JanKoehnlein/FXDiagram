@@ -56,12 +56,19 @@ public class ControlPointCorrector {
   }
   
   protected void correct(final XControlPoint criticalPoint, final Point2D arrowEnd, final Point2D arrowTip, final ArrowHead arrowHead) {
-    Point2D _point2D = ConnectionExtensions.toPoint2D(criticalPoint);
-    Point2D _minus = Point2DExtensions.operator_minus(_point2D, arrowTip);
-    double _norm = Point2DExtensions.norm(_minus);
-    double _lineCut = arrowHead.getLineCut();
-    boolean _lessThan = (_norm < _lineCut);
-    if (_lessThan) {
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(arrowTip, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      Point2D _point2D = ConnectionExtensions.toPoint2D(criticalPoint);
+      Point2D _minus = Point2DExtensions.operator_minus(_point2D, arrowTip);
+      double _norm = Point2DExtensions.norm(_minus);
+      double _lineCut = arrowHead.getLineCut();
+      boolean _lessThan = (_norm < _lineCut);
+      _and = _lessThan;
+    }
+    if (_and) {
       Point2D delta = Point2DExtensions.operator_minus(arrowTip, arrowEnd);
       double _norm_1 = Point2DExtensions.norm(delta);
       Point2D _divide = Point2DExtensions.operator_divide(delta, _norm_1);
