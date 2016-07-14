@@ -236,9 +236,14 @@ public class XDiagramConfigInterpreter {
     final Iterable<T> labelObjects = this.<T, U>select(labelMappingCall, domainArgument);
     final ArrayList<XLabel> result = CollectionLiterals.<XLabel>newArrayList();
     for (final T labelObject : labelObjects) {
-      AbstractLabelMapping<T> _labelMapping = labelMappingCall.getLabelMapping();
-      XLabel _createLabel = this.<T>createLabel(labelObject, _labelMapping);
-      result.add(_createLabel);
+      {
+        AbstractLabelMapping<T> _labelMapping = labelMappingCall.getLabelMapping();
+        final XLabel label = this.<T>createLabel(labelObject, _labelMapping);
+        boolean _notEquals = (!Objects.equal(label, null));
+        if (_notEquals) {
+          result.add(label);
+        }
+      }
     }
     return result;
   }

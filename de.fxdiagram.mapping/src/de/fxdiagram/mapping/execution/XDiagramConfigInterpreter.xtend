@@ -126,8 +126,11 @@ class XDiagramConfigInterpreter {
 	def <T, U> Iterable<? extends XLabel> execute(AbstractLabelMappingCall<T, U> labelMappingCall, U domainArgument) {
 		val labelObjects = select(labelMappingCall, domainArgument)
 		val result = newArrayList
-		for (labelObject : labelObjects)
-			result += createLabel(labelObject, labelMappingCall.labelMapping)
+		for (labelObject : labelObjects) {
+			val label = createLabel(labelObject, labelMappingCall.labelMapping)
+			if(label != null)
+				result += label 
+		}
 		return result
 	}
 
