@@ -34,12 +34,12 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.ide.release"
-      value="http://download.eclipse.org/efxclipse/updates-released/2.3.0/site"
+      value="http://download.eclipse.org/efxclipse/updates-released/2.4.0/site"
       label=""/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.runtime.release"
-      value="http://download.eclipse.org/efxclipse/runtime-released/2.3.0/site"
+      value="http://download.eclipse.org/efxclipse/runtime-released/2.4.0/site"
       label=""/>
   <setupTask
       xsi:type="setup:VariableTask"
@@ -156,7 +156,7 @@
   <setupTask
       xsi:type="git:GitCloneTask"
       id="kieler.git.clone"
-      remoteURI="http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git"
+      remoteURI="https://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git"
       pushURI=""
       checkoutBranch="releases/pragmatics-2015-02">
     <description>Kieler</description>
@@ -171,6 +171,9 @@
     <choice
         value="http://download.eclipse.org/releases/mars"
         label="Mars - 4.5"/>
+    <choice
+        value="http://download.eclipse.org/releases/neon"
+        label="Neon - 4.6"/>
     <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
   </setupTask>
   <setupTask
