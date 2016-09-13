@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.fxdiagram</groupId>
 	<artifactId>de.fxdiagram.maven</artifactId>
-	<version>0.28.1-SNAPSHOT</version>
+	<version>0.29.0-SNAPSHOT</version>
 	<properties>
 		<tycho-version>0.24.0</tycho-version>
-		<xtext-version>2.9.2</xtext-version>
+		<xtext-version>2.10.0</xtext-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<packaging>pom</packaging>
@@ -50,12 +50,12 @@
 		<repository>
 			<id>efxclipse-runtime-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/runtime-released/2.3.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/runtime-released/2.4.0/site</url>
 		</repository>
 		<repository>
 			<id>efxclipse-ide-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/updates-released/2.3.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/updates-released/2.4.0/site</url>
 		</repository>
 		<repository>
 			<id>kieler</id>
