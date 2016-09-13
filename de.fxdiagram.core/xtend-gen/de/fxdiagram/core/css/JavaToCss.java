@@ -13,25 +13,23 @@ public class JavaToCss {
   public static CharSequence toCss(final Paint paint) {
     CharSequence _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (paint instanceof Color) {
-        _matched=true;
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("rgb(");
-        double _red = ((Color)paint).getRed();
-        double _multiply = (255 * _red);
-        _builder.append(((int) _multiply), "");
-        _builder.append(", ");
-        double _green = ((Color)paint).getGreen();
-        double _multiply_1 = (255 * _green);
-        _builder.append(((int) _multiply_1), "");
-        _builder.append(", ");
-        double _blue = ((Color)paint).getBlue();
-        double _multiply_2 = (255 * _blue);
-        _builder.append(((int) _multiply_2), "");
-        _builder.append(")");
-        _switchResult = _builder;
-      }
+    if (paint instanceof Color) {
+      _matched=true;
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("rgb(");
+      double _red = ((Color)paint).getRed();
+      double _multiply = (255 * _red);
+      _builder.append(((int) _multiply), "");
+      _builder.append(", ");
+      double _green = ((Color)paint).getGreen();
+      double _multiply_1 = (255 * _green);
+      _builder.append(((int) _multiply_1), "");
+      _builder.append(", ");
+      double _blue = ((Color)paint).getBlue();
+      double _multiply_2 = (255 * _blue);
+      _builder.append(((int) _multiply_2), "");
+      _builder.append(")");
+      _switchResult = _builder;
     }
     if (!_matched) {
       if (paint instanceof LinearGradient) {

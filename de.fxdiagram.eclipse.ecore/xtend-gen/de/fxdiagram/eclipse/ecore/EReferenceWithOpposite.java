@@ -25,29 +25,7 @@ public class EReferenceWithOpposite {
   public boolean equals(final Object obj) {
     boolean _xifexpression = false;
     if ((obj instanceof EReferenceWithOpposite)) {
-      boolean _or = false;
-      boolean _and = false;
-      boolean _equals = Objects.equal(((EReferenceWithOpposite)obj).to, this.to);
-      if (!_equals) {
-        _and = false;
-      } else {
-        boolean _equals_1 = Objects.equal(((EReferenceWithOpposite)obj).fro, this.fro);
-        _and = _equals_1;
-      }
-      if (_and) {
-        _or = true;
-      } else {
-        boolean _and_1 = false;
-        boolean _equals_2 = Objects.equal(((EReferenceWithOpposite)obj).fro, this.to);
-        if (!_equals_2) {
-          _and_1 = false;
-        } else {
-          boolean _equals_3 = Objects.equal(((EReferenceWithOpposite)obj).to, this.fro);
-          _and_1 = _equals_3;
-        }
-        _or = _and_1;
-      }
-      _xifexpression = _or;
+      _xifexpression = ((Objects.equal(((EReferenceWithOpposite)obj).to, this.to) && Objects.equal(((EReferenceWithOpposite)obj).fro, this.fro)) || (Objects.equal(((EReferenceWithOpposite)obj).fro, this.to) && Objects.equal(((EReferenceWithOpposite)obj).to, this.fro)));
     } else {
       _xifexpression = false;
     }

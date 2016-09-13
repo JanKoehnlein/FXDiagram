@@ -126,7 +126,8 @@ public class NeonSignNode extends FlipNode {
         VBox.setMargin(it_1, _insets);
       };
       TextField _doubleArrow = ObjectExtensions.<TextField>operator_doubleArrow(_textField, _function_1);
-      _children.add((this.textField = _doubleArrow));
+      TextField _textField_1 = (this.textField = _doubleArrow);
+      _children.add(_textField_1);
       ObservableList<Node> _children_1 = it.getChildren();
       Text _text = new Text();
       final Procedure1<Text> _function_2 = (Text it_1) -> {
@@ -159,7 +160,8 @@ public class NeonSignNode extends FlipNode {
         it_1.setEffect(_doubleArrow_1);
       };
       Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
-      _children_1.add((this.neonText = _doubleArrow_1));
+      Text _neonText = (this.neonText = _doubleArrow_1);
+      _children_1.add(_neonText);
     };
     return ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
   }

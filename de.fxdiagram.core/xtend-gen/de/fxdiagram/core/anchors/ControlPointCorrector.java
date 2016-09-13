@@ -56,33 +56,21 @@ public class ControlPointCorrector {
   }
   
   protected void correct(final XControlPoint criticalPoint, final Point2D arrowEnd, final Point2D arrowTip, final ArrowHead arrowHead) {
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(arrowTip, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      Point2D _point2D = ConnectionExtensions.toPoint2D(criticalPoint);
-      Point2D _minus = Point2DExtensions.operator_minus(_point2D, arrowTip);
-      double _norm = Point2DExtensions.norm(_minus);
-      double _lineCut = arrowHead.getLineCut();
-      boolean _lessThan = (_norm < _lineCut);
-      _and = _lessThan;
-    }
-    if (_and) {
+    if (((!Objects.equal(arrowTip, null)) && (Point2DExtensions.norm(Point2DExtensions.operator_minus(ConnectionExtensions.toPoint2D(criticalPoint), arrowTip)) < arrowHead.getLineCut()))) {
       Point2D delta = Point2DExtensions.operator_minus(arrowTip, arrowEnd);
-      double _norm_1 = Point2DExtensions.norm(delta);
-      Point2D _divide = Point2DExtensions.operator_divide(delta, _norm_1);
+      double _norm = Point2DExtensions.norm(delta);
+      Point2D _divide = Point2DExtensions.operator_divide(delta, _norm);
       delta = _divide;
       DoubleProperty _layoutXProperty = criticalPoint.layoutXProperty();
       double _x = arrowEnd.getX();
       double _x_1 = delta.getX();
-      double _minus_1 = (_x - _x_1);
-      CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_minus_1));
+      double _minus = (_x - _x_1);
+      CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_minus));
       DoubleProperty _layoutYProperty = criticalPoint.layoutYProperty();
       double _y = arrowEnd.getY();
       double _y_1 = delta.getY();
-      double _minus_2 = (_y - _y_1);
-      CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_minus_2));
+      double _minus_1 = (_y - _y_1);
+      CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_minus_1));
     }
   }
 }

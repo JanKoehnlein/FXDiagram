@@ -43,18 +43,7 @@ public class JavaTypeModel {
     final HashMultimap<String, Pair<Class<?>, Method>> propertyMethods = HashMultimap.<String, Pair<Class<?>, Method>>create();
     Method[] _declaredMethods = javaType.getDeclaredMethods();
     final Function1<Method, Boolean> _function_1 = (Method it) -> {
-      boolean _and = false;
-      int _modifiers = it.getModifiers();
-      boolean _isPublic = Modifier.isPublic(_modifiers);
-      if (!_isPublic) {
-        _and = false;
-      } else {
-        String _name = it.getName();
-        boolean _startsWith = _name.startsWith("impl_");
-        boolean _not = (!_startsWith);
-        _and = _not;
-      }
-      return Boolean.valueOf(_and);
+      return Boolean.valueOf((Modifier.isPublic(it.getModifiers()) && (!it.getName().startsWith("impl_"))));
     };
     Iterable<Method> _filter_1 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods)), _function_1);
     List<Method> _list_1 = IterableExtensions.<Method>toList(_filter_1);
@@ -221,14 +210,6 @@ public class JavaTypeModel {
   }
   
   public boolean isPrimitiveOrString(final Class<?> type) {
-    boolean _or = false;
-    boolean _isPrimitive = type.isPrimitive();
-    if (_isPrimitive) {
-      _or = true;
-    } else {
-      boolean _equals = Objects.equal(type, String.class);
-      _or = _equals;
-    }
-    return _or;
+    return (type.isPrimitive() || Objects.equal(type, String.class));
   }
 }

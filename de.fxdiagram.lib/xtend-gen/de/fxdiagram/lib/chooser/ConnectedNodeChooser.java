@@ -153,14 +153,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   protected XConnection connectChoice(final XNode choice, final DomainObjectDescriptor choiceInfo) {
     XConnection _xblockexpression = null;
     {
-      boolean _and = false;
-      boolean _isActive = this.getIsActive();
-      if (!_isActive) {
-        _and = false;
-      } else {
-        _and = (choice != this.currentChoice);
-      }
-      if (_and) {
+      if ((this.getIsActive() && (choice != this.currentChoice))) {
         this.currentChoice = choice;
         final XConnection newConnection = this.connectionProvider.getConnection(this.host, choice, choiceInfo);
         boolean _notEquals = (!Objects.equal(newConnection, this.currentConnection));
@@ -179,28 +172,9 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   
   protected boolean addConnection(final XConnection connection) {
     boolean _xifexpression = false;
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _notEquals = (!Objects.equal(connection, null));
-    if (!_notEquals) {
-      _and_1 = false;
-    } else {
-      XNode _source = connection.getSource();
-      XDiagram _diagram = CoreExtensions.getDiagram(_source);
-      boolean _notEquals_1 = (!Objects.equal(_diagram, null));
-      _and_1 = _notEquals_1;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      XNode _target = connection.getTarget();
-      XDiagram _diagram_1 = CoreExtensions.getDiagram(_target);
-      boolean _notEquals_2 = (!Objects.equal(_diagram_1, null));
-      _and = _notEquals_2;
-    }
-    if (_and) {
-      XDiagram _diagram_2 = this.getDiagram();
-      ObservableList<XConnection> _connections = _diagram_2.getConnections();
+    if ((((!Objects.equal(connection, null)) && (!Objects.equal(CoreExtensions.getDiagram(connection.getSource()), null))) && (!Objects.equal(CoreExtensions.getDiagram(connection.getTarget()), null)))) {
+      XDiagram _diagram = this.getDiagram();
+      ObservableList<XConnection> _connections = _diagram.getConnections();
       _xifexpression = _connections.add(connection);
     }
     return _xifexpression;

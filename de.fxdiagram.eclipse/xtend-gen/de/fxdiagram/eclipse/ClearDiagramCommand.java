@@ -23,7 +23,8 @@ public class ClearDiagramCommand extends AbstractCommand {
     this.oldRootDiagram = _rootDiagram;
     XRoot _root_2 = context.getRoot();
     XDiagram _xDiagram = new XDiagram();
-    _root_2.setRootDiagram((this.newDiagram = _xDiagram));
+    XDiagram _newDiagram = (this.newDiagram = _xDiagram);
+    _root_2.setRootDiagram(_newDiagram);
   }
   
   @Override

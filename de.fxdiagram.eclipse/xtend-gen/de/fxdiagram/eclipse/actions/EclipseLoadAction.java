@@ -104,11 +104,9 @@ public class EclipseLoadAction extends LoadAction {
     final Function1<Control, Text> _function = (Control it) -> {
       Text _switchResult = null;
       boolean _matched = false;
-      if (!_matched) {
-        if (it instanceof Text) {
-          _matched=true;
-          _switchResult = ((Text)it);
-        }
+      if (it instanceof Text) {
+        _matched=true;
+        _switchResult = ((Text)it);
       }
       if (!_matched) {
         if (it instanceof Composite) {

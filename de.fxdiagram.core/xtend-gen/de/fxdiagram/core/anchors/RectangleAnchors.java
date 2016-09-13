@@ -44,33 +44,13 @@ public class RectangleAnchors implements Anchors {
       if (_greaterThan) {
         double _minY_1 = boundsInRootDiagram.getMinY();
         final double xTop = this.getXIntersection(_minY_1, centerX, centerY, x, y);
-        boolean _and = false;
-        double _minX_1 = boundsInRootDiagram.getMinX();
-        boolean _greaterEqualsThan = (xTop >= _minX_1);
-        if (!_greaterEqualsThan) {
-          _and = false;
-        } else {
-          double _maxX_1 = boundsInRootDiagram.getMaxX();
-          boolean _lessEqualsThan = (xTop <= _maxX_1);
-          _and = _lessEqualsThan;
-        }
-        if (_and) {
+        if (((xTop >= boundsInRootDiagram.getMinX()) && (xTop <= boundsInRootDiagram.getMaxX()))) {
           double _minY_2 = boundsInRootDiagram.getMinY();
           finder.addCandidate(xTop, _minY_2);
         }
         double _maxY_1 = boundsInRootDiagram.getMaxY();
         final double xBottom = this.getXIntersection(_maxY_1, centerX, centerY, x, y);
-        boolean _and_1 = false;
-        double _minX_2 = boundsInRootDiagram.getMinX();
-        boolean _greaterEqualsThan_1 = (xBottom >= _minX_2);
-        if (!_greaterEqualsThan_1) {
-          _and_1 = false;
-        } else {
-          double _maxX_2 = boundsInRootDiagram.getMaxX();
-          boolean _lessEqualsThan_1 = (xBottom <= _maxX_2);
-          _and_1 = _lessEqualsThan_1;
-        }
-        if (_and_1) {
+        if (((xBottom >= boundsInRootDiagram.getMinX()) && (xBottom <= boundsInRootDiagram.getMaxX()))) {
           double _maxY_2 = boundsInRootDiagram.getMaxY();
           finder.addCandidate(xBottom, _maxY_2);
         }
@@ -78,37 +58,17 @@ public class RectangleAnchors implements Anchors {
       double _abs_1 = Math.abs((centerX - x));
       boolean _greaterThan_1 = (_abs_1 > NumberExpressionExtensions.EPSILON);
       if (_greaterThan_1) {
-        double _minX_3 = boundsInRootDiagram.getMinX();
-        final double yLeft = this.getYIntersection(_minX_3, centerX, centerY, x, y);
-        boolean _and_2 = false;
-        double _minY_3 = boundsInRootDiagram.getMinY();
-        boolean _greaterEqualsThan_2 = (yLeft >= _minY_3);
-        if (!_greaterEqualsThan_2) {
-          _and_2 = false;
-        } else {
-          double _maxY_3 = boundsInRootDiagram.getMaxY();
-          boolean _lessEqualsThan_2 = (yLeft <= _maxY_3);
-          _and_2 = _lessEqualsThan_2;
+        double _minX_1 = boundsInRootDiagram.getMinX();
+        final double yLeft = this.getYIntersection(_minX_1, centerX, centerY, x, y);
+        if (((yLeft >= boundsInRootDiagram.getMinY()) && (yLeft <= boundsInRootDiagram.getMaxY()))) {
+          double _minX_2 = boundsInRootDiagram.getMinX();
+          finder.addCandidate(_minX_2, yLeft);
         }
-        if (_and_2) {
-          double _minX_4 = boundsInRootDiagram.getMinX();
-          finder.addCandidate(_minX_4, yLeft);
-        }
-        double _maxX_3 = boundsInRootDiagram.getMaxX();
-        final double yRight = this.getYIntersection(_maxX_3, centerX, centerY, x, y);
-        boolean _and_3 = false;
-        double _minY_4 = boundsInRootDiagram.getMinY();
-        boolean _greaterEqualsThan_3 = (yRight >= _minY_4);
-        if (!_greaterEqualsThan_3) {
-          _and_3 = false;
-        } else {
-          double _maxY_4 = boundsInRootDiagram.getMaxY();
-          boolean _lessEqualsThan_3 = (yRight <= _maxY_4);
-          _and_3 = _lessEqualsThan_3;
-        }
-        if (_and_3) {
-          double _maxX_4 = boundsInRootDiagram.getMaxX();
-          finder.addCandidate(_maxX_4, yRight);
+        double _maxX_1 = boundsInRootDiagram.getMaxX();
+        final double yRight = this.getYIntersection(_maxX_1, centerX, centerY, x, y);
+        if (((yRight >= boundsInRootDiagram.getMinY()) && (yRight <= boundsInRootDiagram.getMaxY()))) {
+          double _maxX_2 = boundsInRootDiagram.getMaxX();
+          finder.addCandidate(_maxX_2, yRight);
         }
       }
       _xblockexpression = finder.getCurrentNearest();

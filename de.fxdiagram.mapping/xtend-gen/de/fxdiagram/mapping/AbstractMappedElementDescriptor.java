@@ -59,19 +59,7 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof AbstractMappedElementDescriptor<?>)) {
-      boolean _and = false;
-      String _mappingConfigID = this.getMappingConfigID();
-      String _mappingConfigID_1 = ((AbstractMappedElementDescriptor<?>)obj).getMappingConfigID();
-      boolean _equals = Objects.equal(_mappingConfigID, _mappingConfigID_1);
-      if (!_equals) {
-        _and = false;
-      } else {
-        String _mappingID = this.getMappingID();
-        String _mappingID_1 = ((AbstractMappedElementDescriptor<?>)obj).getMappingID();
-        boolean _equals_1 = Objects.equal(_mappingID, _mappingID_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (Objects.equal(this.getMappingConfigID(), ((AbstractMappedElementDescriptor<?>)obj).getMappingConfigID()) && Objects.equal(this.getMappingID(), ((AbstractMappedElementDescriptor<?>)obj).getMappingID()));
     } else {
       return false;
     }

@@ -15,11 +15,9 @@ class HandlerHelper {
       final Widget widget = ((Event) _trigger).widget;
       boolean _switchResult = false;
       boolean _matched = false;
-      if (!_matched) {
-        if (widget instanceof MenuItem) {
-          _matched=true;
-          _switchResult = ((MenuItem)widget).getSelection();
-        }
+      if (widget instanceof MenuItem) {
+        _matched=true;
+        _switchResult = ((MenuItem)widget).getSelection();
       }
       if (!_matched) {
         if (widget instanceof ToolItem) {

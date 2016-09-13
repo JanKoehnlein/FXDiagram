@@ -53,26 +53,7 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof RelativeXtextEObjectID)) {
-      boolean _and = false;
-      boolean _and_1 = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and_1 = false;
-      } else {
-        XtextEObjectID _parentID = ((RelativeXtextEObjectID)obj).getParentID();
-        XtextEObjectID _parentID_1 = this.getParentID();
-        boolean _equals_1 = Objects.equal(_parentID, _parentID_1);
-        _and_1 = _equals_1;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        String _relativeFragment = ((RelativeXtextEObjectID)obj).getRelativeFragment();
-        String _relativeFragment_1 = this.getRelativeFragment();
-        boolean _equals_2 = Objects.equal(_relativeFragment, _relativeFragment_1);
-        _and = _equals_2;
-      }
-      return _and;
+      return ((super.equals(obj) && Objects.equal(((RelativeXtextEObjectID)obj).getParentID(), this.getParentID())) && Objects.equal(((RelativeXtextEObjectID)obj).getRelativeFragment(), this.getRelativeFragment()));
     } else {
       return false;
     }
@@ -141,15 +122,7 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
     final String elementFragment = _xifexpression;
     Resource _eResource = parent.eResource();
     final EObject element = _eResource.getEObject(elementFragment);
-    boolean _or = false;
-    boolean _equals = Objects.equal(element, null);
-    if (_equals) {
-      _or = true;
-    } else {
-      boolean _eIsProxy = element.eIsProxy();
-      _or = _eIsProxy;
-    }
-    if (_or) {
+    if ((Objects.equal(element, null) || element.eIsProxy())) {
       String _string = this.toString();
       String _plus = ("Could not resolve element " + _string);
       throw new NoSuchElementException(_plus);

@@ -22,11 +22,9 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
   @Override
   public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainObject instanceof EClass) {
-        _matched=true;
-        return this.createEClassDescriptor(((EClass)domainObject));
-      }
+    if (domainObject instanceof EClass) {
+      _matched=true;
+      return this.createEClassDescriptor(((EClass)domainObject));
     }
     if (!_matched) {
       if (domainObject instanceof EReference) {

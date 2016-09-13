@@ -17,26 +17,10 @@ public class InitializingListener<T extends Object> implements ChangeListener<T>
   
   @Override
   public void changed(final ObservableValue<? extends T> value, final T oldValue, final T newValue) {
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(this.unset, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _notEquals_1 = (!Objects.equal(oldValue, null));
-      _and = _notEquals_1;
-    }
-    if (_and) {
+    if (((!Objects.equal(this.unset, null)) && (!Objects.equal(oldValue, null)))) {
       this.unset.apply(oldValue);
     }
-    boolean _and_1 = false;
-    boolean _notEquals_2 = (!Objects.equal(this.set, null));
-    if (!_notEquals_2) {
-      _and_1 = false;
-    } else {
-      boolean _notEquals_3 = (!Objects.equal(newValue, null));
-      _and_1 = _notEquals_3;
-    }
-    if (_and_1) {
+    if (((!Objects.equal(this.set, null)) && (!Objects.equal(newValue, null)))) {
       this.set.apply(newValue);
     }
   }

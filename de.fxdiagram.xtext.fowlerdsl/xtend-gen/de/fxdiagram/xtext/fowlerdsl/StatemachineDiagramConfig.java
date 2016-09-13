@@ -127,11 +127,9 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
   @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainArgument instanceof Statemachine) {
-        _matched=true;
-        acceptor.add(this.statemachineDiagram);
-      }
+    if (domainArgument instanceof Statemachine) {
+      _matched=true;
+      acceptor.add(this.statemachineDiagram);
     }
     if (!_matched) {
       if (domainArgument instanceof State) {

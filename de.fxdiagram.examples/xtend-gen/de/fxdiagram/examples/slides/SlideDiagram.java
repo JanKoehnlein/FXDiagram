@@ -166,15 +166,7 @@ public class SlideDiagram extends XDiagram {
       _xifexpression_1 = null;
     }
     final FadeTransition appear = _xifexpression_1;
-    boolean _and = false;
-    boolean _notEquals_2 = (!Objects.equal(fade, null));
-    if (!_notEquals_2) {
-      _and = false;
-    } else {
-      boolean _notEquals_3 = (!Objects.equal(appear, null));
-      _and = _notEquals_3;
-    }
-    if (_and) {
+    if (((!Objects.equal(fade, null)) && (!Objects.equal(appear, null)))) {
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_1 = (ParallelTransition it) -> {
         ObservableList<Animation> _children = it.getChildren();

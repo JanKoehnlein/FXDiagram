@@ -28,12 +28,10 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainObject instanceof Class) {
-        _matched=true;
-        String _classLoaderID = this.getClassLoaderID(((Class<?>)domainObject));
-        return new ClassLoaderDescriptor(_classLoaderID, this);
-      }
+    if (domainObject instanceof Class) {
+      _matched=true;
+      String _classLoaderID = this.getClassLoaderID(((Class<?>)domainObject));
+      return new ClassLoaderDescriptor(_classLoaderID, this);
     }
     if (!_matched) {
       if (domainObject instanceof ResourceHandle) {
@@ -62,15 +60,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   }
   
   protected String getClassLoaderID(final Class<?> clazz) {
-    boolean _and = false;
-    boolean _isEquinox = ClassLoaderExtensions.isEquinox();
-    if (!_isEquinox) {
-      _and = false;
-    } else {
-      boolean _notEquals = (!Objects.equal(this.rootClassLoader, null));
-      _and = _notEquals;
-    }
-    if (_and) {
+    if ((ClassLoaderExtensions.isEquinox() && (!Objects.equal(this.rootClassLoader, null)))) {
       final ClassLoader classLoader = clazz.getClassLoader();
       if ((classLoader instanceof BundleReference)) {
         Bundle _bundle = ((BundleReference)classLoader).getBundle();
@@ -83,21 +73,11 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   public Class<?> loadClass(final String className, final ClassLoaderDescriptor descriptor) {
     try {
       Class<?> _xifexpression = null;
-      boolean _or = false;
-      String _classLoaderID = descriptor.getClassLoaderID();
-      boolean _equals = Objects.equal(_classLoaderID, "root");
-      if (_equals) {
-        _or = true;
-      } else {
-        boolean _isEquinox = ClassLoaderExtensions.isEquinox();
-        boolean _not = (!_isEquinox);
-        _or = _not;
-      }
-      if (_or) {
+      if ((Objects.equal(descriptor.getClassLoaderID(), "root") || (!ClassLoaderExtensions.isEquinox()))) {
         _xifexpression = this.rootClassLoader.loadClass(className);
       } else {
-        String _classLoaderID_1 = descriptor.getClassLoaderID();
-        Bundle _bundle = Platform.getBundle(_classLoaderID_1);
+        String _classLoaderID = descriptor.getClassLoaderID();
+        Bundle _bundle = Platform.getBundle(_classLoaderID);
         Class<?> _loadClass = null;
         if (_bundle!=null) {
           _loadClass=_bundle.loadClass(className);
@@ -113,21 +93,11 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   public String toURI(final String resourcePath, final ClassLoaderDescriptor descriptor) {
     try {
       URL _xifexpression = null;
-      boolean _or = false;
-      String _classLoaderID = descriptor.getClassLoaderID();
-      boolean _equals = Objects.equal(_classLoaderID, "root");
-      if (_equals) {
-        _or = true;
-      } else {
-        boolean _isEquinox = ClassLoaderExtensions.isEquinox();
-        boolean _not = (!_isEquinox);
-        _or = _not;
-      }
-      if (_or) {
+      if ((Objects.equal(descriptor.getClassLoaderID(), "root") || (!ClassLoaderExtensions.isEquinox()))) {
         _xifexpression = this.rootClassLoader.getResource(resourcePath);
       } else {
-        String _classLoaderID_1 = descriptor.getClassLoaderID();
-        Bundle _bundle = Platform.getBundle(_classLoaderID_1);
+        String _classLoaderID = descriptor.getClassLoaderID();
+        Bundle _bundle = Platform.getBundle(_classLoaderID);
         URL _resource = null;
         if (_bundle!=null) {
           _resource=_bundle.getResource(resourcePath);

@@ -32,14 +32,7 @@ public class ConnectionExtensions {
     private final double distance;
     
     public boolean isBetterThan(final ConnectionExtensions.PointOnCurve other) {
-      boolean _or = false;
-      boolean _equals = Objects.equal(other, null);
-      if (_equals) {
-        _or = true;
-      } else {
-        _or = (this.distance < other.distance);
-      }
-      return _or;
+      return (Objects.equal(other, null) || (this.distance < other.distance));
     }
     
     public PointOnCurve(final Point2D point, final double localParameter, final double parameter, final int segmentIndex, final double distance) {

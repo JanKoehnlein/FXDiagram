@@ -31,24 +31,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class ZoomToFitAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (!_isShortcutDown) {
-      _and_1 = false;
-    } else {
-      boolean _isShiftDown = it.isShiftDown();
-      boolean _not = (!_isShiftDown);
-      _and_1 = _not;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.F);
-      _and = _equals;
-    }
-    return _and;
+    return ((it.isShortcutDown() && (!it.isShiftDown())) && Objects.equal(it.getCode(), KeyCode.F));
   }
   
   @Override
@@ -91,34 +74,17 @@ public class ZoomToFitAction implements DiagramAction {
           };
           final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
           ViewportTransition _xifexpression_1 = null;
-          boolean _and = false;
-          boolean _and_1 = false;
-          boolean _notEquals = (!Objects.equal(selectionBounds, null));
-          if (!_notEquals) {
-            _and_1 = false;
-          } else {
-            double _width = selectionBounds.getWidth();
-            boolean _greaterThan = (_width > NumberExpressionExtensions.EPSILON);
-            _and_1 = _greaterThan;
-          }
-          if (!_and_1) {
-            _and = false;
-          } else {
-            double _height = selectionBounds.getHeight();
-            boolean _greaterThan_1 = (_height > NumberExpressionExtensions.EPSILON);
-            _and = _greaterThan_1;
-          }
-          if (_and) {
+          if ((((!Objects.equal(selectionBounds, null)) && (selectionBounds.getWidth() > NumberExpressionExtensions.EPSILON)) && (selectionBounds.getHeight() > NumberExpressionExtensions.EPSILON))) {
             ViewportTransition _xblockexpression_1 = null;
             {
               Scene _scene = root.getScene();
-              double _width_1 = _scene.getWidth();
-              double _width_2 = selectionBounds.getWidth();
-              double _divide = (_width_1 / _width_2);
+              double _width = _scene.getWidth();
+              double _width_1 = selectionBounds.getWidth();
+              double _divide = (_width / _width_1);
               Scene _scene_1 = root.getScene();
-              double _height_1 = _scene_1.getHeight();
-              double _height_2 = selectionBounds.getHeight();
-              double _divide_1 = (_height_1 / _height_2);
+              double _height = _scene_1.getHeight();
+              double _height_1 = selectionBounds.getHeight();
+              double _divide_1 = (_height / _height_1);
               final double targetScale = Math.min(_divide, _divide_1);
               Point2D _center = BoundsExtensions.center(selectionBounds);
               _xblockexpression_1 = new ViewportTransition(root, _center, targetScale, 0);

@@ -55,7 +55,8 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
     } else {
       String _eClassURIAsString = this.getEClassURIAsString();
       EClass _eClass = this.getEClass(_eClassURIAsString);
-      _elvis = (this.eClass = _eClass);
+      EClass _eClass_1 = (this.eClass = _eClass);
+      _elvis = _eClass_1;
     }
     return _elvis;
   }
@@ -93,21 +94,7 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof AbstractXtextEObjectID)) {
-      boolean _and = false;
-      URI _uRI = ((AbstractXtextEObjectID)obj).getURI();
-      URI _trimFragment = _uRI.trimFragment();
-      URI _uRI_1 = this.getURI();
-      URI _trimFragment_1 = _uRI_1.trimFragment();
-      boolean _equals = Objects.equal(_trimFragment, _trimFragment_1);
-      if (!_equals) {
-        _and = false;
-      } else {
-        EClass _eClass = ((AbstractXtextEObjectID)obj).getEClass();
-        EClass _eClass_1 = this.getEClass();
-        boolean _equals_1 = Objects.equal(_eClass, _eClass_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (Objects.equal(((AbstractXtextEObjectID)obj).getURI().trimFragment(), this.getURI().trimFragment()) && Objects.equal(((AbstractXtextEObjectID)obj).getEClass(), this.getEClass()));
     } else {
       return false;
     }

@@ -105,26 +105,14 @@ public class ModelSave {
   
   protected JsonGenerator write(final JsonGenerator gen, final Property<?> property, final Class<?> propertyType, final String currentId) {
     JsonGenerator _xifexpression = null;
-    boolean _and = false;
-    Object _value = property.getValue();
-    boolean _notEquals = (!Objects.equal(_value, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isBound = property.isBound();
-      boolean _not = (!_isBound);
-      _and = _not;
-    }
-    if (_and) {
+    if (((!Objects.equal(property.getValue(), null)) && (!property.isBound()))) {
       JsonGenerator _switchResult = null;
       boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(propertyType, String.class)) {
-          _matched=true;
-          String _name = property.getName();
-          String _value_1 = ((StringProperty) property).getValue();
-          _switchResult = gen.write(_name, _value_1);
-        }
+      if (Objects.equal(propertyType, String.class)) {
+        _matched=true;
+        String _name = property.getName();
+        String _value = ((StringProperty) property).getValue();
+        _switchResult = gen.write(_name, _value);
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Double.class)) {
@@ -162,8 +150,8 @@ public class ModelSave {
         if (Objects.equal(propertyType, Boolean.class)) {
           _matched=true;
           String _name_5 = property.getName();
-          Boolean _value_2 = ((BooleanProperty) property).getValue();
-          boolean _booleanValue = _value_2.booleanValue();
+          Boolean _value_1 = ((BooleanProperty) property).getValue();
+          boolean _booleanValue = _value_1.booleanValue();
           _switchResult = gen.write(_name_5, _booleanValue);
         }
       }
@@ -172,15 +160,15 @@ public class ModelSave {
         if (_isAssignableFrom) {
           _matched=true;
           String _name_6 = property.getName();
-          Object _value_3 = property.getValue();
-          String _string = _value_3.toString();
+          Object _value_2 = property.getValue();
+          String _string = _value_2.toString();
           _switchResult = gen.write(_name_6, _string);
         }
       }
       if (!_matched) {
         Map<Object, ModelElement> _index = this.model.getIndex();
-        Object _value_4 = property.getValue();
-        ModelElement _get = _index.get(_value_4);
+        Object _value_3 = property.getValue();
+        ModelElement _get = _index.get(_value_3);
         String _name_7 = property.getName();
         String _name_8 = property.getName();
         String _plus = ((currentId + "/") + _name_8);
@@ -204,11 +192,9 @@ public class ModelSave {
           ObservableList<?> _value_1 = property.getValue();
           final Object value = _value_1.get((i).intValue());
           boolean _matched = false;
-          if (!_matched) {
-            if (Objects.equal(propertyType, String.class)) {
-              _matched=true;
-              gen.write(((String) value));
-            }
+          if (Objects.equal(propertyType, String.class)) {
+            _matched=true;
+            gen.write(((String) value));
           }
           if (!_matched) {
             if (Objects.equal(propertyType, Double.class)) {

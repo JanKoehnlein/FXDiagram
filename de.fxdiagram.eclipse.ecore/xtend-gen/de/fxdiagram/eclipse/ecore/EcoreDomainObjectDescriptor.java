@@ -88,19 +88,7 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof EcoreDomainObjectDescriptor)) {
-      boolean _and = false;
-      String _uri = ((EcoreDomainObjectDescriptor)obj).getUri();
-      String _uri_1 = this.getUri();
-      boolean _equals = Objects.equal(_uri, _uri_1);
-      if (!_equals) {
-        _and = false;
-      } else {
-        String _name = ((EcoreDomainObjectDescriptor)obj).getName();
-        String _name_1 = this.getName();
-        boolean _equals_1 = Objects.equal(_name, _name_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (Objects.equal(((EcoreDomainObjectDescriptor)obj).getUri(), this.getUri()) && Objects.equal(((EcoreDomainObjectDescriptor)obj).getName(), this.getName()));
     } else {
       return false;
     }

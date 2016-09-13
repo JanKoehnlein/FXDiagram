@@ -74,20 +74,7 @@ public class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReferenc
   @Override
   public boolean equals(final Object other) {
     if ((other instanceof EReferenceDescriptor)) {
-      boolean _or = false;
-      EReference _domainObject = ((EReferenceDescriptor)other).getDomainObject();
-      EReference _domainObject_1 = this.getDomainObject();
-      boolean _equals = Objects.equal(_domainObject, _domainObject_1);
-      if (_equals) {
-        _or = true;
-      } else {
-        EReference _domainObject_2 = ((EReferenceDescriptor)other).getDomainObject();
-        EReference _domainObject_3 = this.getDomainObject();
-        EReference _eOpposite = _domainObject_3.getEOpposite();
-        boolean _equals_1 = Objects.equal(_domainObject_2, _eOpposite);
-        _or = _equals_1;
-      }
-      return _or;
+      return (Objects.equal(((EReferenceDescriptor)other).getDomainObject(), this.getDomainObject()) || Objects.equal(((EReferenceDescriptor)other).getDomainObject(), this.getDomainObject().getEOpposite()));
     } else {
       return false;
     }

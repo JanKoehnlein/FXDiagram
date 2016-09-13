@@ -66,16 +66,7 @@ public class InterpreterContext {
   
   public boolean addNode(final XNode node) {
     boolean _xifexpression = false;
-    boolean _or = false;
-    boolean _equals = Objects.equal(this.diagram, null);
-    if (_equals) {
-      _or = true;
-    } else {
-      XRoot _root = CoreExtensions.getRoot(this.diagram);
-      boolean _notEquals = (!Objects.equal(_root, null));
-      _or = _notEquals;
-    }
-    if (_or) {
+    if ((Objects.equal(this.diagram, null) || (!Objects.equal(CoreExtensions.getRoot(this.diagram), null)))) {
       _xifexpression = this.addedNodes.add(node);
     } else {
       boolean _xifexpression_1 = false;
@@ -93,16 +84,7 @@ public class InterpreterContext {
   
   public boolean addConnection(final XConnection connection) {
     boolean _xifexpression = false;
-    boolean _or = false;
-    boolean _equals = Objects.equal(this.diagram, null);
-    if (_equals) {
-      _or = true;
-    } else {
-      XRoot _root = CoreExtensions.getRoot(this.diagram);
-      boolean _notEquals = (!Objects.equal(_root, null));
-      _or = _notEquals;
-    }
-    if (_or) {
+    if ((Objects.equal(this.diagram, null) || (!Objects.equal(CoreExtensions.getRoot(this.diagram), null)))) {
       _xifexpression = this.addedConnections.add(connection);
     } else {
       boolean _xifexpression_1 = false;
@@ -187,42 +169,14 @@ public class InterpreterContext {
   }
   
   public boolean needsLayoutCommand() {
-    boolean _and = false;
-    boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
-    boolean _not = (!_isReplaceRootDiagram);
-    if (!_not) {
-      _and = false;
-    } else {
-      int _size = this.addedNodes.size();
-      int _size_1 = this.addedConnections.size();
-      int _plus = (_size + _size_1);
-      boolean _greaterThan = (_plus > 1);
-      _and = _greaterThan;
-    }
-    return _and;
+    return ((!this.isReplaceRootDiagram()) && ((this.addedNodes.size() + this.addedConnections.size()) > 1));
   }
   
   /**
    * Doesn't involve either command stack nor animations
    */
   public void directlyApplyChanges() {
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
-    if (!_isReplaceRootDiagram) {
-      _and_1 = false;
-    } else {
-      boolean _isEmpty = this.subContexts.isEmpty();
-      boolean _not = (!_isEmpty);
-      _and_1 = _not;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      boolean _equals = Objects.equal(this.superContext, null);
-      _and = _equals;
-    }
-    if (_and) {
+    if (((this.isReplaceRootDiagram() && (!this.subContexts.isEmpty())) && Objects.equal(this.superContext, null))) {
       XRoot _root = CoreExtensions.getRoot(this.diagram);
       InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);
       _root.setDiagram(_head.diagram);
@@ -248,23 +202,7 @@ public class InterpreterContext {
   }
   
   public void executeCommands(final CommandStack commandStack) {
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
-    if (!_isReplaceRootDiagram) {
-      _and_1 = false;
-    } else {
-      boolean _isEmpty = this.subContexts.isEmpty();
-      boolean _not = (!_isEmpty);
-      _and_1 = _not;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      boolean _equals = Objects.equal(this.superContext, null);
-      _and = _equals;
-    }
-    if (_and) {
+    if (((this.isReplaceRootDiagram() && (!this.subContexts.isEmpty())) && Objects.equal(this.superContext, null))) {
       InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);
       ChangeDiagramCommand _changeDiagramCommand = new ChangeDiagramCommand(_head.diagram);
       commandStack.execute(_changeDiagramCommand);

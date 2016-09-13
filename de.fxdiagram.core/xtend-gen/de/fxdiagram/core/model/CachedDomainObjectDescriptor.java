@@ -34,16 +34,7 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> implements 
   
   @Override
   public boolean equals(final Object obj) {
-    boolean _and = false;
-    if (!(obj instanceof CachedDomainObjectDescriptor<?>)) {
-      _and = false;
-    } else {
-      Object _domainObject = ((CachedDomainObjectDescriptor<?>) obj).getDomainObject();
-      T _domainObject_1 = this.getDomainObject();
-      boolean _equals = Objects.equal(_domainObject, _domainObject_1);
-      _and = _equals;
-    }
-    return _and;
+    return ((obj instanceof CachedDomainObjectDescriptor<?>) && Objects.equal(((CachedDomainObjectDescriptor<?>) obj).getDomainObject(), this.getDomainObject()));
   }
   
   @Override

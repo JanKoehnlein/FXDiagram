@@ -92,26 +92,8 @@ public class FlipNode extends XNode {
   
   public void registerOnClick() {
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
-      boolean _and = false;
-      MouseButton _button = it.getButton();
-      boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-      if (!_equals) {
-        _and = false;
-      } else {
-        int _clickCount = it.getClickCount();
-        boolean _equals_1 = (_clickCount == 2);
-        _and = _equals_1;
-      }
-      if (_and) {
-        boolean _and_1 = false;
-        boolean _notEquals = (!Objects.equal(this.front, null));
-        if (!_notEquals) {
-          _and_1 = false;
-        } else {
-          boolean _notEquals_1 = (!Objects.equal(this.back, null));
-          _and_1 = _notEquals_1;
-        }
-        if (_and_1) {
+      if ((Objects.equal(it.getButton(), MouseButton.PRIMARY) && (it.getClickCount() == 2))) {
+        if (((!Objects.equal(this.front, null)) && (!Objects.equal(this.back, null)))) {
           boolean _isHorizontal = this.isHorizontal(it);
           this.flip(_isHorizontal);
         }
@@ -216,26 +198,7 @@ public class FlipNode extends XNode {
     double _y_1 = center.getY();
     double _minus_1 = (_y - _y_1);
     final Point3D direction = new Point3D(_minus, _minus_1, 0);
-    boolean _or = false;
-    double _x_2 = direction.getX();
-    double _x_3 = direction.getX();
-    double _multiply = (_x_2 * _x_3);
-    double _y_2 = direction.getY();
-    double _y_3 = direction.getY();
-    double _multiply_1 = (_y_2 * _y_3);
-    double _plus = (_multiply + _multiply_1);
-    boolean _lessThan = (_plus < NumberExpressionExtensions.EPSILON);
-    if (_lessThan) {
-      _or = true;
-    } else {
-      double _x_4 = direction.getX();
-      double _abs = Math.abs(_x_4);
-      double _y_4 = direction.getY();
-      double _abs_1 = Math.abs(_y_4);
-      boolean _lessThan_1 = (_abs < _abs_1);
-      _or = _lessThan_1;
-    }
-    return _or;
+    return ((((direction.getX() * direction.getX()) + (direction.getY() * direction.getY())) < NumberExpressionExtensions.EPSILON) || (Math.abs(direction.getX()) < Math.abs(direction.getY())));
   }
   
   public void setFront(final Node front) {

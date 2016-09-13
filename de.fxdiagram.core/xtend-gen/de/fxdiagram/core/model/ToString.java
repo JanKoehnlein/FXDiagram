@@ -70,29 +70,19 @@ public class ToString {
   }
   
   protected static String getPropertiesToString(final ModelElement it, final Map<XModelProvider, Integer> seen) {
-    boolean _and = false;
-    List<? extends Property<?>> _properties = it.getProperties();
-    boolean _isEmpty = _properties.isEmpty();
-    if (!_isEmpty) {
-      _and = false;
-    } else {
-      List<? extends ListProperty<?>> _listProperties = it.getListProperties();
-      boolean _isEmpty_1 = _listProperties.isEmpty();
-      _and = _isEmpty_1;
-    }
-    if (_and) {
+    if ((it.getProperties().isEmpty() && it.getListProperties().isEmpty())) {
       return "";
     } else {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("[");
       _builder.newLine();
       {
-        List<? extends ListProperty<?>> _listProperties_1 = it.getListProperties();
+        List<? extends ListProperty<?>> _listProperties = it.getListProperties();
         final Function1<ListProperty<?>, Boolean> _function = (ListProperty<?> it_1) -> {
-          boolean _isEmpty_2 = it_1.isEmpty();
-          return Boolean.valueOf((!_isEmpty_2));
+          boolean _isEmpty = it_1.isEmpty();
+          return Boolean.valueOf((!_isEmpty));
         };
-        Iterable<? extends ListProperty<?>> _filter = IterableExtensions.filter(_listProperties_1, _function);
+        Iterable<? extends ListProperty<?>> _filter = IterableExtensions.filter(_listProperties, _function);
         for(final ListProperty<?> lp : _filter) {
           _builder.append("\t");
           String _name = lp.getName();
@@ -115,12 +105,12 @@ public class ToString {
         }
       }
       {
-        List<? extends Property<?>> _properties_1 = it.getProperties();
+        List<? extends Property<?>> _properties = it.getProperties();
         final Function1<Property<?>, Boolean> _function_1 = (Property<?> it_1) -> {
           Object _value_1 = it_1.getValue();
           return Boolean.valueOf((!Objects.equal(_value_1, null)));
         };
-        Iterable<? extends Property<?>> _filter_1 = IterableExtensions.filter(_properties_1, _function_1);
+        Iterable<? extends Property<?>> _filter_1 = IterableExtensions.filter(_properties, _function_1);
         for(final Property<?> p : _filter_1) {
           _builder.append("\t");
           String _name_1 = p.getName();

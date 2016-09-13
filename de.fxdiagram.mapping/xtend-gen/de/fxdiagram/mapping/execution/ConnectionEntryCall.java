@@ -5,7 +5,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.ConnectionMappingCall;
-import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
@@ -49,17 +48,7 @@ public class ConnectionEntryCall<RESULT extends Object, ARG extends Object> impl
   
   @Override
   public void execute(final ARG domainObject, final XDiagramConfigInterpreter interpreter, final InterpreterContext context) {
-    boolean _and = false;
-    NodeMappingCall<?, RESULT> _source = this.mapping.getSource();
-    boolean _notEquals = (!Objects.equal(_source, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      NodeMappingCall<?, RESULT> _target = this.mapping.getTarget();
-      boolean _notEquals_1 = (!Objects.equal(_target, null));
-      _and = _notEquals_1;
-    }
-    if (_and) {
+    if (((!Objects.equal(this.mapping.getSource(), null)) && (!Objects.equal(this.mapping.getTarget(), null)))) {
       final Procedure1<XConnection> _function = (XConnection it) -> {
       };
       interpreter.<RESULT, ARG>execute(this.mappingCall, domainObject, _function, context);

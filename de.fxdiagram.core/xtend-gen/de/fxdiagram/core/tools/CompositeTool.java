@@ -23,13 +23,7 @@ public class CompositeTool implements XDiagramTool {
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
     final Function2<Boolean, Boolean, Boolean> _function_1 = (Boolean a, Boolean b) -> {
-      boolean _or = false;
-      if ((a).booleanValue()) {
-        _or = true;
-      } else {
-        _or = (b).booleanValue();
-      }
-      return Boolean.valueOf(_or);
+      return Boolean.valueOf(((a).booleanValue() || (b).booleanValue()));
     };
     return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }
@@ -41,13 +35,7 @@ public class CompositeTool implements XDiagramTool {
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
     final Function2<Boolean, Boolean, Boolean> _function_1 = (Boolean a, Boolean b) -> {
-      boolean _or = false;
-      if ((a).booleanValue()) {
-        _or = true;
-      } else {
-        _or = (b).booleanValue();
-      }
-      return Boolean.valueOf(_or);
+      return Boolean.valueOf(((a).booleanValue() || (b).booleanValue()));
     };
     return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }

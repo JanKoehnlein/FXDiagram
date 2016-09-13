@@ -96,13 +96,11 @@ public class ModelLoad {
       if (_containsKey) {
         boolean _switchResult = false;
         boolean _matched = false;
-        if (!_matched) {
-          if (Objects.equal(propertyType, String.class)) {
-            _matched=true;
-            String _name_1 = property.getName();
-            String _string = it.getString(_name_1);
-            ((StringProperty) property).setValue(_string);
-          }
+        if (Objects.equal(propertyType, String.class)) {
+          _matched=true;
+          String _name_1 = property.getName();
+          String _string = it.getString(_name_1);
+          ((StringProperty) property).setValue(_string);
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Double.class)) {
@@ -213,12 +211,10 @@ public class ModelLoad {
           {
             final JsonValue jsonValue = jsonValues.get((i).intValue());
             boolean _matched = false;
-            if (!_matched) {
-              if (Objects.equal(componentType, String.class)) {
-                _matched=true;
-                String _string = ((JsonString) jsonValue).getString();
-                ((List<String>) property).add(_string);
-              }
+            if (Objects.equal(componentType, String.class)) {
+              _matched=true;
+              String _string = ((JsonString) jsonValue).getString();
+              ((List<String>) property).add(_string);
             }
             if (!_matched) {
               if (Objects.equal(componentType, Double.class)) {

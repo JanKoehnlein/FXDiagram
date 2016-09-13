@@ -153,50 +153,48 @@ public class Layouter {
         final Object xElement = entry.getKey();
         final KGraphElement kElement = entry.getValue();
         boolean _matched = false;
-        if (!_matched) {
-          if (xElement instanceof XNode) {
-            _matched=true;
-            MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-            if (_behavior!=null) {
-              _behavior.setManuallyPlaced(false);
-            }
-            EList<KGraphData> _data = kElement.getData();
-            Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
-            final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
-            Point2D _xifexpression = null;
-            boolean _isTopLevel = this.isTopLevel(kElement);
-            if (_isTopLevel) {
-              _xifexpression = delta;
-            } else {
-              Point2D _xblockexpression = null;
-              {
-                EObject _eContainer = kElement.eContainer();
-                KShapeLayout _data_1 = ((KNode) _eContainer).<KShapeLayout>getData(KShapeLayout.class);
-                final KInsets insets = _data_1.getInsets();
-                float _left = 0f;
-                if (insets!=null) {
-                  _left=insets.getLeft();
-                }
-                float _minus = (-_left);
-                float _top = 0f;
-                if (insets!=null) {
-                  _top=insets.getTop();
-                }
-                float _minus_1 = (-_top);
-                _xblockexpression = new Point2D(_minus, _minus_1);
-              }
-              _xifexpression = _xblockexpression;
-            }
-            final Point2D correction = _xifexpression;
-            float _xpos = shapeLayout.getXpos();
-            double _x = correction.getX();
-            double _minus = (_xpos - _x);
-            ((XNode)xElement).setLayoutX(_minus);
-            float _ypos = shapeLayout.getYpos();
-            double _y = correction.getY();
-            double _minus_1 = (_ypos - _y);
-            ((XNode)xElement).setLayoutY(_minus_1);
+        if (xElement instanceof XNode) {
+          _matched=true;
+          MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
+          if (_behavior!=null) {
+            _behavior.setManuallyPlaced(false);
           }
+          EList<KGraphData> _data = kElement.getData();
+          Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+          final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
+          Point2D _xifexpression = null;
+          boolean _isTopLevel = this.isTopLevel(kElement);
+          if (_isTopLevel) {
+            _xifexpression = delta;
+          } else {
+            Point2D _xblockexpression = null;
+            {
+              EObject _eContainer = kElement.eContainer();
+              KShapeLayout _data_1 = ((KNode) _eContainer).<KShapeLayout>getData(KShapeLayout.class);
+              final KInsets insets = _data_1.getInsets();
+              float _left = 0f;
+              if (insets!=null) {
+                _left=insets.getLeft();
+              }
+              float _minus = (-_left);
+              float _top = 0f;
+              if (insets!=null) {
+                _top=insets.getTop();
+              }
+              float _minus_1 = (-_top);
+              _xblockexpression = new Point2D(_minus, _minus_1);
+            }
+            _xifexpression = _xblockexpression;
+          }
+          final Point2D correction = _xifexpression;
+          float _xpos = shapeLayout.getXpos();
+          double _x = correction.getX();
+          double _minus = (_xpos - _x);
+          ((XNode)xElement).setLayoutX(_minus);
+          float _ypos = shapeLayout.getYpos();
+          double _y = correction.getY();
+          double _minus_1 = (_ypos - _y);
+          ((XNode)xElement).setLayoutY(_minus_1);
         }
         if (!_matched) {
           if (xElement instanceof XConnection) {
@@ -353,52 +351,50 @@ public class Layouter {
         final Object xElement = entry.getKey();
         final KGraphElement kElement = entry.getValue();
         boolean _matched = false;
-        if (!_matched) {
-          if (xElement instanceof XNode) {
-            _matched=true;
-            MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-            _behavior.setManuallyPlaced(false);
-            EList<KGraphData> _data = kElement.getData();
-            Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
-            final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
-            Point2D _xifexpression = null;
-            boolean _isTopLevel = this.isTopLevel(kElement);
-            if (_isTopLevel) {
-              _xifexpression = delta;
-            } else {
-              Point2D _xblockexpression = null;
-              {
-                EObject _eContainer = kElement.eContainer();
-                KShapeLayout _data_1 = ((KNode) _eContainer).<KShapeLayout>getData(KShapeLayout.class);
-                final KInsets insets = _data_1.getInsets();
-                float _left = 0f;
-                if (insets!=null) {
-                  _left=insets.getLeft();
-                }
-                float _minus = (-_left);
-                float _top = 0f;
-                if (insets!=null) {
-                  _top=insets.getTop();
-                }
-                float _minus_1 = (-_top);
-                _xblockexpression = new Point2D(_minus, _minus_1);
+        if (xElement instanceof XNode) {
+          _matched=true;
+          MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
+          _behavior.setManuallyPlaced(false);
+          EList<KGraphData> _data = kElement.getData();
+          Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+          final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
+          Point2D _xifexpression = null;
+          boolean _isTopLevel = this.isTopLevel(kElement);
+          if (_isTopLevel) {
+            _xifexpression = delta;
+          } else {
+            Point2D _xblockexpression = null;
+            {
+              EObject _eContainer = kElement.eContainer();
+              KShapeLayout _data_1 = ((KNode) _eContainer).<KShapeLayout>getData(KShapeLayout.class);
+              final KInsets insets = _data_1.getInsets();
+              float _left = 0f;
+              if (insets!=null) {
+                _left=insets.getLeft();
               }
-              _xifexpression = _xblockexpression;
+              float _minus = (-_left);
+              float _top = 0f;
+              if (insets!=null) {
+                _top=insets.getTop();
+              }
+              float _minus_1 = (-_top);
+              _xblockexpression = new Point2D(_minus, _minus_1);
             }
-            final Point2D correction = _xifexpression;
-            float _xpos = shapeLayout.getXpos();
-            double _x = correction.getX();
-            double _minus = (_xpos - _x);
-            float _ypos = shapeLayout.getYpos();
-            double _y = correction.getY();
-            double _minus_1 = (_ypos - _y);
-            MoveCommand _moveCommand = new MoveCommand(((Node)xElement), _minus, _minus_1);
-            final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
-              it.setExecuteDuration(duration);
-            };
-            MoveCommand _doubleArrow = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand, _function);
-            composite.operator_add(_doubleArrow);
+            _xifexpression = _xblockexpression;
           }
+          final Point2D correction = _xifexpression;
+          float _xpos = shapeLayout.getXpos();
+          double _x = correction.getX();
+          double _minus = (_xpos - _x);
+          float _ypos = shapeLayout.getYpos();
+          double _y = correction.getY();
+          double _minus_1 = (_ypos - _y);
+          MoveCommand _moveCommand = new MoveCommand(((Node)xElement), _minus, _minus_1);
+          final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
+            it.setExecuteDuration(duration);
+          };
+          MoveCommand _doubleArrow = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand, _function);
+          composite.operator_add(_doubleArrow);
         }
         if (!_matched) {
           if (xElement instanceof XConnection) {
@@ -515,19 +511,17 @@ public class Layouter {
   protected boolean isTopLevel(final KGraphElement kElement) {
     boolean _switchResult = false;
     boolean _matched = false;
-    if (!_matched) {
-      if (kElement instanceof KNode) {
-        _matched=true;
-        EObject _eContainer = null;
-        if (((KNode)kElement)!=null) {
-          _eContainer=((KNode)kElement).eContainer();
-        }
-        EObject _eContainer_1 = null;
-        if (_eContainer!=null) {
-          _eContainer_1=_eContainer.eContainer();
-        }
-        _switchResult = Objects.equal(_eContainer_1, null);
+    if (kElement instanceof KNode) {
+      _matched=true;
+      EObject _eContainer = null;
+      if (((KNode)kElement)!=null) {
+        _eContainer=((KNode)kElement).eContainer();
       }
+      EObject _eContainer_1 = null;
+      if (_eContainer!=null) {
+        _eContainer_1=_eContainer.eContainer();
+      }
+      _switchResult = Objects.equal(_eContainer_1, null);
     }
     if (!_matched) {
       if (kElement instanceof KEdge) {
@@ -621,26 +615,24 @@ public class Layouter {
     }
     final KGraphElement kFixed = map.get(xFixed);
     boolean _matched = false;
-    if (!_matched) {
-      if (kFixed instanceof KNode) {
-        _matched=true;
-        EList<KGraphData> _data = ((KNode)kFixed).getData();
-        Iterable<KShapeLayout> _filter_1 = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
-        final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter_1);
-        float _xpos = shapeLayout.getXpos();
-        Bounds _layoutBounds = xFixed.getLayoutBounds();
-        double _minX = _layoutBounds.getMinX();
-        double _minus = (_xpos - _minX);
-        double _layoutX = xFixed.getLayoutX();
-        double _minus_1 = (_minus - _layoutX);
-        float _ypos = shapeLayout.getYpos();
-        Bounds _layoutBounds_1 = xFixed.getLayoutBounds();
-        double _minY = _layoutBounds_1.getMinY();
-        double _minus_2 = (_ypos - _minY);
-        double _layoutY = xFixed.getLayoutY();
-        double _minus_3 = (_minus_2 - _layoutY);
-        return new Point2D(_minus_1, _minus_3);
-      }
+    if (kFixed instanceof KNode) {
+      _matched=true;
+      EList<KGraphData> _data = ((KNode)kFixed).getData();
+      Iterable<KShapeLayout> _filter_1 = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+      final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter_1);
+      float _xpos = shapeLayout.getXpos();
+      Bounds _layoutBounds = xFixed.getLayoutBounds();
+      double _minX = _layoutBounds.getMinX();
+      double _minus = (_xpos - _minX);
+      double _layoutX = xFixed.getLayoutX();
+      double _minus_1 = (_minus - _layoutX);
+      float _ypos = shapeLayout.getYpos();
+      Bounds _layoutBounds_1 = xFixed.getLayoutBounds();
+      double _minY = _layoutBounds_1.getMinY();
+      double _minus_2 = (_ypos - _minY);
+      double _layoutY = xFixed.getLayoutY();
+      double _minus_3 = (_minus_2 - _layoutY);
+      return new Point2D(_minus_1, _minus_3);
     }
     if (!_matched) {
       if (kFixed instanceof KEdge) {
@@ -828,13 +820,7 @@ public class Layouter {
       XNode _target = it.getTarget();
       final KGraphElement kTarget = cache.get(_target);
       KEdge _xifexpression = null;
-      boolean _and = false;
-      if (!(kSource instanceof KNode)) {
-        _and = false;
-      } else {
-        _and = (kTarget instanceof KNode);
-      }
-      if (_and) {
+      if (((kSource instanceof KNode) && (kTarget instanceof KNode))) {
         KEdge _xblockexpression_1 = null;
         {
           final KEdge kEdge = this._kGraphFactory.createKEdge();

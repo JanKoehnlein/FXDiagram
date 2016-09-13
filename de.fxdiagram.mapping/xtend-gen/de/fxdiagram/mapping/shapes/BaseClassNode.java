@@ -174,10 +174,12 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
             it_2.setAlignment(Pos.CENTER);
           };
           VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
-          _children_1.add((this.nameArea = _doubleArrow));
+          VBox _nameArea = (this.nameArea = _doubleArrow);
+          _children_1.add(_nameArea);
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
-        _children.add((this.contentArea = _doubleArrow));
+        VBox _contentArea = (this.contentArea = _doubleArrow);
+        _children.add(_contentArea);
       };
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
@@ -194,16 +196,20 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
           it_1.setSpacing(5);
           ObservableList<Node> _children_1 = it_1.getChildren();
           VBox _vBox_1 = new VBox();
-          _children_1.add((this.fileArea = _vBox_1));
+          VBox _fileArea = (this.fileArea = _vBox_1);
+          _children_1.add(_fileArea);
           ObservableList<Node> _children_2 = it_1.getChildren();
           CheckBox _checkBox = new CheckBox("Package");
-          _children_2.add((this.packageBox = _checkBox));
+          CheckBox _packageBox = (this.packageBox = _checkBox);
+          _children_2.add(_packageBox);
           ObservableList<Node> _children_3 = it_1.getChildren();
           CheckBox _checkBox_1 = new CheckBox("Attributes");
-          _children_3.add((this.attributesBox = _checkBox_1));
+          CheckBox _attributesBox = (this.attributesBox = _checkBox_1);
+          _children_3.add(_attributesBox);
           ObservableList<Node> _children_4 = it_1.getChildren();
           CheckBox _checkBox_2 = new CheckBox("Methods");
-          _children_4.add((this.methodsBox = _checkBox_2));
+          CheckBox _methodsBox = (this.methodsBox = _checkBox_2);
+          _children_4.add(_methodsBox);
           ObservableList<Node> _children_5 = it_1.getChildren();
           ColorPicker _colorPicker = new ColorPicker();
           final Procedure1<ColorPicker> _function_3 = (ColorPicker it_2) -> {
@@ -341,17 +347,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       MouseButton _button = it.getButton();
       boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
       if (_equals) {
-        boolean _and = false;
-        Node _front = this.getFront();
-        boolean _notEquals = (!Objects.equal(_front, null));
-        if (!_notEquals) {
-          _and = false;
-        } else {
-          Node _back = this.getBack();
-          boolean _notEquals_1 = (!Objects.equal(_back, null));
-          _and = _notEquals_1;
-        }
-        if (_and) {
+        if (((!Objects.equal(this.getFront(), null)) && (!Objects.equal(this.getBack(), null)))) {
           boolean _isHorizontal = this.isHorizontal(it);
           this.flip(_isHorizontal);
           it.consume();

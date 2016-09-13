@@ -45,7 +45,8 @@ public class SimpleNode extends XNode {
         it_1.setText(_name);
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-      _children.add((this.label = _doubleArrow));
+      Text _label = (this.label = _doubleArrow);
+      _children.add(_label);
       Insets _insets = new Insets(10, 20, 10, 20);
       StackPane.setMargin(this.label, _insets);
     };

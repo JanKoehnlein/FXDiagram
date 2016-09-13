@@ -149,26 +149,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   }
   
   protected boolean hasMoved() {
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(this.dragContext, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _or = false;
-      T _host = this.getHost();
-      double _layoutX = _host.getLayoutX();
-      boolean _notEquals_1 = (this.dragContext.initialX != _layoutX);
-      if (_notEquals_1) {
-        _or = true;
-      } else {
-        T _host_1 = this.getHost();
-        double _layoutY = _host_1.getLayoutY();
-        boolean _notEquals_2 = (this.dragContext.initialY != _layoutY);
-        _or = _notEquals_2;
-      }
-      _and = _or;
-    }
-    return _and;
+    return ((!Objects.equal(this.dragContext, null)) && ((this.dragContext.initialX != this.getHost().getLayoutX()) || (this.dragContext.initialY != this.getHost().getLayoutY())));
   }
   
   protected AnimationCommand createMoveCommand() {

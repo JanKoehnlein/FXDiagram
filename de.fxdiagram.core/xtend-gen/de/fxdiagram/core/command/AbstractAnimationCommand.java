@@ -78,27 +78,19 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
     {
       final Animation undoAnimation = this.createUndoAnimation(context);
       SequentialTransition _xifexpression = null;
-      boolean _or = false;
-      boolean _notEquals = (!Objects.equal(this.toMemento, null));
-      if (_notEquals) {
-        _or = true;
-      } else {
-        boolean _notEquals_1 = (!Objects.equal(undoAnimation, null));
-        _or = _notEquals_1;
-      }
-      if (_or) {
+      if (((!Objects.equal(this.toMemento, null)) || (!Objects.equal(undoAnimation, null)))) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
-          boolean _notEquals_2 = (!Objects.equal(this.toMemento, null));
-          if (_notEquals_2) {
+          boolean _notEquals = (!Objects.equal(this.toMemento, null));
+          if (_notEquals) {
             ObservableList<Animation> _children = it.getChildren();
             XRoot _root = context.getRoot();
             Duration _defaultUndoDuration = context.getDefaultUndoDuration();
             ViewportTransition _viewportTransition = new ViewportTransition(_root, this.toMemento, _defaultUndoDuration);
             _children.add(_viewportTransition);
           }
-          boolean _notEquals_3 = (!Objects.equal(undoAnimation, null));
-          if (_notEquals_3) {
+          boolean _notEquals_1 = (!Objects.equal(undoAnimation, null));
+          if (_notEquals_1) {
             ObservableList<Animation> _children_1 = it.getChildren();
             _children_1.add(undoAnimation);
           }
@@ -120,27 +112,19 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
     {
       final Animation redoAnimation = this.createRedoAnimation(context);
       SequentialTransition _xifexpression = null;
-      boolean _or = false;
-      boolean _notEquals = (!Objects.equal(this.fromMemento, null));
-      if (_notEquals) {
-        _or = true;
-      } else {
-        boolean _notEquals_1 = (!Objects.equal(redoAnimation, null));
-        _or = _notEquals_1;
-      }
-      if (_or) {
+      if (((!Objects.equal(this.fromMemento, null)) || (!Objects.equal(redoAnimation, null)))) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
-          boolean _notEquals_2 = (!Objects.equal(this.fromMemento, null));
-          if (_notEquals_2) {
+          boolean _notEquals = (!Objects.equal(this.fromMemento, null));
+          if (_notEquals) {
             ObservableList<Animation> _children = it.getChildren();
             XRoot _root = context.getRoot();
             Duration _defaultUndoDuration = context.getDefaultUndoDuration();
             ViewportTransition _viewportTransition = new ViewportTransition(_root, this.fromMemento, _defaultUndoDuration);
             _children.add(_viewportTransition);
           }
-          boolean _notEquals_3 = (!Objects.equal(redoAnimation, null));
-          if (_notEquals_3) {
+          boolean _notEquals_1 = (!Objects.equal(redoAnimation, null));
+          if (_notEquals_1) {
             ObservableList<Animation> _children_1 = it.getChildren();
             _children_1.add(redoAnimation);
           }

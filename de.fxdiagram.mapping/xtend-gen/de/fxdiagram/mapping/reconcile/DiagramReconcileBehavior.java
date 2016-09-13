@@ -164,26 +164,7 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
           };
           AbstractMapping<T> _mapping = descriptor.getMapping();
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, flatContext);
-          boolean _or = false;
-          boolean _or_1 = false;
-          Iterable<XDomainObjectShape> _addedShapes = flatContext.getAddedShapes();
-          boolean _isEmpty = IterableExtensions.isEmpty(_addedShapes);
-          boolean _not = (!_isEmpty);
-          if (_not) {
-            _or_1 = true;
-          } else {
-            boolean _isEmpty_1 = nodesToBeDeleted.isEmpty();
-            boolean _not_1 = (!_isEmpty_1);
-            _or_1 = _not_1;
-          }
-          if (_or_1) {
-            _or = true;
-          } else {
-            boolean _isEmpty_2 = connectionsToBeDeleted.isEmpty();
-            boolean _not_2 = (!_isEmpty_2);
-            _or = _not_2;
-          }
-          if (_or) {
+          if ((((!IterableExtensions.isEmpty(flatContext.getAddedShapes())) || (!nodesToBeDeleted.isEmpty())) || (!connectionsToBeDeleted.isEmpty()))) {
             return DirtyState.DIRTY;
           } else {
             return DirtyState.CLEAN;

@@ -92,15 +92,7 @@ public class ModelElementImpl implements ModelElement {
   @Override
   public boolean isPrimitive(final Property<?> property) {
     final Class<?> type = this.getType(property);
-    boolean _or = false;
-    boolean _contains = Collections.<Class<? extends Object>>unmodifiableSet(CollectionLiterals.<Class<? extends Object>>newHashSet(Double.class, Float.class, Integer.class, Long.class, Boolean.class, String.class)).contains(type);
-    if (_contains) {
-      _or = true;
-    } else {
-      boolean _isAssignableFrom = Enum.class.isAssignableFrom(type);
-      _or = _isAssignableFrom;
-    }
-    return _or;
+    return (Collections.<Class<? extends Object>>unmodifiableSet(CollectionLiterals.<Class<? extends Object>>newHashSet(Double.class, Float.class, Integer.class, Long.class, Boolean.class, String.class)).contains(type) || Enum.class.isAssignableFrom(type));
   }
   
   @Override

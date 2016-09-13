@@ -187,20 +187,10 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
           segmentRemoveCount++;
         } else {
           if ((segmentRemoveCount > 0)) {
-            boolean _or = false;
-            XControlPoint _head = IterableExtensions.<XControlPoint>head(controlPoints);
-            boolean _notEquals = (!Objects.equal(lastRemaining, _head));
-            if (_notEquals) {
-              _or = true;
-            } else {
-              XControlPoint _last = IterableExtensions.<XControlPoint>last(controlPoints);
-              boolean _notEquals_1 = (!Objects.equal(controlPoint, _last));
-              _or = _notEquals_1;
-            }
-            final boolean hasRemainingControlPoints = _or;
+            final boolean hasRemainingControlPoints = ((!Objects.equal(lastRemaining, IterableExtensions.<XControlPoint>head(controlPoints))) || (!Objects.equal(controlPoint, IterableExtensions.<XControlPoint>last(controlPoints))));
             Point2D _xifexpression = null;
-            XControlPoint _head_1 = IterableExtensions.<XControlPoint>head(controlPoints);
-            boolean _equals = Objects.equal(lastRemaining, _head_1);
+            XControlPoint _head = IterableExtensions.<XControlPoint>head(controlPoints);
+            boolean _equals = Objects.equal(lastRemaining, _head);
             if (_equals) {
               Point2D _xblockexpression = null;
               {
@@ -227,8 +217,8 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
             }
             final Point2D segmentStart = _xifexpression;
             Point2D _xifexpression_1 = null;
-            XControlPoint _last_1 = IterableExtensions.<XControlPoint>last(controlPoints);
-            boolean _equals_1 = Objects.equal(controlPoint, _last_1);
+            XControlPoint _last = IterableExtensions.<XControlPoint>last(controlPoints);
+            boolean _equals_1 = Objects.equal(controlPoint, _last);
             if (_equals_1) {
               Point2D _xblockexpression_1 = null;
               {
@@ -263,8 +253,8 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
                 toPoints.add(_linear);
               } else {
                 XControlPoint.Type _type = controlPoint.getType();
-                boolean _notEquals_2 = (!Objects.equal(_type, XControlPoint.Type.CONTROL_POINT));
-                if (_notEquals_2) {
+                boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.CONTROL_POINT));
+                if (_notEquals) {
                   toPoints.add(segmentEnd);
                 } else {
                   toPoints.add(segmentStart);

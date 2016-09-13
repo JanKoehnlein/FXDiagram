@@ -96,26 +96,7 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof BundleDescriptor)) {
-      boolean _and = false;
-      boolean _and_1 = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and_1 = false;
-      } else {
-        String _symbolicName = ((BundleDescriptor)obj).getSymbolicName();
-        String _symbolicName_1 = this.getSymbolicName();
-        boolean _equals_1 = Objects.equal(_symbolicName, _symbolicName_1);
-        _and_1 = _equals_1;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        String _version = ((BundleDescriptor)obj).getVersion();
-        String _version_1 = this.getVersion();
-        boolean _equals_2 = Objects.equal(_version, _version_1);
-        _and = _equals_2;
-      }
-      return _and;
+      return ((super.equals(obj) && Objects.equal(((BundleDescriptor)obj).getSymbolicName(), this.getSymbolicName())) && Objects.equal(((BundleDescriptor)obj).getVersion(), this.getVersion()));
     } else {
       return false;
     }

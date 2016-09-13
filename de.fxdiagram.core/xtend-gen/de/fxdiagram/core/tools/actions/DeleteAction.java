@@ -39,17 +39,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class DeleteAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent event) {
-    boolean _or = false;
-    KeyCode _code = event.getCode();
-    boolean _equals = Objects.equal(_code, KeyCode.DELETE);
-    if (_equals) {
-      _or = true;
-    } else {
-      KeyCode _code_1 = event.getCode();
-      boolean _equals_1 = Objects.equal(_code_1, KeyCode.BACK_SPACE);
-      _or = _equals_1;
-    }
-    return _or;
+    return (Objects.equal(event.getCode(), KeyCode.DELETE) || Objects.equal(event.getCode(), KeyCode.BACK_SPACE));
   }
   
   @Override
@@ -80,13 +70,7 @@ public class DeleteAction implements DiagramAction {
     Iterable<XConnection> _flatten_1 = Iterables.<XConnection>concat(_map_1);
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(_flatten, _flatten_1);
     final Function1<XShape, Boolean> _function_2 = (XShape it) -> {
-      boolean _or = false;
-      if ((it instanceof XNode)) {
-        _or = true;
-      } else {
-        _or = (it instanceof XConnection);
-      }
-      return Boolean.valueOf(_or);
+      return Boolean.valueOf(((it instanceof XNode) || (it instanceof XConnection)));
     };
     Iterable<XShape> _filter_1 = IterableExtensions.<XShape>filter(elements, _function_2);
     Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, _filter_1);

@@ -14,23 +14,7 @@ import javafx.stage.Window;
 public class FullScreenAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (!_isShortcutDown) {
-      _and_1 = false;
-    } else {
-      boolean _isShiftDown = it.isShiftDown();
-      _and_1 = _isShiftDown;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.F);
-      _and = _equals;
-    }
-    return _and;
+    return ((it.isShortcutDown() && it.isShiftDown()) && Objects.equal(it.getCode(), KeyCode.F));
   }
   
   @Override

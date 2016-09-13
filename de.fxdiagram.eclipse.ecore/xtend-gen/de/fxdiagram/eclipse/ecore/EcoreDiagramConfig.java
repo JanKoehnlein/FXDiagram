@@ -149,17 +149,7 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
       final Function1<EClass, Iterable<? extends EReferenceWithOpposite>> _function_3 = (EClass it) -> {
         EList<EReference> _eReferences = it.getEReferences();
         final Function1<EReference, Boolean> _function_4 = (EReference it_1) -> {
-          boolean _and = false;
-          boolean _isContainment = it_1.isContainment();
-          boolean _not = (!_isContainment);
-          if (!_not) {
-            _and = false;
-          } else {
-            boolean _isContainer = it_1.isContainer();
-            boolean _not_1 = (!_isContainer);
-            _and = _not_1;
-          }
-          return Boolean.valueOf(_and);
+          return Boolean.valueOf(((!it_1.isContainment()) && (!it_1.isContainer())));
         };
         Iterable<EReference> _filter = IterableExtensions.<EReference>filter(_eReferences, _function_4);
         final Function1<EReference, EReferenceWithOpposite> _function_5 = (EReference it_1) -> {
@@ -175,15 +165,7 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
       final Function1<EClass, Iterable<? extends EReferenceWithOpposite>> _function_5 = (EClass it) -> {
         EList<EReference> _eReferences = it.getEReferences();
         final Function1<EReference, Boolean> _function_6 = (EReference it_1) -> {
-          boolean _or = false;
-          boolean _isContainment = it_1.isContainment();
-          if (_isContainment) {
-            _or = true;
-          } else {
-            boolean _isContainer = it_1.isContainer();
-            _or = _isContainer;
-          }
-          return Boolean.valueOf(_or);
+          return Boolean.valueOf((it_1.isContainment() || it_1.isContainer()));
         };
         Iterable<EReference> _filter = IterableExtensions.<EReference>filter(_eReferences, _function_6);
         final Function1<EReference, EReferenceWithOpposite> _function_7 = (EReference it_1) -> {
@@ -421,11 +403,9 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
   @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainArgument instanceof EClass) {
-        _matched=true;
-        acceptor.add(this.eClassNode);
-      }
+    if (domainArgument instanceof EClass) {
+      _matched=true;
+      acceptor.add(this.eClassNode);
     }
     if (!_matched) {
       if (domainArgument instanceof EPackage) {

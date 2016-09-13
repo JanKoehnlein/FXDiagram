@@ -50,7 +50,8 @@ public interface ISelectionExtractor {
         _elvis = ISelectionExtractor.Registry.INSTANCE;
       } else {
         ISelectionExtractor.Registry _registry = new ISelectionExtractor.Registry();
-        _elvis = (ISelectionExtractor.Registry.INSTANCE = _registry);
+        ISelectionExtractor.Registry _INSTANCE = (ISelectionExtractor.Registry.INSTANCE = _registry);
+        _elvis = _INSTANCE;
       }
       return _elvis;
     }

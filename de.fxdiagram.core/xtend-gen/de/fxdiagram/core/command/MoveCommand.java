@@ -92,17 +92,7 @@ public class MoveCommand extends AbstractAnimationCommand {
   protected PathTransition createMoveTransition(final double fromX, final double fromY, final double toX, final double toY, final Duration duration) {
     PathTransition _xblockexpression = null;
     {
-      boolean _and = false;
-      double _layoutX = this.node.getLayoutX();
-      boolean _equals = (_layoutX == toX);
-      if (!_equals) {
-        _and = false;
-      } else {
-        double _layoutY = this.node.getLayoutY();
-        boolean _equals_1 = (_layoutY == toY);
-        _and = _equals_1;
-      }
-      if (_and) {
+      if (((this.node.getLayoutX() == toX) && (this.node.getLayoutY() == toY))) {
         return null;
       }
       Group _group = new Group();

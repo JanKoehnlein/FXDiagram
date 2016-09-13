@@ -191,17 +191,7 @@ public class ShapeConverterExtensions {
       _builder.append(" ");
       _builder.newLineIfNotEmpty();
       {
-        boolean _or = false;
-        ArcType _type_1 = arc.getType();
-        boolean _equals_1 = Objects.equal(ArcType.CHORD, _type_1);
-        if (_equals_1) {
-          _or = true;
-        } else {
-          ArcType _type_2 = arc.getType();
-          boolean _equals_2 = Objects.equal(ArcType.ROUND, _type_2);
-          _or = _equals_2;
-        }
-        if (_or) {
+        if ((Objects.equal(ArcType.CHORD, arc.getType()) || Objects.equal(ArcType.ROUND, arc.getType()))) {
           _builder.append("Z");
           _builder.newLine();
         }
@@ -277,19 +267,7 @@ public class ShapeConverterExtensions {
     {
       final Bounds bounds = rectangle.getBoundsInLocal();
       String _xifexpression = null;
-      boolean _and = false;
-      double _arcWidth = rectangle.getArcWidth();
-      int _spaceship = (Double.valueOf(_arcWidth).compareTo(Double.valueOf(0.0)));
-      boolean _equals = (_spaceship == 0);
-      if (!_equals) {
-        _and = false;
-      } else {
-        double _arcHeight = rectangle.getArcHeight();
-        int _spaceship_1 = (Double.valueOf(_arcHeight).compareTo(Double.valueOf(0.0)));
-        boolean _equals_1 = (_spaceship_1 == 0);
-        _and = _equals_1;
-      }
-      if (_and) {
+      if ((((Double.valueOf(rectangle.getArcWidth()).compareTo(Double.valueOf(0.0))) == 0) && ((Double.valueOf(rectangle.getArcHeight()).compareTo(Double.valueOf(0.0))) == 0))) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("M ");
         double _minX = bounds.getMinX();
@@ -590,19 +568,17 @@ public class ShapeConverterExtensions {
       ObservableList<PathElement> _elements = path.getElements();
       for (final PathElement element : _elements) {
         boolean _matched = false;
-        if (!_matched) {
-          if (element instanceof MoveTo) {
-            _matched=true;
-            StringConcatenation _builder = new StringConcatenation();
-            _builder.append("M ");
-            double _x = ((MoveTo)element).getX();
-            _builder.append(_x, "");
-            _builder.append(" ");
-            double _y = ((MoveTo)element).getY();
-            _builder.append(_y, "");
-            _builder.append(" ");
-            it.append(_builder);
-          }
+        if (element instanceof MoveTo) {
+          _matched=true;
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("M ");
+          double _x = ((MoveTo)element).getX();
+          _builder.append(_x, "");
+          _builder.append(" ");
+          double _y = ((MoveTo)element).getY();
+          _builder.append(_y, "");
+          _builder.append(" ");
+          it.append(_builder);
         }
         if (!_matched) {
           if (element instanceof LineTo) {

@@ -14,17 +14,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 public class NavigatePreviousAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _or = false;
-    KeyCode _code = it.getCode();
-    boolean _equals = Objects.equal(_code, KeyCode.LEFT);
-    if (_equals) {
-      _or = true;
-    } else {
-      KeyCode _code_1 = it.getCode();
-      boolean _equals_1 = Objects.equal(_code_1, KeyCode.PAGE_UP);
-      _or = _equals_1;
-    }
-    return _or;
+    return (Objects.equal(it.getCode(), KeyCode.LEFT) || Objects.equal(it.getCode(), KeyCode.PAGE_UP));
   }
   
   @Override

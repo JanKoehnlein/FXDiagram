@@ -71,19 +71,9 @@ public class XConnectionLabel extends XLabel {
         }
         this.connectionProperty.set(connection);
         boolean _xifexpression_1 = false;
-        boolean _and = false;
-        boolean _notEquals_2 = (!Objects.equal(connection, null));
-        if (!_notEquals_2) {
-          _and = false;
-        } else {
+        if (((!Objects.equal(connection, null)) && (!connection.getLabels().contains(this)))) {
           ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
-          boolean _contains = _labels_1.contains(this);
-          boolean _not = (!_contains);
-          _and = _not;
-        }
-        if (_and) {
-          ObservableList<XConnectionLabel> _labels_2 = connection.getLabels();
-          _xifexpression_1 = _labels_2.add(this);
+          _xifexpression_1 = _labels_1.add(this);
         }
         _xblockexpression = _xifexpression_1;
       }

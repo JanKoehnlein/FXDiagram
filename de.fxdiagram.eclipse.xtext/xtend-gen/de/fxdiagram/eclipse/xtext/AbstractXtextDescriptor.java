@@ -32,14 +32,7 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
   
   @Override
   public boolean equals(final Object obj) {
-    boolean _and = false;
-    if (!(obj instanceof AbstractXtextDescriptor<?>)) {
-      _and = false;
-    } else {
-      boolean _equals = super.equals(obj);
-      _and = _equals;
-    }
-    return _and;
+    return ((obj instanceof AbstractXtextDescriptor<?>) && super.equals(obj));
   }
   
   /**

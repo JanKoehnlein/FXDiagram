@@ -308,30 +308,14 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
-    boolean _and = false;
-    if (!this.splineShapeKeeperEnabled) {
-      _and = false;
-    } else {
-      XConnection.Kind _kind = this.connection.getKind();
-      boolean _notEquals = (!Objects.equal(_kind, XConnection.Kind.POLYLINE));
-      _and = _notEquals;
-    }
-    if (_and) {
+    if ((this.splineShapeKeeperEnabled && (!Objects.equal(this.connection.getKind(), XConnection.Kind.POLYLINE)))) {
       this.shapeKeeper.adjustControlPointsToNodeMove();
     }
     XNode _source_1 = this.connection.getSource();
     final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
     XNode _target_1 = this.connection.getTarget();
     final Point2D targetPoint = this.findClosestTargetAnchor(_target_1, true);
-    boolean _and_1 = false;
-    boolean _notEquals_1 = (!Objects.equal(sourcePoint, null));
-    if (!_notEquals_1) {
-      _and_1 = false;
-    } else {
-      boolean _notEquals_2 = (!Objects.equal(targetPoint, null));
-      _and_1 = _notEquals_2;
-    }
-    if (_and_1) {
+    if (((!Objects.equal(sourcePoint, null)) && (!Objects.equal(targetPoint, null)))) {
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
       int _size_1 = _controlPoints_2.size();
       boolean _lessThan_1 = (_size_1 < 2);
@@ -357,9 +341,9 @@ public class ConnectionRouter implements XActivatable {
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
         _controlPoints_3.setAll(
           Collections.<XControlPoint>unmodifiableList(CollectionLiterals.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
-        XConnection.Kind _kind_1 = this.connection.getKind();
-        if (_kind_1 != null) {
-          switch (_kind_1) {
+        XConnection.Kind _kind = this.connection.getKind();
+        if (_kind != null) {
+          switch (_kind) {
             case CUBIC_CURVE:
               this.growToSize(4);
               break;
@@ -630,15 +614,7 @@ public class ConnectionRouter implements XActivatable {
       Anchors _anchors = node.getAnchors();
       final Point2D anchor = _anchors.getAnchor(x, y);
       Point2D _xifexpression = null;
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(anchor, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _notEquals_1 = (!Objects.equal(arrowHead, null));
-        _and = _notEquals_1;
-      }
-      if (_and) {
+      if (((!Objects.equal(anchor, null)) && (!Objects.equal(arrowHead, null)))) {
         _xifexpression = arrowHead.correctAnchor(x, y, anchor);
       } else {
         _xifexpression = anchor;

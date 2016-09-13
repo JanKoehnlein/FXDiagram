@@ -8,7 +8,6 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
-import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -42,68 +41,9 @@ public class SplineShapeKeeper {
   
   protected Point2D adjustControlPointsToNodeMove() {
     Point2D _xifexpression = null;
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _and_2 = false;
-    boolean _and_3 = false;
-    boolean _and_4 = false;
-    boolean _isActive = this.connection.getIsActive();
-    if (!_isActive) {
-      _and_4 = false;
-    } else {
-      XConnection.Kind _kind = this.connection.getKind();
-      boolean _notEquals = (!Objects.equal(_kind, XConnection.Kind.POLYLINE));
-      _and_4 = _notEquals;
-    }
-    if (!_and_4) {
-      _and_3 = false;
-    } else {
-      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      int _size = _controlPoints.size();
-      boolean _greaterThan = (_size > 2);
-      _and_3 = _greaterThan;
-    }
-    if (!_and_3) {
-      _and_2 = false;
-    } else {
-      boolean _notEquals_1 = (!Objects.equal(this.lastSourceCenter, null));
-      _and_2 = _notEquals_1;
-    }
-    if (!_and_2) {
-      _and_1 = false;
-    } else {
-      boolean _notEquals_2 = (!Objects.equal(this.lastTargetCenter, null));
-      _and_1 = _notEquals_2;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-      final Function1<XControlPoint, Boolean> _function = (XControlPoint it) -> {
-        boolean _or = false;
-        boolean _or_1 = false;
-        boolean _selected = it.getSelected();
-        if (_selected) {
-          _or_1 = true;
-        } else {
-          DoubleProperty _layoutXProperty = it.layoutXProperty();
-          boolean _isBound = _layoutXProperty.isBound();
-          _or_1 = _isBound;
-        }
-        if (_or_1) {
-          _or = true;
-        } else {
-          DoubleProperty _layoutYProperty = it.layoutYProperty();
-          boolean _isBound_1 = _layoutYProperty.isBound();
-          _or = _isBound_1;
-        }
-        return Boolean.valueOf(_or);
-      };
-      boolean _exists = IterableExtensions.<XControlPoint>exists(_controlPoints_1, _function);
-      boolean _not = (!_exists);
-      _and = _not;
-    }
-    if (_and) {
+    if ((((((this.connection.getIsActive() && (!Objects.equal(this.connection.getKind(), XConnection.Kind.POLYLINE))) && (this.getControlPoints().size() > 2)) && (!Objects.equal(this.lastSourceCenter, null))) && (!Objects.equal(this.lastTargetCenter, null))) && (!IterableExtensions.<XControlPoint>exists(this.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
+      return Boolean.valueOf(((it.getSelected() || it.layoutXProperty().isBound()) || it.layoutYProperty().isBound()));
+    }))))) {
       Point2D _xblockexpression = null;
       {
         XNode _source = this.connection.getSource();
@@ -112,13 +52,13 @@ public class SplineShapeKeeper {
         final Point2D newTargetCenter = this.midPoint(_target);
         Point2D oldFixedPoint = this.lastTargetCenter;
         Point2D newFixedPoint = newTargetCenter;
-        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-        int _size_1 = _controlPoints_2.size();
-        int _minus = (_size_1 - 1);
+        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+        int _size = _controlPoints.size();
+        int _minus = (_size - 1);
         ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
         for (final Integer i : _doubleDotLessThan) {
-          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-          XControlPoint _get = _controlPoints_3.get((i).intValue());
+          ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+          XControlPoint _get = _controlPoints_1.get((i).intValue());
           this.adjust(_get, oldFixedPoint, this.lastSourceCenter, newFixedPoint, newSourceCenter);
         }
         this.lastSourceCenter = newSourceCenter;

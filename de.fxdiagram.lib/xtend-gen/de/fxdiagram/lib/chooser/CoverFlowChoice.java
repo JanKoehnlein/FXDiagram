@@ -98,16 +98,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
       }
       this.transformNode(rightIndex, interpolatedPosition, false, (rightIndex - interpolatedPosition));
       this.transformNode(leftIndex, interpolatedPosition, true, (interpolatedPosition - leftIndex));
-      boolean _and = false;
-      if (!(rightIndex > 0)) {
-        _and = false;
-      } else {
-        double _abs = Math.abs((leftIndex - interpolatedPosition));
-        double _abs_1 = Math.abs((rightIndex - interpolatedPosition));
-        boolean _greaterThan = (_abs > _abs_1);
-        _and = _greaterThan;
-      }
-      if (_and) {
+      if (((rightIndex > 0) && (Math.abs((leftIndex - interpolatedPosition)) > Math.abs((rightIndex - interpolatedPosition))))) {
         ArrayList<XNode> _choiceNodes_7 = this.getChoiceNodes();
         XNode _get = _choiceNodes_7.get(rightIndex);
         _get.toFront();

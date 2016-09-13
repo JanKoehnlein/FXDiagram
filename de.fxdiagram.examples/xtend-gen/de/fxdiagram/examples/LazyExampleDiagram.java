@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -105,20 +104,9 @@ public class LazyExampleDiagram extends XDiagram {
     } else {
       ObservableList<XNode> _nodes_1 = this.getNodes();
       final Consumer<XNode> _function_1 = (XNode it) -> {
-        boolean _or = false;
-        String _nameSuffix = this.getNameSuffix();
-        boolean _isEmpty_1 = _nameSuffix.isEmpty();
-        boolean _not = (!_isEmpty_1);
-        if (_not) {
-          _or = true;
-        } else {
-          Node _node = it.getNode();
-          boolean _not_1 = (!(_node instanceof SimpleNode));
-          _or = _not_1;
-        }
-        if (_or) {
-          String _nameSuffix_1 = this.getNameSuffix();
-          this.addRapidButtons(it, _nameSuffix_1);
+        if (((!this.getNameSuffix().isEmpty()) || (!(it.getNode() instanceof SimpleNode)))) {
+          String _nameSuffix = this.getNameSuffix();
+          this.addRapidButtons(it, _nameSuffix);
         }
       };
       _nodes_1.forEach(_function_1);

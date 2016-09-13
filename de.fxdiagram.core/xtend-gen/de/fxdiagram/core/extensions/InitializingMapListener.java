@@ -16,28 +16,12 @@ public class InitializingMapListener<T extends Object, U extends Object> impleme
   
   @Override
   public void onChanged(final MapChangeListener.Change<? extends T, ? extends U> c) {
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(this.remove, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _wasRemoved = c.wasRemoved();
-      _and = _wasRemoved;
-    }
-    if (_and) {
+    if (((!Objects.equal(this.remove, null)) && c.wasRemoved())) {
       T _key = c.getKey();
       U _valueRemoved = c.getValueRemoved();
       this.remove.apply(_key, _valueRemoved);
     }
-    boolean _and_1 = false;
-    boolean _notEquals_1 = (!Objects.equal(this.put, null));
-    if (!_notEquals_1) {
-      _and_1 = false;
-    } else {
-      boolean _wasAdded = c.wasAdded();
-      _and_1 = _wasAdded;
-    }
-    if (_and_1) {
+    if (((!Objects.equal(this.put, null)) && c.wasAdded())) {
       T _key_1 = c.getKey();
       U _valueAdded = c.getValueAdded();
       this.put.apply(_key_1, _valueAdded);

@@ -35,16 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 @SuppressWarnings("all")
 public class CoreExtensions {
   public static <T extends Object> void safeAdd(final Collection<? super T> collection, final T element) {
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(element, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _contains = collection.contains(element);
-      boolean _not = (!_contains);
-      _and = _not;
-    }
-    if (_and) {
+    if (((!Objects.equal(element, null)) && (!collection.contains(element)))) {
       collection.add(element);
     }
   }
@@ -58,15 +49,7 @@ public class CoreExtensions {
   
   public static <T extends Object> boolean safeDelete(final Collection<? super T> list, final T element) {
     boolean _xifexpression = false;
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(element, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _contains = list.contains(element);
-      _and = _contains;
-    }
-    if (_and) {
+    if (((!Objects.equal(element, null)) && list.contains(element))) {
       _xifexpression = list.remove(element);
     }
     return _xifexpression;
@@ -84,11 +67,9 @@ public class CoreExtensions {
     boolean _xblockexpression = false;
     {
       boolean _matched = false;
-      if (!_matched) {
-        if (node instanceof XDiagram) {
-          _matched=true;
-          return ((XDiagram)node).getIsRootDiagram();
-        }
+      if (node instanceof XDiagram) {
+        _matched=true;
+        return ((XDiagram)node).getIsRootDiagram();
       }
       _xblockexpression = false;
     }
@@ -104,11 +85,9 @@ public class CoreExtensions {
     Point2D _xblockexpression = null;
     {
       boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(node, null)) {
-          _matched=true;
-          return null;
-        }
+      if (Objects.equal(node, null)) {
+        _matched=true;
+        return null;
       }
       if (!_matched) {
         if (node instanceof XDiagram) {
@@ -130,11 +109,9 @@ public class CoreExtensions {
     Bounds _xblockexpression = null;
     {
       boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(node, null)) {
-          _matched=true;
-          return null;
-        }
+      if (Objects.equal(node, null)) {
+        _matched=true;
+        return null;
       }
       if (!_matched) {
         if (node instanceof XDiagram) {
@@ -160,11 +137,9 @@ public class CoreExtensions {
   public static Point2D localToDiagram(final Node node, final Point2D point) {
     Point2D _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(node, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(node, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (node instanceof XDiagram) {
@@ -183,11 +158,9 @@ public class CoreExtensions {
   public static Bounds localToDiagram(final Node node, final Bounds bounds) {
     Bounds _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(node, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(node, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (node instanceof XDiagram) {
@@ -227,11 +200,9 @@ public class CoreExtensions {
   public static XDiagram getDiagram(final Node it) {
     XDiagram _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(it, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (it instanceof XDiagram) {
@@ -282,11 +253,9 @@ public class CoreExtensions {
   public static XDiagram getRootDiagram(final Node it) {
     XDiagram _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(it, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (it instanceof XDiagram) {
@@ -312,11 +281,9 @@ public class CoreExtensions {
   public static XRoot getRoot(final Node it) {
     XRoot _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(it, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (it instanceof XRoot) {
@@ -334,11 +301,9 @@ public class CoreExtensions {
   public static XShape getContainerShape(final Node it) {
     XShape _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(it, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (it instanceof XShape) {

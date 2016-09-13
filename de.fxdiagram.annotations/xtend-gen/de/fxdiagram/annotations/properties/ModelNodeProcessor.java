@@ -25,7 +25,6 @@ import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableConstructorDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableMethodDeclaration;
-import org.eclipse.xtend.lib.macro.declaration.MutableParameterDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.Type;
 import org.eclipse.xtend.lib.macro.declaration.TypeDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.TypeReference;
@@ -98,13 +97,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
             Type _type_1 = superClass.getType();
             AnnotationReference _findAnnotation = ((TypeDeclaration) _type_1).findAnnotation(modelNodeAnnotationType);
             final boolean isSuperHasModelNodeAnnotation = (!Objects.equal(_findAnnotation, null));
-            boolean _or = false;
-            if (isSuperImplementsModelProvider) {
-              _or = true;
-            } else {
-              _or = isSuperHasModelNodeAnnotation;
-            }
-            _xblockexpression = _or;
+            _xblockexpression = (isSuperImplementsModelProvider || isSuperHasModelNodeAnnotation);
           }
           _xifexpression = _xblockexpression;
         } else {
@@ -147,17 +140,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     annotatedClass.addMethod("populate", _function_2);
     Iterable<? extends MutableMethodDeclaration> _declaredMethods = annotatedClass.getDeclaredMethods();
     final Function1<MutableMethodDeclaration, Boolean> _function_3 = (MutableMethodDeclaration it) -> {
-      boolean _and = false;
-      String _simpleName = it.getSimpleName();
-      boolean _equals_1 = Objects.equal(_simpleName, "toString");
-      if (!_equals_1) {
-        _and = false;
-      } else {
-        Iterable<? extends MutableParameterDeclaration> _parameters = it.getParameters();
-        boolean _isEmpty = IterableExtensions.isEmpty(_parameters);
-        _and = _isEmpty;
-      }
-      return Boolean.valueOf(_and);
+      return Boolean.valueOf((Objects.equal(it.getSimpleName(), "toString") && IterableExtensions.isEmpty(it.getParameters())));
     };
     boolean _exists = IterableExtensions.exists(_declaredMethods, _function_3);
     boolean _not_1 = (!_exists);
@@ -230,22 +213,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
       _elvis = _findDeclaredField_1;
     }
     final FieldDeclaration field = _elvis;
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(field, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _or = false;
-      if (allowPrivate) {
-        _or = true;
-      } else {
-        Visibility _visibility = field.getVisibility();
-        boolean _notEquals_1 = (!Objects.equal(_visibility, Visibility.PRIVATE));
-        _or = _notEquals_1;
-      }
-      _and = _or;
-    }
-    if (_and) {
+    if (((!Objects.equal(field, null)) && (allowPrivate || (!Objects.equal(field.getVisibility(), Visibility.PRIVATE))))) {
       return field;
     }
     MethodDeclaration _elvis_1 = null;
@@ -266,27 +234,12 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
       _elvis_1 = _findDeclaredMethod_2;
     }
     final MethodDeclaration method = _elvis_1;
-    boolean _and_1 = false;
-    boolean _notEquals_2 = (!Objects.equal(method, null));
-    if (!_notEquals_2) {
-      _and_1 = false;
-    } else {
-      boolean _or_1 = false;
-      if (allowPrivate) {
-        _or_1 = true;
-      } else {
-        Visibility _visibility_1 = method.getVisibility();
-        boolean _notEquals_3 = (!Objects.equal(_visibility_1, Visibility.PRIVATE));
-        _or_1 = _notEquals_3;
-      }
-      _and_1 = _or_1;
-    }
-    if (_and_1) {
+    if (((!Objects.equal(method, null)) && (allowPrivate || (!Objects.equal(method.getVisibility(), Visibility.PRIVATE))))) {
       return method;
     }
     TypeReference _extendedClass = clazz.getExtendedClass();
-    boolean _notEquals_4 = (!Objects.equal(_extendedClass, null));
-    if (_notEquals_4) {
+    boolean _notEquals = (!Objects.equal(_extendedClass, null));
+    if (_notEquals) {
       TypeReference _extendedClass_1 = clazz.getExtendedClass();
       Type _type = _extendedClass_1.getType();
       return this.getPropertyAccessor(((ClassDeclaration) _type), propertyName, false);
@@ -297,11 +250,9 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
   protected TypeReference getComponentType(final MemberDeclaration member) {
     TypeReference _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (member instanceof MethodDeclaration) {
-        _matched=true;
-        _switchResult = ((MethodDeclaration)member).getReturnType();
-      }
+    if (member instanceof MethodDeclaration) {
+      _matched=true;
+      _switchResult = ((MethodDeclaration)member).getReturnType();
     }
     if (!_matched) {
       if (member instanceof FieldDeclaration) {

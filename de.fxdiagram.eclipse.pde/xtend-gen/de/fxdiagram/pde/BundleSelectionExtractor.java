@@ -50,13 +50,7 @@ public class BundleSelectionExtractor implements ISelectionExtractor {
       };
       final Iterable<Boolean> booleans = IterableExtensions.<BundleDescription, Boolean>map(_set, _function_1);
       final Function2<Boolean, Boolean, Boolean> _function_2 = (Boolean $0, Boolean $1) -> {
-        boolean _or = false;
-        if (($0).booleanValue()) {
-          _or = true;
-        } else {
-          _or = ($1).booleanValue();
-        }
-        return Boolean.valueOf(_or);
+        return Boolean.valueOf((($0).booleanValue() || ($1).booleanValue()));
       };
       return (boolean) IterableExtensions.<Boolean, Boolean>fold(booleans, Boolean.valueOf(false), _function_2);
     }

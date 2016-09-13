@@ -103,27 +103,18 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
   public Point2D correctAnchor(final double x, final double y, final Point2D anchorOnOutline) {
     Point2D _xblockexpression = null;
     {
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(anchorOnOutline, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        double _lineCut = this.getLineCut();
-        boolean _greaterThan = (_lineCut > 0);
-        _and = _greaterThan;
-      }
-      if (_and) {
+      if (((!Objects.equal(anchorOnOutline, null)) && (this.getLineCut() > 0))) {
         double _x = anchorOnOutline.getX();
         double _minus = (_x - x);
         double _y = anchorOnOutline.getY();
         double _minus_1 = (_y - y);
         final Point2D direction = new Point2D(_minus, _minus_1);
         double _norm = Point2DExtensions.norm(direction);
-        boolean _greaterThan_1 = (_norm > NumberExpressionExtensions.EPSILON);
-        if (_greaterThan_1) {
-          double _lineCut_1 = this.getLineCut();
+        boolean _greaterThan = (_norm > NumberExpressionExtensions.EPSILON);
+        if (_greaterThan) {
+          double _lineCut = this.getLineCut();
           double _norm_1 = Point2DExtensions.norm(direction);
-          double _divide = (_lineCut_1 / _norm_1);
+          double _divide = (_lineCut / _norm_1);
           final Point2D correction = Point2DExtensions.operator_multiply(direction, _divide);
           return Point2DExtensions.operator_minus(anchorOnOutline, correction);
         }

@@ -211,7 +211,8 @@ public class LcarsNode extends XNode {
             final Procedure1<VBox> _function_5 = (VBox it_3) -> {
             };
             VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_5);
-            _children_3.add((this.infoTextBox = _doubleArrow_1));
+            Pane _infoTextBox = (this.infoTextBox = _doubleArrow_1);
+            _children_3.add(_infoTextBox);
             ObservableList<Node> _children_4 = it_2.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function_6 = (ImageView it_3) -> {
@@ -226,7 +227,8 @@ public class LcarsNode extends XNode {
               it_3.setPreserveRatio(true);
             };
             ImageView _doubleArrow_2 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_6);
-            _children_4.add((this.imageView = _doubleArrow_2));
+            ImageView _imageView_1 = (this.imageView = _doubleArrow_2);
+            _children_4.add(_imageView_1);
             String _last = IterableExtensions.<String>last(this.imageUrls);
             this.showImage(_last);
             Insets _insets_1 = new Insets(5, 6, 5, 5);
@@ -463,11 +465,9 @@ public class LcarsNode extends XNode {
             VPos _switchResult = null;
             int _indexOf = LcarsNode.pageOrder.indexOf(pageTitle);
             boolean _matched = false;
-            if (!_matched) {
-              if (Objects.equal(_indexOf, 0)) {
-                _matched=true;
-                _switchResult = VPos.BOTTOM;
-              }
+            if (Objects.equal(_indexOf, 0)) {
+              _matched=true;
+              _switchResult = VPos.BOTTOM;
             }
             if (!_matched) {
               Set<String> _keySet = this.pages.keySet();

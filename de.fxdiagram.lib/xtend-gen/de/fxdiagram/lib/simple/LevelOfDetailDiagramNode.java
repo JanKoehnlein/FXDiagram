@@ -70,7 +70,8 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
         StackPane.setMargin(it_1, _insets);
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-      _children.add((this.label = _doubleArrow));
+      Text _label = (this.label = _doubleArrow);
+      _children.add(_label);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
       this.pane, _function);
@@ -83,17 +84,7 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   
   @Override
   public boolean isInnerDiagramActive() {
-    boolean _and = false;
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    boolean _isActive = _innerDiagram.getIsActive();
-    if (!_isActive) {
-      _and = false;
-    } else {
-      XDiagram _innerDiagram_1 = this.getInnerDiagram();
-      boolean _isVisible = _innerDiagram_1.isVisible();
-      _and = _isVisible;
-    }
-    return _and;
+    return (this.getInnerDiagram().getIsActive() && this.getInnerDiagram().isVisible());
   }
   
   @Override
@@ -127,7 +118,8 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
         _children_1.setAll(_innerDiagram_1);
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
-      _children.add((this.innerDiagramGroup = _doubleArrow));
+      Group _innerDiagramGroup = (this.innerDiagramGroup = _doubleArrow);
+      _children.add(_innerDiagramGroup);
       XDiagram _innerDiagram_1 = this.getInnerDiagram();
       DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram_1);
       this.diagramScaler = _diagramScaler;

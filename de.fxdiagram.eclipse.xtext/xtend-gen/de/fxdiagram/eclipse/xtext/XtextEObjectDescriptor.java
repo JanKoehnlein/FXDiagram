@@ -86,17 +86,7 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof XtextEObjectDescriptor<?>)) {
-      boolean _and = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and = false;
-      } else {
-        XtextEObjectID _elementID = this.getElementID();
-        XtextEObjectID _elementID_1 = ((XtextEObjectDescriptor<?>)obj).getElementID();
-        boolean _equals_1 = Objects.equal(_elementID, _elementID_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (super.equals(obj) && Objects.equal(this.getElementID(), ((XtextEObjectDescriptor<?>)obj).getElementID()));
     } else {
       return false;
     }

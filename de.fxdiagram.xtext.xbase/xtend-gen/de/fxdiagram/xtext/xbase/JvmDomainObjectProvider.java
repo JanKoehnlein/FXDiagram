@@ -41,36 +41,34 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<? extends T> mapping) {
     final T it = domainObject;
     boolean _matched = false;
-    if (!_matched) {
-      if (it instanceof EObject) {
-        _matched=true;
-        final XtextEObjectID elementID = this.createXtextEObjectID(((EObject)it));
-        Resource _eResource = ((EObject)it).eResource();
-        URI _uRI = _eResource.getURI();
-        String _scheme = _uRI.scheme();
-        boolean _endsWith = _scheme.endsWith("java");
-        if (_endsWith) {
-          final JvmIdentifiableElement identifiableJvmElement = EcoreUtil2.<JvmIdentifiableElement>getContainerOfType(((EObject)it), JvmIdentifiableElement.class);
-          Resource _eResource_1 = ((EObject)it).eResource();
-          URI _uRI_1 = _eResource_1.getURI();
-          JvmDomainUtil _jvmDomainUtil = this.getJvmDomainUtil(_uRI_1);
-          final IJavaElement javaElement = _jvmDomainUtil.getJavaElement(identifiableJvmElement);
-          boolean _notEquals = (!Objects.equal(javaElement, null));
-          if (_notEquals) {
-            String _handleIdentifier = javaElement.getHandleIdentifier();
-            XDiagramConfig _config = mapping.getConfig();
-            String _iD = _config.getID();
-            String _iD_1 = mapping.getID();
-            JavaElementDescriptor<EObject> _javaElementDescriptor = new JavaElementDescriptor<EObject>(elementID, _handleIdentifier, _iD, _iD_1);
-            return ((IMappedElementDescriptor<T>) _javaElementDescriptor);
-          }
+    if (it instanceof EObject) {
+      _matched=true;
+      final XtextEObjectID elementID = this.createXtextEObjectID(((EObject)it));
+      Resource _eResource = ((EObject)it).eResource();
+      URI _uRI = _eResource.getURI();
+      String _scheme = _uRI.scheme();
+      boolean _endsWith = _scheme.endsWith("java");
+      if (_endsWith) {
+        final JvmIdentifiableElement identifiableJvmElement = EcoreUtil2.<JvmIdentifiableElement>getContainerOfType(((EObject)it), JvmIdentifiableElement.class);
+        Resource _eResource_1 = ((EObject)it).eResource();
+        URI _uRI_1 = _eResource_1.getURI();
+        JvmDomainUtil _jvmDomainUtil = this.getJvmDomainUtil(_uRI_1);
+        final IJavaElement javaElement = _jvmDomainUtil.getJavaElement(identifiableJvmElement);
+        boolean _notEquals = (!Objects.equal(javaElement, null));
+        if (_notEquals) {
+          String _handleIdentifier = javaElement.getHandleIdentifier();
+          XDiagramConfig _config = mapping.getConfig();
+          String _iD = _config.getID();
+          String _iD_1 = mapping.getID();
+          JavaElementDescriptor<EObject> _javaElementDescriptor = new JavaElementDescriptor<EObject>(elementID, _handleIdentifier, _iD, _iD_1);
+          return ((IMappedElementDescriptor<T>) _javaElementDescriptor);
         }
-        XDiagramConfig _config_1 = mapping.getConfig();
-        String _iD_2 = _config_1.getID();
-        String _iD_3 = mapping.getID();
-        JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(elementID, _iD_2, _iD_3);
-        return ((IMappedElementDescriptor<T>) _jvmEObjectDescriptor);
       }
+      XDiagramConfig _config_1 = mapping.getConfig();
+      String _iD_2 = _config_1.getID();
+      String _iD_3 = mapping.getID();
+      JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(elementID, _iD_2, _iD_3);
+      return ((IMappedElementDescriptor<T>) _jvmEObjectDescriptor);
     }
     return null;
   }

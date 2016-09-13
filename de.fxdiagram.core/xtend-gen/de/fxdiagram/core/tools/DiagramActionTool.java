@@ -21,7 +21,6 @@ import javafx.event.EventTarget;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -200,7 +199,8 @@ public class DiagramActionTool implements XDiagramTool {
         _children_1.add(_doubleArrow_1);
       };
       Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_3);
-      _xblockexpression = _children.add((this.menuGroup = _doubleArrow_1));
+      Group _menuGroup = (this.menuGroup = _doubleArrow_1);
+      _xblockexpression = _children.add(_menuGroup);
     }
     return _xblockexpression;
   }
@@ -210,16 +210,7 @@ public class DiagramActionTool implements XDiagramTool {
     {
       this.menu.hide();
       boolean _xifexpression = false;
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(this.menuGroup, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        Parent _parent = this.menuGroup.getParent();
-        boolean _notEquals_1 = (!Objects.equal(_parent, null));
-        _and = _notEquals_1;
-      }
-      if (_and) {
+      if (((!Objects.equal(this.menuGroup, null)) && (!Objects.equal(this.menuGroup.getParent(), null)))) {
         HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
         ObservableList<Node> _children = _headsUpDisplay.getChildren();
         _xifexpression = _children.remove(this.menuGroup);

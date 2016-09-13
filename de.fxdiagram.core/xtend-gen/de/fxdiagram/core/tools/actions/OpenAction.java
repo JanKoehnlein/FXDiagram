@@ -17,17 +17,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class OpenAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _or = false;
-    KeyCode _code = it.getCode();
-    boolean _equals = Objects.equal(_code, KeyCode.PERIOD);
-    if (_equals) {
-      _or = true;
-    } else {
-      KeyCode _code_1 = it.getCode();
-      boolean _equals_1 = Objects.equal(_code_1, KeyCode.ENTER);
-      _or = _equals_1;
-    }
-    return _or;
+    return (Objects.equal(it.getCode(), KeyCode.PERIOD) || Objects.equal(it.getCode(), KeyCode.ENTER));
   }
   
   @Override

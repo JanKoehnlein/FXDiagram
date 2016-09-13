@@ -303,11 +303,9 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainArgument instanceof BundleDescription) {
-        _matched=true;
-        acceptor.add(this.pluginNode);
-      }
+    if (domainArgument instanceof BundleDescription) {
+      _matched=true;
+      acceptor.add(this.pluginNode);
     }
   }
 }

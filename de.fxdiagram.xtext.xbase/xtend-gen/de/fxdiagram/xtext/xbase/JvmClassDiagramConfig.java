@@ -281,11 +281,9 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainArgument instanceof JvmDeclaredType) {
-        _matched=true;
-        acceptor.add(this.typeNode);
-      }
+    if (domainArgument instanceof JvmDeclaredType) {
+      _matched=true;
+      acceptor.add(this.typeNode);
     }
     if (!_matched) {
       if (domainArgument instanceof IType) {

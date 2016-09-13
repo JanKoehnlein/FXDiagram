@@ -73,19 +73,7 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof ESuperTypeDescriptor)) {
-      boolean _and = false;
-      String _subTypeUri = ((ESuperTypeDescriptor)obj).getSubTypeUri();
-      String _subTypeUri_1 = this.getSubTypeUri();
-      boolean _equals = Objects.equal(_subTypeUri, _subTypeUri_1);
-      if (!_equals) {
-        _and = false;
-      } else {
-        String _superTypeUri = ((ESuperTypeDescriptor)obj).getSuperTypeUri();
-        String _superTypeUri_1 = this.getSuperTypeUri();
-        boolean _equals_1 = Objects.equal(_superTypeUri, _superTypeUri_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (Objects.equal(((ESuperTypeDescriptor)obj).getSubTypeUri(), this.getSubTypeUri()) && Objects.equal(((ESuperTypeDescriptor)obj).getSuperTypeUri(), this.getSuperTypeUri()));
     } else {
       return false;
     }

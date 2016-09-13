@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -67,19 +66,8 @@ public class JvmAssociationSelectionExtractor implements ISelectionExtractor {
   }
   
   protected boolean usesXbase(final Grammar it) {
-    boolean _or = false;
-    String _name = it.getName();
-    boolean _equals = Objects.equal(_name, "org.eclipse.xtext.xbase.Xbase");
-    if (_equals) {
-      _or = true;
-    } else {
-      EList<Grammar> _usedGrammars = it.getUsedGrammars();
-      final Function1<Grammar, Boolean> _function = (Grammar it_1) -> {
-        return Boolean.valueOf(this.usesXbase(it_1));
-      };
-      boolean _exists = IterableExtensions.<Grammar>exists(_usedGrammars, _function);
-      _or = _exists;
-    }
-    return _or;
+    return (Objects.equal(it.getName(), "org.eclipse.xtext.xbase.Xbase") || IterableExtensions.<Grammar>exists(it.getUsedGrammars(), ((Function1<Grammar, Boolean>) (Grammar it_1) -> {
+      return Boolean.valueOf(this.usesXbase(it_1));
+    })));
   }
 }

@@ -100,17 +100,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
               _xifexpression_1 = new DiamondArrowHead(it, true);
             } else {
               LineArrowHead _xifexpression_2 = null;
-              boolean _and = false;
-              boolean _isContainer_1 = reference.isContainer();
-              boolean _not = (!_isContainer_1);
-              if (!_not) {
-                _and = false;
-              } else {
-                EReference _eOpposite = reference.getEOpposite();
-                boolean _notEquals = (!Objects.equal(_eOpposite, null));
-                _and = _notEquals;
-              }
-              if (_and) {
+              if (((!reference.isContainer()) && (!Objects.equal(reference.getEOpposite(), null)))) {
                 _xifexpression_2 = new LineArrowHead(it, true);
               }
               _xifexpression_1 = _xifexpression_2;
@@ -124,14 +114,14 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
               it_1.setPosition(0.8);
             };
             ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_3);
-            EReference _eOpposite_1 = reference.getEOpposite();
-            boolean _notEquals_1 = (!Objects.equal(_eOpposite_1, null));
-            if (_notEquals_1) {
+            EReference _eOpposite = reference.getEOpposite();
+            boolean _notEquals = (!Objects.equal(_eOpposite, null));
+            if (_notEquals) {
               XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function_4 = (XConnectionLabel it_1) -> {
                 Text _text = it_1.getText();
-                EReference _eOpposite_2 = reference.getEOpposite();
-                String _name = _eOpposite_2.getName();
+                EReference _eOpposite_1 = reference.getEOpposite();
+                String _name = _eOpposite_1.getName();
                 _text.setText(_name);
                 it_1.setPosition(0.2);
               };

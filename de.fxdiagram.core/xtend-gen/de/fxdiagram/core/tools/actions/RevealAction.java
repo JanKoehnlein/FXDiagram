@@ -43,16 +43,7 @@ public class RevealAction implements DiagramAction {
   
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _and = false;
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (!_isShortcutDown) {
-      _and = false;
-    } else {
-      KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.R);
-      _and = _equals;
-    }
-    return _and;
+    return (it.isShortcutDown() && Objects.equal(it.getCode(), KeyCode.R));
   }
   
   @Override
@@ -107,38 +98,16 @@ public class RevealAction implements DiagramAction {
           return null;
         }
         final Scene scene = root.getScene();
-        boolean _or = false;
-        double _width = scene.getWidth();
-        double _width_1 = boundsInScene.getWidth();
-        boolean _lessThan = (_width < _width_1);
-        if (_lessThan) {
-          _or = true;
-        } else {
-          double _height = scene.getHeight();
-          double _height_1 = boundsInScene.getHeight();
-          boolean _lessThan_1 = (_height < _height_1);
-          _or = _lessThan_1;
-        }
-        if (_or) {
+        if (((scene.getWidth() < boundsInScene.getWidth()) || (scene.getHeight() < boundsInScene.getHeight()))) {
           XDiagram _diagram = root.getDiagram();
           final Bounds boundsInDiagram = _diagram.sceneToLocal(boundsInScene);
-          boolean _and = false;
-          double _width_2 = boundsInDiagram.getWidth();
-          boolean _greaterThan = (_width_2 > NumberExpressionExtensions.EPSILON);
-          if (!_greaterThan) {
-            _and = false;
-          } else {
-            double _height_2 = boundsInDiagram.getHeight();
-            boolean _greaterThan_1 = (_height_2 > NumberExpressionExtensions.EPSILON);
-            _and = _greaterThan_1;
-          }
-          if (_and) {
-            double _width_3 = scene.getWidth();
-            double _width_4 = boundsInDiagram.getWidth();
-            double _divide = (_width_3 / _width_4);
-            double _height_3 = scene.getHeight();
-            double _height_4 = boundsInDiagram.getHeight();
-            double _divide_1 = (_height_3 / _height_4);
+          if (((boundsInDiagram.getWidth() > NumberExpressionExtensions.EPSILON) && (boundsInDiagram.getHeight() > NumberExpressionExtensions.EPSILON))) {
+            double _width = scene.getWidth();
+            double _width_1 = boundsInDiagram.getWidth();
+            double _divide = (_width / _width_1);
+            double _height = scene.getHeight();
+            double _height_1 = boundsInDiagram.getHeight();
+            double _divide_1 = (_height / _height_1);
             final double targetScale = Math.min(_divide, _divide_1);
             Point2D _center = BoundsExtensions.center(boundsInDiagram);
             return new ViewportTransition(root, _center, targetScale, 0);
@@ -148,38 +117,38 @@ public class RevealAction implements DiagramAction {
         }
         double _xifexpression = (double) 0;
         double _minX = boundsInScene.getMinX();
-        boolean _lessThan_2 = (_minX < 0);
-        if (_lessThan_2) {
+        boolean _lessThan = (_minX < 0);
+        if (_lessThan) {
           double _minX_1 = boundsInScene.getMinX();
           _xifexpression = (-_minX_1);
         } else {
           double _xifexpression_1 = (double) 0;
           double _maxX = boundsInScene.getMaxX();
-          double _width_5 = scene.getWidth();
-          boolean _greaterThan_2 = (_maxX > _width_5);
-          if (_greaterThan_2) {
-            double _width_6 = scene.getWidth();
+          double _width_2 = scene.getWidth();
+          boolean _greaterThan = (_maxX > _width_2);
+          if (_greaterThan) {
+            double _width_3 = scene.getWidth();
             double _maxX_1 = boundsInScene.getMaxX();
-            _xifexpression_1 = (_width_6 - _maxX_1);
+            _xifexpression_1 = (_width_3 - _maxX_1);
           }
           _xifexpression = _xifexpression_1;
         }
         final double deltaX = _xifexpression;
         double _xifexpression_2 = (double) 0;
         double _minY = boundsInScene.getMinY();
-        boolean _lessThan_3 = (_minY < 0);
-        if (_lessThan_3) {
+        boolean _lessThan_1 = (_minY < 0);
+        if (_lessThan_1) {
           double _minY_1 = boundsInScene.getMinY();
           _xifexpression_2 = (-_minY_1);
         } else {
           double _xifexpression_3 = (double) 0;
           double _maxY = boundsInScene.getMaxY();
-          double _height_5 = scene.getHeight();
-          boolean _greaterThan_3 = (_maxY > _height_5);
-          if (_greaterThan_3) {
-            double _height_6 = scene.getHeight();
+          double _height_2 = scene.getHeight();
+          boolean _greaterThan_1 = (_maxY > _height_2);
+          if (_greaterThan_1) {
+            double _height_3 = scene.getHeight();
             double _maxY_1 = boundsInScene.getMaxY();
-            _xifexpression_3 = (_height_6 - _maxY_1);
+            _xifexpression_3 = (_height_3 - _maxY_1);
           }
           _xifexpression_2 = _xifexpression_3;
         }

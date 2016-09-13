@@ -125,11 +125,9 @@ public class ButtonExtensions {
   public static XButton getContainerButton(final Node it) {
     XButton _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
+    if (Objects.equal(it, null)) {
+      _matched=true;
+      _switchResult = null;
     }
     if (!_matched) {
       if (it instanceof XButton) {

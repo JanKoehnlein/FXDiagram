@@ -230,24 +230,7 @@ public class BundleUtil {
       ((List<BundleDescription>)Conversions.doWrapArray(_fragments)).forEach(_function_2);
     }
     final Function1<BundleDependency, Boolean> _function_3 = (BundleDependency it) -> {
-      boolean _and = false;
-      BundleDescription _dependency = it.getDependency();
-      boolean _notEquals = (!Objects.equal(_dependency, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _or = false;
-        boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
-        if (_isConsiderOptional) {
-          _or = true;
-        } else {
-          boolean _isOptional = it.isOptional();
-          boolean _not = (!_isOptional);
-          _or = _not;
-        }
-        _and = _or;
-      }
-      return Boolean.valueOf(_and);
+      return Boolean.valueOf(((!Objects.equal(it.getDependency(), null)) && (BundleUtil.isConsiderOptional() || (!it.isOptional()))));
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_3);
   }
@@ -310,24 +293,7 @@ public class BundleUtil {
     };
     ((List<BundleDescription>)Conversions.doWrapArray(_dependents)).forEach(_function);
     final Function1<BundleDependency, Boolean> _function_1 = (BundleDependency it) -> {
-      boolean _and = false;
-      BundleDescription _dependency = it.getDependency();
-      boolean _notEquals = (!Objects.equal(_dependency, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _or = false;
-        boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
-        if (_isConsiderOptional) {
-          _or = true;
-        } else {
-          boolean _isOptional = it.isOptional();
-          boolean _not = (!_isOptional);
-          _or = _not;
-        }
-        _and = _or;
-      }
-      return Boolean.valueOf(_and);
+      return Boolean.valueOf(((!Objects.equal(it.getDependency(), null)) && (BundleUtil.isConsiderOptional() || (!it.isOptional()))));
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_1);
   }
@@ -387,19 +353,7 @@ public class BundleUtil {
         case PACKAGE_IMPORT:
           ImportPackageSpecification[] _importPackages = owner.getImportPackages();
           final Function1<ImportPackageSpecification, Boolean> _function_1 = (ImportPackageSpecification it) -> {
-            boolean _and = false;
-            BaseDescription _supplier = it.getSupplier();
-            BundleDescription _exporter = ((ExportPackageDescription) _supplier).getExporter();
-            String _name = _exporter.getName();
-            boolean _equals = Objects.equal(_name, dependencyID);
-            if (!_equals) {
-              _and = false;
-            } else {
-              VersionRange _versionRange = it.getVersionRange();
-              boolean _equals_1 = Objects.equal(_versionRange, dependencyVersionRange);
-              _and = _equals_1;
-            }
-            return Boolean.valueOf(_and);
+            return Boolean.valueOf((Objects.equal(((ExportPackageDescription) it.getSupplier()).getExporter().getName(), dependencyID) && Objects.equal(it.getVersionRange(), dependencyVersionRange)));
           };
           final ImportPackageSpecification packageImport = IterableExtensions.<ImportPackageSpecification>findFirst(((Iterable<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)), _function_1);
           boolean _notEquals_1 = (!Objects.equal(packageImport, null));

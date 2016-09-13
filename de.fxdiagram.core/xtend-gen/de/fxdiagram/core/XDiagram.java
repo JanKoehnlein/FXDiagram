@@ -182,16 +182,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }
-    boolean _and = false;
-    boolean _layoutOnActivate = this.getLayoutOnActivate();
-    if (!_layoutOnActivate) {
-      _and = false;
-    } else {
-      LayoutParameters _layoutParameters = this.getLayoutParameters();
-      boolean _notEquals = (!Objects.equal(_layoutParameters, null));
-      _and = _notEquals;
-    }
-    if (_and) {
+    if ((this.getLayoutOnActivate() && (!Objects.equal(this.getLayoutParameters(), null)))) {
       ObservableList<XNode> _nodes = this.getNodes();
       final Consumer<XNode> _function_1 = (XNode it) -> {
         Node _node = it.getNode();
@@ -210,8 +201,8 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       };
       _connections.forEach(_function_2);
       Layouter _layouter = new Layouter();
-      LayoutParameters _layoutParameters_1 = this.getLayoutParameters();
-      _layouter.layout(_layoutParameters_1, this, null);
+      LayoutParameters _layoutParameters = this.getLayoutParameters();
+      _layouter.layout(_layoutParameters, this, null);
       this.setLayoutOnActivate(false);
     }
     ObservableList<XNode> _nodes_1 = this.getNodes();
@@ -279,21 +270,21 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     InitializingListListener<XConnection> _doubleArrow_1 = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener_1, _function_4);
     CoreExtensions.<XConnection>addInitializingListener(_connections_1, _doubleArrow_1);
     AuxiliaryLinesSupport _xifexpression = null;
-    boolean _and_1 = false;
+    boolean _and = false;
     boolean _isRootDiagram = this.getIsRootDiagram();
     boolean _not = (!_isRootDiagram);
     if (!_not) {
-      _and_1 = false;
+      _and = false;
     } else {
       XDiagram _parentDiagram = this.getParentDiagram();
       AuxiliaryLinesSupport _auxiliaryLinesSupport = null;
       if (_parentDiagram!=null) {
         _auxiliaryLinesSupport=_parentDiagram.auxiliaryLinesSupport;
       }
-      boolean _notEquals_1 = (!Objects.equal(_auxiliaryLinesSupport, null));
-      _and_1 = _notEquals_1;
+      boolean _notEquals = (!Objects.equal(_auxiliaryLinesSupport, null));
+      _and = _notEquals;
     }
-    if (_and_1) {
+    if (_and) {
       XDiagram _parentDiagram_1 = this.getParentDiagram();
       _xifexpression = _parentDiagram_1.auxiliaryLinesSupport;
     } else {
@@ -318,13 +309,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public void centerDiagram(final boolean useForce) {
-    boolean _or = false;
-    if (this.needsCentering) {
-      _or = true;
-    } else {
-      _or = useForce;
-    }
-    if (_or) {
+    if ((this.needsCentering || useForce)) {
       this.layout();
       Bounds _layoutBounds = this.getLayoutBounds();
       double _width = _layoutBounds.getWidth();
@@ -380,24 +365,11 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   protected void addArrowHead(final Property<? extends Node> property, final ChangeListener<? super Node> listener) {
-    boolean _and = false;
-    Node _value = property.getValue();
-    boolean _notEquals = (!Objects.equal(_value, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
+    if (((!Objects.equal(property.getValue(), null)) && (!this.getConnectionLayer().getChildren().contains(property.getValue())))) {
       Group _connectionLayer = this.getConnectionLayer();
       ObservableList<Node> _children = _connectionLayer.getChildren();
-      Node _value_1 = property.getValue();
-      boolean _contains = _children.contains(_value_1);
-      boolean _not = (!_contains);
-      _and = _not;
-    }
-    if (_and) {
-      Group _connectionLayer_1 = this.getConnectionLayer();
-      ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
-      Node _value_2 = property.getValue();
-      _children_1.add(_value_2);
+      Node _value = property.getValue();
+      _children.add(_value);
     }
     property.addListener(listener);
   }

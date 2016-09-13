@@ -80,14 +80,7 @@ public class SelectionTool implements XDiagramTool {
             } else {
               targetShape.select(event);
             }
-            boolean _or = false;
-            if (targetWasSelected) {
-              _or = true;
-            } else {
-              boolean _isShortcutDown_1 = event.isShortcutDown();
-              _or = _isShortcutDown_1;
-            }
-            if (_or) {
+            if ((targetWasSelected || event.isShortcutDown())) {
               final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
                 XDiagram _diagram = CoreExtensions.getDiagram(it);
                 XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
@@ -159,15 +152,7 @@ public class SelectionTool implements XDiagramTool {
     };
     this.mouseDraggedHandler = _function_1;
     final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
-      boolean _and = false;
-      if (!(this.isActionOnDiagram && (!this.hasDragged))) {
-        _and = false;
-      } else {
-        MouseButton _button = it.getButton();
-        boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-        _and = _equals;
-      }
-      if (_and) {
+      if (((this.isActionOnDiagram && (!this.hasDragged)) && Objects.equal(it.getButton(), MouseButton.PRIMARY))) {
         Iterable<XShape> _currentSelection = root.getCurrentSelection();
         final Consumer<XShape> _function_3 = (XShape it_1) -> {
           it_1.setSelected(false);
@@ -215,16 +200,7 @@ public class SelectionTool implements XDiagramTool {
   
   protected boolean showPositionTooltip() {
     boolean _xifexpression = false;
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(this.positionTip, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isShowing = this.positionTip.isShowing();
-      boolean _not = (!_isShowing);
-      _and = _not;
-    }
-    if (_and) {
+    if (((!Objects.equal(this.positionTip, null)) && (!this.positionTip.isShowing()))) {
       _xifexpression = this.positionTip.show();
     }
     return _xifexpression;
@@ -301,13 +277,11 @@ public class SelectionTool implements XDiagramTool {
   private XShape getTargetShape(final Node it) {
     XShape _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (it instanceof XShape) {
-        boolean _isSelectable = ((XShape)it).isSelectable();
-        if (_isSelectable) {
-          _matched=true;
-          _switchResult = ((XShape)it);
-        }
+    if (it instanceof XShape) {
+      boolean _isSelectable = ((XShape)it).isSelectable();
+      if (_isSelectable) {
+        _matched=true;
+        _switchResult = ((XShape)it);
       }
     }
     if (!_matched) {

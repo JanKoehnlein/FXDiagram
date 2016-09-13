@@ -22,16 +22,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 public class LoadAction implements DiagramAction {
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _and = false;
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (!_isShortcutDown) {
-      _and = false;
-    } else {
-      KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.O);
-      _and = _equals;
-    }
-    return _and;
+    return (it.isShortcutDown() && Objects.equal(it.getCode(), KeyCode.O));
   }
   
   @Override

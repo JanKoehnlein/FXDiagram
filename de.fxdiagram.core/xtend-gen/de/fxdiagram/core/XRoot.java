@@ -271,15 +271,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     XDiagram _diagram = this.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Function1<XShape, Boolean> _function = (XShape it) -> {
-      boolean _and = false;
-      boolean _isSelectable = it.isSelectable();
-      if (!_isSelectable) {
-        _and = false;
-      } else {
-        boolean _selected = it.getSelected();
-        _and = _selected;
-      }
-      return Boolean.valueOf(_and);
+      return Boolean.valueOf((it.isSelectable() && it.getSelected()));
     };
     return IterableExtensions.<XShape>filter(_allShapes, _function);
   }

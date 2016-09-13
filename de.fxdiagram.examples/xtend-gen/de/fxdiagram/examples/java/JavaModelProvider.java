@@ -17,11 +17,9 @@ public class JavaModelProvider implements DomainObjectProvider {
   @Override
   public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
-    if (!_matched) {
-      if (domainObject instanceof Class) {
-        _matched=true;
-        return this.createJavaTypeDescriptor(((Class<?>)domainObject));
-      }
+    if (domainObject instanceof Class) {
+      _matched=true;
+      return this.createJavaTypeDescriptor(((Class<?>)domainObject));
     }
     if (!_matched) {
       if (domainObject instanceof JavaProperty) {

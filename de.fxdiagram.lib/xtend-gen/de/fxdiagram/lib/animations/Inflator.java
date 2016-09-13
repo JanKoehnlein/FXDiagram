@@ -98,14 +98,7 @@ public class Inflator {
   public Transition getInflateAnimation() {
     SequentialTransition _xblockexpression = null;
     {
-      boolean _or = false;
-      boolean _isEmpty = this.inflatable2spacer.isEmpty();
-      if (_isEmpty) {
-        _or = true;
-      } else {
-        _or = this.isInflated;
-      }
-      if (_or) {
+      if ((this.inflatable2spacer.isEmpty() || this.isInflated)) {
         return new EmptyTransition();
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();
@@ -131,14 +124,7 @@ public class Inflator {
   public Transition getDeflateAnimation() {
     SequentialTransition _xblockexpression = null;
     {
-      boolean _or = false;
-      boolean _isEmpty = this.inflatable2spacer.isEmpty();
-      if (_isEmpty) {
-        _or = true;
-      } else {
-        _or = (!this.isInflated);
-      }
-      if (_or) {
+      if ((this.inflatable2spacer.isEmpty() || (!this.isInflated))) {
         return new EmptyTransition();
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();

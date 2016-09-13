@@ -26,11 +26,9 @@ public class MappingAcceptor<ARG extends Object> {
   public <T extends Object> boolean add(final AbstractMapping<T> mapping, final Function1<? super ARG, ? extends T> selector) {
     EntryCall<ARG> _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (mapping instanceof NodeMapping) {
-        _matched=true;
-        _switchResult = new NodeEntryCall<T, ARG>(selector, ((NodeMapping<T>)mapping));
-      }
+    if (mapping instanceof NodeMapping) {
+      _matched=true;
+      _switchResult = new NodeEntryCall<T, ARG>(selector, ((NodeMapping<T>)mapping));
     }
     if (!_matched) {
       if (mapping instanceof DiagramMapping) {

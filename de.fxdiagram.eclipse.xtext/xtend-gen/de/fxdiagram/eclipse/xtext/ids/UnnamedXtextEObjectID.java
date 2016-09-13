@@ -52,15 +52,7 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   public EObject resolve(final ResourceSet resourceSet) {
     URI _uRI = this.getURI();
     final EObject element = resourceSet.getEObject(_uRI, true);
-    boolean _or = false;
-    boolean _equals = Objects.equal(element, null);
-    if (_equals) {
-      _or = true;
-    } else {
-      boolean _eIsProxy = element.eIsProxy();
-      _or = _eIsProxy;
-    }
-    if (_or) {
+    if ((Objects.equal(element, null) || element.eIsProxy())) {
       URI _uRI_1 = this.getURI();
       String _plus = ("Could not resolve " + _uRI_1);
       throw new NoSuchElementException(_plus);
@@ -84,17 +76,7 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof UnnamedXtextEObjectID)) {
-      boolean _and = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and = false;
-      } else {
-        URI _uRI = this.getURI();
-        URI _uRI_1 = ((UnnamedXtextEObjectID)obj).getURI();
-        boolean _equals_1 = Objects.equal(_uRI, _uRI_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (super.equals(obj) && Objects.equal(this.getURI(), ((UnnamedXtextEObjectID)obj).getURI()));
     } else {
       return false;
     }

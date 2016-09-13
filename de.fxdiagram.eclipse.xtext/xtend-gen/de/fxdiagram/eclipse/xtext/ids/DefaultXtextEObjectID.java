@@ -68,17 +68,7 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof DefaultXtextEObjectID)) {
-      boolean _and = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and = false;
-      } else {
-        QualifiedName _qualifiedName = ((DefaultXtextEObjectID)obj).getQualifiedName();
-        QualifiedName _qualifiedName_1 = this.getQualifiedName();
-        boolean _equals_1 = Objects.equal(_qualifiedName, _qualifiedName_1);
-        _and = _equals_1;
-      }
-      return _and;
+      return (super.equals(obj) && Objects.equal(((DefaultXtextEObjectID)obj).getQualifiedName(), this.getQualifiedName()));
     } else {
       return false;
     }
@@ -153,15 +143,7 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     final IEObjectDescription eObjectDescription = IterableExtensions.<IEObjectDescription>head(eObjectDescriptions);
     EObject _eObjectOrProxy = eObjectDescription.getEObjectOrProxy();
     final EObject element = EcoreUtil.resolve(_eObjectOrProxy, resource);
-    boolean _or = false;
-    boolean _equals_1 = Objects.equal(element, null);
-    if (_equals_1) {
-      _or = true;
-    } else {
-      boolean _eIsProxy = element.eIsProxy();
-      _or = _eIsProxy;
-    }
-    if (_or) {
+    if ((Objects.equal(element, null) || element.eIsProxy())) {
       URI _eObjectURI = eObjectDescription.getEObjectURI();
       String _plus_1 = ("Cannot resolve element " + _eObjectURI);
       throw new NoSuchElementException(_plus_1);

@@ -19,11 +19,9 @@ public class ClassLoaderExtensions {
     {
       Class<?> _switchResult = null;
       boolean _matched = false;
-      if (!_matched) {
-        if (context instanceof Class) {
-          _matched=true;
-          _switchResult = ((Class<?>)context);
-        }
+      if (context instanceof Class) {
+        _matched=true;
+        _switchResult = ((Class<?>)context);
       }
       if (!_matched) {
         _switchResult = context.getClass();
@@ -96,18 +94,10 @@ public class ClassLoaderExtensions {
         _xifexpression_1 = classLoaderClass;
       }
       final String className = _xifexpression_1;
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(bundleName, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _isEquinox = ClassLoaderExtensions.isEquinox();
-        _and = _isEquinox;
-      }
-      if (_and) {
+      if (((!Objects.equal(bundleName, null)) && ClassLoaderExtensions.isEquinox())) {
         final Bundle bundle = Platform.getBundle(bundleName);
-        boolean _notEquals_1 = (!Objects.equal(bundle, null));
-        if (_notEquals_1) {
+        boolean _notEquals = (!Objects.equal(bundle, null));
+        if (_notEquals) {
           return bundle.loadClass(className);
         }
       } else {

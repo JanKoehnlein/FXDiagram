@@ -185,15 +185,7 @@ public class FXDiagramTab {
   }
   
   public boolean confirmClose() {
-    boolean _or = false;
-    boolean _needsSave = this.root.getNeedsSave();
-    boolean _not = (!_needsSave);
-    if (_not) {
-      _or = true;
-    } else {
-      _or = this.dontSave;
-    }
-    if (_or) {
+    if (((!this.root.getNeedsSave()) || this.dontSave)) {
       return true;
     }
     CTabFolder _parent = this.tab.getParent();

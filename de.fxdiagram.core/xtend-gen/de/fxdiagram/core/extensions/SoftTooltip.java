@@ -140,16 +140,14 @@ public class SoftTooltip {
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       EventType<? extends MouseEvent> _eventType = it.getEventType();
       boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
-          _matched=true;
-          this.isHideOnTrigger = false;
-          double _sceneX = it.getSceneX();
-          double _sceneY = it.getSceneY();
-          this.setReferencePosition(_sceneX, _sceneY);
-          if (this.timer!=null) {
-            this.timer.restart();
-          }
+      if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
+        _matched=true;
+        this.isHideOnTrigger = false;
+        double _sceneX = it.getSceneX();
+        double _sceneY = it.getSceneY();
+        this.setReferencePosition(_sceneX, _sceneY);
+        if (this.timer!=null) {
+          this.timer.restart();
         }
       }
       if (!_matched) {

@@ -146,16 +146,7 @@ public class XDiagramConfigInterpreter {
         if (_notEquals) {
           List<AbstractConnectionMappingCall<?, Object>> _incoming = nodeMappingCasted.getIncoming();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function = (AbstractConnectionMappingCall<?, Object> it_1) -> {
-            boolean _and = false;
-            boolean _isOnDemand = it_1.isOnDemand();
-            if (!_isOnDemand) {
-              _and = false;
-            } else {
-              AbstractMapping<?> _mapping = it_1.getMapping();
-              boolean _contains = eagerConnections.contains(_mapping);
-              _and = _contains;
-            }
-            return Boolean.valueOf(_and);
+            return Boolean.valueOf((it_1.isOnDemand() && eagerConnections.contains(it_1.getMapping())));
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_incoming, _function);
           final Consumer<AbstractConnectionMappingCall<?, Object>> _function_1 = (AbstractConnectionMappingCall<?, Object> it_1) -> {
@@ -167,16 +158,7 @@ public class XDiagramConfigInterpreter {
           _filter.forEach(_function_1);
           List<AbstractConnectionMappingCall<?, Object>> _outgoing = nodeMappingCasted.getOutgoing();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function_2 = (AbstractConnectionMappingCall<?, Object> it_1) -> {
-            boolean _and = false;
-            boolean _isOnDemand = it_1.isOnDemand();
-            if (!_isOnDemand) {
-              _and = false;
-            } else {
-              AbstractMapping<?> _mapping = it_1.getMapping();
-              boolean _contains = eagerConnections.contains(_mapping);
-              _and = _contains;
-            }
-            return Boolean.valueOf(_and);
+            return Boolean.valueOf((it_1.isOnDemand() && eagerConnections.contains(it_1.getMapping())));
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_outgoing, _function_2);
           final Consumer<AbstractConnectionMappingCall<?, Object>> _function_3 = (AbstractConnectionMappingCall<?, Object> it_1) -> {
@@ -260,16 +242,7 @@ public class XDiagramConfigInterpreter {
       boolean _not = (!_isCreateDuplicateNodes);
       if (_not) {
         final XNode existingNode = context.getNode(descriptor);
-        boolean _or = false;
-        boolean _notEquals = (!Objects.equal(existingNode, null));
-        if (_notEquals) {
-          _or = true;
-        } else {
-          boolean _isCreateNodes = context.isCreateNodes();
-          boolean _not_1 = (!_isCreateNodes);
-          _or = _not_1;
-        }
-        if (_or) {
+        if (((!Objects.equal(existingNode, null)) || (!context.isCreateNodes()))) {
           return existingNode;
         }
       }
@@ -282,8 +255,8 @@ public class XDiagramConfigInterpreter {
         List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
         final Consumer<AbstractConnectionMappingCall<?, T>> _function = (AbstractConnectionMappingCall<?, T> it) -> {
           boolean _isOnDemand = it.isOnDemand();
-          boolean _not_2 = (!_isOnDemand);
-          if (_not_2) {
+          boolean _not_1 = (!_isOnDemand);
+          if (_not_1) {
             final Procedure1<XConnection> _function_1 = (XConnection it_1) -> {
               it_1.setTarget(node);
             };
@@ -294,8 +267,8 @@ public class XDiagramConfigInterpreter {
         List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
         final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
           boolean _isOnDemand = it.isOnDemand();
-          boolean _not_2 = (!_isOnDemand);
-          if (_not_2) {
+          boolean _not_1 = (!_isOnDemand);
+          if (_not_1) {
             final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
               it_1.setSource(node);
             };
@@ -337,16 +310,7 @@ public class XDiagramConfigInterpreter {
         return null;
       }
       final XConnection existingConnection = context.getConnection(descriptor);
-      boolean _or = false;
-      boolean _notEquals = (!Objects.equal(existingConnection, null));
-      if (_notEquals) {
-        _or = true;
-      } else {
-        boolean _isCreateConnections = context.isCreateConnections();
-        boolean _not = (!_isCreateConnections);
-        _or = _not;
-      }
-      if (_or) {
+      if (((!Objects.equal(existingConnection, null)) || (!context.isCreateConnections()))) {
         return existingConnection;
       }
       final XConnection connection = connectionMappingCasted.createConnection(descriptor);
@@ -362,17 +326,7 @@ public class XDiagramConfigInterpreter {
       _labels.forEach(_function);
       initializer.apply(connection);
       this.<T>createEndpoints(connectionMapping, connectionObject, connection, context);
-      boolean _and = false;
-      XNode _source = connection.getSource();
-      boolean _notEquals_1 = (!Objects.equal(_source, null));
-      if (!_notEquals_1) {
-        _and = false;
-      } else {
-        XNode _target = connection.getTarget();
-        boolean _notEquals_2 = (!Objects.equal(_target, null));
-        _and = _notEquals_2;
-      }
-      if (_and) {
+      if (((!Objects.equal(connection.getSource(), null)) && (!Objects.equal(connection.getTarget(), null)))) {
         context.addConnection(connection);
         return connection;
       }
@@ -457,40 +411,20 @@ public class XDiagramConfigInterpreter {
   }
   
   protected <T extends Object> void createEndpoints(final ConnectionMapping<T> connectionMapping, final T connectionObject, final XConnection connection, final InterpreterContext context) {
-    boolean _and = false;
-    XNode _source = connection.getSource();
-    boolean _equals = Objects.equal(_source, null);
-    if (!_equals) {
-      _and = false;
-    } else {
-      NodeMappingCall<?, T> _source_1 = connectionMapping.getSource();
-      boolean _notEquals = (!Objects.equal(_source_1, null));
-      _and = _notEquals;
-    }
-    if (_and) {
-      NodeMappingCall<?, T> _source_2 = connectionMapping.getSource();
+    if ((Objects.equal(connection.getSource(), null) && (!Objects.equal(connectionMapping.getSource(), null)))) {
+      NodeMappingCall<?, T> _source = connectionMapping.getSource();
       Iterable<XNode> _execute = null;
-      if (_source_2!=null) {
-        _execute=this.execute(_source_2, connectionObject, context);
+      if (_source!=null) {
+        _execute=this.execute(_source, connectionObject, context);
       }
       XNode _head = IterableExtensions.<XNode>head(_execute);
       connection.setSource(_head);
     }
-    boolean _and_1 = false;
-    XNode _target = connection.getTarget();
-    boolean _equals_1 = Objects.equal(_target, null);
-    if (!_equals_1) {
-      _and_1 = false;
-    } else {
-      NodeMappingCall<?, T> _target_1 = connectionMapping.getTarget();
-      boolean _notEquals_1 = (!Objects.equal(_target_1, null));
-      _and_1 = _notEquals_1;
-    }
-    if (_and_1) {
-      NodeMappingCall<?, T> _target_2 = connectionMapping.getTarget();
+    if ((Objects.equal(connection.getTarget(), null) && (!Objects.equal(connectionMapping.getTarget(), null)))) {
+      NodeMappingCall<?, T> _target = connectionMapping.getTarget();
       Iterable<XNode> _execute_1 = null;
-      if (_target_2!=null) {
-        _execute_1=this.execute(_target_2, connectionObject, context);
+      if (_target!=null) {
+        _execute_1=this.execute(_target, connectionObject, context);
       }
       XNode _head_1 = IterableExtensions.<XNode>head(_execute_1);
       connection.setTarget(_head_1);

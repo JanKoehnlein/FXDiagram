@@ -70,17 +70,7 @@ public class JvmDomainUtil {
       final Map<String, JvmField> fields = IterableExtensions.<String, JvmField>toMap(_declaredFields, _function);
       Iterable<JvmOperation> _declaredOperations = owner.getDeclaredOperations();
       final Function1<JvmOperation, Boolean> _function_1 = (JvmOperation it) -> {
-        boolean _and = false;
-        boolean _isSetter = this.isSetter(it, fields);
-        boolean _not = (!_isSetter);
-        if (!_not) {
-          _and = false;
-        } else {
-          boolean _isGetter = this.isGetter(it, fields);
-          boolean _not_1 = (!_isGetter);
-          _and = _not_1;
-        }
-        return Boolean.valueOf(_and);
+        return Boolean.valueOf(((!this.isSetter(it, fields)) && (!this.isGetter(it, fields))));
       };
       _xblockexpression = IterableExtensions.<JvmOperation>filter(_declaredOperations, _function_1);
     }
@@ -122,20 +112,9 @@ public class JvmDomainUtil {
   }
   
   protected boolean isSetter(final JvmOperation it, final Map<String, JvmField> fields) {
-    boolean _and = false;
-    String _simpleName = it.getSimpleName();
-    boolean _startsWith = _simpleName.startsWith("set");
-    if (!_startsWith) {
-      _and = false;
-    } else {
-      EList<JvmFormalParameter> _parameters = it.getParameters();
-      int _size = _parameters.size();
-      boolean _equals = (_size == 1);
-      _and = _equals;
-    }
-    if (_and) {
-      String _simpleName_1 = it.getSimpleName();
-      String _substring = _simpleName_1.substring(3);
+    if ((it.getSimpleName().startsWith("set") && (it.getParameters().size() == 1))) {
+      String _simpleName = it.getSimpleName();
+      String _substring = _simpleName.substring(3);
       String _firstLower = StringExtensions.toFirstLower(_substring);
       final JvmField field = fields.get(_firstLower);
       JvmTypeReference _type = null;
@@ -149,8 +128,8 @@ public class JvmDomainUtil {
       final LightweightTypeReference fieldType = _lightweight;
       boolean _notEquals = (!Objects.equal(fieldType, null));
       if (_notEquals) {
-        EList<JvmFormalParameter> _parameters_1 = it.getParameters();
-        JvmFormalParameter _head = IterableExtensions.<JvmFormalParameter>head(_parameters_1);
+        EList<JvmFormalParameter> _parameters = it.getParameters();
+        JvmFormalParameter _head = IterableExtensions.<JvmFormalParameter>head(_parameters);
         JvmTypeReference _parameterType = _head.getParameterType();
         LightweightTypeReference _lightweight_1 = this.getLightweight(_parameterType);
         return fieldType.isAssignableFrom(_lightweight_1);
@@ -160,18 +139,7 @@ public class JvmDomainUtil {
   }
   
   protected boolean isGetter(final JvmOperation it, final Map<String, JvmField> fields) {
-    boolean _and = false;
-    EList<JvmFormalParameter> _parameters = it.getParameters();
-    int _size = _parameters.size();
-    boolean _equals = (_size == 0);
-    if (!_equals) {
-      _and = false;
-    } else {
-      JvmTypeReference _returnType = it.getReturnType();
-      boolean _notEquals = (!Objects.equal(_returnType, null));
-      _and = _notEquals;
-    }
-    if (_and) {
+    if (((it.getParameters().size() == 0) && (!Objects.equal(it.getReturnType(), null)))) {
       JvmField _xifexpression = null;
       String _simpleName = it.getSimpleName();
       boolean _startsWith = _simpleName.startsWith("get");
@@ -195,10 +163,10 @@ public class JvmDomainUtil {
         _xifexpression = _xifexpression_1;
       }
       final JvmField field = _xifexpression;
-      boolean _notEquals_1 = (!Objects.equal(field, null));
-      if (_notEquals_1) {
-        JvmTypeReference _returnType_1 = it.getReturnType();
-        LightweightTypeReference _lightweight = this.getLightweight(_returnType_1);
+      boolean _notEquals = (!Objects.equal(field, null));
+      if (_notEquals) {
+        JvmTypeReference _returnType = it.getReturnType();
+        LightweightTypeReference _lightweight = this.getLightweight(_returnType);
         JvmTypeReference _type = null;
         if (field!=null) {
           _type=field.getType();
@@ -224,16 +192,7 @@ public class JvmDomainUtil {
     {
       JvmTypeReference _type = it.getType();
       final JvmTypeReference componentType = this.getComponentType(_type);
-      boolean _or = false;
-      boolean _isPrimitive = this._primitives.isPrimitive(componentType);
-      if (_isPrimitive) {
-        _or = true;
-      } else {
-        String _qualifiedName = componentType.getQualifiedName();
-        boolean _equals = Objects.equal(_qualifiedName, "java.lang.String");
-        _or = _equals;
-      }
-      _xblockexpression = _or;
+      _xblockexpression = (this._primitives.isPrimitive(componentType) || Objects.equal(componentType.getQualifiedName(), "java.lang.String"));
     }
     return _xblockexpression;
   }
@@ -246,19 +205,9 @@ public class JvmDomainUtil {
       _xifexpression = type.getComponentType();
     } else {
       LightweightTypeReference _xifexpression_1 = null;
-      boolean _and = false;
-      boolean _isSubtypeOf = type.isSubtypeOf(Iterable.class);
-      if (!_isSubtypeOf) {
-        _and = false;
-      } else {
+      if ((type.isSubtypeOf(Iterable.class) && (!type.getTypeArguments().isEmpty()))) {
         List<LightweightTypeReference> _typeArguments = type.getTypeArguments();
-        boolean _isEmpty = _typeArguments.isEmpty();
-        boolean _not = (!_isEmpty);
-        _and = _not;
-      }
-      if (_and) {
-        List<LightweightTypeReference> _typeArguments_1 = type.getTypeArguments();
-        LightweightTypeReference _head = IterableExtensions.<LightweightTypeReference>head(_typeArguments_1);
+        LightweightTypeReference _head = IterableExtensions.<LightweightTypeReference>head(_typeArguments);
         _xifexpression_1 = _head.getInvariantBoundSubstitute();
       } else {
         _xifexpression_1 = type;

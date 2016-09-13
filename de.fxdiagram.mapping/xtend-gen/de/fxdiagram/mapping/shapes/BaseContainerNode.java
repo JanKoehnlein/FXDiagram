@@ -30,7 +30,6 @@ import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -163,7 +162,8 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
           _children_1.add(titleArea);
           ObservableList<Node> _children_2 = it_1.getChildren();
           Group _group = new Group();
-          _children_2.add((this.diagramGroup = _group));
+          Group _diagramGroup = (this.diagramGroup = _group);
+          _children_2.add(_diagramGroup);
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
         _children.add(_doubleArrow);
@@ -211,19 +211,7 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
     XDiagram _innerDiagram = this.getInnerDiagram();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
-      boolean _and = false;
-      DoubleProperty _layoutXProperty = this.layoutXProperty();
-      boolean _isBound = _layoutXProperty.isBound();
-      boolean _not = (!_isBound);
-      if (!_not) {
-        _and = false;
-      } else {
-        DoubleProperty _layoutYProperty = this.layoutYProperty();
-        boolean _isBound_1 = _layoutYProperty.isBound();
-        boolean _not_1 = (!_isBound_1);
-        _and = _not_1;
-      }
-      if (_and) {
+      if (((!this.layoutXProperty().isBound()) && (!this.layoutYProperty().isBound()))) {
         double _layoutX = this.getLayoutX();
         double _minX = n.getMinX();
         double _minX_1 = o.getMinX();

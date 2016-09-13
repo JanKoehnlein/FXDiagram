@@ -50,35 +50,11 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
     BooleanProperty _selectedProperty = _host.selectedProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean newValue) -> {
       final XConnection connection = this.getConnection();
-      boolean _and = false;
-      boolean _and_1 = false;
-      if (!(!(newValue).booleanValue())) {
-        _and_1 = false;
-      } else {
-        boolean _notEquals = (!Objects.equal(connection, null));
-        _and_1 = _notEquals;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        XConnection.Kind _kind = connection.getKind();
-        boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
-        _and = _equals;
-      }
-      if (_and) {
+      if ((((!(newValue).booleanValue()) && (!Objects.equal(connection, null))) && Objects.equal(connection.getKind(), XConnection.Kind.POLYLINE))) {
         final ObservableList<XControlPoint> siblings = this.getSiblings();
         XControlPoint _host_1 = this.getHost();
         final int index = siblings.indexOf(_host_1);
-        boolean _and_2 = false;
-        if (!(index > 0)) {
-          _and_2 = false;
-        } else {
-          int _size = siblings.size();
-          int _minus = (_size - 1);
-          boolean _lessThan = (index < _minus);
-          _and_2 = _lessThan;
-        }
-        if (_and_2) {
+        if (((index > 0) && (index < (siblings.size() - 1)))) {
           final XControlPoint predecessor = siblings.get((index - 1));
           final XControlPoint successor = siblings.get((index + 1));
           double _layoutX = predecessor.getLayoutX();
@@ -220,29 +196,10 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   }
   
   protected void adjustBoth(final int index, final ObservableList<XControlPoint> siblings, final double moveDeltaX, final double moveDeltaY) {
-    boolean _and = false;
-    if (!(index > 0)) {
-      _and = false;
-    } else {
-      int _size = siblings.size();
-      int _minus = (_size - 1);
-      boolean _lessThan = (index < _minus);
-      _and = _lessThan;
-    }
-    if (_and) {
+    if (((index > 0) && (index < (siblings.size() - 1)))) {
       final XControlPoint predecessor = siblings.get((index - 1));
       final XControlPoint successor = siblings.get((index + 1));
-      boolean _and_1 = false;
-      XControlPoint.Type _type = predecessor.getType();
-      boolean _equals = Objects.equal(_type, XControlPoint.Type.CONTROL_POINT);
-      if (!_equals) {
-        _and_1 = false;
-      } else {
-        XControlPoint.Type _type_1 = successor.getType();
-        boolean _equals_1 = Objects.equal(_type_1, XControlPoint.Type.CONTROL_POINT);
-        _and_1 = _equals_1;
-      }
-      if (_and_1) {
+      if ((Objects.equal(predecessor.getType(), XControlPoint.Type.CONTROL_POINT) && Objects.equal(successor.getType(), XControlPoint.Type.CONTROL_POINT))) {
         double _layoutX = successor.getLayoutX();
         double _layoutX_1 = predecessor.getLayoutX();
         final double dx0 = (_layoutX - _layoutX_1);
@@ -300,17 +257,7 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
       final XControlPoint current = siblings.get(index);
       final XControlPoint predecessor = siblings.get((index - 1));
       final XControlPoint prepredecessor = siblings.get((index - 2));
-      boolean _and = false;
-      XControlPoint.Type _type = predecessor.getType();
-      boolean _equals = Objects.equal(_type, XControlPoint.Type.INTERPOLATED);
-      if (!_equals) {
-        _and = false;
-      } else {
-        XControlPoint.Type _type_1 = prepredecessor.getType();
-        boolean _equals_1 = Objects.equal(_type_1, XControlPoint.Type.CONTROL_POINT);
-        _and = _equals_1;
-      }
-      if (_and) {
+      if ((Objects.equal(predecessor.getType(), XControlPoint.Type.INTERPOLATED) && Objects.equal(prepredecessor.getType(), XControlPoint.Type.CONTROL_POINT))) {
         boolean _selected = prepredecessor.getSelected();
         boolean _not = (!_selected);
         if (_not) {
@@ -362,17 +309,7 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
       final XControlPoint current = siblings.get(index);
       final XControlPoint successor = siblings.get((index + 1));
       final XControlPoint postsuccessor = siblings.get((index + 2));
-      boolean _and = false;
-      XControlPoint.Type _type = successor.getType();
-      boolean _equals = Objects.equal(_type, XControlPoint.Type.INTERPOLATED);
-      if (!_equals) {
-        _and = false;
-      } else {
-        XControlPoint.Type _type_1 = postsuccessor.getType();
-        boolean _equals_1 = Objects.equal(_type_1, XControlPoint.Type.CONTROL_POINT);
-        _and = _equals_1;
-      }
-      if (_and) {
+      if ((Objects.equal(successor.getType(), XControlPoint.Type.INTERPOLATED) && Objects.equal(postsuccessor.getType(), XControlPoint.Type.CONTROL_POINT))) {
         boolean _selected = postsuccessor.getSelected();
         boolean _not = (!_selected);
         if (_not) {
@@ -494,33 +431,17 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
       final ParallelAnimationCommand pac = new ParallelAnimationCommand();
       Set<Map.Entry<XControlPoint, Point2D>> _entrySet = this.initialPositions.entrySet();
       final Consumer<Map.Entry<XControlPoint, Point2D>> _function = (Map.Entry<XControlPoint, Point2D> it) -> {
-        boolean _or = false;
-        XControlPoint _key = it.getKey();
-        double _layoutX = _key.getLayoutX();
-        Point2D _value = it.getValue();
-        double _x = _value.getX();
-        boolean _notEquals = (_layoutX != _x);
-        if (_notEquals) {
-          _or = true;
-        } else {
-          XControlPoint _key_1 = it.getKey();
-          double _layoutY = _key_1.getLayoutY();
+        if (((it.getKey().getLayoutX() != it.getValue().getX()) || (it.getKey().getLayoutY() != it.getValue().getY()))) {
+          XControlPoint _key = it.getKey();
+          Point2D _value = it.getValue();
+          double _x = _value.getX();
           Point2D _value_1 = it.getValue();
           double _y = _value_1.getY();
-          boolean _notEquals_1 = (_layoutY != _y);
-          _or = _notEquals_1;
-        }
-        if (_or) {
+          XControlPoint _key_1 = it.getKey();
+          double _layoutX = _key_1.getLayoutX();
           XControlPoint _key_2 = it.getKey();
-          Point2D _value_2 = it.getValue();
-          double _x_1 = _value_2.getX();
-          Point2D _value_3 = it.getValue();
-          double _y_1 = _value_3.getY();
-          XControlPoint _key_3 = it.getKey();
-          double _layoutX_1 = _key_3.getLayoutX();
-          XControlPoint _key_4 = it.getKey();
-          double _layoutY_1 = _key_4.getLayoutY();
-          MoveCommand _moveCommand = new MoveCommand(_key_2, _x_1, _y_1, _layoutX_1, _layoutY_1);
+          double _layoutY = _key_2.getLayoutY();
+          MoveCommand _moveCommand = new MoveCommand(_key, _x, _y, _layoutX, _layoutY);
           pac.operator_add(_moveCommand);
         }
       };

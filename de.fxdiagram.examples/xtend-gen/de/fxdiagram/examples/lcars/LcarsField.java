@@ -2,7 +2,6 @@ package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
@@ -165,61 +164,11 @@ public class LcarsField extends Parent {
           ObservableList<XNode> _nodes = _diagram.getNodes();
           Iterable<LcarsNode> _filter = Iterables.<LcarsNode>filter(_nodes, LcarsNode.class);
           final Function1<LcarsNode, Boolean> _function_6 = (LcarsNode it_2) -> {
-            boolean _and = false;
-            boolean _and_1 = false;
-            boolean _and_2 = false;
-            boolean _notEquals = (!Objects.equal(it_2, node));
-            if (!_notEquals) {
-              _and_2 = false;
-            } else {
-              DBObject _data = it_2.getData();
-              Object _get = _data.get(name);
-              boolean _equals_1 = Objects.equal(_get, value);
-              _and_2 = _equals_1;
-            }
-            if (!_and_2) {
-              _and_1 = false;
-            } else {
-              ObservableList<XConnection> _outgoingConnections = it_2.getOutgoingConnections();
-              final Function1<XConnection, Boolean> _function_7 = (XConnection it_3) -> {
-                boolean _and_3 = false;
-                XNode _target = it_3.getTarget();
-                boolean _equals_2 = Objects.equal(_target, node);
-                if (!_equals_2) {
-                  _and_3 = false;
-                } else {
-                  DomainObjectDescriptor _domainObjectDescriptor = it_3.getDomainObjectDescriptor();
-                  boolean _equals_3 = Objects.equal(_domainObjectDescriptor, connectionDescriptor);
-                  _and_3 = _equals_3;
-                }
-                return Boolean.valueOf(_and_3);
-              };
-              boolean _exists = IterableExtensions.<XConnection>exists(_outgoingConnections, _function_7);
-              boolean _not_1 = (!_exists);
-              _and_1 = _not_1;
-            }
-            if (!_and_1) {
-              _and = false;
-            } else {
-              ObservableList<XConnection> _incomingConnections = it_2.getIncomingConnections();
-              final Function1<XConnection, Boolean> _function_8 = (XConnection it_3) -> {
-                boolean _and_3 = false;
-                XNode _source = it_3.getSource();
-                boolean _equals_2 = Objects.equal(_source, node);
-                if (!_equals_2) {
-                  _and_3 = false;
-                } else {
-                  DomainObjectDescriptor _domainObjectDescriptor = it_3.getDomainObjectDescriptor();
-                  boolean _equals_3 = Objects.equal(_domainObjectDescriptor, connectionDescriptor);
-                  _and_3 = _equals_3;
-                }
-                return Boolean.valueOf(_and_3);
-              };
-              boolean _exists_1 = IterableExtensions.<XConnection>exists(_incomingConnections, _function_8);
-              boolean _not_2 = (!_exists_1);
-              _and = _not_2;
-            }
-            return Boolean.valueOf(_and);
+            return Boolean.valueOf(((((!Objects.equal(it_2, node)) && Objects.equal(it_2.getData().get(name), value)) && (!IterableExtensions.<XConnection>exists(it_2.getOutgoingConnections(), ((Function1<XConnection, Boolean>) (XConnection it_3) -> {
+              return Boolean.valueOf((Objects.equal(it_3.getTarget(), node) && Objects.equal(it_3.getDomainObjectDescriptor(), connectionDescriptor)));
+            })))) && (!IterableExtensions.<XConnection>exists(it_2.getIncomingConnections(), ((Function1<XConnection, Boolean>) (XConnection it_3) -> {
+              return Boolean.valueOf((Objects.equal(it_3.getSource(), node) && Objects.equal(it_3.getDomainObjectDescriptor(), connectionDescriptor)));
+            })))));
           };
           Iterable<LcarsNode> _filter_1 = IterableExtensions.<LcarsNode>filter(_filter, _function_6);
           final Function1<LcarsNode, XConnection> _function_7 = (LcarsNode it_2) -> {
@@ -245,7 +194,8 @@ public class LcarsField extends Parent {
       it.setOnMouseReleased(_function_5);
     };
     FlowPane _doubleArrow = ObjectExtensions.<FlowPane>operator_doubleArrow(_flowPane, _function_1);
-    _children.add((this.flowPane = _doubleArrow));
+    FlowPane _flowPane_1 = (this.flowPane = _doubleArrow);
+    _children.add(_flowPane_1);
   }
   
   public LcarsNode getLcarsNode() {

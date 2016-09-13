@@ -42,16 +42,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
   
   @Override
   public boolean matches(final KeyEvent it) {
-    boolean _and = false;
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (!_isShortcutDown) {
-      _and = false;
-    } else {
-      KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.P);
-      _and = _equals;
-    }
-    return _and;
+    return (it.isShortcutDown() && Objects.equal(it.getCode(), KeyCode.P));
   }
   
   @Override
@@ -219,24 +210,10 @@ public class UndoRedoPlayerAction implements DiagramAction {
     this.stopFastMode();
     final CommandStack commandStack = this.root.getCommandStack();
     final AnimationQueue.Listener _function = () -> {
-      boolean _and = false;
-      if (!isUndo) {
-        _and = false;
-      } else {
-        boolean _canUndo = commandStack.canUndo();
-        _and = _canUndo;
-      }
-      if (_and) {
+      if ((isUndo && commandStack.canUndo())) {
         commandStack.undo();
       } else {
-        boolean _and_1 = false;
-        if (!(!isUndo)) {
-          _and_1 = false;
-        } else {
-          boolean _canRedo = commandStack.canRedo();
-          _and_1 = _canRedo;
-        }
-        if (_and_1) {
+        if (((!isUndo) && commandStack.canRedo())) {
           commandStack.redo();
         } else {
           this.stopFastMode();

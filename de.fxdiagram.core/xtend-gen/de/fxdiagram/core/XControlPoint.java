@@ -152,16 +152,7 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   @Override
   public boolean isSelectable() {
-    boolean _and = false;
-    XControlPoint.Type _type = this.getType();
-    boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.ANCHOR));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isSelectable = super.isSelectable();
-      _and = _isSelectable;
-    }
-    return _and;
+    return ((!Objects.equal(this.getType(), XControlPoint.Type.ANCHOR)) && super.isSelectable());
   }
   
   public Boolean update(final List<XControlPoint> siblings) {
@@ -173,16 +164,7 @@ public class XControlPoint extends XShape implements XModelProvider {
       {
         final int index = siblings.indexOf(this);
         boolean _xifexpression_1 = false;
-        boolean _and = false;
-        if (!(index > 0)) {
-          _and = false;
-        } else {
-          int _size = siblings.size();
-          int _minus = (_size - 1);
-          boolean _lessThan = (index < _minus);
-          _and = _lessThan;
-        }
-        if (_and) {
+        if (((index > 0) && (index < (siblings.size() - 1)))) {
           boolean _xblockexpression_1 = false;
           {
             final XControlPoint predecessor = siblings.get((index - 1));
@@ -213,9 +195,9 @@ public class XControlPoint extends XShape implements XModelProvider {
             Node _node_1 = this.getNode();
             Bounds _layoutBounds_1 = _node_1.getLayoutBounds();
             double _height = _layoutBounds_1.getHeight();
-            double _minus_1 = (-_height);
-            double _minus_2 = (_minus_1 - 5);
-            TransformExtensions.translate(trafo, _multiply, _minus_2);
+            double _minus = (-_height);
+            double _minus_1 = (_minus - 5);
+            TransformExtensions.translate(trafo, _multiply, _minus_1);
             TransformExtensions.rotate(trafo, angle);
             ObservableList<Transform> _transforms = this.getTransforms();
             _xblockexpression_1 = _transforms.setAll(trafo);

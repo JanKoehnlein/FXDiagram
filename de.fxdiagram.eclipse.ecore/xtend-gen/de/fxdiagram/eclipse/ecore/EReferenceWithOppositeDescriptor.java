@@ -63,37 +63,7 @@ public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescr
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof EReferenceWithOppositeDescriptor)) {
-      boolean _or = false;
-      boolean _and = false;
-      String _uri = ((EReferenceWithOppositeDescriptor)obj).getUri();
-      String _uri_1 = this.getUri();
-      boolean _equals = Objects.equal(_uri, _uri_1);
-      if (!_equals) {
-        _and = false;
-      } else {
-        String _oppositeUri = ((EReferenceWithOppositeDescriptor)obj).getOppositeUri();
-        String _oppositeUri_1 = this.getOppositeUri();
-        boolean _equals_1 = Objects.equal(_oppositeUri, _oppositeUri_1);
-        _and = _equals_1;
-      }
-      if (_and) {
-        _or = true;
-      } else {
-        boolean _and_1 = false;
-        String _oppositeUri_2 = ((EReferenceWithOppositeDescriptor)obj).getOppositeUri();
-        String _uri_2 = this.getUri();
-        boolean _equals_2 = Objects.equal(_oppositeUri_2, _uri_2);
-        if (!_equals_2) {
-          _and_1 = false;
-        } else {
-          String _uri_3 = ((EReferenceWithOppositeDescriptor)obj).getUri();
-          String _oppositeUri_3 = this.getOppositeUri();
-          boolean _equals_3 = Objects.equal(_uri_3, _oppositeUri_3);
-          _and_1 = _equals_3;
-        }
-        _or = _and_1;
-      }
-      return _or;
+      return ((Objects.equal(((EReferenceWithOppositeDescriptor)obj).getUri(), this.getUri()) && Objects.equal(((EReferenceWithOppositeDescriptor)obj).getOppositeUri(), this.getOppositeUri())) || (Objects.equal(((EReferenceWithOppositeDescriptor)obj).getOppositeUri(), this.getUri()) && Objects.equal(((EReferenceWithOppositeDescriptor)obj).getUri(), this.getOppositeUri())));
     } else {
       return false;
     }

@@ -20,7 +20,8 @@ public class ImageCache {
       _elvis = ImageCache.INSTANCE;
     } else {
       ImageCache _imageCache = new ImageCache();
-      _elvis = (ImageCache.INSTANCE = _imageCache);
+      ImageCache _INSTANCE = (ImageCache.INSTANCE = _imageCache);
+      _elvis = _INSTANCE;
     }
     return _elvis;
   }

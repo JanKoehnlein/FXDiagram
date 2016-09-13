@@ -31,11 +31,12 @@ public class Test extends Application {
       HeadsUpDisplay _headsUpDisplay = it.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Rectangle _rectangle = new Rectangle(10, 10, 10, 10);
-      _children.add((this.r = _rectangle));
+      Node _r = (this.r = _rectangle);
+      _children.add(_r);
     };
     XRoot _doubleArrow = ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
-    Scene _scene = new Scene(
-      this.root = _doubleArrow, 320, 240);
+    XRoot _root = this.root = _doubleArrow;
+    Scene _scene = new Scene(_root, 320, 240);
     primaryStage.setScene(_scene);
     primaryStage.show();
     new Thread() {

@@ -76,11 +76,9 @@ public class LcarsModelProvider implements DomainObjectProvider {
   @Override
   public DomainObjectDescriptor createDescriptor(final Object it) {
     boolean _matched = false;
-    if (!_matched) {
-      if (it instanceof DBObject) {
-        _matched=true;
-        return this.createLcarsEntryDescriptor(((DBObject)it));
-      }
+    if (it instanceof DBObject) {
+      _matched=true;
+      return this.createLcarsEntryDescriptor(((DBObject)it));
     }
     if (!_matched) {
       if (it instanceof String) {

@@ -23,18 +23,16 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<? extends T> mapping) {
     IMappedElementDescriptor<T> _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (domainObject instanceof BundleDescription) {
-        _matched=true;
-        String _symbolicName = ((BundleDescription)domainObject).getSymbolicName();
-        Version _version = ((BundleDescription)domainObject).getVersion();
-        String _string = _version.toString();
-        XDiagramConfig _config = mapping.getConfig();
-        String _iD = _config.getID();
-        String _iD_1 = mapping.getID();
-        BundleDescriptor _bundleDescriptor = new BundleDescriptor(_symbolicName, _string, _iD, _iD_1);
-        _switchResult = ((IMappedElementDescriptor<T>) _bundleDescriptor);
-      }
+    if (domainObject instanceof BundleDescription) {
+      _matched=true;
+      String _symbolicName = ((BundleDescription)domainObject).getSymbolicName();
+      Version _version = ((BundleDescription)domainObject).getVersion();
+      String _string = _version.toString();
+      XDiagramConfig _config = mapping.getConfig();
+      String _iD = _config.getID();
+      String _iD_1 = mapping.getID();
+      BundleDescriptor _bundleDescriptor = new BundleDescriptor(_symbolicName, _string, _iD, _iD_1);
+      _switchResult = ((IMappedElementDescriptor<T>) _bundleDescriptor);
     }
     if (!_matched) {
       if (domainObject instanceof BundleDependency) {

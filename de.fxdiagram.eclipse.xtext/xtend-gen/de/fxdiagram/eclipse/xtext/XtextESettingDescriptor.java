@@ -118,7 +118,8 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
       _elvis = this.eReference;
     } else {
       EReference _resolveReference = this.resolveReference();
-      _elvis = (this.eReference = _resolveReference);
+      EReference _eReference = (this.eReference = _resolveReference);
+      _elvis = _eReference;
     }
     return _elvis;
   }
@@ -151,42 +152,7 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof XtextESettingDescriptor<?>)) {
-      boolean _and = false;
-      boolean _and_1 = false;
-      boolean _and_2 = false;
-      boolean _and_3 = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and_3 = false;
-      } else {
-        XtextEObjectID _sourceID = this.getSourceID();
-        XtextEObjectID _sourceID_1 = ((XtextESettingDescriptor<?>)obj).getSourceID();
-        boolean _equals_1 = Objects.equal(_sourceID, _sourceID_1);
-        _and_3 = _equals_1;
-      }
-      if (!_and_3) {
-        _and_2 = false;
-      } else {
-        XtextEObjectID _targetID = this.getTargetID();
-        XtextEObjectID _targetID_1 = ((XtextESettingDescriptor<?>)obj).getTargetID();
-        boolean _equals_2 = Objects.equal(_targetID, _targetID_1);
-        _and_2 = _equals_2;
-      }
-      if (!_and_2) {
-        _and_1 = false;
-      } else {
-        boolean _equals_3 = Objects.equal(this.eReference, ((XtextESettingDescriptor<?>)obj).eReference);
-        _and_1 = _equals_3;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        int _index = this.getIndex();
-        int _index_1 = ((XtextESettingDescriptor<?>)obj).getIndex();
-        boolean _equals_4 = (_index == _index_1);
-        _and = _equals_4;
-      }
-      return _and;
+      return ((((super.equals(obj) && Objects.equal(this.getSourceID(), ((XtextESettingDescriptor<?>)obj).getSourceID())) && Objects.equal(this.getTargetID(), ((XtextESettingDescriptor<?>)obj).getTargetID())) && Objects.equal(this.eReference, ((XtextESettingDescriptor<?>)obj).eReference)) && (this.getIndex() == ((XtextESettingDescriptor<?>)obj).getIndex()));
     } else {
       return false;
     }

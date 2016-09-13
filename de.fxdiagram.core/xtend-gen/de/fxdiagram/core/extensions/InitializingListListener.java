@@ -26,15 +26,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       this.change.apply(c);
     }
     while (c.next()) {
-      boolean _and = false;
-      boolean _notEquals_1 = (!Objects.equal(this.remove, null));
-      if (!_notEquals_1) {
-        _and = false;
-      } else {
-        boolean _wasRemoved = c.wasRemoved();
-        _and = _wasRemoved;
-      }
-      if (_and) {
+      if (((!Objects.equal(this.remove, null)) && c.wasRemoved())) {
         List<? extends T> _removed = c.getRemoved();
         final Consumer<T> _function = (T it) -> {
           this.remove.apply(it);
@@ -42,15 +34,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
         _removed.forEach(_function);
       }
     }
-    boolean _and = false;
-    boolean _notEquals_1 = (!Objects.equal(this.add, null));
-    if (!_notEquals_1) {
-      _and = false;
-    } else {
-      boolean _wasAdded = c.wasAdded();
-      _and = _wasAdded;
-    }
-    if (_and) {
+    if (((!Objects.equal(this.add, null)) && c.wasAdded())) {
       List<? extends T> _addedSubList = c.getAddedSubList();
       final Consumer<T> _function = (T it) -> {
         this.add.apply(it);

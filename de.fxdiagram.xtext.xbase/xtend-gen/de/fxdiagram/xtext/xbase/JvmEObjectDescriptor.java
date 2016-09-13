@@ -26,19 +26,7 @@ public class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDe
   public boolean equals(final Object obj) {
     boolean _xifexpression = false;
     if ((obj instanceof JvmEObjectDescriptor<?>)) {
-      boolean _and = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and = false;
-      } else {
-        XtextEObjectID _elementID = this.getElementID();
-        URI _uRI = _elementID.getURI();
-        XtextEObjectID _elementID_1 = ((JvmEObjectDescriptor<?>)obj).getElementID();
-        URI _uRI_1 = _elementID_1.getURI();
-        boolean _equals_1 = Objects.equal(_uRI, _uRI_1);
-        _and = _equals_1;
-      }
-      _xifexpression = _and;
+      _xifexpression = (super.equals(obj) && Objects.equal(this.getElementID().getURI(), ((JvmEObjectDescriptor<?>)obj).getElementID().getURI()));
     } else {
       _xifexpression = false;
     }

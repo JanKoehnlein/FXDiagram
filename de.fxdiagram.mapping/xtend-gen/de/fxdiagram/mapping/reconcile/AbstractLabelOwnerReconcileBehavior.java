@@ -39,21 +39,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
     @Override
     public boolean equals(final Object obj) {
       if ((obj instanceof AbstractLabelOwnerReconcileBehavior.LabelEntry)) {
-        boolean _and = false;
-        DomainObjectDescriptor _domainObjectDescriptor = ((AbstractLabelOwnerReconcileBehavior.LabelEntry)obj).label.getDomainObjectDescriptor();
-        DomainObjectDescriptor _domainObjectDescriptor_1 = this.label.getDomainObjectDescriptor();
-        boolean _equals = Objects.equal(_domainObjectDescriptor, _domainObjectDescriptor_1);
-        if (!_equals) {
-          _and = false;
-        } else {
-          Text _text = ((AbstractLabelOwnerReconcileBehavior.LabelEntry)obj).label.getText();
-          String _text_1 = _text.getText();
-          Text _text_2 = this.label.getText();
-          String _text_3 = _text_2.getText();
-          boolean _equals_1 = Objects.equal(_text_1, _text_3);
-          _and = _equals_1;
-        }
-        return _and;
+        return (Objects.equal(((AbstractLabelOwnerReconcileBehavior.LabelEntry)obj).label.getDomainObjectDescriptor(), this.label.getDomainObjectDescriptor()) && Objects.equal(((AbstractLabelOwnerReconcileBehavior.LabelEntry)obj).label.getText().getText(), this.label.getText().getText()));
       } else {
         return false;
       }

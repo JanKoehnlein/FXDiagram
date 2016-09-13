@@ -58,19 +58,9 @@ public class DomainModelUtil {
       _xifexpression = type.getComponentType();
     } else {
       LightweightTypeReference _xifexpression_1 = null;
-      boolean _and = false;
-      boolean _isSubtypeOf = type.isSubtypeOf(Iterable.class);
-      if (!_isSubtypeOf) {
-        _and = false;
-      } else {
+      if ((type.isSubtypeOf(Iterable.class) && (!type.getTypeArguments().isEmpty()))) {
         List<LightweightTypeReference> _typeArguments = type.getTypeArguments();
-        boolean _isEmpty = _typeArguments.isEmpty();
-        boolean _not = (!_isEmpty);
-        _and = _not;
-      }
-      if (_and) {
-        List<LightweightTypeReference> _typeArguments_1 = type.getTypeArguments();
-        LightweightTypeReference _head = IterableExtensions.<LightweightTypeReference>head(_typeArguments_1);
+        LightweightTypeReference _head = IterableExtensions.<LightweightTypeReference>head(_typeArguments);
         _xifexpression_1 = _head.getInvariantBoundSubstitute();
       } else {
         _xifexpression_1 = type;

@@ -84,32 +84,15 @@ public class SelectAndRevealCommand extends ViewportCommand {
       return BoundsExtensions.operator_plus(a, b);
     };
     final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_filterNull, _function_2);
-    boolean _and = false;
-    boolean _and_1 = false;
-    boolean _notEquals = (!Objects.equal(selectionBounds, null));
-    if (!_notEquals) {
-      _and_1 = false;
-    } else {
-      double _width = selectionBounds.getWidth();
-      boolean _greaterThan = (_width > NumberExpressionExtensions.EPSILON);
-      _and_1 = _greaterThan;
-    }
-    if (!_and_1) {
-      _and = false;
-    } else {
-      double _height = selectionBounds.getHeight();
-      boolean _greaterThan_1 = (_height > NumberExpressionExtensions.EPSILON);
-      _and = _greaterThan_1;
-    }
-    if (_and) {
+    if ((((!Objects.equal(selectionBounds, null)) && (selectionBounds.getWidth() > NumberExpressionExtensions.EPSILON)) && (selectionBounds.getHeight() > NumberExpressionExtensions.EPSILON))) {
       Scene _scene = root.getScene();
-      double _width_1 = _scene.getWidth();
-      double _width_2 = selectionBounds.getWidth();
-      double _divide = (_width_1 / _width_2);
+      double _width = _scene.getWidth();
+      double _width_1 = selectionBounds.getWidth();
+      double _divide = (_width / _width_1);
       Scene _scene_1 = root.getScene();
-      double _height_1 = _scene_1.getHeight();
-      double _height_2 = selectionBounds.getHeight();
-      double _divide_1 = (_height_1 / _height_2);
+      double _height = _scene_1.getHeight();
+      double _height_1 = selectionBounds.getHeight();
+      double _divide_1 = (_height / _height_1);
       double _min = Math.min(_divide, _divide_1);
       final double targetScale = Math.min(1, _min);
       Point2D _center = BoundsExtensions.center(selectionBounds);

@@ -67,53 +67,7 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof BundleDependencyDescriptor)) {
-      boolean _and = false;
-      boolean _and_1 = false;
-      boolean _and_2 = false;
-      boolean _and_3 = false;
-      boolean _and_4 = false;
-      boolean _equals = super.equals(obj);
-      if (!_equals) {
-        _and_4 = false;
-      } else {
-        BundleDependency.Kind _kind = ((BundleDependencyDescriptor)obj).getKind();
-        BundleDependency.Kind _kind_1 = this.getKind();
-        boolean _equals_1 = Objects.equal(_kind, _kind_1);
-        _and_4 = _equals_1;
-      }
-      if (!_and_4) {
-        _and_3 = false;
-      } else {
-        String _ownerSymbolicName = ((BundleDependencyDescriptor)obj).getOwnerSymbolicName();
-        String _ownerSymbolicName_1 = this.getOwnerSymbolicName();
-        boolean _equals_2 = Objects.equal(_ownerSymbolicName, _ownerSymbolicName_1);
-        _and_3 = _equals_2;
-      }
-      if (!_and_3) {
-        _and_2 = false;
-      } else {
-        String _ownerVersion = ((BundleDependencyDescriptor)obj).getOwnerVersion();
-        String _ownerVersion_1 = this.getOwnerVersion();
-        boolean _equals_3 = Objects.equal(_ownerVersion, _ownerVersion_1);
-        _and_2 = _equals_3;
-      }
-      if (!_and_2) {
-        _and_1 = false;
-      } else {
-        String _importSymbolicName = ((BundleDependencyDescriptor)obj).getImportSymbolicName();
-        String _importSymbolicName_1 = this.getImportSymbolicName();
-        boolean _equals_4 = Objects.equal(_importSymbolicName, _importSymbolicName_1);
-        _and_1 = _equals_4;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        String _importVersionRange = ((BundleDependencyDescriptor)obj).getImportVersionRange();
-        String _importVersionRange_1 = this.getImportVersionRange();
-        boolean _equals_5 = Objects.equal(_importVersionRange, _importVersionRange_1);
-        _and = _equals_5;
-      }
-      return _and;
+      return (((((super.equals(obj) && Objects.equal(((BundleDependencyDescriptor)obj).getKind(), this.getKind())) && Objects.equal(((BundleDependencyDescriptor)obj).getOwnerSymbolicName(), this.getOwnerSymbolicName())) && Objects.equal(((BundleDependencyDescriptor)obj).getOwnerVersion(), this.getOwnerVersion())) && Objects.equal(((BundleDependencyDescriptor)obj).getImportSymbolicName(), this.getImportSymbolicName())) && Objects.equal(((BundleDependencyDescriptor)obj).getImportVersionRange(), this.getImportVersionRange()));
     } else {
       return false;
     }

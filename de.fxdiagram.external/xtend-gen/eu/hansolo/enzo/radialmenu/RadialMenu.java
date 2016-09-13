@@ -252,17 +252,7 @@ public class RadialMenu extends Pane {
         ObservableList<Node> _children = NODE.getChildren();
         Circle _createItemShape = this.createItemShape(item, SHADOW);
         _children.add(_createItemShape);
-        boolean _and = false;
-        SymbolType _symbol = item.getSymbol();
-        boolean _tripleEquals = (SymbolType.NONE == _symbol);
-        if (!_tripleEquals) {
-          _and = false;
-        } else {
-          String _thumbnailImageName = item.getThumbnailImageName();
-          boolean _isEmpty = _thumbnailImageName.isEmpty();
-          _and = _isEmpty;
-        }
-        if (_and) {
+        if (((SymbolType.NONE == item.getSymbol()) && item.getThumbnailImageName().isEmpty())) {
           String _string = Integer.toString(i);
           Text text = new Text(_string);
           double _size_1 = item.getSize();
@@ -274,9 +264,9 @@ public class RadialMenu extends Pane {
           ObservableList<Node> _children_1 = NODE.getChildren();
           _children_1.add(text);
         } else {
-          String _thumbnailImageName_1 = item.getThumbnailImageName();
-          boolean _isEmpty_1 = _thumbnailImageName_1.isEmpty();
-          boolean _not = (!_isEmpty_1);
+          String _thumbnailImageName = item.getThumbnailImageName();
+          boolean _isEmpty = _thumbnailImageName.isEmpty();
+          boolean _not = (!_isEmpty);
           if (_not) {
             try {
               ObservableList<Node> _children_2 = NODE.getChildren();
@@ -300,10 +290,10 @@ public class RadialMenu extends Pane {
               }
             }
           } else {
-            SymbolType _symbol_1 = item.getSymbol();
+            SymbolType _symbol = item.getSymbol();
             double _size_3 = item.getSize();
             double _multiply_3 = (0.7 * _size_3);
-            Canvas symbol = SymbolCanvas.getSymbol(_symbol_1, _multiply_3, Color.WHITE);
+            Canvas symbol = SymbolCanvas.getSymbol(_symbol, _multiply_3, Color.WHITE);
             ObservableList<Node> _children_4 = NODE.getChildren();
             _children_4.add(symbol);
           }
@@ -425,15 +415,7 @@ public class RadialMenu extends Pane {
   }
   
   public MenuItem getItem(final int INDEX) {
-    boolean _or = false;
-    if ((INDEX < 0)) {
-      _or = true;
-    } else {
-      int _size = this.items.size();
-      boolean _greaterThan = (INDEX > _size);
-      _or = _greaterThan;
-    }
-    if (_or) {
+    if (((INDEX < 0) || (INDEX > this.items.size()))) {
       throw new IndexOutOfBoundsException();
     }
     List<MenuItem> _items = this.getItems();
@@ -546,28 +528,10 @@ public class RadialMenu extends Pane {
   }
   
   public void show() {
-    boolean _and = false;
-    boolean _buttonHideOnSelect = this.options.getButtonHideOnSelect();
-    if (!_buttonHideOnSelect) {
-      _and = false;
-    } else {
-      double _opacity = this.button.getOpacity();
-      boolean _greaterThan = (_opacity > 0);
-      _and = _greaterThan;
-    }
-    if (_and) {
+    if ((this.options.getButtonHideOnSelect() && (this.button.getOpacity() > 0))) {
       return;
     }
-    boolean _or = false;
-    boolean _buttonHideOnSelect_1 = this.options.getButtonHideOnSelect();
-    if (_buttonHideOnSelect_1) {
-      _or = true;
-    } else {
-      double _opacity_1 = this.button.getOpacity();
-      boolean _tripleEquals = (_opacity_1 == 0);
-      _or = _tripleEquals;
-    }
-    if (_or) {
+    if ((this.options.getButtonHideOnSelect() || (this.button.getOpacity() == 0))) {
       this.button.setScaleX(1.0);
       this.button.setScaleY(1.0);
       this.button.setRotate(0);
@@ -933,11 +897,9 @@ public class RadialMenu extends Pane {
     final EventType<? extends Event> TYPE = EVENT.getEventType();
     EventHandler<RadialMenu.MenuEvent> _switchResult = null;
     boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(TYPE, RadialMenu.MenuEvent.MENU_OPEN_STARTED)) {
-        _matched=true;
-        _switchResult = this.getOnMenuOpenStarted();
-      }
+    if (Objects.equal(TYPE, RadialMenu.MenuEvent.MENU_OPEN_STARTED)) {
+      _matched=true;
+      _switchResult = this.getOnMenuOpenStarted();
     }
     if (!_matched) {
       if (Objects.equal(TYPE, RadialMenu.MenuEvent.MENU_OPEN_FINISHED)) {

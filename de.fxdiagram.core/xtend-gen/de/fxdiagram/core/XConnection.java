@@ -138,19 +138,9 @@ public class XConnection extends XDomainObjectShape {
       if (_outgoingConnections!=null) {
         _outgoingConnections.remove(this);
       }
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(newSource, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
+      if (((!Objects.equal(newSource, null)) && (!newSource.getOutgoingConnections().contains(this)))) {
         ObservableList<XConnection> _outgoingConnections_1 = newSource.getOutgoingConnections();
-        boolean _contains = _outgoingConnections_1.contains(this);
-        boolean _not = (!_contains);
-        _and = _not;
-      }
-      if (_and) {
-        ObservableList<XConnection> _outgoingConnections_2 = newSource.getOutgoingConnections();
-        _outgoingConnections_2.add(this);
+        _outgoingConnections_1.add(this);
       }
       this.setNeedsLayout(true);
     };
@@ -163,19 +153,9 @@ public class XConnection extends XDomainObjectShape {
       if (_incomingConnections!=null) {
         _incomingConnections.remove(this);
       }
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(newTarget, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
+      if (((!Objects.equal(newTarget, null)) && (!newTarget.getIncomingConnections().contains(this)))) {
         ObservableList<XConnection> _incomingConnections_1 = newTarget.getIncomingConnections();
-        boolean _contains = _incomingConnections_1.contains(this);
-        boolean _not = (!_contains);
-        _and = _not;
-      }
-      if (_and) {
-        ObservableList<XConnection> _incomingConnections_2 = newTarget.getIncomingConnections();
-        _incomingConnections_2.add(this);
+        _incomingConnections_1.add(this);
       }
       this.setNeedsLayout(true);
     };
@@ -314,19 +294,9 @@ public class XConnection extends XDomainObjectShape {
     };
     this.controlPointListener = _function;
     final ChangeListener<Boolean> _function_1 = (ObservableValue<? extends Boolean> prop, Boolean oldVal, Boolean newVal) -> {
-      boolean _and = false;
-      if (!(!(newVal).booleanValue())) {
-        _and = false;
-      } else {
-        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-        final Function1<XControlPoint, Boolean> _function_2 = (XControlPoint it) -> {
-          return Boolean.valueOf(it.getSelected());
-        };
-        boolean _exists = IterableExtensions.<XControlPoint>exists(_controlPoints, _function_2);
-        boolean _not = (!_exists);
-        _and = _not;
-      }
-      if (_and) {
+      if (((!(newVal).booleanValue()) && (!IterableExtensions.<XControlPoint>exists(this.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
+        return Boolean.valueOf(it.getSelected());
+      }))))) {
         this.hideControlPoints();
       }
     };
@@ -341,17 +311,7 @@ public class XConnection extends XDomainObjectShape {
       final Procedure1<XControlPoint> _function_4 = (XControlPoint it_1) -> {
         ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
         final int index = _controlPoints_1.indexOf(it_1);
-        boolean _or = false;
-        if ((index == 0)) {
-          _or = true;
-        } else {
-          ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-          int _size = _controlPoints_2.size();
-          int _minus = (_size - 1);
-          boolean _equals_1 = (index == _minus);
-          _or = _equals_1;
-        }
-        if (_or) {
+        if (((index == 0) || (index == (this.getControlPoints().size() - 1)))) {
           it_1.initializeGraphics();
         } else {
           it_1.activate();
@@ -411,21 +371,7 @@ public class XConnection extends XDomainObjectShape {
         controlPointPicked = true;
       }
     }
-    boolean _and = false;
-    if (!(!controlPointPicked)) {
-      _and = false;
-    } else {
-      boolean _or = false;
-      XConnection.Kind _kind = this.getKind();
-      boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
-      if (_equals) {
-        _or = true;
-      } else {
-        _or = wasSelected;
-      }
-      _and = _or;
-    }
-    if (_and) {
+    if (((!controlPointPicked) && (Objects.equal(this.getKind(), XConnection.Kind.POLYLINE) || wasSelected))) {
       AddControlPointBehavior _behavior_1 = this.<AddControlPointBehavior>getBehavior(AddControlPointBehavior.class);
       if (_behavior_1!=null) {
         double _sceneX_1 = it.getSceneX();

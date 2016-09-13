@@ -133,11 +133,9 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       int _switchResult = (int) 0;
       EventType<SwipeEvent> _eventType = it.getEventType();
       boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(_eventType, SwipeEvent.SWIPE_DOWN)) {
-          _matched=true;
-          _switchResult = (-1);
-        }
+      if (Objects.equal(_eventType, SwipeEvent.SWIPE_DOWN)) {
+        _matched=true;
+        _switchResult = (-1);
       }
       if (!_matched) {
         if (Objects.equal(_eventType, SwipeEvent.SWIPE_RIGHT)) {
@@ -327,16 +325,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      boolean _or = false;
-      boolean _isActive = this.getIsActive();
-      if (_isActive) {
-        _or = true;
-      } else {
-        ArrayList<XNode> _nodes = this.getNodes();
-        boolean _isEmpty = _nodes.isEmpty();
-        _or = _isEmpty;
-      }
-      if (_or) {
+      if ((this.getIsActive() || this.getNodes().isEmpty())) {
         return false;
       }
       this.isActiveProperty.set(true);
@@ -345,30 +334,30 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       ObservableList<Node> _children = _buttonLayer.getChildren();
       _children.add(this.group);
       this.setCurrentPosition(0);
-      ArrayList<XNode> _nodes_1 = this.getNodes();
-      int _size = _nodes_1.size();
+      ArrayList<XNode> _nodes = this.getNodes();
+      int _size = _nodes.size();
       boolean _equals = (_size == 1);
       if (_equals) {
-        ArrayList<XNode> _nodes_2 = this.getNodes();
-        XNode _head = IterableExtensions.<XNode>head(_nodes_2);
+        ArrayList<XNode> _nodes_1 = this.getNodes();
+        XNode _head = IterableExtensions.<XNode>head(_nodes_1);
         this.nodeChosen(_head);
         return false;
       }
       this.setBlurDiagram(true);
-      ArrayList<XNode> _nodes_3 = this.getNodes();
-      int _size_1 = _nodes_3.size();
+      ArrayList<XNode> _nodes_2 = this.getNodes();
+      int _size_1 = _nodes_2.size();
       boolean _notEquals = (_size_1 != 0);
       if (_notEquals) {
         this.setInterpolatedPosition(0);
       }
-      ArrayList<XNode> _nodes_4 = this.getNodes();
+      ArrayList<XNode> _nodes_3 = this.getNodes();
       final Consumer<XNode> _function = (XNode node) -> {
         final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
           int _clickCount = it.getClickCount();
           switch (_clickCount) {
             case 1:
-              ArrayList<XNode> _nodes_5 = this.getNodes();
-              List<XNode> _list = IterableExtensions.<XNode>toList(_nodes_5);
+              ArrayList<XNode> _nodes_4 = this.getNodes();
+              List<XNode> _list = IterableExtensions.<XNode>toList(_nodes_4);
               int _indexOf = _list.indexOf(node);
               this.spinToPosition.setTargetPosition(_indexOf);
               break;
@@ -383,7 +372,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         };
         node.setOnMouseClicked(_function_1);
       };
-      _nodes_4.forEach(_function);
+      _nodes_3.forEach(_function);
       XDiagram _diagram_1 = this.getDiagram();
       Scene _scene = _diagram_1.getScene();
       _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
@@ -440,8 +429,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _layoutYProperty.addListener(relocateButtons_1);
         this.graphics.relocateButtons(this.minusButton, this.plusButton);
       }
-      ArrayList<XNode> _nodes_5 = this.getNodes();
-      RevealAction _revealAction = new RevealAction(_nodes_5);
+      ArrayList<XNode> _nodes_4 = this.getNodes();
+      RevealAction _revealAction = new RevealAction(_nodes_4);
       XRoot _root_1 = this.getRoot();
       _revealAction.perform(_root_1);
       _xblockexpression = true;
