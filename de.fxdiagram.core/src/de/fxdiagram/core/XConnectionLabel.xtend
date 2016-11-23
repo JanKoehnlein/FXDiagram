@@ -2,6 +2,7 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior
 import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.geometry.VPos
@@ -12,7 +13,6 @@ import javafx.scene.transform.Affine
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
-import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior
 
 /**
  * A label on an {@link XConnection}.
@@ -30,7 +30,7 @@ class XConnectionLabel extends XLabel {
 	@FxProperty(readOnly=true) XConnection connection
 	@FxProperty double position = 0.5
 
-	Effect selectionEffect = new DropShadow		
+	Effect selectionEffect = new DropShadow
 
 	new(XConnection connection) {
 		this.connection = connection

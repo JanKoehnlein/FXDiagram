@@ -201,16 +201,9 @@ public class Demo extends Application {
         ObservableList<XNode> _nodes_6 = it.getNodes();
         SimpleNode _simpleNode = new SimpleNode("Xtext Views");
         _nodes_6.add(_simpleNode);
-        LcarsModelProvider _domainObjectProvider = this.root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
-        boolean _canConnect = _domainObjectProvider.canConnect();
-        if (_canConnect) {
-          ObservableList<XNode> _nodes_7 = it.getNodes();
-          OpenableDiagramNode _newLcarsDiagramNode = this.newLcarsDiagramNode();
-          _nodes_7.add(_newLcarsDiagramNode);
-        }
-        ObservableList<XNode> _nodes_8 = it.getNodes();
+        ObservableList<XNode> _nodes_7 = it.getNodes();
         SummarySlideDeck _summarySlideDeck = new SummarySlideDeck();
-        _nodes_8.add(_summarySlideDeck);
+        _nodes_7.add(_summarySlideDeck);
       };
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function_1);
       final ObservableList<XNode> allNodes = diagram.getNodes();
@@ -242,13 +235,17 @@ public class Demo extends Application {
         XNode _get = allNodes.get(((i).intValue() - 1));
         XNode _get_1 = allNodes.get((i).intValue());
         XConnection _xConnection = new XConnection(_get, _get_1);
-        _connections.add(_xConnection);
+        final Procedure1<XConnection> _function_3 = (XConnection it) -> {
+          it.setKind(XConnection.Kind.RECTILINEAR);
+        };
+        XConnection _doubleArrow_1 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_3);
+        _connections.add(_doubleArrow_1);
       }
       this.warmUpLayouter();
-      final Runnable _function_3 = () -> {
+      final Runnable _function_4 = () -> {
         diagram.centerDiagram(true);
       };
-      Platform.runLater(_function_3);
+      Platform.runLater(_function_4);
       _xblockexpression = scene;
     }
     return _xblockexpression;

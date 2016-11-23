@@ -1,6 +1,5 @@
 package de.fxdiagram.core.extensions;
 
-import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.geometry.Point2D;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -153,13 +152,13 @@ public class Point2DExtensions {
     final double d0x = (x0x - x1x);
     final double d0y = (x0y - x1y);
     final double norm0 = Point2DExtensions.norm(d0x, d0y);
-    if ((norm0 < NumberExpressionExtensions.EPSILON)) {
+    if ((norm0 < 1)) {
       return true;
     }
     final double d1x = (x1x - x2x);
     final double d1y = (x1y - x2y);
     final double norm1 = Point2DExtensions.norm(d1x, d1y);
-    if ((norm1 < NumberExpressionExtensions.EPSILON)) {
+    if ((norm1 < 1)) {
       return true;
     }
     final double cosTheta = ((((d0x * d1x) + (d0y * d1y)) / norm0) / norm1);

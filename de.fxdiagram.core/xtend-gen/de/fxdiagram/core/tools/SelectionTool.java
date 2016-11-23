@@ -152,12 +152,23 @@ public class SelectionTool implements XDiagramTool {
     };
     this.mouseDraggedHandler = _function_1;
     final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
+      final Iterable<XShape> selection = root.getCurrentSelection();
+      if (((!this.isActionOnDiagram) && this.hasDragged)) {
+        for (final XShape shape : selection) {
+          MoveBehavior _behavior = null;
+          if (shape!=null) {
+            _behavior=shape.<MoveBehavior>getBehavior(MoveBehavior.class);
+          }
+          if (_behavior!=null) {
+            _behavior.mouseReleased(it);
+          }
+        }
+      }
       if (((this.isActionOnDiagram && (!this.hasDragged)) && Objects.equal(it.getButton(), MouseButton.PRIMARY))) {
-        Iterable<XShape> _currentSelection = root.getCurrentSelection();
         final Consumer<XShape> _function_3 = (XShape it_1) -> {
           it_1.setSelected(false);
         };
-        _currentSelection.forEach(_function_3);
+        selection.forEach(_function_3);
       }
       XDiagram _diagram = root.getDiagram();
       AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();

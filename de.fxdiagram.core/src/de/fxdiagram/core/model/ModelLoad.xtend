@@ -1,6 +1,7 @@
 package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.tools.actions.LoadAction
 import java.io.Reader
 import java.util.List
 import java.util.Map
@@ -18,7 +19,6 @@ import javax.json.JsonObject
 import javax.json.JsonString
 import javax.json.JsonValue
 import org.eclipse.xtend.lib.annotations.Data
-import de.fxdiagram.core.tools.actions.LoadAction
 
 /**
  * Functionality of a {@link LoadAction}. 

@@ -5,6 +5,7 @@ import de.fxdiagram.core.XRoot
 import javafx.animation.FadeTransition
 import javafx.animation.SequentialTransition
 import javafx.util.Duration
+
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class ChangeDiagramCommand extends AbstractAnimationCommand {

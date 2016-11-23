@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -133,19 +132,6 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   
   @Override
   public void doActivate() {
-    T _host = this.getHost();
-    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
-      boolean _hasMoved = this.hasMoved();
-      if (_hasMoved) {
-        T _host_1 = this.getHost();
-        XRoot _root = CoreExtensions.getRoot(_host_1);
-        CommandStack _commandStack = _root.getCommandStack();
-        AnimationCommand _createMoveCommand = this.createMoveCommand();
-        _commandStack.execute(_createMoveCommand);
-        this.setManuallyPlaced(true);
-      }
-    };
-    _host.setOnMouseReleased(_function);
   }
   
   protected boolean hasMoved() {
@@ -216,6 +202,21 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
     this.dragTo(newPositionInDiagram);
+  }
+  
+  public void mouseReleased(final MouseEvent it) {
+    boolean _hasMoved = this.hasMoved();
+    if (_hasMoved) {
+      final AnimationCommand moveCommand = this.createMoveCommand();
+      boolean _notEquals = (!Objects.equal(moveCommand, null));
+      if (_notEquals) {
+        T _host = this.getHost();
+        XRoot _root = CoreExtensions.getRoot(_host);
+        CommandStack _commandStack = _root.getCommandStack();
+        _commandStack.execute(moveCommand);
+        this.setManuallyPlaced(true);
+      }
+    }
   }
   
   protected void dragTo(final Point2D newPositionInDiagram) {

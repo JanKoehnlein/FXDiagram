@@ -1,7 +1,10 @@
 package de.fxdiagram.core.tools.actions
 
+import com.google.common.collect.HashMultimap
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior
@@ -13,16 +16,12 @@ import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SequentialAnimationCommand
-import de.fxdiagram.core.tools.actions.ReconcileAction.UpdateDirtyStateCommand
 import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import com.google.common.collect.HashMultimap
-import de.fxdiagram.core.XNode
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XDiagramContainer
 
 class ReconcileAction implements DiagramAction {
 	

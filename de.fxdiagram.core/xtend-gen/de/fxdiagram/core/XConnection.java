@@ -86,6 +86,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class XConnection extends XDomainObjectShape {
   public enum Kind {
+    RECTILINEAR,
+    
     POLYLINE,
     
     QUAD_CURVE,
@@ -308,19 +310,13 @@ public class XConnection extends XDomainObjectShape {
         this.updateShapes();
       };
       it.setChange(_function_3);
-      final Procedure1<XControlPoint> _function_4 = (XControlPoint it_1) -> {
-        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-        final int index = _controlPoints_1.indexOf(it_1);
-        if (((index == 0) || (index == (this.getControlPoints().size() - 1)))) {
-          it_1.initializeGraphics();
-        } else {
-          it_1.activate();
-        }
-        DoubleProperty _layoutXProperty = it_1.layoutXProperty();
+      final Procedure1<XControlPoint> _function_4 = (XControlPoint cp) -> {
+        cp.activate();
+        DoubleProperty _layoutXProperty = cp.layoutXProperty();
         _layoutXProperty.addListener(this.controlPointListener);
-        DoubleProperty _layoutYProperty = it_1.layoutYProperty();
+        DoubleProperty _layoutYProperty = cp.layoutYProperty();
         _layoutYProperty.addListener(this.controlPointListener);
-        BooleanProperty _selectedProperty = it_1.selectedProperty();
+        BooleanProperty _selectedProperty = cp.selectedProperty();
         _selectedProperty.addListener(controlPointSelectionListener);
       };
       it.setAdd(_function_4);
@@ -556,7 +552,9 @@ public class XConnection extends XDomainObjectShape {
       }
     }
     if ((remainder != 0)) {
-      this.setKind(XConnection.Kind.POLYLINE);
+      if ((Objects.equal(this.getKind(), XConnection.Kind.CUBIC_CURVE) || Objects.equal(this.getKind(), XConnection.Kind.QUAD_CURVE))) {
+        this.setKind(XConnection.Kind.POLYLINE);
+      }
       Polyline _elvis = null;
       ObservableList<Node> _children_2 = this.shapeGroup.getChildren();
       Iterable<Polyline> _filter_2 = Iterables.<Polyline>filter(_children_2, Polyline.class);
@@ -709,6 +707,7 @@ public class XConnection extends XDomainObjectShape {
             _switchResult = _xblockexpression_2;
             break;
           case POLYLINE:
+          case RECTILINEAR:
             Point2D _xblockexpression_3 = null;
             {
               ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -787,6 +786,7 @@ public class XConnection extends XDomainObjectShape {
             _switchResult = _xblockexpression_2;
             break;
           case POLYLINE:
+          case RECTILINEAR:
             Point2D _xblockexpression_3 = null;
             {
               ObservableList<Node> _children = this.shapeGroup.getChildren();

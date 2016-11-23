@@ -1,5 +1,6 @@
 package de.fxdiagram.core.auxlines;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
@@ -340,9 +341,12 @@ public class AuxiliaryLinesCache {
     this.centerXMap.removeByShape(point);
     this.centerYMap.removeByShape(point);
     final ChangeListener<Number> scalarListener = this.shape2scalarListener.remove(point);
-    DoubleProperty _layoutXProperty = point.layoutXProperty();
-    _layoutXProperty.removeListener(scalarListener);
-    DoubleProperty _layoutYProperty = point.layoutYProperty();
-    _layoutYProperty.removeListener(scalarListener);
+    boolean _notEquals = (!Objects.equal(scalarListener, null));
+    if (_notEquals) {
+      DoubleProperty _layoutXProperty = point.layoutXProperty();
+      _layoutXProperty.removeListener(scalarListener);
+      DoubleProperty _layoutYProperty = point.layoutYProperty();
+      _layoutYProperty.removeListener(scalarListener);
+    }
   }
 }

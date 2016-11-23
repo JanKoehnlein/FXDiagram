@@ -1,7 +1,7 @@
 package de.fxdiagram.core.extensions
 
-import javafx.util.Duration
 import javafx.application.Platform
+import javafx.util.Duration
 
 class TimerExtensions {
 	

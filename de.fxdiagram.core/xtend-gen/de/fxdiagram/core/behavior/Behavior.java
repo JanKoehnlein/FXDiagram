@@ -1,6 +1,7 @@
 package de.fxdiagram.core.behavior;
 
 import de.fxdiagram.core.XActivatable;
+import de.fxdiagram.core.XShape;
 
 /**
  * Base interface for any kind of user interoperability or liveness an {@link XShape} could have.

@@ -35,7 +35,7 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 	}
 	
 	protected def getParallelTransition(List<Animation> animations) {
-		val validAnimations = animations.filterNull.toList
+		val validAnimations = animations.filterNull
 		if(validAnimations.empty)
 			return null
 		else
@@ -43,4 +43,12 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 				children += validAnimations 	
 			]		
 	}
+	
+	override toString() '''
+		ParallelAnimationCommand [
+			«FOR command:commands»
+				«command»
+			«ENDFOR»
+		]'''
+	
 }

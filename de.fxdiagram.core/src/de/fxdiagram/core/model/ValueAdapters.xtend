@@ -1,8 +1,8 @@
 package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
-import javafx.scene.paint.Color
 import javafx.beans.property.Property
+import javafx.scene.paint.Color
 
 /**
  * Adapter interface for serializing instances of classes that don't implement

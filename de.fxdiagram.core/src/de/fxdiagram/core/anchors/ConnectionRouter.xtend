@@ -33,6 +33,7 @@ class ConnectionRouter implements XActivatable {
 	
 	SplineShapeKeeper shapeKeeper
 	ControlPointCorrector controlPointCorrector
+	ManhattanRouter manhattanRouter
 	
 	@Accessors(PUBLIC_GETTER)
 	boolean splineShapeKeeperEnabled = false
@@ -66,6 +67,9 @@ class ConnectionRouter implements XActivatable {
 		connection.sourceProperty.addInitializingListener(connectionEndListener)	
 		connection.targetProperty.addInitializingListener(connectionEndListener)	
 		isActiveProperty.set(true)
+		connection.kindProperty.addListener[ p, o, n |
+			manhattanRouter = null
+		]
 	}
 	
 	protected def bindNode(XNode host) {
@@ -140,7 +144,7 @@ class ConnectionRouter implements XActivatable {
 		for(i: 1..<controlPoints.size - 1) {
 			val currentPoint = controlPoints.get(i)
 			currentPoint.type = switch connection.kind {
-				case POLYLINE:
+				case POLYLINE, case RECTILINEAR:
 					INTERPOLATED
 				case QUAD_CURVE:
 					if(i % 2 == 0)
@@ -156,8 +160,12 @@ class ConnectionRouter implements XActivatable {
 		}
 	}
 	
+	def getManhattanRouter() {
+		manhattanRouter ?: (manhattanRouter = new ManhattanRouter(connection))
+	}
+	
 	def void calculatePoints() {
-		if(controlPoints.size < 2) {
+		if(controlPoints.size < 2 || connection.kind == RECTILINEAR) {
 			for(controlPoint: controlPoints) {
 				controlPoint.layoutXProperty.removeListener(scalarListener)
 				controlPoint.layoutYProperty.removeListener(scalarListener)
@@ -166,7 +174,11 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
-		if(splineShapeKeeperEnabled && connection.kind != POLYLINE)
+		if(connection.kind == RECTILINEAR) {
+			getManhattanRouter.calculatePoints
+			return
+		}
+		if(splineShapeKeeperEnabled && connection.kind != POLYLINE && connection.kind != RECTILINEAR)
 			shapeKeeper.adjustControlPointsToNodeMove
 		val sourcePoint = findClosestSourceAnchor(connection.source, true)
 		val targetPoint = findClosestTargetAnchor(connection.target, true)

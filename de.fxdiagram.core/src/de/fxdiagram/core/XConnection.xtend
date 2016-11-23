@@ -182,15 +182,11 @@ class XConnection extends XDomainObjectShape {
 			change = [
 				updateShapes
 			]
-			add = [ XControlPoint it | // Oops, have to declare 'it'
-				val index = controlPoints.indexOf(it)
-				if(index == 0 || index == controlPoints.size()-1)
-					initializeGraphics  // Oops, have to write 'it'
-				else 
-					activate
-				layoutXProperty.addListener(controlPointListener)
-				layoutYProperty.addListener(controlPointListener)
-				selectedProperty.addListener(controlPointSelectionListener)
+			add = [ XControlPoint cp | 
+				cp.activate
+				cp.layoutXProperty.addListener(controlPointListener)
+				cp.layoutYProperty.addListener(controlPointListener)
+				cp.selectedProperty.addListener(controlPointSelectionListener)
 			]
 			remove = [
 				layoutXProperty.removeListener(controlPointListener)
@@ -297,7 +293,8 @@ class XConnection extends XDomainObjectShape {
 			}
 		}
 		if (remainder != 0) {
-			kind = POLYLINE
+			if(kind == CUBIC_CURVE || kind == QUAD_CURVE)
+				kind = POLYLINE
 			val polyline = shapeGroup.children.filter(Polyline).head 
 				?: new Polyline
 			polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
@@ -361,7 +358,8 @@ class XConnection extends XDomainObjectShape {
 				val curve = curves.get(index)
 				curve.at(segment - index)
 			}
-			case POLYLINE: {
+			case POLYLINE,
+			case RECTILINEAR: {
 				val line = shapeGroup.children.filter(Polyline).head
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = t * numSegments
@@ -396,7 +394,8 @@ class XConnection extends XDomainObjectShape {
 				val curve = curves.get(index)
 				curve.derivativeAt(segment - index)
 			}
-			case POLYLINE: {
+			case POLYLINE,
+			case RECTILINEAR: {
 				val line = shapeGroup.children.filter(Polyline).head
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = if(t == 1)
@@ -411,7 +410,7 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	enum Kind {
-		POLYLINE, QUAD_CURVE, CUBIC_CURVE 
+		RECTILINEAR, POLYLINE, QUAD_CURVE, CUBIC_CURVE 
 	}
 }
 

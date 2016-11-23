@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.collections.ObservableList;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -64,9 +65,8 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
   }
   
   protected ParallelTransition getParallelTransition(final List<Animation> animations) {
-    Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(animations);
-    final List<Animation> validAnimations = IterableExtensions.<Animation>toList(_filterNull);
-    boolean _isEmpty = validAnimations.isEmpty();
+    final Iterable<Animation> validAnimations = IterableExtensions.<Animation>filterNull(animations);
+    boolean _isEmpty = IterableExtensions.isEmpty(validAnimations);
     if (_isEmpty) {
       return null;
     } else {
@@ -77,5 +77,21 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
       };
       return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
     }
+  }
+  
+  @Override
+  public String toString() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("ParallelAnimationCommand [");
+    _builder.newLine();
+    {
+      for(final AnimationCommand command : this.commands) {
+        _builder.append("\t");
+        _builder.append(command, "\t");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("]");
+    return _builder.toString();
   }
 }

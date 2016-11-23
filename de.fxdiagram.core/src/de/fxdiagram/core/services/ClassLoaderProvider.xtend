@@ -9,7 +9,8 @@ import org.eclipse.core.runtime.Platform
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
 import org.osgi.framework.BundleReference
-import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
+
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode
 class ClassLoaderProvider implements DomainObjectProviderWithState {

@@ -1,12 +1,12 @@
 package de.fxdiagram.core.anchors
 
 import de.fxdiagram.core.XConnection
-
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
-import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import de.fxdiagram.core.XControlPoint
 import javafx.geometry.Point2D
+
+import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 /**
  * Makes sure that the outer control points don't lie within the arrow head

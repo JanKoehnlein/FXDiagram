@@ -1,10 +1,10 @@
 package de.fxdiagram.core.auxlines
 
+import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import javafx.scene.Group
-import de.fxdiagram.core.XControlPoint
 
 class AuxiliaryLinesSupport {
 	

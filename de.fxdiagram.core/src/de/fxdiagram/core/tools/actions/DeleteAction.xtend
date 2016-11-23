@@ -6,12 +6,17 @@ import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.command.AbstractAnimationCommand
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.RemoveControlPointCommand
+import de.fxdiagram.core.command.ResetConnectionCommand
 import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+
+import static de.fxdiagram.core.XConnection.Kind.*
+
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class DeleteAction implements DiagramAction {
@@ -36,13 +41,16 @@ class DeleteAction implements DiagramAction {
 			nodes.map[outgoingConnections].flatten +
 			elements.filter[it instanceof XNode || it instanceof XConnection]).toSet
 		val connection2controlPoints = Multimaps.index(elements.filter(XControlPoint), [connection])
-		val connectionMorphCommands = newArrayList
+		val connectionMorphCommands = <AbstractAnimationCommand>newArrayList
 		connection2controlPoints.keySet.forEach [ connection |
 			if(!elements.contains(connection)) {
 				val controlPoints = connection2controlPoints.get(connection)
-				connectionMorphCommands += new RemoveControlPointCommand(
-					connection, 
-					controlPoints)
+				if(connection.kind == RECTILINEAR)
+					connectionMorphCommands += new ResetConnectionCommand(connection)
+				else
+					connectionMorphCommands += new RemoveControlPointCommand(
+						connection, 
+						controlPoints)
 			}
 		]
 		val diagram2shape = Multimaps.index(deleteThem, [diagram])

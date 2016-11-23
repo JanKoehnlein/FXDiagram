@@ -24,4 +24,10 @@ class SequentialAnimationCommand extends AbstractAnimationCommand {
 		createChainedAnimation(commands, [getRedoAnimation(context)])
 	}
 	
+	override toString() '''
+		SequentialAnimationCommand [
+			«FOR command:commands»
+				«command»
+			«ENDFOR»
+		]'''
 }

@@ -5,7 +5,6 @@ import java.util.Map
 import javafx.beans.property.ListProperty
 import javafx.beans.property.Property
 
-
 interface ModelElement {
 	
 	def List<? extends Property<?>> getProperties()

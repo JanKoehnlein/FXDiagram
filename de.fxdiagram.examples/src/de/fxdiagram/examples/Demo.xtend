@@ -153,8 +153,8 @@ class Demo extends Application {
 					nodes += openableDiagram('Ecore Explorer', newEClassNode)
 					nodes += new SimpleNode('Xtext Views')
 //		//			nodes += newGalleryDiagramNode()
-					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
-						nodes += newLcarsDiagramNode
+//					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
+//						nodes += newLcarsDiagramNode
 //					nodes += new DemoCampSummarySlides
 					nodes += new SummarySlideDeck
 				]
@@ -170,7 +170,9 @@ class Demo extends Application {
 			node.layoutY = i * deltaY - node.layoutBounds.height / 2
 		]
 		for(i: 1..<allNodes.size) 
-			diagram.connections += new XConnection(allNodes.get(i-1), allNodes.get(i)) 
+			diagram.connections += new XConnection(allNodes.get(i-1), allNodes.get(i))  => [
+				kind = XConnection.Kind.RECTILINEAR
+			]
 		warmUpLayouter
 		Platform.runLater[|
 			diagram.centerDiagram(true)

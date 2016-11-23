@@ -3,6 +3,7 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.behavior.Behavior
+import de.fxdiagram.core.extensions.CoreExtensions
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.extensions.InitializingMapListener
 import javafx.beans.property.ObjectProperty

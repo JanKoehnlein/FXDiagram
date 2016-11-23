@@ -3,6 +3,7 @@ package de.fxdiagram.core.auxlines
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.extensions.InitializingListListener
@@ -14,7 +15,6 @@ import javafx.geometry.Orientation
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XDiagramContainer
 
 class AuxiliaryLinesCache {
 
@@ -212,9 +212,9 @@ class AuxiliaryLinesCache {
 		centerXMap.removeByShape(point)
 		centerYMap.removeByShape(point)
 		val scalarListener = shape2scalarListener.remove(point)
-		point.layoutXProperty.removeListener(scalarListener)
-		point.layoutYProperty.removeListener(scalarListener)
+		if(scalarListener != null) {
+			point.layoutXProperty.removeListener(scalarListener)
+			point.layoutYProperty.removeListener(scalarListener)
+		}
 	}
-	
-
 }

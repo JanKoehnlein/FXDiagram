@@ -1,15 +1,15 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.AnimationCommand
 import de.fxdiagram.core.command.MoveCommand
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
 import org.eclipse.xtend.lib.annotations.Data
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.command.AnimationCommand
-import de.fxdiagram.core.XNode
 
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
@@ -22,12 +22,6 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	}
 	
 	override doActivate() {
-		host.onMouseReleased = [
-			if(hasMoved) {
-				host.root.commandStack.execute(createMoveCommand)
-				manuallyPlaced = true
-			}
-		]
 	}
 	
 	protected def hasMoved() {
@@ -75,6 +69,17 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 		dragTo(newPositionInDiagram)
 	}
 	
+	
+	def void mouseReleased(MouseEvent it) {
+		if(hasMoved) {
+			val moveCommand = createMoveCommand
+			if(moveCommand != null) {
+				host.root.commandStack.execute(moveCommand)
+				manuallyPlaced = true
+			}
+		}
+	}
+
 	protected def dragTo(Point2D newPositionInDiagram) {
 		if(newPositionInDiagram != null) {
 			host.layoutX = newPositionInDiagram.x

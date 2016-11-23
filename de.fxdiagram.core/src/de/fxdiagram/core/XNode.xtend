@@ -5,23 +5,23 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
-import de.fxdiagram.core.behavior.MoveBehavior
+import de.fxdiagram.core.behavior.NodeMoveBehavior
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.StringDescriptor
 import javafx.collections.ObservableList
 import javafx.geometry.Side
+import javafx.scene.Group
+import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.scene.Group
-import javafx.scene.Node
-import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via 
@@ -115,7 +115,7 @@ class XNode extends XDomainObjectShape {
 	}
 
 	override doActivate() {
-		addBehavior(new MoveBehavior(this))
+		addBehavior(new NodeMoveBehavior(this))
 		onMouseEntered = [
 			originalEffect = node.effect
 			node.effect = mouseOverEffect ?: originalEffect

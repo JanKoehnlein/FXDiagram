@@ -15,6 +15,7 @@ import de.cau.cs.kieler.kiml.options.EdgeRouting
 import de.cau.cs.kieler.kiml.options.LayoutOptions
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
+import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
@@ -214,7 +215,14 @@ class Layouter {
 							val insets = (kSource.eContainer as KNode).getData(KShapeLayout).insets
 							new Point2D(delta.x - insets?.left, delta.y - insets?.top)
 						} 
-					val xLayoutPoints = layoutPoints.layoutPointsInRoot(kSource).toList.map[it - correction]
+					val xLayoutPoints = layoutPoints.layoutPointsInRoot(kSource).toList.map[it - correction].map[ p |
+						new XControlPoint => [
+							layoutX = p.x
+							layoutY = p.y
+						]
+					]
+					xLayoutPoints.head?.setType(XControlPoint.Type.ANCHOR)
+					xLayoutPoints.last?.setType(XControlPoint.Type.ANCHOR)
 					composite += new ConnectionRelayoutCommand(xElement, newKind, xLayoutPoints) => [ 
 						executeDuration = duration
 					]

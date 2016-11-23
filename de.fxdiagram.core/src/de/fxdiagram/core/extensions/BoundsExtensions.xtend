@@ -2,10 +2,10 @@ package de.fxdiagram.core.extensions
 
 import javafx.geometry.BoundingBox
 import javafx.geometry.Bounds
+import javafx.geometry.Insets
 import javafx.geometry.Point2D
 
 import static java.lang.Math.*
-import javafx.geometry.Insets
 
 class BoundsExtensions {
 

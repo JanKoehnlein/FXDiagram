@@ -1,44 +1,35 @@
 package de.fxdiagram.core.behavior;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.ConnectionMemento;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.AnimationCommand;
-import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
-import de.fxdiagram.core.command.MoveCommand;
-import de.fxdiagram.core.command.ParallelAnimationCommand;
-import de.fxdiagram.core.extensions.ConnectionExtensions;
+import de.fxdiagram.core.command.RemoveDanglingControlPointsCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Conversions;
+import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
-import org.eclipse.xtext.xbase.lib.Pair;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
+  private double lastMouseX;
+  
+  private double lastMouseY;
+  
   public ControlPointMoveBehavior(final XControlPoint host) {
     super(host);
   }
@@ -50,111 +41,32 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
     BooleanProperty _selectedProperty = _host.selectedProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean newValue) -> {
       final XConnection connection = this.getConnection();
-      if ((((!(newValue).booleanValue()) && (!Objects.equal(connection, null))) && Objects.equal(connection.getKind(), XConnection.Kind.POLYLINE))) {
-        final ObservableList<XControlPoint> siblings = this.getSiblings();
-        XControlPoint _host_1 = this.getHost();
-        final int index = siblings.indexOf(_host_1);
-        if (((index > 0) && (index < (siblings.size() - 1)))) {
-          final XControlPoint predecessor = siblings.get((index - 1));
-          final XControlPoint successor = siblings.get((index + 1));
-          double _layoutX = predecessor.getLayoutX();
-          double _layoutY = predecessor.getLayoutY();
-          XControlPoint _host_2 = this.getHost();
-          double _layoutX_1 = _host_2.getLayoutX();
-          XControlPoint _host_3 = this.getHost();
-          double _layoutY_1 = _host_3.getLayoutY();
-          double _layoutX_2 = successor.getLayoutX();
-          double _layoutY_2 = successor.getLayoutY();
-          boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_layoutX, _layoutY, _layoutX_1, _layoutY_1, _layoutX_2, _layoutY_2);
-          if (_areOnSameLine) {
-            XControlPoint _host_4 = this.getHost();
-            XRoot _root = CoreExtensions.getRoot(_host_4);
-            CommandStack _commandStack = _root.getCommandStack();
-            _commandStack.execute(new AbstractCommand() {
-              @Override
-              public void execute(final CommandContext context) {
-                ObservableList<XConnectionLabel> _labels = connection.getLabels();
-                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
-                  XConnection _connection = it.getConnection();
-                  double _position = it.getPosition();
-                  Point2D _at = _connection.at(_position);
-                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
-                };
-                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
-                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
-                siblings.remove(index);
-                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
-                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
-                  Point2D _get = label2position.get(it);
-                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
-                    return ConnectionExtensions.toPoint2D(it_1);
-                  };
-                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
-                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
-                  double _parameter = _nearestPointOnConnection.getParameter();
-                  it.setPosition(_parameter);
-                };
-                _labels_1.forEach(_function_1);
-              }
-              
-              @Override
-              public void undo(final CommandContext context) {
-                ObservableList<XConnectionLabel> _labels = connection.getLabels();
-                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
-                  XConnection _connection = it.getConnection();
-                  double _position = it.getPosition();
-                  Point2D _at = _connection.at(_position);
-                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
-                };
-                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
-                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
-                XControlPoint _host = ControlPointMoveBehavior.this.getHost();
-                siblings.add(index, _host);
-                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
-                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
-                  Point2D _get = label2position.get(it);
-                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
-                    return ConnectionExtensions.toPoint2D(it_1);
-                  };
-                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
-                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
-                  double _parameter = _nearestPointOnConnection.getParameter();
-                  it.setPosition(_parameter);
-                };
-                _labels_1.forEach(_function_1);
-              }
-              
-              @Override
-              public void redo(final CommandContext context) {
-                ObservableList<XConnectionLabel> _labels = connection.getLabels();
-                final Function1<XConnectionLabel, Pair<XConnectionLabel, Point2D>> _function = (XConnectionLabel it) -> {
-                  XConnection _connection = it.getConnection();
-                  double _position = it.getPosition();
-                  Point2D _at = _connection.at(_position);
-                  return Pair.<XConnectionLabel, Point2D>of(it, _at);
-                };
-                List<Pair<XConnectionLabel, Point2D>> _map = ListExtensions.<XConnectionLabel, Pair<XConnectionLabel, Point2D>>map(_labels, _function);
-                final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap(((Pair<? extends XConnectionLabel, ? extends Point2D>[])Conversions.unwrapArray(_map, Pair.class)));
-                siblings.remove(index);
-                ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
-                final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel it) -> {
-                  Point2D _get = label2position.get(it);
-                  final Function1<XControlPoint, Point2D> _function_2 = (XControlPoint it_1) -> {
-                    return ConnectionExtensions.toPoint2D(it_1);
-                  };
-                  List<Point2D> _map_1 = ListExtensions.<XControlPoint, Point2D>map(siblings, _function_2);
-                  ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map_1, XConnection.Kind.POLYLINE);
-                  double _parameter = _nearestPointOnConnection.getParameter();
-                  it.setPosition(_parameter);
-                };
-                _labels_1.forEach(_function_1);
-              }
-            });
-          }
+      if ((((!(newValue).booleanValue()) && (!Objects.equal(connection, null))) && (Objects.equal(connection.getKind(), XConnection.Kind.POLYLINE) || Objects.equal(connection.getKind(), XConnection.Kind.RECTILINEAR)))) {
+        ObservableList<XControlPoint> _siblings = this.getSiblings();
+        final Function1<XControlPoint, Boolean> _function_1 = (XControlPoint it) -> {
+          XControlPoint.Type _type = it.getType();
+          return Boolean.valueOf(Objects.equal(_type, XControlPoint.Type.DANGLING));
+        };
+        boolean _exists = IterableExtensions.<XControlPoint>exists(_siblings, _function_1);
+        if (_exists) {
+          XControlPoint _host_1 = this.getHost();
+          XRoot _root = CoreExtensions.getRoot(_host_1);
+          CommandStack _commandStack = _root.getCommandStack();
+          RemoveDanglingControlPointsCommand _removeDanglingControlPointsCommand = new RemoveDanglingControlPointsCommand(connection);
+          _commandStack.execute(_removeDanglingControlPointsCommand);
         }
       }
     };
     _selectedProperty.addListener(_function);
+  }
+  
+  @Override
+  public void mouseDragged(final MouseEvent it) {
+    super.mouseDragged(it);
+    double _sceneX = it.getSceneX();
+    this.lastMouseX = _sceneX;
+    double _sceneY = it.getSceneY();
+    this.lastMouseY = _sceneY;
   }
   
   @Override
@@ -248,7 +160,48 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
             }
           }
         }
+      } else {
+        XConnection _connection = this.getConnection();
+        XConnection.Kind _kind = _connection.getKind();
+        boolean _equals = Objects.equal(_kind, XConnection.Kind.RECTILINEAR);
+        if (_equals) {
+          XControlPoint _get = siblings.get(index);
+          this.keepRectilinear(_get, predecessor, moveDeltaX, moveDeltaY);
+          XControlPoint _get_1 = siblings.get(index);
+          this.keepRectilinear(_get_1, successor, moveDeltaX, moveDeltaY);
+          this.updateDangling(index, siblings);
+          if ((index > 1)) {
+            this.updateDangling((index - 1), siblings);
+          }
+          int _size = siblings.size();
+          int _minus = (_size - 2);
+          boolean _lessThan = (index < _minus);
+          if (_lessThan) {
+            this.updateDangling((index + 1), siblings);
+          }
+        }
       }
+    }
+  }
+  
+  protected void keepRectilinear(final XControlPoint moved, final XControlPoint dependent, final double moveDeltaX, final double moveDeltaY) {
+    double _layoutX = dependent.getLayoutX();
+    double _layoutX_1 = moved.getLayoutX();
+    double _minus = (_layoutX_1 - moveDeltaX);
+    double _minus_1 = (_layoutX - _minus);
+    double _abs = Math.abs(_minus_1);
+    double _layoutY = dependent.getLayoutY();
+    double _layoutY_1 = moved.getLayoutY();
+    double _minus_2 = (_layoutY_1 - moveDeltaY);
+    double _minus_3 = (_layoutY - _minus_2);
+    double _abs_1 = Math.abs(_minus_3);
+    boolean _lessThan = (_abs < _abs_1);
+    if (_lessThan) {
+      double _layoutX_2 = moved.getLayoutX();
+      dependent.setLayoutX(_layoutX_2);
+    } else {
+      double _layoutY_2 = moved.getLayoutY();
+      dependent.setLayoutY(_layoutY_2);
     }
   }
   
@@ -354,27 +307,21 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   }
   
   protected void updateDangling(final int index, final List<XControlPoint> siblings) {
-    XConnection _connection = this.getConnection();
-    XConnection.Kind _kind = _connection.getKind();
-    boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
-    if (_equals) {
+    if ((Objects.equal(this.getConnection().getKind(), XConnection.Kind.POLYLINE) || Objects.equal(this.getConnection().getKind(), XConnection.Kind.RECTILINEAR))) {
       final XControlPoint predecessor = siblings.get((index - 1));
+      final XControlPoint candidate = siblings.get(index);
       final XControlPoint successor = siblings.get((index + 1));
       double _layoutX = predecessor.getLayoutX();
       double _layoutY = predecessor.getLayoutY();
-      XControlPoint _host = this.getHost();
-      double _layoutX_1 = _host.getLayoutX();
-      XControlPoint _host_1 = this.getHost();
-      double _layoutY_1 = _host_1.getLayoutY();
+      double _layoutX_1 = candidate.getLayoutX();
+      double _layoutY_1 = candidate.getLayoutY();
       double _layoutX_2 = successor.getLayoutX();
       double _layoutY_2 = successor.getLayoutY();
       boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_layoutX, _layoutY, _layoutX_1, _layoutY_1, _layoutX_2, _layoutY_2);
       if (_areOnSameLine) {
-        XControlPoint _host_2 = this.getHost();
-        _host_2.setType(XControlPoint.Type.DANGLING);
+        candidate.setType(XControlPoint.Type.DANGLING);
       } else {
-        XControlPoint _host_3 = this.getHost();
-        _host_3.setType(XControlPoint.Type.INTERPOLATED);
+        candidate.setType(XControlPoint.Type.INTERPOLATED);
       }
     }
   }
@@ -409,45 +356,18 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
     return ((XConnection)_xblockexpression);
   }
   
-  private Map<XControlPoint, Point2D> initialPositions;
+  private ConnectionMemento memento;
   
   @Override
   public void startDrag(final double screenX, final double screenY) {
     super.startDrag(screenX, screenY);
-    ObservableList<XControlPoint> _siblings = this.getSiblings();
-    final Function<XControlPoint, Point2D> _function = (XControlPoint it) -> {
-      double _layoutX = it.getLayoutX();
-      double _layoutY = it.getLayoutY();
-      return new Point2D(_layoutX, _layoutY);
-    };
-    ImmutableMap<XControlPoint, Point2D> _map = Maps.<XControlPoint, Point2D>toMap(_siblings, _function);
-    this.initialPositions = _map;
+    XConnection _connection = this.getConnection();
+    ConnectionMemento _connectionMemento = new ConnectionMemento(_connection);
+    this.memento = _connectionMemento;
   }
   
   @Override
-  protected AnimationCommand createMoveCommand() {
-    ParallelAnimationCommand _xblockexpression = null;
-    {
-      final ParallelAnimationCommand pac = new ParallelAnimationCommand();
-      Set<Map.Entry<XControlPoint, Point2D>> _entrySet = this.initialPositions.entrySet();
-      final Consumer<Map.Entry<XControlPoint, Point2D>> _function = (Map.Entry<XControlPoint, Point2D> it) -> {
-        if (((it.getKey().getLayoutX() != it.getValue().getX()) || (it.getKey().getLayoutY() != it.getValue().getY()))) {
-          XControlPoint _key = it.getKey();
-          Point2D _value = it.getValue();
-          double _x = _value.getX();
-          Point2D _value_1 = it.getValue();
-          double _y = _value_1.getY();
-          XControlPoint _key_1 = it.getKey();
-          double _layoutX = _key_1.getLayoutX();
-          XControlPoint _key_2 = it.getKey();
-          double _layoutY = _key_2.getLayoutY();
-          MoveCommand _moveCommand = new MoveCommand(_key, _x, _y, _layoutX, _layoutY);
-          pac.operator_add(_moveCommand);
-        }
-      };
-      _entrySet.forEach(_function);
-      _xblockexpression = pac;
-    }
-    return _xblockexpression;
+  public AnimationCommand createMoveCommand() {
+    return this.memento.createChangeCommand();
   }
 }

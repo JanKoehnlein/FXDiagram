@@ -1,7 +1,7 @@
 package de.fxdiagram.core.layout
 
-import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode('type', 'useSplines')
 class LayoutParameters {

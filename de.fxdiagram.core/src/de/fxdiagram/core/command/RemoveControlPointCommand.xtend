@@ -3,7 +3,6 @@ package de.fxdiagram.core.command
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.ArrayList
 import java.util.List
 import java.util.Map
@@ -221,9 +220,6 @@ class RemoveControlPointCommand extends AbstractAnimationCommand {
 					.getNearestPointOnConnection(
 						connection.controlPoints.map[toPoint2D], toKind)
 					.parameter
-			]
-			connection.controlPoints.forEach [
-				getBehavior(MoveBehavior)?.setManuallyPlaced(false)
 			]
 			connection.updateShapes
 		]

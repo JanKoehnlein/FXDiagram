@@ -13,7 +13,6 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
-
 @FinalFieldsConstructor
 class SplineShapeKeeper {
 

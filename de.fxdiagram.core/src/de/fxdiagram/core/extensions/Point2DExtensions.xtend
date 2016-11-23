@@ -2,7 +2,6 @@ package de.fxdiagram.core.extensions
 
 import javafx.geometry.Point2D
 
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 class Point2DExtensions {
@@ -96,12 +95,12 @@ class Point2DExtensions {
 		val d0x = x0x-x1x
 		val d0y = x0y-x1y
 		val norm0 = norm(d0x, d0y)
-		if(norm0 < EPSILON)
+		if(norm0 < 1)
 			return true
 		val d1x = x1x-x2x
 		val d1y = x1y-x2y
 		val norm1 = norm(d1x, d1y)
-		if(norm1 < EPSILON)
+		if(norm1 < 1)
 			return true
 		val cosTheta = (d0x*d1x + d0y*d1y) / norm0 / norm1
 		return abs(cosTheta) > COS_EPSILON 

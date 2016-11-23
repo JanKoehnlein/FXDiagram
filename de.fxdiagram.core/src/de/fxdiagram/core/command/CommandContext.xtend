@@ -1,8 +1,9 @@
 package de.fxdiagram.core.command
 
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.util.Duration
 import de.fxdiagram.core.XRoot
+import javafx.util.Duration
+
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class CommandContext {
 	

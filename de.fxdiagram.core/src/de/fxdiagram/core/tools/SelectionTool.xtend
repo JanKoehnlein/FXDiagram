@@ -3,10 +3,12 @@ package de.fxdiagram.core.tools
 import de.fxdiagram.core.XButton
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.extensions.SoftTooltip
 import java.util.Collection
 import javafx.event.EventHandler
+import javafx.scene.Node
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
@@ -16,8 +18,6 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.scene.Node
-import de.fxdiagram.core.anchors.ArrowHead
 
 class SelectionTool implements XDiagramTool {
 
@@ -76,8 +76,14 @@ class SelectionTool implements XDiagramTool {
 			}
 		]
 		this.mouseReleasedHandler = [
+			val selection = root.currentSelection
+			if(!isActionOnDiagram && hasDragged) {
+				for (shape : selection) 
+					shape?.getBehavior(MoveBehavior)?.mouseReleased(it)
+			}
 			if(isActionOnDiagram && !hasDragged && it.button == MouseButton.PRIMARY)
-				root.currentSelection.forEach[selected = false]
+				selection.forEach[selected = false]
+			
 			root.diagram.auxiliaryLinesSupport?.hide()
 			hidePositionTooltip
 		]

@@ -1,7 +1,7 @@
 package de.fxdiagram.core.behavior
 
-import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.annotations.properties.FxProperty
 
 interface OpenBehavior extends Behavior {
 	def void open()

@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.ControlPointMoveBehavior
 import de.fxdiagram.core.images.Magnet
 import java.util.List
+import javafx.geometry.Side
 import javafx.scene.effect.DropShadow
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
@@ -26,10 +27,11 @@ import static extension java.lang.Math.*
  * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li> 
  * <li> 
  */
-@ModelNode('layoutX', 'layoutY', 'type')
+@ModelNode('layoutX', 'layoutY', 'type', 'side')
 class XControlPoint extends XShape {
 
 	@FxProperty Type type = CONTROL_POINT
+	@FxProperty Side side = null
 
 	protected override createNode() {
 		switch type {

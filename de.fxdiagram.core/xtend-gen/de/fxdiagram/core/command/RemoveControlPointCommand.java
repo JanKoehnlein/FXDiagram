@@ -8,7 +8,6 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
-import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -400,14 +399,6 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
         it_1.setPosition(_parameter);
       };
       _labels_2.forEach(_function_5);
-      ObservableList<XControlPoint> _controlPoints_3 = this.connection.getControlPoints();
-      final Consumer<XControlPoint> _function_6 = (XControlPoint it_1) -> {
-        MoveBehavior _behavior = it_1.<MoveBehavior>getBehavior(MoveBehavior.class);
-        if (_behavior!=null) {
-          _behavior.setManuallyPlaced(false);
-        }
-      };
-      _controlPoints_3.forEach(_function_6);
       this.connection.updateShapes();
     };
     morph.setOnFinished(_function_4);

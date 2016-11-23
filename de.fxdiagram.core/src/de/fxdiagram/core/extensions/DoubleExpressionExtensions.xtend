@@ -1,9 +1,8 @@
 package de.fxdiagram.core.extensions
 
-import javafx.beans.binding.DoubleExpression
-import org.eclipse.xtext.xbase.lib.Pure
-import javafx.beans.value.ObservableNumberValue
 import javafx.beans.binding.DoubleBinding
+import javafx.beans.binding.DoubleExpression
+import javafx.beans.value.ObservableNumberValue
 
 class DoubleExpressionExtensions {
 	

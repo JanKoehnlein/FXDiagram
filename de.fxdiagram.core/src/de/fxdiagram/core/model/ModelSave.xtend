@@ -1,6 +1,7 @@
 package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.tools.actions.SaveAction
 import java.io.Writer
 import java.util.Map
 import javafx.beans.property.BooleanProperty
@@ -13,8 +14,8 @@ import javafx.beans.property.Property
 import javafx.beans.property.StringProperty
 import javax.json.Json
 import javax.json.stream.JsonGenerator
+
 import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
-import de.fxdiagram.core.tools.actions.SaveAction
 
 /**
  * Functionality of a {@link SaveAction}

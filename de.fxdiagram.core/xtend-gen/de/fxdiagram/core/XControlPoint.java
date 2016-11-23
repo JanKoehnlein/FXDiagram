@@ -17,6 +17,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
@@ -36,7 +37,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li>
  * <li>
  */
-@ModelNode({ "layoutX", "layoutY", "type" })
+@ModelNode({ "layoutX", "layoutY", "type", "side" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
   public enum Type {
@@ -218,6 +219,7 @@ public class XControlPoint extends XShape implements XModelProvider {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(typeProperty, XControlPoint.Type.class);
+    modelElement.addProperty(sideProperty, Side.class);
   }
   
   public String toString() {
@@ -240,5 +242,23 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   public ObjectProperty<XControlPoint.Type> typeProperty() {
     return this.typeProperty;
+  }
+  
+  private SimpleObjectProperty<Side> sideProperty = new SimpleObjectProperty<Side>(this, "side",_initSide());
+  
+  private static final Side _initSide() {
+    return null;
+  }
+  
+  public Side getSide() {
+    return this.sideProperty.get();
+  }
+  
+  public void setSide(final Side side) {
+    this.sideProperty.set(side);
+  }
+  
+  public ObjectProperty<Side> sideProperty() {
+    return this.sideProperty;
   }
 }

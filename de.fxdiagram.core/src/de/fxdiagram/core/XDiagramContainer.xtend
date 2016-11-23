@@ -1,8 +1,7 @@
 package de.fxdiagram.core
 
-import de.fxdiagram.core.XDiagram
-import javafx.geometry.Insets
 import javafx.beans.property.ObjectProperty
+import javafx.geometry.Insets
 
 /**
  * Interface for {@XNode}s that contain diagrams.

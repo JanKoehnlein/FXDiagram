@@ -1,5 +1,7 @@
 package de.fxdiagram.core.tools;
 
+import de.fxdiagram.core.XRoot;
+
 /**
  * Encapsulates the current master behavior of the {@link XRoot}.
  * 

@@ -14,10 +14,12 @@ import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.RemoveControlPointCommand;
+import de.fxdiagram.core.command.ResetConnectionCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
@@ -80,15 +82,22 @@ public class DeleteAction implements DiagramAction {
       return this.getConnection(it);
     };
     final ImmutableListMultimap<XConnection, XControlPoint> connection2controlPoints = Multimaps.<XConnection, XControlPoint>index(_filter_2, _function_3);
-    final ArrayList<RemoveControlPointCommand> connectionMorphCommands = CollectionLiterals.<RemoveControlPointCommand>newArrayList();
+    final ArrayList<AbstractAnimationCommand> connectionMorphCommands = CollectionLiterals.<AbstractAnimationCommand>newArrayList();
     ImmutableSet<XConnection> _keySet = connection2controlPoints.keySet();
     final Consumer<XConnection> _function_4 = (XConnection connection) -> {
       boolean _contains = elements.contains(connection);
       boolean _not = (!_contains);
       if (_not) {
         final ImmutableList<XControlPoint> controlPoints = connection2controlPoints.get(connection);
-        RemoveControlPointCommand _removeControlPointCommand = new RemoveControlPointCommand(connection, controlPoints);
-        connectionMorphCommands.add(_removeControlPointCommand);
+        XConnection.Kind _kind = connection.getKind();
+        boolean _equals = Objects.equal(_kind, XConnection.Kind.RECTILINEAR);
+        if (_equals) {
+          ResetConnectionCommand _resetConnectionCommand = new ResetConnectionCommand(connection);
+          connectionMorphCommands.add(_resetConnectionCommand);
+        } else {
+          RemoveControlPointCommand _removeControlPointCommand = new RemoveControlPointCommand(connection, controlPoints);
+          connectionMorphCommands.add(_removeControlPointCommand);
+        }
       }
     };
     _keySet.forEach(_function_4);

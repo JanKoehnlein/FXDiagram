@@ -52,7 +52,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -389,7 +388,7 @@ public class Layouter {
           float _ypos = shapeLayout.getYpos();
           double _y = correction.getY();
           double _minus_1 = (_ypos - _y);
-          MoveCommand _moveCommand = new MoveCommand(((Node)xElement), _minus, _minus_1);
+          MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
           final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
             it.setExecuteDuration(duration);
           };
@@ -494,12 +493,31 @@ public class Layouter {
             final Function1<Point2D, Point2D> _function_2 = (Point2D it) -> {
               return Point2DExtensions.operator_minus(it, correction);
             };
-            final List<Point2D> xLayoutPoints = ListExtensions.<Point2D, Point2D>map(_list, _function_2);
+            List<Point2D> _map = ListExtensions.<Point2D, Point2D>map(_list, _function_2);
+            final Function1<Point2D, XControlPoint> _function_3 = (Point2D p) -> {
+              XControlPoint _xControlPoint = new XControlPoint();
+              final Procedure1<XControlPoint> _function_4 = (XControlPoint it) -> {
+                double _x = p.getX();
+                it.setLayoutX(_x);
+                double _y = p.getY();
+                it.setLayoutY(_y);
+              };
+              return ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_4);
+            };
+            final List<XControlPoint> xLayoutPoints = ListExtensions.<Point2D, XControlPoint>map(_map, _function_3);
+            XControlPoint _head = IterableExtensions.<XControlPoint>head(xLayoutPoints);
+            if (_head!=null) {
+              _head.setType(XControlPoint.Type.ANCHOR);
+            }
+            XControlPoint _last = IterableExtensions.<XControlPoint>last(xLayoutPoints);
+            if (_last!=null) {
+              _last.setType(XControlPoint.Type.ANCHOR);
+            }
             ConnectionRelayoutCommand _connectionRelayoutCommand = new ConnectionRelayoutCommand(((XConnection)xElement), newKind, xLayoutPoints);
-            final Procedure1<ConnectionRelayoutCommand> _function_3 = (ConnectionRelayoutCommand it) -> {
+            final Procedure1<ConnectionRelayoutCommand> _function_4 = (ConnectionRelayoutCommand it) -> {
               it.setExecuteDuration(duration);
             };
-            ConnectionRelayoutCommand _doubleArrow = ObjectExtensions.<ConnectionRelayoutCommand>operator_doubleArrow(_connectionRelayoutCommand, _function_3);
+            ConnectionRelayoutCommand _doubleArrow = ObjectExtensions.<ConnectionRelayoutCommand>operator_doubleArrow(_connectionRelayoutCommand, _function_4);
             composite.operator_add(_doubleArrow);
           }
         }

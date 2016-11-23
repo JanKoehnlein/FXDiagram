@@ -1,5 +1,7 @@
 package de.fxdiagram.core.anchors
 
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XNode
 import javafx.geometry.Point2D
 
 /**

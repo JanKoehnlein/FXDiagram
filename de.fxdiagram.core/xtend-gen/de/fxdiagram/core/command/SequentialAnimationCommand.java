@@ -6,6 +6,7 @@ import de.fxdiagram.core.command.ChainedAnimationUtil;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.List;
 import javafx.animation.Animation;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -41,5 +42,21 @@ public class SequentialAnimationCommand extends AbstractAnimationCommand {
       return it.getRedoAnimation(context);
     };
     return ChainedAnimationUtil.<AnimationCommand>createChainedAnimation(this.commands, _function);
+  }
+  
+  @Override
+  public String toString() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("SequentialAnimationCommand [");
+    _builder.newLine();
+    {
+      for(final AnimationCommand command : this.commands) {
+        _builder.append("\t");
+        _builder.append(command, "\t");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("]");
+    return _builder.toString();
   }
 }

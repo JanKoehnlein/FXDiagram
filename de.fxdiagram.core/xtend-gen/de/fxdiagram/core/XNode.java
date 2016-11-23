@@ -10,7 +10,7 @@ import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
-import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.behavior.NodeMoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
@@ -160,8 +160,8 @@ public class XNode extends XDomainObjectShape {
   
   @Override
   public void doActivate() {
-    MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
-    this.addBehavior(_moveBehavior);
+    NodeMoveBehavior _nodeMoveBehavior = new NodeMoveBehavior(this);
+    this.addBehavior(_nodeMoveBehavior);
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       Node _node = this.getNode();
       Effect _effect = _node.getEffect();

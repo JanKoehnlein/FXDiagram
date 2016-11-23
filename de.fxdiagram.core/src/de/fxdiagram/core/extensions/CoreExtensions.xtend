@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import java.util.Collection
+import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.collections.ListChangeListener
@@ -37,7 +38,7 @@ class CoreExtensions {
 			list -= element
 	}
 	
-	def static <T> setSafely(javafx.beans.property.Property<T> property, T newValue) {
+	def static <T> setSafely(Property<T> property, T newValue) {
 		if(!property.isBound) 
 			property.value = newValue
 	}

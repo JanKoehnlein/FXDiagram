@@ -4,15 +4,15 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.XShape
 import javafx.event.EventHandler
+import javafx.geometry.Dimension2D
 import javafx.geometry.Point2D
 import javafx.scene.input.RotateEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
 import javafx.scene.transform.Rotate
 import org.eclipse.xtend.lib.annotations.Accessors
-import de.fxdiagram.core.XShape
-import javafx.geometry.Dimension2D
 
 class DiagramGestureTool implements XDiagramTool {
 

@@ -1,15 +1,15 @@
 package de.fxdiagram.core.behavior
 
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.command.AnimationCommand
 import javafx.animation.Animation
 import javafx.animation.FadeTransition
 import javafx.animation.SequentialTransition
-
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import javafx.scene.Node
 import org.eclipse.xtend.lib.annotations.Accessors
-import de.fxdiagram.core.XDiagram
+
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 /**
  * A behavior to compare the shown state of a shape with its current domain model.

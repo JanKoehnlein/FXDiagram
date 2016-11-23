@@ -3,6 +3,7 @@ package de.fxdiagram.core.model
 import de.fxdiagram.annotations.logging.Logging
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
+
 import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @Logging

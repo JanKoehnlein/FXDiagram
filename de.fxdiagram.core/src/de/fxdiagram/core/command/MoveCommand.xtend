@@ -1,26 +1,23 @@
 package de.fxdiagram.core.command
 
-import de.fxdiagram.core.XShape
-import javafx.animation.PathTransition
-import javafx.scene.Group
-import javafx.scene.shape.LineTo
-import javafx.scene.shape.MoveTo
-import javafx.scene.shape.Path
-import javafx.util.Duration
-import javafx.scene.Node
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
+import javafx.geometry.Point2D
+import javafx.util.Duration
+
+import static de.fxdiagram.core.extensions.TransitionExtensions.*
 
 class MoveCommand extends AbstractAnimationCommand {
 
-	Node node
+	XShape shape
 	
 	double fromX
 	double fromY
 	double toX
 	double toY
 	
-	new(Node shape, double toX, double toY) {
-		this.node = shape;
+	new(XShape shape, double toX, double toY) {
+		this.shape = shape;
 		this.fromX = shape.layoutX
 		this.fromY = shape.layoutY
 		this.toX = toX
@@ -28,7 +25,7 @@ class MoveCommand extends AbstractAnimationCommand {
 	}
 	
 	new(XShape shape, double fromX, double fromY, double toX, double toY) {
-		this.node = shape;
+		this.shape = shape;
 		this.fromX = fromX
 		this.fromY = fromY
 		this.toX = toX
@@ -36,14 +33,14 @@ class MoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
-		if(node instanceof XNode) {
-			fromX -= node.placementGroup.layoutX
-			fromY -= node.placementGroup.layoutY
-			node.placementGroup => [
+		if(shape instanceof XNode) {
+			fromX -= shape.placementGroup.layoutX
+			fromY -= shape.placementGroup.layoutY
+			shape.placementGroup => [
 				layoutX = 0
 				layoutY = 0	
 			]
-			node.placementHint = null
+			shape.placementHint = null
 		}
 		createMoveTransition(fromX, fromY, toX, toY, context.executeDuration)
 	}
@@ -57,30 +54,8 @@ class MoveCommand extends AbstractAnimationCommand {
 	}
 	
 	protected def createMoveTransition(double fromX, double fromY, double toX, double toY, Duration duration) {
-		if(node.layoutX == toX && node.layoutY == toY)
+		if(shape.layoutX == toX && shape.layoutY == toY)
 			return null;
-		val dummyNode = new Group => [
-			translateX = fromX
-			translateY = fromY
-		]
-		node.layoutXProperty.bind(dummyNode.translateXProperty)
-		node.layoutYProperty.bind(dummyNode.translateYProperty)
-		new PathTransition => [
-			it.node = dummyNode
-			it.duration = duration
-			cycleCount = 1
-			path = new Path => [
-				elements += new MoveTo(fromX, fromY)
-				elements += new LineTo(toX, toY)
-			]
-			onFinished = [
-				node => [
-					layoutXProperty.unbind
-					layoutYProperty.unbind
-					layoutX = toX
-					layoutY = toY
-				]
-			]
-		]
+		createMoveTransition(shape, new Point2D(fromX, fromY), new Point2D(toX, toY), duration)
 	}
 }

@@ -1,10 +1,10 @@
 package de.fxdiagram.core.command
 
+import com.google.common.collect.Lists
 import java.util.List
 import java.util.Queue
 import javafx.animation.Animation
 import javafx.animation.SequentialTransition
-import com.google.common.collect.Lists
 
 /** 
  * Clients should not access this class.

@@ -8,6 +8,7 @@ import java.util.List
 import java.util.Map
 import java.util.logging.Level
 import javafx.embed.swing.SwingFXUtils
+import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
 import javafx.scene.Node
 import javafx.scene.Parent
@@ -24,7 +25,6 @@ import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javafx.scene.transform.Translate
 import javax.imageio.ImageIO
-import javafx.geometry.Insets
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
