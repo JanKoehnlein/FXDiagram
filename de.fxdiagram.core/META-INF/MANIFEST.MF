@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Core
 Bundle-SymbolicName: de.fxdiagram.core;singleton:=true
-Bundle-Version: 0.29.0.qualifier
+Bundle-Version: 0.30.0.qualifier
 Bundle-ClassPath: .,
  lib/javax.json-1.0.4.jar
 Bundle-Vendor: JanKoehnlein
