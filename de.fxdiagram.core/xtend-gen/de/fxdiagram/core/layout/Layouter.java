@@ -30,7 +30,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
-import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
@@ -154,10 +153,7 @@ public class Layouter {
         boolean _matched = false;
         if (xElement instanceof XNode) {
           _matched=true;
-          MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-          if (_behavior!=null) {
-            _behavior.setManuallyPlaced(false);
-          }
+          ((XNode)xElement).setManuallyPlaced(false);
           EList<KGraphData> _data = kElement.getData();
           Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
           final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
@@ -321,6 +317,7 @@ public class Layouter {
                 Point2D _get_1 = xLayoutPoints.get((i).intValue());
                 double _y = _get_1.getY();
                 controlPoint.setLayoutY(_y);
+                controlPoint.setManuallyPlaced(false);
               }
             }
           }
@@ -352,8 +349,7 @@ public class Layouter {
         boolean _matched = false;
         if (xElement instanceof XNode) {
           _matched=true;
-          MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-          _behavior.setManuallyPlaced(false);
+          ((XNode)xElement).setManuallyPlaced(false);
           EList<KGraphData> _data = kElement.getData();
           Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
           final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
@@ -388,7 +384,8 @@ public class Layouter {
           float _ypos = shapeLayout.getYpos();
           double _y = correction.getY();
           double _minus_1 = (_ypos - _y);
-          MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
+          MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1, 
+            true);
           final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
             it.setExecuteDuration(duration);
           };
@@ -501,6 +498,7 @@ public class Layouter {
                 it.setLayoutX(_x);
                 double _y = p.getY();
                 it.setLayoutY(_y);
+                it.setManuallyPlaced(false);
               };
               return ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_4);
             };

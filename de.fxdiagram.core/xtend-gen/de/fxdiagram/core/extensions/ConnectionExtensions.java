@@ -125,6 +125,7 @@ public class ConnectionExtensions {
     ConnectionExtensions.PointOnCurve _switchResult = null;
     if (kind != null) {
       switch (kind) {
+        case RECTILINEAR:
         case POLYLINE:
           _switchResult = ConnectionExtensions.getNearestPointOnPolyline(pointInLocal, controlPoints);
           break;

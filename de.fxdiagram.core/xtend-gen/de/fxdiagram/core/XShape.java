@@ -212,4 +212,18 @@ public abstract class XShape extends Parent implements XActivatable {
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
   }
+  
+  private SimpleBooleanProperty manuallyPlacedProperty = new SimpleBooleanProperty(this, "manuallyPlaced");
+  
+  public boolean getManuallyPlaced() {
+    return this.manuallyPlacedProperty.get();
+  }
+  
+  public void setManuallyPlaced(final boolean manuallyPlaced) {
+    this.manuallyPlacedProperty.set(manuallyPlaced);
+  }
+  
+  public BooleanProperty manuallyPlacedProperty() {
+    return this.manuallyPlacedProperty;
+  }
 }

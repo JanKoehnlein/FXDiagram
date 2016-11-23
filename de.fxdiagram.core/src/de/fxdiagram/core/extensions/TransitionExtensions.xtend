@@ -18,7 +18,7 @@ import javafx.animation.Transition
 
 class TransitionExtensions {
 
-	static def Transition createMoveTransition(XShape shape, Point2D from, Point2D to, Duration duration) {
+	static def Transition createMoveTransition(XShape shape, Point2D from, Point2D to, boolean toManuallyPlaced, Duration duration) {
 		val dummyNode = new Group => [
 			translateX = from.x
 			translateY = from.y
@@ -40,6 +40,7 @@ class TransitionExtensions {
 					layoutX = to.x
 					layoutY = to.y
 				]
+				shape.manuallyPlaced = toManuallyPlaced
 			]
 		]
 	}
@@ -56,8 +57,10 @@ class TransitionExtensions {
 			val fromPoint = from.get(min(from.size - 1, i))
 			val toPoint = to.get(min(to.size - 1, i))
 			val currentControlPoint = controlPoints.get(i)
-			if (fromPoint.distance(toPoint) > EPSILON)
-				morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, duration)
+			if (fromPoint.distance(toPoint) > EPSILON) {
+				val toManuallyPlaced = toMemento.controlPoints.get(min(to.size - 1, i)).manuallyPlaced
+				morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, toManuallyPlaced, duration)
+			}
 		}
 		morph.onFinished = [
 			connection.connectionRouter.shrinkToSize(to.size)

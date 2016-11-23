@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior;
-import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -141,24 +140,11 @@ public class XConnectionLabel extends XLabel {
     if (_not) {
       return;
     }
-    final MoveBehavior moveBehavior = this.<MoveBehavior>getBehavior(MoveBehavior.class);
-    boolean _and = false;
-    boolean _manuallyPlaced = false;
-    if (moveBehavior!=null) {
-      _manuallyPlaced=moveBehavior.getManuallyPlaced();
-    }
-    if (!_manuallyPlaced) {
-      _and = false;
-    } else {
-      _and = (!force);
-    }
-    if (_and) {
+    if ((this.getManuallyPlaced() && (!force))) {
       return;
     }
     if (force) {
-      if (moveBehavior!=null) {
-        moveBehavior.setManuallyPlaced(false);
-      }
+      this.setManuallyPlaced(false);
     }
     XConnection _connection_1 = this.getConnection();
     double _position = this.getPosition();

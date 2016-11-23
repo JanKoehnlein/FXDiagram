@@ -20,7 +20,6 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
-import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.MoveCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
@@ -97,7 +96,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement {
 				XNode: {
-					xElement.getBehavior(MoveBehavior)?.setManuallyPlaced(false)
+					xElement.manuallyPlaced = false
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					val correction = if (kElement.isTopLevel) {
 							delta
@@ -148,6 +147,7 @@ class Layouter {
 						val controlPoint = xElement.controlPoints.get(i)
 						controlPoint.layoutX = xLayoutPoints.get(i).x
 						controlPoint.layoutY = xLayoutPoints.get(i).y
+						controlPoint.manuallyPlaced = false
 					}
 				}
 			}
@@ -169,7 +169,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement {
 				XNode: {
-					xElement.getBehavior(MoveBehavior).manuallyPlaced = false
+					xElement.manuallyPlaced = false
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					val correction = if (kElement.isTopLevel) {
 							delta					
@@ -180,7 +180,8 @@ class Layouter {
 					composite += new MoveCommand(
 						xElement,
 						shapeLayout.xpos - correction.x,
-						shapeLayout.ypos - correction.y
+						shapeLayout.ypos - correction.y,
+						true
 					) => [
 						executeDuration = duration
 					]
@@ -219,6 +220,7 @@ class Layouter {
 						new XControlPoint => [
 							layoutX = p.x
 							layoutY = p.y
+							manuallyPlaced = false
 						]
 					]
 					xLayoutPoints.head?.setType(XControlPoint.Type.ANCHOR)

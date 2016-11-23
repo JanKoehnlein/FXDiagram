@@ -25,22 +25,30 @@ public class MoveCommand extends AbstractAnimationCommand {
   
   private double toY;
   
-  public MoveCommand(final XShape shape, final double toX, final double toY) {
+  private boolean fromManuallyPlaced;
+  
+  private boolean toManuallyPlaced;
+  
+  public MoveCommand(final XShape shape, final double toX, final double toY, final boolean toManuallyPlaced) {
     this.shape = shape;
     double _layoutX = shape.getLayoutX();
     this.fromX = _layoutX;
     double _layoutY = shape.getLayoutY();
     this.fromY = _layoutY;
+    boolean _manuallyPlaced = shape.getManuallyPlaced();
+    this.fromManuallyPlaced = _manuallyPlaced;
     this.toX = toX;
     this.toY = toY;
+    this.toManuallyPlaced = toManuallyPlaced;
   }
   
-  public MoveCommand(final XShape shape, final double fromX, final double fromY, final double toX, final double toY) {
+  public MoveCommand(final XShape shape, final double fromX, final double fromY, final boolean fromManuallyPlaced, final double toX, final double toY) {
     this.shape = shape;
     this.fromX = fromX;
     this.fromY = fromY;
     this.toX = toX;
     this.toY = toY;
+    this.toManuallyPlaced = true;
   }
   
   @Override
@@ -65,7 +73,7 @@ public class MoveCommand extends AbstractAnimationCommand {
         ((XNode)this.shape).setPlacementHint(null);
       }
       Duration _executeDuration = this.getExecuteDuration(context);
-      _xblockexpression = this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _executeDuration);
+      _xblockexpression = this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, _executeDuration);
     }
     return _xblockexpression;
   }
@@ -73,16 +81,16 @@ public class MoveCommand extends AbstractAnimationCommand {
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, _defaultUndoDuration);
+    return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, this.fromManuallyPlaced, _defaultUndoDuration);
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _defaultUndoDuration);
+    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, _defaultUndoDuration);
   }
   
-  protected Transition createMoveTransition(final double fromX, final double fromY, final double toX, final double toY, final Duration duration) {
+  protected Transition createMoveTransition(final double fromX, final double fromY, final double toX, final double toY, final boolean toManuallyPlaced, final Duration duration) {
     Transition _xblockexpression = null;
     {
       if (((this.shape.getLayoutX() == toX) && (this.shape.getLayoutY() == toY))) {
@@ -90,7 +98,7 @@ public class MoveCommand extends AbstractAnimationCommand {
       }
       Point2D _point2D = new Point2D(fromX, fromY);
       Point2D _point2D_1 = new Point2D(toX, toY);
-      _xblockexpression = TransitionExtensions.createMoveTransition(this.shape, _point2D, _point2D_1, duration);
+      _xblockexpression = TransitionExtensions.createMoveTransition(this.shape, _point2D, _point2D_1, toManuallyPlaced, duration);
     }
     return _xblockexpression;
   }

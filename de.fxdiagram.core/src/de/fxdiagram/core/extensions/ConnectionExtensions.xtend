@@ -18,6 +18,7 @@ class ConnectionExtensions {
 	
 	static def PointOnCurve getNearestPointOnConnection(Point2D pointInLocal, List<Point2D> controlPoints, XConnection.Kind kind) {
 		switch kind {
+			case RECTILINEAR,
 			case POLYLINE:
 				getNearestPointOnPolyline(pointInLocal, controlPoints)
 			case QUAD_CURVE:

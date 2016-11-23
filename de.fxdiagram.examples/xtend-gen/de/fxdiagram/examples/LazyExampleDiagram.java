@@ -40,65 +40,87 @@ public class LazyExampleDiagram extends XDiagram {
         final OpenableDiagramNode openable = this.newOpenableDiagramNode(_nameSuffix_1);
         String _nameSuffix_2 = this.getNameSuffix();
         final LevelOfDetailDiagramNode levelOfDetail = this.newEmbeddedDiagramNode(_nameSuffix_2);
+        String _nameSuffix_3 = this.getNameSuffix();
+        final SimpleNode other = this.newSimpleNode(_nameSuffix_3);
         ObservableList<XNode> _nodes_1 = it.getNodes();
         final Procedure1<SimpleNode> _function_1 = (SimpleNode it_1) -> {
-          it_1.setLayoutX(75);
-          it_1.setLayoutY(50);
+          it_1.setLayoutX((-150));
+          it_1.setLayoutY((-150));
         };
         SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(simple, _function_1);
         _nodes_1.add(_doubleArrow);
         ObservableList<XNode> _nodes_2 = it.getNodes();
         final Procedure1<OpenableDiagramNode> _function_2 = (OpenableDiagramNode it_1) -> {
-          it_1.setLayoutX(350);
-          it_1.setLayoutY(150);
+          it_1.setLayoutX(150);
+          it_1.setLayoutY((-150));
         };
         OpenableDiagramNode _doubleArrow_1 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(openable, _function_2);
         _nodes_2.add(_doubleArrow_1);
         ObservableList<XNode> _nodes_3 = it.getNodes();
-        final Procedure1<LevelOfDetailDiagramNode> _function_3 = (LevelOfDetailDiagramNode it_1) -> {
-          it_1.setLayoutX(50);
-          it_1.setLayoutY(300);
+        final Procedure1<SimpleNode> _function_3 = (SimpleNode it_1) -> {
+          it_1.setLayoutX((-150));
+          it_1.setLayoutY(150);
         };
-        LevelOfDetailDiagramNode _doubleArrow_2 = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(levelOfDetail, _function_3);
+        SimpleNode _doubleArrow_2 = ObjectExtensions.<SimpleNode>operator_doubleArrow(other, _function_3);
         _nodes_3.add(_doubleArrow_2);
+        ObservableList<XNode> _nodes_4 = it.getNodes();
+        final Procedure1<LevelOfDetailDiagramNode> _function_4 = (LevelOfDetailDiagramNode it_1) -> {
+          it_1.setLayoutX(150);
+          it_1.setLayoutY(150);
+        };
+        LevelOfDetailDiagramNode _doubleArrow_3 = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(levelOfDetail, _function_4);
+        _nodes_4.add(_doubleArrow_3);
         ObservableList<XConnection> _connections = it.getConnections();
         XConnection _xConnection = new XConnection(simple, openable);
-        final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
-          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
-          final Procedure1<XConnectionLabel> _function_5 = (XConnectionLabel it_2) -> {
-            Text _text = it_2.getText();
-            _text.setText("polyline");
-          };
-          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_5);
-        };
-        XConnection _doubleArrow_3 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_4);
-        _connections.add(_doubleArrow_3);
-        ObservableList<XConnection> _connections_1 = it.getConnections();
-        XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
         final Procedure1<XConnection> _function_5 = (XConnection it_1) -> {
-          it_1.setKind(XConnection.Kind.QUAD_CURVE);
           XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
           final Procedure1<XConnectionLabel> _function_6 = (XConnectionLabel it_2) -> {
             Text _text = it_2.getText();
-            _text.setText("quadratic");
+            _text.setText("polyline");
           };
           ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_6);
         };
-        XConnection _doubleArrow_4 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_1, _function_5);
-        _connections_1.add(_doubleArrow_4);
-        ObservableList<XConnection> _connections_2 = it.getConnections();
-        XConnection _xConnection_2 = new XConnection(simple, levelOfDetail);
+        XConnection _doubleArrow_4 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_5);
+        _connections.add(_doubleArrow_4);
+        ObservableList<XConnection> _connections_1 = it.getConnections();
+        XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
         final Procedure1<XConnection> _function_6 = (XConnection it_1) -> {
-          it_1.setKind(XConnection.Kind.CUBIC_CURVE);
+          it_1.setKind(XConnection.Kind.QUAD_CURVE);
           XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
           final Procedure1<XConnectionLabel> _function_7 = (XConnectionLabel it_2) -> {
             Text _text = it_2.getText();
-            _text.setText("cubic");
+            _text.setText("quadratic");
           };
           ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_7);
         };
-        XConnection _doubleArrow_5 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_2, _function_6);
-        _connections_2.add(_doubleArrow_5);
+        XConnection _doubleArrow_5 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_1, _function_6);
+        _connections_1.add(_doubleArrow_5);
+        ObservableList<XConnection> _connections_2 = it.getConnections();
+        XConnection _xConnection_2 = new XConnection(levelOfDetail, other);
+        final Procedure1<XConnection> _function_7 = (XConnection it_1) -> {
+          it_1.setKind(XConnection.Kind.CUBIC_CURVE);
+          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
+          final Procedure1<XConnectionLabel> _function_8 = (XConnectionLabel it_2) -> {
+            Text _text = it_2.getText();
+            _text.setText("cubic");
+          };
+          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_8);
+        };
+        XConnection _doubleArrow_6 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_2, _function_7);
+        _connections_2.add(_doubleArrow_6);
+        ObservableList<XConnection> _connections_3 = it.getConnections();
+        XConnection _xConnection_3 = new XConnection(other, simple);
+        final Procedure1<XConnection> _function_8 = (XConnection it_1) -> {
+          it_1.setKind(XConnection.Kind.RECTILINEAR);
+          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
+          final Procedure1<XConnectionLabel> _function_9 = (XConnectionLabel it_2) -> {
+            Text _text = it_2.getText();
+            _text.setText("rectilinear");
+          };
+          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_9);
+        };
+        XConnection _doubleArrow_7 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_3, _function_8);
+        _connections_3.add(_doubleArrow_7);
       };
       this.setContentsInitializer(_function);
     } else {

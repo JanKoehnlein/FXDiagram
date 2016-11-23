@@ -31,7 +31,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class TransitionExtensions {
-  public static Transition createMoveTransition(final XShape shape, final Point2D from, final Point2D to, final Duration duration) {
+  public static Transition createMoveTransition(final XShape shape, final Point2D from, final Point2D to, final boolean toManuallyPlaced, final Duration duration) {
     PathTransition _xblockexpression = null;
     {
       Group _group = new Group();
@@ -80,6 +80,7 @@ public class TransitionExtensions {
             it_2.setLayoutY(_y);
           };
           ObjectExtensions.<XShape>operator_doubleArrow(shape, _function_4);
+          shape.setManuallyPlaced(toManuallyPlaced);
         };
         it.setOnFinished(_function_3);
       };
@@ -116,8 +117,14 @@ public class TransitionExtensions {
         double _distance = fromPoint.distance(toPoint);
         boolean _greaterThan = (_distance > NumberExpressionExtensions.EPSILON);
         if (_greaterThan) {
+          List<XControlPoint> _controlPoints = toMemento.getControlPoints();
+          int _size_4 = to.size();
+          int _minus_3 = (_size_4 - 1);
+          int _min_2 = Math.min(_minus_3, (i).intValue());
+          XControlPoint _get = _controlPoints.get(_min_2);
+          final boolean toManuallyPlaced = _get.getManuallyPlaced();
           ObservableList<Animation> _children = morph.getChildren();
-          Transition _createMoveTransition = TransitionExtensions.createMoveTransition(currentControlPoint, fromPoint, toPoint, duration);
+          Transition _createMoveTransition = TransitionExtensions.createMoveTransition(currentControlPoint, fromPoint, toPoint, toManuallyPlaced, duration);
           _children.add(_createMoveTransition);
         }
       }

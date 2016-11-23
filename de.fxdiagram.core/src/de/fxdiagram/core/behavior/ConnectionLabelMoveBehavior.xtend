@@ -9,8 +9,6 @@ import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.scene.input.MouseEvent
 
-import static de.fxdiagram.core.XConnection.Kind.*
-
 import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 
 class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
@@ -22,10 +20,12 @@ class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
 	}
 	
 	override protected hasMoved() {
-		if(host.connection.kind != POLYLINE) 
-			super.hasMoved
-		else
-			initialPosition != host.position
+		switch host.connection.kind {
+			case POLYLINE, case RECTILINEAR:
+				initialPosition != host.position
+			default:
+				super.hasMoved
+		}
 	}
 	
 	override mouseDragged(MouseEvent it) {
@@ -38,10 +38,6 @@ class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
 	
 	override startDrag(double screenX, double screenY) {
 		initialPosition = host.position
-	}
-	
-	override getManuallyPlaced() {
-		false
 	}
 	
 	override protected createMoveCommand() {

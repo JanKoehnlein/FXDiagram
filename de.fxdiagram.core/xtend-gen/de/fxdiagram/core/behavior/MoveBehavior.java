@@ -14,8 +14,6 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.function.Consumer;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -141,11 +139,13 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   protected AnimationCommand createMoveCommand() {
     T _host = this.getHost();
     T _host_1 = this.getHost();
-    double _layoutX = _host_1.getLayoutX();
+    boolean _manuallyPlaced = _host_1.getManuallyPlaced();
     T _host_2 = this.getHost();
-    double _layoutY = _host_2.getLayoutY();
+    double _layoutX = _host_2.getLayoutX();
+    T _host_3 = this.getHost();
+    double _layoutY = _host_3.getLayoutY();
     return new MoveCommand(_host, 
-      this.dragContext.initialX, this.dragContext.initialY, _layoutX, _layoutY);
+      this.dragContext.initialX, this.dragContext.initialY, _manuallyPlaced, _layoutX, _layoutY);
   }
   
   @Override
@@ -214,7 +214,6 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
         XRoot _root = CoreExtensions.getRoot(_host);
         CommandStack _commandStack = _root.getCommandStack();
         _commandStack.execute(moveCommand);
-        this.setManuallyPlaced(true);
       }
     }
   }
@@ -229,19 +228,5 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       double _y = newPositionInDiagram.getY();
       _host_1.setLayoutY(_y);
     }
-  }
-  
-  private SimpleBooleanProperty manuallyPlacedProperty = new SimpleBooleanProperty(this, "manuallyPlaced");
-  
-  public boolean getManuallyPlaced() {
-    return this.manuallyPlacedProperty.get();
-  }
-  
-  public void setManuallyPlaced(final boolean manuallyPlaced) {
-    this.manuallyPlacedProperty.set(manuallyPlaced);
-  }
-  
-  public BooleanProperty manuallyPlacedProperty() {
-    return this.manuallyPlacedProperty;
   }
 }

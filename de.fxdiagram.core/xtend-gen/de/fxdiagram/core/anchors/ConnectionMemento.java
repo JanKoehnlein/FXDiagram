@@ -86,6 +86,8 @@ public class ConnectionMemento {
         it.setLayoutY(_layoutY);
         Side _side = orig.getSide();
         it.setSide(_side);
+        boolean _manuallyPlaced = orig.getManuallyPlaced();
+        it.setManuallyPlaced(_manuallyPlaced);
       };
       return ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_1);
     };

@@ -1,6 +1,5 @@
 package de.fxdiagram.core.behavior
 
-import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.command.AnimationCommand
@@ -14,8 +13,6 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
 	DragContext dragContext
-	
-	@FxProperty boolean manuallyPlaced
 	
 	new(T host) {
 		super(host)
@@ -32,8 +29,8 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 		new MoveCommand(
 			host,
 			dragContext.initialX, dragContext.initialY,
-			host.layoutX, host.layoutY
-		)
+			host.manuallyPlaced,
+			host.layoutX, host.layoutY)
 	}
 	
 	override getBehaviorKey() {
@@ -75,7 +72,6 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			val moveCommand = createMoveCommand
 			if(moveCommand != null) {
 				host.root.commandStack.execute(moveCommand)
-				manuallyPlaced = true
 			}
 		}
 	}

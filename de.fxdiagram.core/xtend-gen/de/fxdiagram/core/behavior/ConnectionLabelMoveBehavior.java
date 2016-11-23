@@ -35,19 +35,26 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
   
   @Override
   protected boolean hasMoved() {
-    boolean _xifexpression = false;
+    boolean _switchResult = false;
     XConnectionLabel _host = this.getHost();
     XConnection _connection = _host.getConnection();
     XConnection.Kind _kind = _connection.getKind();
-    boolean _notEquals = (!Objects.equal(_kind, XConnection.Kind.POLYLINE));
-    if (_notEquals) {
-      _xifexpression = super.hasMoved();
+    if (_kind != null) {
+      switch (_kind) {
+        case POLYLINE:
+        case RECTILINEAR:
+          XConnectionLabel _host_1 = this.getHost();
+          double _position = _host_1.getPosition();
+          _switchResult = (this.initialPosition != _position);
+          break;
+        default:
+          _switchResult = super.hasMoved();
+          break;
+      }
     } else {
-      XConnectionLabel _host_1 = this.getHost();
-      double _position = _host_1.getPosition();
-      _xifexpression = (this.initialPosition != _position);
+      _switchResult = super.hasMoved();
     }
-    return _xifexpression;
+    return _switchResult;
   }
   
   @Override
@@ -77,11 +84,6 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
     XConnectionLabel _host = this.getHost();
     double _position = _host.getPosition();
     this.initialPosition = _position;
-  }
-  
-  @Override
-  public boolean getManuallyPlaced() {
-    return false;
   }
   
   @Override

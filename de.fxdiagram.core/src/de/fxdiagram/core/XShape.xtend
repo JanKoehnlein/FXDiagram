@@ -36,7 +36,10 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	@FxProperty(readOnly=true) boolean isActive
 	
+	@FxProperty boolean manuallyPlaced
+	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
+	
 	
 	def getNode() {
 		if(nodeProperty.get == null) {

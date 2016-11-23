@@ -26,17 +26,22 @@ class LazyExampleDiagram extends XDiagram {
 				val simple = newSimpleNode(nameSuffix)
 				val openable = newOpenableDiagramNode(nameSuffix)
 				val levelOfDetail = newEmbeddedDiagramNode(nameSuffix) 
+				val other = newSimpleNode(nameSuffix) 
 				nodes += simple => [
-					layoutX = 75
-					layoutY = 50
+					layoutX = -150
+					layoutY = -150
 				]
 				nodes += openable => [
-					layoutX = 350
+					layoutX = 150
+					layoutY = -150
+				]
+				nodes += other => [
+					layoutX = -150
 					layoutY = 150
 				]
 				nodes += levelOfDetail => [
-					layoutX = 50
-					layoutY = 300
+					layoutX = 150
+					layoutY = 150
 				]
 				connections += new XConnection(simple, openable) => [
 					new XConnectionLabel(it) => [
@@ -49,10 +54,16 @@ class LazyExampleDiagram extends XDiagram {
 						text.text = 'quadratic'
 					]
 				]
-				connections += new XConnection(simple, levelOfDetail) => [
+				connections += new XConnection(levelOfDetail, other) => [
 					kind = XConnection.Kind.CUBIC_CURVE
 					new XConnectionLabel(it) => [
 						text.text = 'cubic'
+					]
+				]
+				connections += new XConnection(other, simple) => [
+					kind = XConnection.Kind.RECTILINEAR
+					new XConnectionLabel(it) => [
+						text.text = 'rectilinear'
 					]
 				]
 			]

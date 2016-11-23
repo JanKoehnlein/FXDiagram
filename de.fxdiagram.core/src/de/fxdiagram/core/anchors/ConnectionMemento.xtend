@@ -31,6 +31,7 @@ class ConnectionMemento {
 				layoutX = orig.layoutX
 				layoutY = orig.layoutY
 				side = orig.side
+				manuallyPlaced = orig.manuallyPlaced
 			]
 		]
 	}
