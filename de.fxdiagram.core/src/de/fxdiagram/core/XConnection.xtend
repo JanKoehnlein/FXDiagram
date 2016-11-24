@@ -212,7 +212,9 @@ class XConnection extends XDomainObjectShape {
 				controlPointPicked = true
 			}
 		}
-		if(!controlPointPicked && (kind==POLYLINE || wasSelected)) {
+		if(kind != RECTILINEAR 
+			&& !controlPointPicked 
+			&& (kind==POLYLINE || wasSelected)) {
 			getBehavior(AddControlPointBehavior)
 				?.addControlPoint(sceneToLocal(sceneX, sceneY))
 		}

@@ -10,6 +10,7 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.RemoveDanglingControlPointsCommand;
+import de.fxdiagram.core.extensions.ConnectionExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
@@ -368,6 +369,29 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   
   @Override
   public AnimationCommand createMoveCommand() {
-    return this.memento.createChangeCommand();
+    ConnectionMemento.MorphCommand _xblockexpression = null;
+    {
+      for (int i = 1; (i < (this.getConnection().getControlPoints().size() - 1)); i++) {
+        {
+          XConnection _connection = this.getConnection();
+          ObservableList<XControlPoint> _controlPoints = _connection.getControlPoints();
+          final XControlPoint cp = _controlPoints.get(i);
+          Point2D _point2D = ConnectionExtensions.toPoint2D(cp);
+          List<XControlPoint> _controlPoints_1 = this.memento.getControlPoints();
+          List<XControlPoint> _controlPoints_2 = this.memento.getControlPoints();
+          int _size = _controlPoints_2.size();
+          int _minus = (_size - 1);
+          int _min = Math.min(i, _minus);
+          XControlPoint _get = _controlPoints_1.get(_min);
+          Point2D _point2D_1 = ConnectionExtensions.toPoint2D(_get);
+          boolean _notEquals = (!Objects.equal(_point2D, _point2D_1));
+          if (_notEquals) {
+            cp.setManuallyPlaced(true);
+          }
+        }
+      }
+      _xblockexpression = this.memento.createChangeCommand();
+    }
+    return _xblockexpression;
   }
 }

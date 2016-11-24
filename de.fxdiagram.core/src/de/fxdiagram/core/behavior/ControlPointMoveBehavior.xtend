@@ -15,6 +15,7 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static java.lang.Math.*
 
+import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
@@ -199,6 +200,11 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 	}
 
 	override createMoveCommand() {
+		for(var i=1; i<connection.controlPoints.size -1; i++) {
+			val cp = connection.controlPoints.get(i)
+			if(cp.toPoint2D != memento.controlPoints.get(min(i, memento.controlPoints.size-1)).toPoint2D)
+				cp.manuallyPlaced = true
+		}
 		memento.createChangeCommand()
 	}
 }

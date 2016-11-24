@@ -367,7 +367,7 @@ public class XConnection extends XDomainObjectShape {
         controlPointPicked = true;
       }
     }
-    if (((!controlPointPicked) && (Objects.equal(this.getKind(), XConnection.Kind.POLYLINE) || wasSelected))) {
+    if ((((!Objects.equal(this.getKind(), XConnection.Kind.RECTILINEAR)) && (!controlPointPicked)) && (Objects.equal(this.getKind(), XConnection.Kind.POLYLINE) || wasSelected))) {
       AddControlPointBehavior _behavior_1 = this.<AddControlPointBehavior>getBehavior(AddControlPointBehavior.class);
       if (_behavior_1!=null) {
         double _sceneX_1 = it.getSceneX();
