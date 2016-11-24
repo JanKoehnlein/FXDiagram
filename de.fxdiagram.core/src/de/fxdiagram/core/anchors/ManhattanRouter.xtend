@@ -22,8 +22,8 @@ class ManhattanRouter {
 	val STANDARD_DISTANCE = 20
 
 	XConnection connection
-	PointsOnEdge sourceRect
-	PointsOnEdge targetRect
+	CachedAnchors sourceAnchors
+	CachedAnchors targetAnchors
 
 	@Accessors boolean reroutingEnabled = false
 
@@ -32,20 +32,20 @@ class ManhattanRouter {
 	}
 
 	def calculatePoints() {
-		if(connection.controlPoints.size == 0 && sourceRect != null)
+		if(connection.controlPoints.size == 0 && sourceAnchors != null)
 			return
-		val newSourceRect = new PointsOnEdge(connection.source)
-		val newTargetRect = new PointsOnEdge(connection.target)
-		if (sourceRect != null && targetRect != null 
+		val newSourceAnchors = new CachedAnchors(connection.source)
+		val newTargetAnchors = new CachedAnchors(connection.target)
+		if (sourceAnchors != null && targetAnchors != null 
 			&& connection.controlPoints.exists[manuallyPlaced || getBehavior(MoveBehavior)?.hasMoved]) {
-			sourceRect = newSourceRect
-			targetRect = newTargetRect
-			partiallyRerouteIfNecessary(sourceRect, connection.controlPoints.head, true) 
-			partiallyRerouteIfNecessary(targetRect, connection.controlPoints.last, false) 
+			sourceAnchors = newSourceAnchors
+			targetAnchors = newTargetAnchors
+			partiallyRerouteIfNecessary(sourceAnchors, connection.controlPoints.head, true) 
+			partiallyRerouteIfNecessary(targetAnchors, connection.controlPoints.last, false) 
 			return 
 		} else {
-			sourceRect = newSourceRect
-			targetRect = newTargetRect
+			sourceAnchors = newSourceAnchors
+			targetAnchors = newTargetAnchors
 			val newControlPoints = defaultPoints
 			connection.controlPoints.setAll(newControlPoints)
 			reroutingEnabled = true
@@ -54,7 +54,7 @@ class ManhattanRouter {
 	
 	def getDefaultPoints() {
 		val connectionDir = getConnectionDirection
-		val points = doRecalculatePoints(connectionDir.key, connectionDir.value)
+		val points = calculateDefaultPoints(connectionDir.key, connectionDir.value)
 		if(connection.sourceArrowHead != null)
 			points.set(0, connection.sourceArrowHead.correctAnchor(points.get(1).x, points.get(1).y, points.head))
 		if(connection.targetArrowHead != null)
@@ -75,7 +75,7 @@ class ManhattanRouter {
 		return newControlPoints
 	}
 	
-	protected def partiallyRerouteIfNecessary(PointsOnEdge connected, XControlPoint anchor, boolean isSource) {
+	protected def partiallyRerouteIfNecessary(CachedAnchors connected, XControlPoint anchor, boolean isSource) {
 		val lastSide = anchor.side
 		val referencePoint = if(isSource) 
 				connection.controlPoints.get(1)
@@ -123,7 +123,6 @@ class ManhattanRouter {
 						return								
 					}
 				} 
-				setAnchorPoint(connected, anchor, new Point2D(referencePoint.layoutX, connected.get(lastSide).y), isSource, lastSide, referencePoint)
 			}
 			case LEFT, case RIGHT: {
 				if(doReroute) {
@@ -153,12 +152,12 @@ class ManhattanRouter {
 						return								
 					}
 				}
-				setAnchorPoint(connected, anchor, new Point2D(connected.get(lastSide).x, referencePoint.layoutY), isSource, lastSide, referencePoint)
 			}
 		}
+		setAnchorPoint(connected, anchor, connected.get(referencePoint, lastSide), isSource, lastSide, referencePoint)
 	}
 	
-	protected def switchSide(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
+	protected def switchSide(CachedAnchors connected, XControlPoint anchor, boolean isSource, Side newSide) {
 		val referencePoint = if(isSource) 
 			connection.controlPoints.get(1)
 		else
@@ -166,7 +165,7 @@ class ManhattanRouter {
 		setAnchorPoint(connected, anchor, connected.get(newSide), isSource, newSide, referencePoint)
 	}
 	
-	protected def addCorner(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
+	protected def addCorner(CachedAnchors connected, XControlPoint anchor, boolean isSource, Side newSide) {
 		val index = if(isSource) 1 else connection.controlPoints.size - 1
 		val cpX = anchor.layoutX
 		val cpY = anchor.layoutY			
@@ -179,7 +178,7 @@ class ManhattanRouter {
 		setAnchorPoint(connected, anchor, connected.get(newSide), isSource, newSide, newPoint)
 	}
 	
-	protected def removeCorner(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
+	protected def removeCorner(CachedAnchors connected, XControlPoint anchor, boolean isSource, Side newSide) {
 		val referencePoint = if(isSource) { 
 				connection.controlPoints.remove(1)
 				connection.controlPoints.get(1)		
@@ -194,7 +193,7 @@ class ManhattanRouter {
 		setAnchorPoint(connected, anchor, anchorPoint, isSource, newSide, referencePoint)
 	}
 
-	protected def setAnchorPoint(PointsOnEdge connected, XControlPoint anchor, Point2D newAnchorPoint, boolean isSource, Side newSide, XControlPoint referencePoint) {
+	protected def setAnchorPoint(CachedAnchors connected, XControlPoint anchor, Point2D newAnchorPoint, boolean isSource, Side newSide, XControlPoint referencePoint) {
 		var anchorPoint = newAnchorPoint
 	 	if(isSource) {
 			if(connection.sourceArrowHead != null)
@@ -208,10 +207,10 @@ class ManhattanRouter {
 	 	anchor.layoutY = anchorPoint.y
 	}	
 	
-	protected def doRecalculatePoints(Side sourceSide, Side targetSide) {
+	protected def calculateDefaultPoints(Side sourceSide, Side targetSide) {
 		val points = newArrayList
-		val Point2D startPoint = sourceRect.get(sourceSide)
-		var Point2D endPoint = targetRect.get(targetSide)
+		val Point2D startPoint = sourceAnchors.get(sourceSide)
+		var Point2D endPoint = targetAnchors.get(targetSide)
 		switch sourceSide {
 			case RIGHT: {
 				points += startPoint
@@ -244,7 +243,7 @@ class ManhattanRouter {
 						points += new Point2D(endPoint.x, startPoint.y)
 					}
 					default: {
-						endPoint = targetRect.get(RIGHT)
+						endPoint = targetAnchors.get(RIGHT)
 						if (endPoint.y != startPoint.y) {
 							points += new Point2D((startPoint.x + endPoint.x) / 2, startPoint.y)
 							points += new Point2D((startPoint.x + endPoint.x) / 2, endPoint.y)
@@ -307,7 +306,7 @@ class ManhattanRouter {
 						}
 					}
 					default: {
-						endPoint = targetRect.get(TOP)
+						endPoint = targetAnchors.get(TOP)
 						if (endPoint.x != startPoint.x) {
 							points += new Point2D(startPoint.x, (startPoint.y + endPoint.y) / 2)
 							points += new Point2D(endPoint.x, (startPoint.y + endPoint.y) / 2)
@@ -322,105 +321,105 @@ class ManhattanRouter {
 
 	protected def getConnectionDirection() {
 		// distance is enough
-		var sourcePoint = sourceRect.get(RIGHT)
-		var targetPoint = targetRect.get(LEFT)
+		var sourcePoint = sourceAnchors.get(RIGHT)
+		var targetPoint = targetAnchors.get(LEFT)
 		if ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE)
 			return RIGHT -> LEFT
 
-		sourcePoint = sourceRect.get(LEFT)
-		targetPoint = targetRect.get(RIGHT)
+		sourcePoint = sourceAnchors.get(LEFT)
+		targetPoint = targetAnchors.get(RIGHT)
 		if ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE)
 			return LEFT -> RIGHT
 
-		sourcePoint = sourceRect.get(TOP)
-		targetPoint = targetRect.get(BOTTOM)
+		sourcePoint = sourceAnchors.get(TOP)
+		targetPoint = targetAnchors.get(BOTTOM)
 		if ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE)
 			return TOP -> BOTTOM
 
-		sourcePoint = sourceRect.get(BOTTOM)
-		targetPoint = targetRect.get(TOP)
+		sourcePoint = sourceAnchors.get(BOTTOM)
+		targetPoint = targetAnchors.get(TOP)
 		if ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE)
 			return BOTTOM -> TOP
 
 		// One additional point
-		sourcePoint = sourceRect.get(RIGHT)
-		targetPoint = targetRect.get(TOP)
+		sourcePoint = sourceAnchors.get(RIGHT)
+		targetPoint = targetAnchors.get(TOP)
 		if (((targetPoint.x - sourcePoint.x) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE))
 			return RIGHT -> TOP
 
-		targetPoint = targetRect.get(BOTTOM)
+		targetPoint = targetAnchors.get(BOTTOM)
 		if (((targetPoint.x - sourcePoint.x) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE))
 			return RIGHT -> BOTTOM
 
-		sourcePoint = sourceRect.get(LEFT)
-		targetPoint = targetRect.get(BOTTOM)
+		sourcePoint = sourceAnchors.get(LEFT)
+		targetPoint = targetAnchors.get(BOTTOM)
 		if (((sourcePoint.x - targetPoint.x) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE))
 			return LEFT -> BOTTOM
 
-		targetPoint = targetRect.get(TOP)
+		targetPoint = targetAnchors.get(TOP)
 		if (((sourcePoint.x - targetPoint.x) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE))
 			return LEFT -> TOP
 
-		sourcePoint = sourceRect.get(TOP)
-		targetPoint = targetRect.get(RIGHT)
+		sourcePoint = sourceAnchors.get(TOP)
+		targetPoint = targetAnchors.get(RIGHT)
 		if (((sourcePoint.y - targetPoint.y) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE))
 			return TOP -> RIGHT
 
-		targetPoint = targetRect.get(LEFT)
+		targetPoint = targetAnchors.get(LEFT)
 		if (((sourcePoint.y - targetPoint.y) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE))
 			return TOP -> LEFT
 
-		sourcePoint = sourceRect.get(BOTTOM)
-		targetPoint = targetRect.get(RIGHT)
+		sourcePoint = sourceAnchors.get(BOTTOM)
+		targetPoint = targetAnchors.get(RIGHT)
 		if (((targetPoint.y - sourcePoint.y) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE))
 			return BOTTOM -> RIGHT
 
-		targetPoint = targetRect.get(LEFT)
+		targetPoint = targetAnchors.get(LEFT)
 		if (((targetPoint.y - sourcePoint.y) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE))
 			return BOTTOM -> LEFT
 
 		// Two points
 		// priority NN >> EE >> NE >> NW >> SE >> SW
-		sourcePoint = sourceRect.get(TOP)
-		targetPoint = targetRect.get(TOP)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint))) {
+		sourcePoint = sourceAnchors.get(TOP)
+		targetPoint = targetAnchors.get(TOP)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint))) {
 			if ((sourcePoint.y - targetPoint.y) < 0) {
-				if (Math.abs(sourcePoint.x - targetPoint.x) > ((sourceRect.width + STANDARD_DISTANCE) / 2))
+				if (Math.abs(sourcePoint.x - targetPoint.x) > ((sourceAnchors.width + STANDARD_DISTANCE) / 2))
 					return TOP -> TOP
 			} else {
-				if (Math.abs(sourcePoint.x - targetPoint.x) > (targetRect.width / 2))
+				if (Math.abs(sourcePoint.x - targetPoint.x) > (targetAnchors.width / 2))
 					return TOP -> TOP
 			}
 		}
 
-		sourcePoint = sourceRect.get(RIGHT)
-		targetPoint = targetRect.get(RIGHT)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint))) {
+		sourcePoint = sourceAnchors.get(RIGHT)
+		targetPoint = targetAnchors.get(RIGHT)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint))) {
 			if ((sourcePoint.x - targetPoint.x) > 0) {
-				if (Math.abs(sourcePoint.y - targetPoint.y) > ((sourceRect.height + STANDARD_DISTANCE) / 2))
+				if (Math.abs(sourcePoint.y - targetPoint.y) > ((sourceAnchors.height + STANDARD_DISTANCE) / 2))
 					return RIGHT -> RIGHT
-			} else if (Math.abs(sourcePoint.y - targetPoint.y) > (targetRect.height / 2))
+			} else if (Math.abs(sourcePoint.y - targetPoint.y) > (targetAnchors.height / 2))
 				return RIGHT -> RIGHT
 		}
 
 		// Secondly, judge NE NW is available
-		sourcePoint = sourceRect.get(TOP)
-		targetPoint = targetRect.get(RIGHT)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint)))
+		sourcePoint = sourceAnchors.get(TOP)
+		targetPoint = targetAnchors.get(RIGHT)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return TOP -> RIGHT
 
-		targetPoint = targetRect.get(LEFT)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint)))
+		targetPoint = targetAnchors.get(LEFT)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return TOP -> LEFT
 
 		// Finally, judge SE SW is available
-		sourcePoint = sourceRect.get(BOTTOM)
-		targetPoint = targetRect.get(RIGHT)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint)))
+		sourcePoint = sourceAnchors.get(BOTTOM)
+		targetPoint = targetAnchors.get(RIGHT)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return BOTTOM -> RIGHT
 
-		targetPoint = targetRect.get(LEFT)
-		if ((!targetRect.contains(sourcePoint)) && (!sourceRect.contains(targetPoint)))
+		targetPoint = targetAnchors.get(LEFT)
+		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return BOTTOM -> LEFT
 
 		// Only to return to the
@@ -428,17 +427,28 @@ class ManhattanRouter {
 	}
 }
 
-class PointsOnEdge {
+class CachedAnchors {
+
+	XNode host
 	Map<Side, Point2D> side2point = newHashMap()
 	Bounds bounds
 	  
 	new(XNode host) {
+		this.host = host
 		this.bounds = host.localToRootDiagram(host.node.boundsInLocal)
 		val center = this.bounds.center
 		side2point.put(TOP, new Point2D(center.x, bounds.minY))
 		side2point.put(BOTTOM, new Point2D(center.x, bounds.maxY))
 		side2point.put(LEFT, new Point2D(bounds.minX, center.y))
 		side2point.put(RIGHT, new Point2D(bounds.maxX, center.y))
+	}
+
+	def get(XControlPoint referencePoint, Side side) {
+		val anchors = host.anchors
+		if(anchors instanceof ManhattanAnchors) 
+			anchors.getManhattanAnchor(referencePoint.layoutX, referencePoint.layoutY, side)
+		else 
+			get(side)
 	}
 
 	def get(Side side) {

@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
@@ -33,6 +34,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import javafx.util.Duration
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static java.lang.Math.*
 
@@ -40,8 +42,6 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import org.eclipse.xtend.lib.annotations.Accessors
-import de.fxdiagram.core.XDiagramContainer
 
 /**
  * An {@link XNode} containing a diagram that is shown when the user double-clicks.

@@ -9,6 +9,8 @@ import javafx.geometry.Point2D
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.geometry.Side
+import javafx.geometry.Bounds
 
 class RoundedRectangleAnchors extends RectangleAnchors {
 
@@ -62,5 +64,43 @@ class RoundedRectangleAnchors extends RectangleAnchors {
 		val angle = atan2(y - centerY, x - centerX)
 		new Point2D(centerX + cos(angle) * radius.width, centerY + sin(angle) * radius.height)
 	}
+	
+	override getManhattanAnchor(double x, double y, Side side) {
+		val rectAnchor = super.getManhattanAnchor(x, y, side)
+		if(rectAnchor == null)
+			return null
+		val bounds = host.node.localToRootDiagram(host.node.layoutBounds)
+		val radius= host.node.localToRootDiagram(new BoundingBox(0, 0, radiusX, radiusY))
+		switch side {
+			case TOP:
+				if(bounds.minX < x && x < bounds.minX + radius.width)
+					return new Point2D(x, bounds.minY + radius.height - getY(bounds.minX + radius.width - x, radius))
+				else if(bounds.maxX - radius.width < x && x < bounds.maxX)
+					return new Point2D(x, bounds.minY + radius.height - getY(bounds.maxX - radius.width - x, radius))
+			case BOTTOM:
+				if(bounds.minX < x && x < bounds.minX + radius.width)
+					return new Point2D(x, bounds.maxY - radius.height + getY(bounds.minX + radius.width - x, radius))
+				else if(bounds.maxX - radius.width < x && x < bounds.maxX)
+					return new Point2D(x, bounds.maxY - radius.height + getY(bounds.maxX - radius.width - x, radius))
+			case LEFT:
+				if(bounds.minY < y && y < bounds.minY + radius.height)
+					return new Point2D(bounds.minX + radius.width - getX(bounds.minY + radius.height - y, radius), y)
+				else if(bounds.maxY - radius.height < y && y < bounds.maxY)
+					return new Point2D(bounds.minX + radius.width - getX(bounds.maxY - radius.height - y, radius), y)
+			case RIGHT:
+				if(bounds.minY < y && y < bounds.minY + radius.height)
+					return new Point2D(bounds.maxX - radius.width + getX(bounds.minY + radius.height - y, radius), y)
+				else if(bounds.maxY - radius.height < y && y < bounds.maxY)
+					return new Point2D(bounds.maxX - radius.width + getX(bounds.maxY - radius.height - y, radius), y)
+		}
+		return rectAnchor
+	}
 
+	protected def getX(double y, Bounds radius) {
+		radius.width * sqrt(1-(y*y) / (radius.height * radius.height))
+	}
+
+	protected def getY(double x, Bounds radius) {
+		radius.height * sqrt(1-(x*x) / (radius.width * radius.width))
+	}
 }

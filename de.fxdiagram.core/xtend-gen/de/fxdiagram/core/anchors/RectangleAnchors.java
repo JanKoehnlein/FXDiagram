@@ -3,15 +3,17 @@ package de.fxdiagram.core.anchors;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.anchors.ManhattanAnchors;
 import de.fxdiagram.core.anchors.NearestPointFinder;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 
 @SuppressWarnings("all")
-public class RectangleAnchors implements Anchors {
+public class RectangleAnchors implements Anchors, ManhattanAnchors {
   protected XNode host;
   
   public RectangleAnchors(final XNode host) {
@@ -92,5 +94,48 @@ public class RectangleAnchors implements Anchors {
       _xblockexpression = (((pointY - centerY) * t) + centerY);
     }
     return _xblockexpression;
+  }
+  
+  @Override
+  public Point2D getManhattanAnchor(final double x, final double y, final Side side) {
+    Node _node = this.host.getNode();
+    Node _node_1 = this.host.getNode();
+    Bounds _layoutBounds = _node_1.getLayoutBounds();
+    final Bounds bounds = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+    if (side != null) {
+      switch (side) {
+        case TOP:
+          double _maxX = bounds.getMaxX();
+          double _min = Math.min(x, _maxX);
+          double _minX = bounds.getMinX();
+          double _max = Math.max(_min, _minX);
+          double _minY = bounds.getMinY();
+          return new Point2D(_max, _minY);
+        case BOTTOM:
+          double _maxX_1 = bounds.getMaxX();
+          double _min_1 = Math.min(x, _maxX_1);
+          double _minX_1 = bounds.getMinX();
+          double _max_1 = Math.max(_min_1, _minX_1);
+          double _maxY = bounds.getMaxY();
+          return new Point2D(_max_1, _maxY);
+        case LEFT:
+          double _minX_2 = bounds.getMinX();
+          double _maxY_1 = bounds.getMaxY();
+          double _min_2 = Math.min(y, _maxY_1);
+          double _minY_1 = bounds.getMinY();
+          double _max_2 = Math.max(_min_2, _minY_1);
+          return new Point2D(_minX_2, _max_2);
+        case RIGHT:
+          double _maxX_2 = bounds.getMaxX();
+          double _maxY_2 = bounds.getMaxY();
+          double _min_3 = Math.min(y, _maxY_2);
+          double _minY_2 = bounds.getMinY();
+          double _max_3 = Math.max(_min_3, _minY_2);
+          return new Point2D(_maxX_2, _max_3);
+        default:
+          break;
+      }
+    }
+    return null;
   }
 }

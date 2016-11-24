@@ -5,7 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.anchors.PointsOnEdge;
+import de.fxdiagram.core.anchors.CachedAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
@@ -27,9 +27,9 @@ public class ManhattanRouter {
   
   private XConnection connection;
   
-  private PointsOnEdge sourceRect;
+  private CachedAnchors sourceAnchors;
   
-  private PointsOnEdge targetRect;
+  private CachedAnchors targetAnchors;
   
   @Accessors
   private boolean reroutingEnabled = false;
@@ -39,14 +39,14 @@ public class ManhattanRouter {
   }
   
   public void calculatePoints() {
-    if (((this.connection.getControlPoints().size() == 0) && (!Objects.equal(this.sourceRect, null)))) {
+    if (((this.connection.getControlPoints().size() == 0) && (!Objects.equal(this.sourceAnchors, null)))) {
       return;
     }
     XNode _source = this.connection.getSource();
-    final PointsOnEdge newSourceRect = new PointsOnEdge(_source);
+    final CachedAnchors newSourceAnchors = new CachedAnchors(_source);
     XNode _target = this.connection.getTarget();
-    final PointsOnEdge newTargetRect = new PointsOnEdge(_target);
-    if ((((!Objects.equal(this.sourceRect, null)) && (!Objects.equal(this.targetRect, null))) && IterableExtensions.<XControlPoint>exists(this.connection.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
+    final CachedAnchors newTargetAnchors = new CachedAnchors(_target);
+    if ((((!Objects.equal(this.sourceAnchors, null)) && (!Objects.equal(this.targetAnchors, null))) && IterableExtensions.<XControlPoint>exists(this.connection.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
       boolean _or = false;
       boolean _manuallyPlaced = it.getManuallyPlaced();
       if (_manuallyPlaced) {
@@ -61,18 +61,18 @@ public class ManhattanRouter {
       }
       return Boolean.valueOf(_or);
     })))) {
-      this.sourceRect = newSourceRect;
-      this.targetRect = newTargetRect;
+      this.sourceAnchors = newSourceAnchors;
+      this.targetAnchors = newTargetAnchors;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
       XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints);
-      this.partiallyRerouteIfNecessary(this.sourceRect, _head, true);
+      this.partiallyRerouteIfNecessary(this.sourceAnchors, _head, true);
       ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
       XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_1);
-      this.partiallyRerouteIfNecessary(this.targetRect, _last, false);
+      this.partiallyRerouteIfNecessary(this.targetAnchors, _last, false);
       return;
     } else {
-      this.sourceRect = newSourceRect;
-      this.targetRect = newTargetRect;
+      this.sourceAnchors = newSourceAnchors;
+      this.targetAnchors = newTargetAnchors;
       final ArrayList<XControlPoint> newControlPoints = this.getDefaultPoints();
       ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
       _controlPoints_2.setAll(newControlPoints);
@@ -84,7 +84,7 @@ public class ManhattanRouter {
     final Pair<Side, Side> connectionDir = this.getConnectionDirection();
     Side _key = connectionDir.getKey();
     Side _value = connectionDir.getValue();
-    final ArrayList<Point2D> points = this.doRecalculatePoints(_key, _value);
+    final ArrayList<Point2D> points = this.calculateDefaultPoints(_key, _value);
     ArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
     boolean _notEquals = (!Objects.equal(_sourceArrowHead, null));
     if (_notEquals) {
@@ -144,7 +144,7 @@ public class ManhattanRouter {
     return newControlPoints;
   }
   
-  protected void partiallyRerouteIfNecessary(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource) {
+  protected void partiallyRerouteIfNecessary(final CachedAnchors connected, final XControlPoint anchor, final boolean isSource) {
     final Side lastSide = anchor.getSide();
     XControlPoint _xifexpression = null;
     if (isSource) {
@@ -243,36 +243,31 @@ public class ManhattanRouter {
               }
             }
           }
-          double _layoutX_3 = referencePoint.getLayoutX();
-          Point2D _get_3 = connected.get(lastSide);
-          double _y = _get_3.getY();
-          Point2D _point2D = new Point2D(_layoutX_3, _y);
-          this.setAnchorPoint(connected, anchor, _point2D, isSource, lastSide, referencePoint);
           break;
         case LEFT:
         case RIGHT:
           if (doReroute) {
             double _layoutY = anchor.getLayoutY();
-            Point2D _get_4 = connected.get(Side.TOP);
-            double _y_1 = _get_4.getY();
-            boolean _lessThan_2 = (_layoutY < _y_1);
+            Point2D _get_3 = connected.get(Side.TOP);
+            double _y = _get_3.getY();
+            boolean _lessThan_2 = (_layoutY < _y);
             if (_lessThan_2) {
               this.addCorner(connected, anchor, isSource, Side.TOP);
               return;
             } else {
               double _layoutY_1 = anchor.getLayoutY();
-              Point2D _get_5 = connected.get(Side.BOTTOM);
-              double _y_2 = _get_5.getY();
-              boolean _greaterThan_2 = (_layoutY_1 > _y_2);
+              Point2D _get_4 = connected.get(Side.BOTTOM);
+              double _y_1 = _get_4.getY();
+              boolean _greaterThan_2 = (_layoutY_1 > _y_1);
               if (_greaterThan_2) {
                 this.addCorner(connected, anchor, isSource, Side.BOTTOM);
                 return;
               } else {
                 if ((((!Objects.equal(refPoint2, null)) && (refPoint2.getLayoutX() > connected.get(Side.LEFT).getX())) && (refPoint2.getLayoutX() < connected.get(Side.RIGHT).getX()))) {
                   double _layoutY_2 = refPoint2.getLayoutY();
-                  Point2D _get_6 = connected.get(lastSide);
-                  double _y_3 = _get_6.getY();
-                  boolean _lessThan_3 = (_layoutY_2 < _y_3);
+                  Point2D _get_5 = connected.get(lastSide);
+                  double _y_2 = _get_5.getY();
+                  boolean _lessThan_3 = (_layoutY_2 < _y_2);
                   if (_lessThan_3) {
                     this.removeCorner(connected, anchor, isSource, Side.TOP);
                   } else {
@@ -293,19 +288,16 @@ public class ManhattanRouter {
               }
             }
           }
-          Point2D _get_7 = connected.get(lastSide);
-          double _x_3 = _get_7.getX();
-          double _layoutY_3 = referencePoint.getLayoutY();
-          Point2D _point2D_1 = new Point2D(_x_3, _layoutY_3);
-          this.setAnchorPoint(connected, anchor, _point2D_1, isSource, lastSide, referencePoint);
           break;
         default:
           break;
       }
     }
+    Point2D _get_6 = connected.get(referencePoint, lastSide);
+    this.setAnchorPoint(connected, anchor, _get_6, isSource, lastSide, referencePoint);
   }
   
-  protected void switchSide(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
+  protected void switchSide(final CachedAnchors connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
     XControlPoint _xifexpression = null;
     if (isSource) {
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
@@ -322,7 +314,7 @@ public class ManhattanRouter {
     this.setAnchorPoint(connected, anchor, _get, isSource, newSide, referencePoint);
   }
   
-  protected void addCorner(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
+  protected void addCorner(final CachedAnchors connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
     int _xifexpression = (int) 0;
     if (isSource) {
       _xifexpression = 1;
@@ -363,7 +355,7 @@ public class ManhattanRouter {
     this.setAnchorPoint(connected, anchor, _get, isSource, newSide, newPoint);
   }
   
-  protected void removeCorner(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
+  protected void removeCorner(final CachedAnchors connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
     XControlPoint _xifexpression = null;
     if (isSource) {
       XControlPoint _xblockexpression = null;
@@ -408,7 +400,7 @@ public class ManhattanRouter {
     this.setAnchorPoint(connected, anchor, anchorPoint, isSource, newSide, referencePoint);
   }
   
-  protected void setAnchorPoint(final PointsOnEdge connected, final XControlPoint anchor, final Point2D newAnchorPoint, final boolean isSource, final Side newSide, final XControlPoint referencePoint) {
+  protected void setAnchorPoint(final CachedAnchors connected, final XControlPoint anchor, final Point2D newAnchorPoint, final boolean isSource, final Side newSide, final XControlPoint referencePoint) {
     Point2D anchorPoint = newAnchorPoint;
     if (isSource) {
       ArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
@@ -438,10 +430,10 @@ public class ManhattanRouter {
     anchor.setLayoutY(_y);
   }
   
-  protected ArrayList<Point2D> doRecalculatePoints(final Side sourceSide, final Side targetSide) {
+  protected ArrayList<Point2D> calculateDefaultPoints(final Side sourceSide, final Side targetSide) {
     final ArrayList<Point2D> points = CollectionLiterals.<Point2D>newArrayList();
-    final Point2D startPoint = this.sourceRect.get(sourceSide);
-    Point2D endPoint = this.targetRect.get(targetSide);
+    final Point2D startPoint = this.sourceAnchors.get(sourceSide);
+    Point2D endPoint = this.targetAnchors.get(targetSide);
     if (sourceSide != null) {
       switch (sourceSide) {
         case RIGHT:
@@ -520,7 +512,7 @@ public class ManhattanRouter {
                 break;
               default:
                 {
-                  Point2D _get = this.targetRect.get(Side.RIGHT);
+                  Point2D _get = this.targetAnchors.get(Side.RIGHT);
                   endPoint = _get;
                   double _y_10 = endPoint.getY();
                   double _y_11 = startPoint.getY();
@@ -546,7 +538,7 @@ public class ManhattanRouter {
             }
           } else {
             {
-              Point2D _get = this.targetRect.get(Side.RIGHT);
+              Point2D _get = this.targetAnchors.get(Side.RIGHT);
               endPoint = _get;
               double _y_10 = endPoint.getY();
               double _y_11 = startPoint.getY();
@@ -738,7 +730,7 @@ public class ManhattanRouter {
                 break;
               default:
                 {
-                  Point2D _get = this.targetRect.get(Side.TOP);
+                  Point2D _get = this.targetAnchors.get(Side.TOP);
                   endPoint = _get;
                   double _x_42 = endPoint.getX();
                   double _x_43 = startPoint.getX();
@@ -764,7 +756,7 @@ public class ManhattanRouter {
             }
           } else {
             {
-              Point2D _get = this.targetRect.get(Side.TOP);
+              Point2D _get = this.targetAnchors.get(Side.TOP);
               endPoint = _get;
               double _x_42 = endPoint.getX();
               double _x_43 = startPoint.getX();
@@ -797,8 +789,8 @@ public class ManhattanRouter {
   }
   
   protected Pair<Side, Side> getConnectionDirection() {
-    Point2D sourcePoint = this.sourceRect.get(Side.RIGHT);
-    Point2D targetPoint = this.targetRect.get(Side.LEFT);
+    Point2D sourcePoint = this.sourceAnchors.get(Side.RIGHT);
+    Point2D targetPoint = this.targetAnchors.get(Side.LEFT);
     double _x = targetPoint.getX();
     double _x_1 = sourcePoint.getX();
     double _minus = (_x - _x_1);
@@ -806,9 +798,9 @@ public class ManhattanRouter {
     if (_greaterThan) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.LEFT);
     }
-    Point2D _get = this.sourceRect.get(Side.LEFT);
+    Point2D _get = this.sourceAnchors.get(Side.LEFT);
     sourcePoint = _get;
-    Point2D _get_1 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_1 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_1;
     double _x_2 = sourcePoint.getX();
     double _x_3 = targetPoint.getX();
@@ -817,9 +809,9 @@ public class ManhattanRouter {
     if (_greaterThan_1) {
       return Pair.<Side, Side>of(Side.LEFT, Side.RIGHT);
     }
-    Point2D _get_2 = this.sourceRect.get(Side.TOP);
+    Point2D _get_2 = this.sourceAnchors.get(Side.TOP);
     sourcePoint = _get_2;
-    Point2D _get_3 = this.targetRect.get(Side.BOTTOM);
+    Point2D _get_3 = this.targetAnchors.get(Side.BOTTOM);
     targetPoint = _get_3;
     double _y = sourcePoint.getY();
     double _y_1 = targetPoint.getY();
@@ -828,9 +820,9 @@ public class ManhattanRouter {
     if (_greaterThan_2) {
       return Pair.<Side, Side>of(Side.TOP, Side.BOTTOM);
     }
-    Point2D _get_4 = this.sourceRect.get(Side.BOTTOM);
+    Point2D _get_4 = this.sourceAnchors.get(Side.BOTTOM);
     sourcePoint = _get_4;
-    Point2D _get_5 = this.targetRect.get(Side.TOP);
+    Point2D _get_5 = this.targetAnchors.get(Side.TOP);
     targetPoint = _get_5;
     double _y_2 = targetPoint.getY();
     double _y_3 = sourcePoint.getY();
@@ -839,59 +831,59 @@ public class ManhattanRouter {
     if (_greaterThan_3) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.TOP);
     }
-    Point2D _get_6 = this.sourceRect.get(Side.RIGHT);
+    Point2D _get_6 = this.sourceAnchors.get(Side.RIGHT);
     sourcePoint = _get_6;
-    Point2D _get_7 = this.targetRect.get(Side.TOP);
+    Point2D _get_7 = this.targetAnchors.get(Side.TOP);
     targetPoint = _get_7;
     if ((((targetPoint.getX() - sourcePoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getY() - sourcePoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.TOP);
     }
-    Point2D _get_8 = this.targetRect.get(Side.BOTTOM);
+    Point2D _get_8 = this.targetAnchors.get(Side.BOTTOM);
     targetPoint = _get_8;
     if ((((targetPoint.getX() - sourcePoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getY() - targetPoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.BOTTOM);
     }
-    Point2D _get_9 = this.sourceRect.get(Side.LEFT);
+    Point2D _get_9 = this.sourceAnchors.get(Side.LEFT);
     sourcePoint = _get_9;
-    Point2D _get_10 = this.targetRect.get(Side.BOTTOM);
+    Point2D _get_10 = this.targetAnchors.get(Side.BOTTOM);
     targetPoint = _get_10;
     if ((((sourcePoint.getX() - targetPoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getY() - targetPoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.LEFT, Side.BOTTOM);
     }
-    Point2D _get_11 = this.targetRect.get(Side.TOP);
+    Point2D _get_11 = this.targetAnchors.get(Side.TOP);
     targetPoint = _get_11;
     if ((((sourcePoint.getX() - targetPoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getY() - sourcePoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.LEFT, Side.TOP);
     }
-    Point2D _get_12 = this.sourceRect.get(Side.TOP);
+    Point2D _get_12 = this.sourceAnchors.get(Side.TOP);
     sourcePoint = _get_12;
-    Point2D _get_13 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_13 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_13;
     if ((((sourcePoint.getY() - targetPoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getX() - targetPoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.TOP, Side.RIGHT);
     }
-    Point2D _get_14 = this.targetRect.get(Side.LEFT);
+    Point2D _get_14 = this.targetAnchors.get(Side.LEFT);
     targetPoint = _get_14;
     if ((((sourcePoint.getY() - targetPoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getX() - sourcePoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.TOP, Side.LEFT);
     }
-    Point2D _get_15 = this.sourceRect.get(Side.BOTTOM);
+    Point2D _get_15 = this.sourceAnchors.get(Side.BOTTOM);
     sourcePoint = _get_15;
-    Point2D _get_16 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_16 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_16;
     if ((((targetPoint.getY() - sourcePoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getX() - targetPoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.RIGHT);
     }
-    Point2D _get_17 = this.targetRect.get(Side.LEFT);
+    Point2D _get_17 = this.targetAnchors.get(Side.LEFT);
     targetPoint = _get_17;
     if ((((targetPoint.getY() - sourcePoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getX() - sourcePoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.LEFT);
     }
-    Point2D _get_18 = this.sourceRect.get(Side.TOP);
+    Point2D _get_18 = this.sourceAnchors.get(Side.TOP);
     sourcePoint = _get_18;
-    Point2D _get_19 = this.targetRect.get(Side.TOP);
+    Point2D _get_19 = this.targetAnchors.get(Side.TOP);
     targetPoint = _get_19;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       double _y_4 = sourcePoint.getY();
       double _y_5 = targetPoint.getY();
       double _minus_4 = (_y_4 - _y_5);
@@ -901,7 +893,7 @@ public class ManhattanRouter {
         double _x_5 = targetPoint.getX();
         double _minus_5 = (_x_4 - _x_5);
         double _abs = Math.abs(_minus_5);
-        double _width = this.sourceRect.getWidth();
+        double _width = this.sourceAnchors.getWidth();
         double _plus = (_width + this.STANDARD_DISTANCE);
         double _divide = (_plus / 2);
         boolean _greaterThan_4 = (_abs > _divide);
@@ -913,7 +905,7 @@ public class ManhattanRouter {
         double _x_7 = targetPoint.getX();
         double _minus_6 = (_x_6 - _x_7);
         double _abs_1 = Math.abs(_minus_6);
-        double _width_1 = this.targetRect.getWidth();
+        double _width_1 = this.targetAnchors.getWidth();
         double _divide_1 = (_width_1 / 2);
         boolean _greaterThan_5 = (_abs_1 > _divide_1);
         if (_greaterThan_5) {
@@ -921,11 +913,11 @@ public class ManhattanRouter {
         }
       }
     }
-    Point2D _get_20 = this.sourceRect.get(Side.RIGHT);
+    Point2D _get_20 = this.sourceAnchors.get(Side.RIGHT);
     sourcePoint = _get_20;
-    Point2D _get_21 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_21 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_21;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       double _x_8 = sourcePoint.getX();
       double _x_9 = targetPoint.getX();
       double _minus_7 = (_x_8 - _x_9);
@@ -935,7 +927,7 @@ public class ManhattanRouter {
         double _y_7 = targetPoint.getY();
         double _minus_8 = (_y_6 - _y_7);
         double _abs_2 = Math.abs(_minus_8);
-        double _height = this.sourceRect.getHeight();
+        double _height = this.sourceAnchors.getHeight();
         double _plus_1 = (_height + this.STANDARD_DISTANCE);
         double _divide_2 = (_plus_1 / 2);
         boolean _greaterThan_7 = (_abs_2 > _divide_2);
@@ -947,7 +939,7 @@ public class ManhattanRouter {
         double _y_9 = targetPoint.getY();
         double _minus_9 = (_y_8 - _y_9);
         double _abs_3 = Math.abs(_minus_9);
-        double _height_1 = this.targetRect.getHeight();
+        double _height_1 = this.targetAnchors.getHeight();
         double _divide_3 = (_height_1 / 2);
         boolean _greaterThan_8 = (_abs_3 > _divide_3);
         if (_greaterThan_8) {
@@ -955,28 +947,28 @@ public class ManhattanRouter {
         }
       }
     }
-    Point2D _get_22 = this.sourceRect.get(Side.TOP);
+    Point2D _get_22 = this.sourceAnchors.get(Side.TOP);
     sourcePoint = _get_22;
-    Point2D _get_23 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_23 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_23;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.TOP, Side.RIGHT);
     }
-    Point2D _get_24 = this.targetRect.get(Side.LEFT);
+    Point2D _get_24 = this.targetAnchors.get(Side.LEFT);
     targetPoint = _get_24;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.TOP, Side.LEFT);
     }
-    Point2D _get_25 = this.sourceRect.get(Side.BOTTOM);
+    Point2D _get_25 = this.sourceAnchors.get(Side.BOTTOM);
     sourcePoint = _get_25;
-    Point2D _get_26 = this.targetRect.get(Side.RIGHT);
+    Point2D _get_26 = this.targetAnchors.get(Side.RIGHT);
     targetPoint = _get_26;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.RIGHT);
     }
-    Point2D _get_27 = this.targetRect.get(Side.LEFT);
+    Point2D _get_27 = this.targetAnchors.get(Side.LEFT);
     targetPoint = _get_27;
-    if (((!this.targetRect.contains(sourcePoint)) && (!this.sourceRect.contains(targetPoint)))) {
+    if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.LEFT);
     }
     return Pair.<Side, Side>of(Side.RIGHT, Side.LEFT);

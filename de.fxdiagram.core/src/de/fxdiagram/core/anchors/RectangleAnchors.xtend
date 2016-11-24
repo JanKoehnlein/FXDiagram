@@ -7,8 +7,9 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.geometry.Side
 
-class RectangleAnchors implements Anchors {
+class RectangleAnchors implements Anchors, ManhattanAnchors {
 
 	protected XNode host
 
@@ -50,6 +51,20 @@ class RectangleAnchors implements Anchors {
 	protected def getYIntersection(double xIntersection, double centerX, double centerY, double pointX, double pointY) {
 		val t = (xIntersection - centerX) / (pointX - centerX)
 		(pointY - centerY) * t + centerY
+	}
+	
+	override getManhattanAnchor(double x, double y, Side side) {
+		val bounds = host.node.localToRootDiagram(host.node.layoutBounds)
+		switch side {
+			case TOP:
+				return new Point2D(max(min(x, bounds.maxX), bounds.minX), bounds.minY)	
+			case BOTTOM:
+				return new Point2D(max(min(x, bounds.maxX), bounds.minX), bounds.maxY)
+			case LEFT:
+				return new Point2D(bounds.minX, max(min(y, bounds.maxY), bounds.minY))	
+			case RIGHT:
+				return new Point2D(bounds.maxX, max(min(y, bounds.maxY), bounds.minY))	
+		}
 	}
 }
 
