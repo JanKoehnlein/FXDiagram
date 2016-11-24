@@ -15,6 +15,7 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 class ManhattanRouter {
 
@@ -35,7 +36,8 @@ class ManhattanRouter {
 			return
 		val newSourceRect = new PointsOnEdge(connection.source)
 		val newTargetRect = new PointsOnEdge(connection.target)
-		if (sourceRect != null && targetRect != null) {
+		if (sourceRect != null && targetRect != null 
+			&& connection.controlPoints.exists[manuallyPlaced || getBehavior(MoveBehavior)?.hasMoved]) {
 			sourceRect = newSourceRect
 			targetRect = newTargetRect
 			rerouteIfNecessary(sourceRect, connection.controlPoints.head, true) 
@@ -44,7 +46,7 @@ class ManhattanRouter {
 		} else {
 			sourceRect = newSourceRect
 			targetRect = newTargetRect
-			val newControlPoints = recalculatePoints 
+			val newControlPoints = recalculatePoints
 			connection.controlPoints.setAll(newControlPoints)
 			reroutingEnabled = true
 		}

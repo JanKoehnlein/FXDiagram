@@ -34,7 +34,7 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
   }
   
   @Override
-  protected boolean hasMoved() {
+  public boolean hasMoved() {
     boolean _switchResult = false;
     XConnectionLabel _host = this.getHost();
     XConnection _connection = _host.getConnection();

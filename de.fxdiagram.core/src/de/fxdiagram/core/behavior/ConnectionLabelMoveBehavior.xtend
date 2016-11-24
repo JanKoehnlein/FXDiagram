@@ -19,7 +19,7 @@ class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
 		super(label)
 	}
 	
-	override protected hasMoved() {
+	override hasMoved() {
 		switch host.connection.kind {
 			case POLYLINE, case RECTILINEAR:
 				initialPosition != host.position

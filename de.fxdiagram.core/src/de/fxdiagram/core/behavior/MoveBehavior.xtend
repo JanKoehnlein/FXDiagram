@@ -21,7 +21,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	override doActivate() {
 	}
 	
-	protected def hasMoved() {
+	def hasMoved() {
 		dragContext != null && (dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY)
 	}
 	

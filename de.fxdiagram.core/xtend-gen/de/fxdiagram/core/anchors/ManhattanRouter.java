@@ -6,12 +6,14 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.PointsOnEdge;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
@@ -44,7 +46,21 @@ public class ManhattanRouter {
     final PointsOnEdge newSourceRect = new PointsOnEdge(_source);
     XNode _target = this.connection.getTarget();
     final PointsOnEdge newTargetRect = new PointsOnEdge(_target);
-    if (((!Objects.equal(this.sourceRect, null)) && (!Objects.equal(this.targetRect, null)))) {
+    if ((((!Objects.equal(this.sourceRect, null)) && (!Objects.equal(this.targetRect, null))) && IterableExtensions.<XControlPoint>exists(this.connection.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
+      boolean _or = false;
+      boolean _manuallyPlaced = it.getManuallyPlaced();
+      if (_manuallyPlaced) {
+        _or = true;
+      } else {
+        MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
+        boolean _hasMoved = false;
+        if (_behavior!=null) {
+          _hasMoved=_behavior.hasMoved();
+        }
+        _or = _hasMoved;
+      }
+      return Boolean.valueOf(_or);
+    })))) {
       this.sourceRect = newSourceRect;
       this.targetRect = newTargetRect;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();

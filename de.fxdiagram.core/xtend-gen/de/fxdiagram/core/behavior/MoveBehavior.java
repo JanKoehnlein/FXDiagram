@@ -132,7 +132,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   public void doActivate() {
   }
   
-  protected boolean hasMoved() {
+  public boolean hasMoved() {
     return ((!Objects.equal(this.dragContext, null)) && ((this.dragContext.initialX != this.getHost().getLayoutX()) || (this.dragContext.initialY != this.getHost().getLayoutY())));
   }
   
