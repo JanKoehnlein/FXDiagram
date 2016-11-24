@@ -65,22 +65,22 @@ public class ManhattanRouter {
       this.targetRect = newTargetRect;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
       XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints);
-      this.rerouteIfNecessary(this.sourceRect, _head, true);
+      this.partiallyRerouteIfNecessary(this.sourceRect, _head, true);
       ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
       XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_1);
-      this.rerouteIfNecessary(this.targetRect, _last, false);
+      this.partiallyRerouteIfNecessary(this.targetRect, _last, false);
       return;
     } else {
       this.sourceRect = newSourceRect;
       this.targetRect = newTargetRect;
-      final ArrayList<XControlPoint> newControlPoints = this.recalculatePoints();
+      final ArrayList<XControlPoint> newControlPoints = this.getDefaultPoints();
       ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
       _controlPoints_2.setAll(newControlPoints);
       this.reroutingEnabled = true;
     }
   }
   
-  public ArrayList<XControlPoint> recalculatePoints() {
+  public ArrayList<XControlPoint> getDefaultPoints() {
     final Pair<Side, Side> connectionDir = this.getConnectionDirection();
     Side _key = connectionDir.getKey();
     Side _value = connectionDir.getValue();
@@ -144,7 +144,7 @@ public class ManhattanRouter {
     return newControlPoints;
   }
   
-  protected void rerouteIfNecessary(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource) {
+  protected void partiallyRerouteIfNecessary(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource) {
     final Side lastSide = anchor.getSide();
     XControlPoint _xifexpression = null;
     if (isSource) {
@@ -207,7 +207,7 @@ public class ManhattanRouter {
             double _x = _get.getX();
             boolean _lessThan = (_layoutX < _x);
             if (_lessThan) {
-              this.addLoop(connected, anchor, isSource, Side.LEFT);
+              this.addCorner(connected, anchor, isSource, Side.LEFT);
               return;
             } else {
               double _layoutX_1 = anchor.getLayoutX();
@@ -215,7 +215,7 @@ public class ManhattanRouter {
               double _x_1 = _get_1.getX();
               boolean _greaterThan_1 = (_layoutX_1 > _x_1);
               if (_greaterThan_1) {
-                this.addLoop(connected, anchor, isSource, Side.RIGHT);
+                this.addCorner(connected, anchor, isSource, Side.RIGHT);
                 return;
               } else {
                 if ((((!Objects.equal(refPoint2, null)) && (refPoint2.getLayoutY() > connected.get(Side.TOP).getY())) && (refPoint2.getLayoutY() < connected.get(Side.BOTTOM).getY()))) {
@@ -224,9 +224,9 @@ public class ManhattanRouter {
                   double _x_2 = _get_2.getX();
                   boolean _lessThan_1 = (_layoutX_2 < _x_2);
                   if (_lessThan_1) {
-                    this.removeLoop(connected, anchor, isSource, Side.LEFT);
+                    this.removeCorner(connected, anchor, isSource, Side.LEFT);
                   } else {
-                    this.removeLoop(connected, anchor, isSource, Side.RIGHT);
+                    this.removeCorner(connected, anchor, isSource, Side.RIGHT);
                   }
                   return;
                 } else {
@@ -257,7 +257,7 @@ public class ManhattanRouter {
             double _y_1 = _get_4.getY();
             boolean _lessThan_2 = (_layoutY < _y_1);
             if (_lessThan_2) {
-              this.addLoop(connected, anchor, isSource, Side.TOP);
+              this.addCorner(connected, anchor, isSource, Side.TOP);
               return;
             } else {
               double _layoutY_1 = anchor.getLayoutY();
@@ -265,7 +265,7 @@ public class ManhattanRouter {
               double _y_2 = _get_5.getY();
               boolean _greaterThan_2 = (_layoutY_1 > _y_2);
               if (_greaterThan_2) {
-                this.addLoop(connected, anchor, isSource, Side.BOTTOM);
+                this.addCorner(connected, anchor, isSource, Side.BOTTOM);
                 return;
               } else {
                 if ((((!Objects.equal(refPoint2, null)) && (refPoint2.getLayoutX() > connected.get(Side.LEFT).getX())) && (refPoint2.getLayoutX() < connected.get(Side.RIGHT).getX()))) {
@@ -274,9 +274,9 @@ public class ManhattanRouter {
                   double _y_3 = _get_6.getY();
                   boolean _lessThan_3 = (_layoutY_2 < _y_3);
                   if (_lessThan_3) {
-                    this.removeLoop(connected, anchor, isSource, Side.TOP);
+                    this.removeCorner(connected, anchor, isSource, Side.TOP);
                   } else {
-                    this.removeLoop(connected, anchor, isSource, Side.BOTTOM);
+                    this.removeCorner(connected, anchor, isSource, Side.BOTTOM);
                   }
                   return;
                 } else {
@@ -322,7 +322,7 @@ public class ManhattanRouter {
     this.setAnchorPoint(connected, anchor, _get, isSource, newSide, referencePoint);
   }
   
-  protected void addLoop(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
+  protected void addCorner(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
     int _xifexpression = (int) 0;
     if (isSource) {
       _xifexpression = 1;
@@ -363,7 +363,7 @@ public class ManhattanRouter {
     this.setAnchorPoint(connected, anchor, _get, isSource, newSide, newPoint);
   }
   
-  protected void removeLoop(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
+  protected void removeCorner(final PointsOnEdge connected, final XControlPoint anchor, final boolean isSource, final Side newSide) {
     XControlPoint _xifexpression = null;
     if (isSource) {
       XControlPoint _xblockexpression = null;
@@ -796,7 +796,7 @@ public class ManhattanRouter {
     return points;
   }
   
-  public Pair<Side, Side> getConnectionDirection() {
+  protected Pair<Side, Side> getConnectionDirection() {
     Point2D sourcePoint = this.sourceRect.get(Side.RIGHT);
     Point2D targetPoint = this.targetRect.get(Side.LEFT);
     double _x = targetPoint.getX();

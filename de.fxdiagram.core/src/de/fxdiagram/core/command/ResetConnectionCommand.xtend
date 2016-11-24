@@ -21,7 +21,7 @@ class ResetConnectionCommand extends AbstractAnimationCommand {
 		switch connection.kind {
 			case RECTILINEAR: {
 				val newPoints = newArrayList
-				newPoints += connection.connectionRouter.manhattanRouter.recalculatePoints
+				newPoints += connection.connectionRouter.manhattanRouter.defaultPoints
 				return new ConnectionMemento(connection, connection.kind, newPoints)
 			}
 			default: 

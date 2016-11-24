@@ -3,6 +3,7 @@ package de.fxdiagram.core.anchors
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.Map
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
@@ -15,7 +16,6 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.behavior.MoveBehavior
 
 class ManhattanRouter {
 
@@ -40,19 +40,19 @@ class ManhattanRouter {
 			&& connection.controlPoints.exists[manuallyPlaced || getBehavior(MoveBehavior)?.hasMoved]) {
 			sourceRect = newSourceRect
 			targetRect = newTargetRect
-			rerouteIfNecessary(sourceRect, connection.controlPoints.head, true) 
-			rerouteIfNecessary(targetRect, connection.controlPoints.last, false) 
+			partiallyRerouteIfNecessary(sourceRect, connection.controlPoints.head, true) 
+			partiallyRerouteIfNecessary(targetRect, connection.controlPoints.last, false) 
 			return 
 		} else {
 			sourceRect = newSourceRect
 			targetRect = newTargetRect
-			val newControlPoints = recalculatePoints
+			val newControlPoints = defaultPoints
 			connection.controlPoints.setAll(newControlPoints)
 			reroutingEnabled = true
 		}
 	}
 	
-	def recalculatePoints() {
+	def getDefaultPoints() {
 		val connectionDir = getConnectionDirection
 		val points = doRecalculatePoints(connectionDir.key, connectionDir.value)
 		if(connection.sourceArrowHead != null)
@@ -75,7 +75,7 @@ class ManhattanRouter {
 		return newControlPoints
 	}
 	
-	protected def rerouteIfNecessary(PointsOnEdge connected, XControlPoint anchor, boolean isSource) {
+	protected def partiallyRerouteIfNecessary(PointsOnEdge connected, XControlPoint anchor, boolean isSource) {
 		val lastSide = anchor.side
 		val referencePoint = if(isSource) 
 				connection.controlPoints.get(1)
@@ -98,18 +98,18 @@ class ManhattanRouter {
 			case TOP, case BOTTOM: {
 				if(doReroute) {
 					if(anchor.layoutX < connected.get(LEFT).x) {
-						addLoop(connected, anchor, isSource, LEFT)
+						addCorner(connected, anchor, isSource, LEFT)
 						return						
 					} else if(anchor.layoutX > connected.get(RIGHT).x) {
-						addLoop(connected, anchor, isSource, RIGHT)
+						addCorner(connected, anchor, isSource, RIGHT)
 						return 						
 					} else if(refPoint2 != null 
 						&& refPoint2.layoutY > connected.get(TOP).y 
 						&& refPoint2.layoutY < connected.get(BOTTOM).y) {
 						if(refPoint2.layoutX < connected.get(lastSide).x)
-							removeLoop(connected, anchor, isSource, LEFT)
+							removeCorner(connected, anchor, isSource, LEFT)
 						else
-							removeLoop(connected, anchor, isSource, RIGHT)
+							removeCorner(connected, anchor, isSource, RIGHT)
 						return
 					} else if(lastSide == TOP 
 						&& (referencePoint.layoutY > connected.get(BOTTOM).y + lineCut
@@ -128,18 +128,18 @@ class ManhattanRouter {
 			case LEFT, case RIGHT: {
 				if(doReroute) {
 					if(anchor.layoutY < connected.get(TOP).y) {
-						addLoop(connected, anchor, isSource, TOP)
+						addCorner(connected, anchor, isSource, TOP)
 						return
 					} else if(anchor.layoutY > connected.get(BOTTOM).y) {
-						addLoop(connected, anchor, isSource, BOTTOM)
+						addCorner(connected, anchor, isSource, BOTTOM)
 						return
 					} else if(refPoint2 != null
 						&& refPoint2.layoutX > connected.get(LEFT).x 
 						&& refPoint2.layoutX < connected.get(RIGHT).x) {
 							if(refPoint2.layoutY < connected.get(lastSide).y)
-								removeLoop(connected, anchor, isSource, TOP)
+								removeCorner(connected, anchor, isSource, TOP)
 							else
-								removeLoop(connected, anchor, isSource, BOTTOM)
+								removeCorner(connected, anchor, isSource, BOTTOM)
 							return
 					} else if(lastSide == LEFT 
 						&& (referencePoint.layoutX > connected.get(RIGHT).x + lineCut
@@ -166,7 +166,7 @@ class ManhattanRouter {
 		setAnchorPoint(connected, anchor, connected.get(newSide), isSource, newSide, referencePoint)
 	}
 	
-	protected def addLoop(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
+	protected def addCorner(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
 		val index = if(isSource) 1 else connection.controlPoints.size - 1
 		val cpX = anchor.layoutX
 		val cpY = anchor.layoutY			
@@ -179,7 +179,7 @@ class ManhattanRouter {
 		setAnchorPoint(connected, anchor, connected.get(newSide), isSource, newSide, newPoint)
 	}
 	
-	protected def removeLoop(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
+	protected def removeCorner(PointsOnEdge connected, XControlPoint anchor, boolean isSource, Side newSide) {
 		val referencePoint = if(isSource) { 
 				connection.controlPoints.remove(1)
 				connection.controlPoints.get(1)		
@@ -320,7 +320,7 @@ class ManhattanRouter {
 		return points;
 	}
 
-	def getConnectionDirection() {
+	protected def getConnectionDirection() {
 		// distance is enough
 		var sourcePoint = sourceRect.get(RIGHT)
 		var targetPoint = targetRect.get(LEFT)
@@ -431,10 +431,8 @@ class ManhattanRouter {
 class PointsOnEdge {
 	Map<Side, Point2D> side2point = newHashMap()
 	Bounds bounds
-	Bounds snapBounds
 	  
 	new(XNode host) {
-		this.snapBounds = host.localToRootDiagram(host.snapBounds)
 		this.bounds = host.localToRootDiagram(host.node.boundsInLocal)
 		val center = this.bounds.center
 		side2point.put(TOP, new Point2D(center.x, bounds.minY))

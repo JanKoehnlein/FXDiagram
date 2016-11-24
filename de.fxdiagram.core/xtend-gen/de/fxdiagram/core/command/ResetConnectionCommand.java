@@ -36,8 +36,8 @@ public class ResetConnectionCommand extends AbstractAnimationCommand {
           final ArrayList<XControlPoint> newPoints = CollectionLiterals.<XControlPoint>newArrayList();
           ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
           ManhattanRouter _manhattanRouter = _connectionRouter.getManhattanRouter();
-          ArrayList<XControlPoint> _recalculatePoints = _manhattanRouter.recalculatePoints();
-          Iterables.<XControlPoint>addAll(newPoints, _recalculatePoints);
+          ArrayList<XControlPoint> _defaultPoints = _manhattanRouter.getDefaultPoints();
+          Iterables.<XControlPoint>addAll(newPoints, _defaultPoints);
           XConnection.Kind _kind_1 = this.connection.getKind();
           return new ConnectionMemento(this.connection, _kind_1, newPoints);
         default:

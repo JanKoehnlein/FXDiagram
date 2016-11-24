@@ -16,16 +16,11 @@ public class PointsOnEdge {
   
   private Bounds bounds;
   
-  private Bounds snapBounds;
-  
   public PointsOnEdge(final XNode host) {
-    Bounds _snapBounds = host.getSnapBounds();
-    Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(host, _snapBounds);
-    this.snapBounds = _localToRootDiagram;
     Node _node = host.getNode();
     Bounds _boundsInLocal = _node.getBoundsInLocal();
-    Bounds _localToRootDiagram_1 = CoreExtensions.localToRootDiagram(host, _boundsInLocal);
-    this.bounds = _localToRootDiagram_1;
+    Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(host, _boundsInLocal);
+    this.bounds = _localToRootDiagram;
     final Point2D center = BoundsExtensions.center(this.bounds);
     double _x = center.getX();
     double _minY = this.bounds.getMinY();
