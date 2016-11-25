@@ -11,6 +11,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
@@ -18,6 +19,8 @@ public class CachedAnchors {
   private XNode host;
   
   private Map<Side, Point2D> side2point = CollectionLiterals.<Side, Point2D>newHashMap();
+  
+  private Map<Side, Point2D> side2pointUnselected = CollectionLiterals.<Side, Point2D>newHashMap();
   
   private Bounds bounds;
   
@@ -44,6 +47,26 @@ public class CachedAnchors {
     double _y_1 = center.getY();
     Point2D _point2D_3 = new Point2D(_maxX, _y_1);
     this.side2point.put(Side.RIGHT, _point2D_3);
+    Parent _parent = host.getParent();
+    Bounds _snapBounds = host.getSnapBounds();
+    final Bounds snapBounds = CoreExtensions.localToRootDiagram(_parent, _snapBounds);
+    final Point2D snapCenter = BoundsExtensions.center(snapBounds);
+    double _x_2 = snapCenter.getX();
+    double _minY_1 = snapBounds.getMinY();
+    Point2D _point2D_4 = new Point2D(_x_2, _minY_1);
+    this.side2pointUnselected.put(Side.TOP, _point2D_4);
+    double _x_3 = snapCenter.getX();
+    double _maxY_1 = snapBounds.getMaxY();
+    Point2D _point2D_5 = new Point2D(_x_3, _maxY_1);
+    this.side2pointUnselected.put(Side.BOTTOM, _point2D_5);
+    double _minX_1 = snapBounds.getMinX();
+    double _y_2 = snapCenter.getY();
+    Point2D _point2D_6 = new Point2D(_minX_1, _y_2);
+    this.side2pointUnselected.put(Side.LEFT, _point2D_6);
+    double _maxX_1 = snapBounds.getMaxX();
+    double _y_3 = snapCenter.getY();
+    Point2D _point2D_7 = new Point2D(_maxX_1, _y_3);
+    this.side2pointUnselected.put(Side.RIGHT, _point2D_7);
   }
   
   public Point2D get(final XControlPoint referencePoint, final Side side) {
@@ -61,6 +84,10 @@ public class CachedAnchors {
       _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
+  }
+  
+  public Point2D getUnselected(final Side side) {
+    return this.side2pointUnselected.get(side);
   }
   
   public Point2D get(final Side side) {

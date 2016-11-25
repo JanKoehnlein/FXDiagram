@@ -789,8 +789,8 @@ public class ManhattanRouter {
   }
   
   protected Pair<Side, Side> getConnectionDirection() {
-    Point2D sourcePoint = this.sourceAnchors.get(Side.RIGHT);
-    Point2D targetPoint = this.targetAnchors.get(Side.LEFT);
+    Point2D sourcePoint = this.sourceAnchors.getUnselected(Side.RIGHT);
+    Point2D targetPoint = this.targetAnchors.getUnselected(Side.LEFT);
     double _x = targetPoint.getX();
     double _x_1 = sourcePoint.getX();
     double _minus = (_x - _x_1);

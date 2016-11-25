@@ -321,8 +321,8 @@ class ManhattanRouter {
 
 	protected def getConnectionDirection() {
 		// distance is enough
-		var sourcePoint = sourceAnchors.get(RIGHT)
-		var targetPoint = targetAnchors.get(LEFT)
+		var sourcePoint = sourceAnchors.getUnselected(RIGHT)
+		var targetPoint = targetAnchors.getUnselected(LEFT)
 		if ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE)
 			return RIGHT -> LEFT
 
@@ -431,6 +431,7 @@ class CachedAnchors {
 
 	XNode host
 	Map<Side, Point2D> side2point = newHashMap()
+	Map<Side, Point2D> side2pointUnselected = newHashMap()
 	Bounds bounds
 	  
 	new(XNode host) {
@@ -441,6 +442,13 @@ class CachedAnchors {
 		side2point.put(BOTTOM, new Point2D(center.x, bounds.maxY))
 		side2point.put(LEFT, new Point2D(bounds.minX, center.y))
 		side2point.put(RIGHT, new Point2D(bounds.maxX, center.y))
+		
+		val snapBounds = host.parent.localToRootDiagram(host.snapBounds)
+		val snapCenter = snapBounds.center
+		side2pointUnselected.put(TOP, new Point2D(snapCenter.x, snapBounds.minY))
+		side2pointUnselected.put(BOTTOM, new Point2D(snapCenter.x, snapBounds.maxY))
+		side2pointUnselected.put(LEFT, new Point2D(snapBounds.minX, snapCenter.y))
+		side2pointUnselected.put(RIGHT, new Point2D(snapBounds.maxX, snapCenter.y))
 	}
 
 	def get(XControlPoint referencePoint, Side side) {
@@ -449,6 +457,10 @@ class CachedAnchors {
 			anchors.getManhattanAnchor(referencePoint.layoutX, referencePoint.layoutY, side)
 		else 
 			get(side)
+	}
+	
+	def getUnselected(Side side) {
+		side2pointUnselected.get(side)
 	}
 
 	def get(Side side) {
