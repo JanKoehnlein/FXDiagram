@@ -12,6 +12,7 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static de.fxdiagram.core.extensions.TransitionExtensions.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 @Data
 @FinalFieldsConstructor
@@ -80,7 +81,13 @@ class ConnectionMemento {
 		}
 
 		override createExecuteAnimation(CommandContext context) {
-			new EmptyTransition
+			new EmptyTransition => [
+				onFinished = [
+					connection.controlPoints.forEach [
+						getBehavior(MoveBehavior)?.reset
+					]
+				]
+			]
 		}
 
 		override createUndoAnimation(CommandContext context) {

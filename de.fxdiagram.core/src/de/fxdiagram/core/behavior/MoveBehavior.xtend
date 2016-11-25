@@ -25,6 +25,10 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 		dragContext != null && (dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY)
 	}
 	
+	def reset() {
+		dragContext = null
+	}
+	
 	protected def AnimationCommand createMoveCommand() {
 		new MoveCommand(
 			host,
@@ -72,6 +76,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			val moveCommand = createMoveCommand
 			if(moveCommand != null) {
 				host.root.commandStack.execute(moveCommand)
+				reset
 			}
 		}
 	}

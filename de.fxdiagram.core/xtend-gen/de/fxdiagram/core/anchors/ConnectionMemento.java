@@ -4,14 +4,18 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.EmptyTransition;
 import de.fxdiagram.core.extensions.TransitionExtensions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.util.Duration;
@@ -46,7 +50,21 @@ public class ConnectionMemento {
     
     @Override
     public Animation createExecuteAnimation(final CommandContext context) {
-      return new EmptyTransition();
+      EmptyTransition _emptyTransition = new EmptyTransition();
+      final Procedure1<EmptyTransition> _function = (EmptyTransition it) -> {
+        final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
+          ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+          final Consumer<XControlPoint> _function_2 = (XControlPoint it_2) -> {
+            MoveBehavior _behavior = it_2.<MoveBehavior>getBehavior(MoveBehavior.class);
+            if (_behavior!=null) {
+              _behavior.reset();
+            }
+          };
+          _controlPoints.forEach(_function_2);
+        };
+        it.setOnFinished(_function_1);
+      };
+      return ObjectExtensions.<EmptyTransition>operator_doubleArrow(_emptyTransition, _function);
     }
     
     @Override

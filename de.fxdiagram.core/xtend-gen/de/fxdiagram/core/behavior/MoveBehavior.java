@@ -136,6 +136,10 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     return ((!Objects.equal(this.dragContext, null)) && ((this.dragContext.initialX != this.getHost().getLayoutX()) || (this.dragContext.initialY != this.getHost().getLayoutY())));
   }
   
+  public MoveBehavior.DragContext reset() {
+    return this.dragContext = null;
+  }
+  
   protected AnimationCommand createMoveCommand() {
     T _host = this.getHost();
     T _host_1 = this.getHost();
@@ -214,6 +218,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
         XRoot _root = CoreExtensions.getRoot(_host);
         CommandStack _commandStack = _root.getCommandStack();
         _commandStack.execute(moveCommand);
+        this.reset();
       }
     }
   }
