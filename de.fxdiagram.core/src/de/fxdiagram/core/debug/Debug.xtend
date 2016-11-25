@@ -1,10 +1,15 @@
 package de.fxdiagram.core.debug
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.XConnection
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
+
+import static de.fxdiagram.core.XConnection.Kind.*
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
@@ -65,5 +70,17 @@ class Debug {
 		 	current = current.parent
 		 }
 		 LOG.info(message)
+	}
+	
+	def static checkRectilinearity(XConnection connection) {
+		if(connection.kind != RECTILINEAR)
+			return;
+		for(var i=1; i<connection.controlPoints.size; i++) {
+			val first = connection.controlPoints.get(i-1)
+			val second = connection.controlPoints.get(i)
+			if(abs(first.layoutX-second.layoutX) > EPSILON 
+				&& abs(first.layoutY-second.layoutY) > EPSILON)
+				throw new IllegalStateException('XConnection is no longer rectilinear')
+		}
 	}
 }

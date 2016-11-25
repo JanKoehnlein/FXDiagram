@@ -96,8 +96,7 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 					}
 				}
 			} else if (connection.kind == RECTILINEAR) {
-				keepRectilinear(siblings.get(index), predecessor, moveDeltaX, moveDeltaY)
-				keepRectilinear(siblings.get(index), successor, moveDeltaX, moveDeltaY)
+				keepRectilinear(index, siblings)
 				updateDangling(index, siblings)
 				if(index > 1)
 					updateDangling(index - 1, siblings)
@@ -107,11 +106,22 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 		}
 	}
 
-	protected def keepRectilinear(XControlPoint moved, XControlPoint dependent, double moveDeltaX, double moveDeltaY) {
-		if (abs(dependent.layoutX - (moved.layoutX - moveDeltaX)) < abs(dependent.layoutY - (moved.layoutY - moveDeltaY))) {
-			dependent.layoutX = moved.layoutX
-		} else {
-			dependent.layoutY = moved.layoutY
+	protected def keepRectilinear(int index, List<XControlPoint> siblings) {
+		if(siblings.head.side != null) {
+			val incomingVertical = if(index % 2 == 0)
+					siblings.head.side.isVertical
+				else 
+			 		!siblings.head.side.isVertical
+			val predecessor = siblings.get(index - 1)
+			val current = siblings.get(index)
+			val successor = siblings.get(index + 1)
+			if(incomingVertical){
+				predecessor.layoutX = current.layoutX
+				successor.layoutY = current.layoutY
+			} else  {
+				predecessor.layoutY = current.layoutY
+				successor.layoutX = current.layoutX
+			}
 		}
 	}
 

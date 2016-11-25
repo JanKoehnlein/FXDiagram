@@ -2,12 +2,16 @@ package de.fxdiagram.core.debug;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -145,6 +149,25 @@ public class Debug {
       }
     }
     Debug.LOG.info(message);
+  }
+  
+  public static void checkRectilinearity(final XConnection connection) {
+    XConnection.Kind _kind = connection.getKind();
+    boolean _notEquals = (!Objects.equal(_kind, XConnection.Kind.RECTILINEAR));
+    if (_notEquals) {
+      return;
+    }
+    for (int i = 1; (i < connection.getControlPoints().size()); i++) {
+      {
+        ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
+        final XControlPoint first = _controlPoints.get((i - 1));
+        ObservableList<XControlPoint> _controlPoints_1 = connection.getControlPoints();
+        final XControlPoint second = _controlPoints_1.get(i);
+        if (((Math.abs((first.getLayoutX() - second.getLayoutX())) > NumberExpressionExtensions.EPSILON) && (Math.abs((first.getLayoutY() - second.getLayoutY())) > NumberExpressionExtensions.EPSILON))) {
+          throw new IllegalStateException("XConnection is no longer rectilinear");
+        }
+      }
+    }
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.debug.Debug");

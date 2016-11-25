@@ -20,6 +20,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -166,10 +167,7 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
         XConnection.Kind _kind = _connection.getKind();
         boolean _equals = Objects.equal(_kind, XConnection.Kind.RECTILINEAR);
         if (_equals) {
-          XControlPoint _get = siblings.get(index);
-          this.keepRectilinear(_get, predecessor, moveDeltaX, moveDeltaY);
-          XControlPoint _get_1 = siblings.get(index);
-          this.keepRectilinear(_get_1, successor, moveDeltaX, moveDeltaY);
+          this.keepRectilinear(index, siblings);
           this.updateDangling(index, siblings);
           if ((index > 1)) {
             this.updateDangling((index - 1), siblings);
@@ -185,24 +183,37 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
     }
   }
   
-  protected void keepRectilinear(final XControlPoint moved, final XControlPoint dependent, final double moveDeltaX, final double moveDeltaY) {
-    double _layoutX = dependent.getLayoutX();
-    double _layoutX_1 = moved.getLayoutX();
-    double _minus = (_layoutX_1 - moveDeltaX);
-    double _minus_1 = (_layoutX - _minus);
-    double _abs = Math.abs(_minus_1);
-    double _layoutY = dependent.getLayoutY();
-    double _layoutY_1 = moved.getLayoutY();
-    double _minus_2 = (_layoutY_1 - moveDeltaY);
-    double _minus_3 = (_layoutY - _minus_2);
-    double _abs_1 = Math.abs(_minus_3);
-    boolean _lessThan = (_abs < _abs_1);
-    if (_lessThan) {
-      double _layoutX_2 = moved.getLayoutX();
-      dependent.setLayoutX(_layoutX_2);
-    } else {
-      double _layoutY_2 = moved.getLayoutY();
-      dependent.setLayoutY(_layoutY_2);
+  protected void keepRectilinear(final int index, final List<XControlPoint> siblings) {
+    XControlPoint _head = IterableExtensions.<XControlPoint>head(siblings);
+    Side _side = _head.getSide();
+    boolean _notEquals = (!Objects.equal(_side, null));
+    if (_notEquals) {
+      boolean _xifexpression = false;
+      if (((index % 2) == 0)) {
+        XControlPoint _head_1 = IterableExtensions.<XControlPoint>head(siblings);
+        Side _side_1 = _head_1.getSide();
+        _xifexpression = _side_1.isVertical();
+      } else {
+        XControlPoint _head_2 = IterableExtensions.<XControlPoint>head(siblings);
+        Side _side_2 = _head_2.getSide();
+        boolean _isVertical = _side_2.isVertical();
+        _xifexpression = (!_isVertical);
+      }
+      final boolean incomingVertical = _xifexpression;
+      final XControlPoint predecessor = siblings.get((index - 1));
+      final XControlPoint current = siblings.get(index);
+      final XControlPoint successor = siblings.get((index + 1));
+      if (incomingVertical) {
+        double _layoutX = current.getLayoutX();
+        predecessor.setLayoutX(_layoutX);
+        double _layoutY = current.getLayoutY();
+        successor.setLayoutY(_layoutY);
+      } else {
+        double _layoutY_1 = current.getLayoutY();
+        predecessor.setLayoutY(_layoutY_1);
+        double _layoutX_1 = current.getLayoutX();
+        successor.setLayoutX(_layoutX_1);
+      }
     }
   }
   
