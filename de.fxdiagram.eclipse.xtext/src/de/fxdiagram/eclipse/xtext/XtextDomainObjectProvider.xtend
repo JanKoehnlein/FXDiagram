@@ -31,7 +31,9 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 
 	Map<URI, CachedEditor> editorCache = newHashMap
 
-	val idFactory = new XtextEObjectID.Factory 
+	def XtextEObjectID.Factory getIdFactory() {
+		new XtextEObjectID.Factory		
+	}
 
 	override createDescriptor(Object handle) {
 		null

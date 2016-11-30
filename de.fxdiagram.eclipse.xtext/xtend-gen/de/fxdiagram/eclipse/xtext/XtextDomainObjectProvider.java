@@ -92,7 +92,9 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   
   private Map<URI, XtextDomainObjectProvider.CachedEditor> editorCache = CollectionLiterals.<URI, XtextDomainObjectProvider.CachedEditor>newHashMap();
   
-  private final XtextEObjectID.Factory idFactory = new XtextEObjectID.Factory();
+  public XtextEObjectID.Factory getIdFactory() {
+    return new XtextEObjectID.Factory();
+  }
   
   @Override
   public DomainObjectDescriptor createDescriptor(final Object handle) {
@@ -149,11 +151,13 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   }
   
   public XtextEObjectID createXtextEObjectID(final EObject element) {
-    return this.idFactory.createXtextEObjectID(element);
+    XtextEObjectID.Factory _idFactory = this.getIdFactory();
+    return _idFactory.createXtextEObjectID(element);
   }
   
   public XtextEObjectID createXtextEObjectID(final IEObjectDescription element) {
-    return this.idFactory.createXtextEObjectID(element);
+    XtextEObjectID.Factory _idFactory = this.getIdFactory();
+    return _idFactory.createXtextEObjectID(element);
   }
   
   public IResourceDescriptions getIndex(final XtextEObjectID context) {
