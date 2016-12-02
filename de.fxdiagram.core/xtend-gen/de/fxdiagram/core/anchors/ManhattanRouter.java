@@ -798,10 +798,10 @@ public class ManhattanRouter {
     if (_greaterThan) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.LEFT);
     }
-    Point2D _get = this.sourceAnchors.get(Side.LEFT);
-    sourcePoint = _get;
-    Point2D _get_1 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_1;
+    Point2D _unselected = this.sourceAnchors.getUnselected(Side.LEFT);
+    sourcePoint = _unselected;
+    Point2D _unselected_1 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_1;
     double _x_2 = sourcePoint.getX();
     double _x_3 = targetPoint.getX();
     double _minus_1 = (_x_2 - _x_3);
@@ -809,10 +809,10 @@ public class ManhattanRouter {
     if (_greaterThan_1) {
       return Pair.<Side, Side>of(Side.LEFT, Side.RIGHT);
     }
-    Point2D _get_2 = this.sourceAnchors.get(Side.TOP);
-    sourcePoint = _get_2;
-    Point2D _get_3 = this.targetAnchors.get(Side.BOTTOM);
-    targetPoint = _get_3;
+    Point2D _unselected_2 = this.sourceAnchors.getUnselected(Side.TOP);
+    sourcePoint = _unselected_2;
+    Point2D _unselected_3 = this.targetAnchors.getUnselected(Side.BOTTOM);
+    targetPoint = _unselected_3;
     double _y = sourcePoint.getY();
     double _y_1 = targetPoint.getY();
     double _minus_2 = (_y - _y_1);
@@ -820,10 +820,10 @@ public class ManhattanRouter {
     if (_greaterThan_2) {
       return Pair.<Side, Side>of(Side.TOP, Side.BOTTOM);
     }
-    Point2D _get_4 = this.sourceAnchors.get(Side.BOTTOM);
-    sourcePoint = _get_4;
-    Point2D _get_5 = this.targetAnchors.get(Side.TOP);
-    targetPoint = _get_5;
+    Point2D _unselected_4 = this.sourceAnchors.getUnselected(Side.BOTTOM);
+    sourcePoint = _unselected_4;
+    Point2D _unselected_5 = this.targetAnchors.getUnselected(Side.TOP);
+    targetPoint = _unselected_5;
     double _y_2 = targetPoint.getY();
     double _y_3 = sourcePoint.getY();
     double _minus_3 = (_y_2 - _y_3);
@@ -831,58 +831,58 @@ public class ManhattanRouter {
     if (_greaterThan_3) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.TOP);
     }
-    Point2D _get_6 = this.sourceAnchors.get(Side.RIGHT);
-    sourcePoint = _get_6;
-    Point2D _get_7 = this.targetAnchors.get(Side.TOP);
-    targetPoint = _get_7;
+    Point2D _unselected_6 = this.sourceAnchors.getUnselected(Side.RIGHT);
+    sourcePoint = _unselected_6;
+    Point2D _unselected_7 = this.targetAnchors.getUnselected(Side.TOP);
+    targetPoint = _unselected_7;
     if ((((targetPoint.getX() - sourcePoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getY() - sourcePoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.TOP);
     }
-    Point2D _get_8 = this.targetAnchors.get(Side.BOTTOM);
-    targetPoint = _get_8;
+    Point2D _unselected_8 = this.targetAnchors.getUnselected(Side.BOTTOM);
+    targetPoint = _unselected_8;
     if ((((targetPoint.getX() - sourcePoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getY() - targetPoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.RIGHT, Side.BOTTOM);
     }
-    Point2D _get_9 = this.sourceAnchors.get(Side.LEFT);
-    sourcePoint = _get_9;
-    Point2D _get_10 = this.targetAnchors.get(Side.BOTTOM);
-    targetPoint = _get_10;
+    Point2D _unselected_9 = this.sourceAnchors.getUnselected(Side.LEFT);
+    sourcePoint = _unselected_9;
+    Point2D _unselected_10 = this.targetAnchors.getUnselected(Side.BOTTOM);
+    targetPoint = _unselected_10;
     if ((((sourcePoint.getX() - targetPoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getY() - targetPoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.LEFT, Side.BOTTOM);
     }
-    Point2D _get_11 = this.targetAnchors.get(Side.TOP);
-    targetPoint = _get_11;
+    Point2D _unselected_11 = this.targetAnchors.getUnselected(Side.TOP);
+    targetPoint = _unselected_11;
     if ((((sourcePoint.getX() - targetPoint.getX()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getY() - sourcePoint.getY()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.LEFT, Side.TOP);
     }
-    Point2D _get_12 = this.sourceAnchors.get(Side.TOP);
-    sourcePoint = _get_12;
-    Point2D _get_13 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_13;
+    Point2D _unselected_12 = this.sourceAnchors.getUnselected(Side.TOP);
+    sourcePoint = _unselected_12;
+    Point2D _unselected_13 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_13;
     if ((((sourcePoint.getY() - targetPoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getX() - targetPoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.TOP, Side.RIGHT);
     }
-    Point2D _get_14 = this.targetAnchors.get(Side.LEFT);
-    targetPoint = _get_14;
+    Point2D _unselected_14 = this.targetAnchors.getUnselected(Side.LEFT);
+    targetPoint = _unselected_14;
     if ((((sourcePoint.getY() - targetPoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getX() - sourcePoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.TOP, Side.LEFT);
     }
-    Point2D _get_15 = this.sourceAnchors.get(Side.BOTTOM);
-    sourcePoint = _get_15;
-    Point2D _get_16 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_16;
+    Point2D _unselected_15 = this.sourceAnchors.getUnselected(Side.BOTTOM);
+    sourcePoint = _unselected_15;
+    Point2D _unselected_16 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_16;
     if ((((targetPoint.getY() - sourcePoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((sourcePoint.getX() - targetPoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.RIGHT);
     }
-    Point2D _get_17 = this.targetAnchors.get(Side.LEFT);
-    targetPoint = _get_17;
+    Point2D _unselected_17 = this.targetAnchors.getUnselected(Side.LEFT);
+    targetPoint = _unselected_17;
     if ((((targetPoint.getY() - sourcePoint.getY()) > (0.5 * this.STANDARD_DISTANCE)) && ((targetPoint.getX() - sourcePoint.getX()) > this.STANDARD_DISTANCE))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.LEFT);
     }
-    Point2D _get_18 = this.sourceAnchors.get(Side.TOP);
-    sourcePoint = _get_18;
-    Point2D _get_19 = this.targetAnchors.get(Side.TOP);
-    targetPoint = _get_19;
+    Point2D _unselected_18 = this.sourceAnchors.getUnselected(Side.TOP);
+    sourcePoint = _unselected_18;
+    Point2D _unselected_19 = this.targetAnchors.getUnselected(Side.TOP);
+    targetPoint = _unselected_19;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       double _y_4 = sourcePoint.getY();
       double _y_5 = targetPoint.getY();
@@ -913,10 +913,10 @@ public class ManhattanRouter {
         }
       }
     }
-    Point2D _get_20 = this.sourceAnchors.get(Side.RIGHT);
-    sourcePoint = _get_20;
-    Point2D _get_21 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_21;
+    Point2D _unselected_20 = this.sourceAnchors.getUnselected(Side.RIGHT);
+    sourcePoint = _unselected_20;
+    Point2D _unselected_21 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_21;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       double _x_8 = sourcePoint.getX();
       double _x_9 = targetPoint.getX();
@@ -947,27 +947,27 @@ public class ManhattanRouter {
         }
       }
     }
-    Point2D _get_22 = this.sourceAnchors.get(Side.TOP);
-    sourcePoint = _get_22;
-    Point2D _get_23 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_23;
+    Point2D _unselected_22 = this.sourceAnchors.getUnselected(Side.TOP);
+    sourcePoint = _unselected_22;
+    Point2D _unselected_23 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_23;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.TOP, Side.RIGHT);
     }
-    Point2D _get_24 = this.targetAnchors.get(Side.LEFT);
-    targetPoint = _get_24;
+    Point2D _unselected_24 = this.targetAnchors.getUnselected(Side.LEFT);
+    targetPoint = _unselected_24;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.TOP, Side.LEFT);
     }
-    Point2D _get_25 = this.sourceAnchors.get(Side.BOTTOM);
-    sourcePoint = _get_25;
-    Point2D _get_26 = this.targetAnchors.get(Side.RIGHT);
-    targetPoint = _get_26;
+    Point2D _unselected_25 = this.sourceAnchors.getUnselected(Side.BOTTOM);
+    sourcePoint = _unselected_25;
+    Point2D _unselected_26 = this.targetAnchors.getUnselected(Side.RIGHT);
+    targetPoint = _unselected_26;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.RIGHT);
     }
-    Point2D _get_27 = this.targetAnchors.get(Side.LEFT);
-    targetPoint = _get_27;
+    Point2D _unselected_27 = this.targetAnchors.getUnselected(Side.LEFT);
+    targetPoint = _unselected_27;
     if (((!this.targetAnchors.contains(sourcePoint)) && (!this.sourceAnchors.contains(targetPoint)))) {
       return Pair.<Side, Side>of(Side.BOTTOM, Side.LEFT);
     }

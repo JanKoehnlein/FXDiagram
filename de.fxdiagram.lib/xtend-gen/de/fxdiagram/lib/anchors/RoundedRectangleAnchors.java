@@ -32,17 +32,14 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
       if (_equals) {
         return null;
       }
-      Node _node = this.host.getNode();
-      Node _node_1 = this.host.getNode();
-      Bounds _layoutBounds = _node_1.getLayoutBounds();
-      final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+      final Bounds boundsInRootDiagram = this.getBoundsInRoot();
       boolean _equals_1 = Objects.equal(boundsInRootDiagram, null);
       if (_equals_1) {
         return null;
       }
-      Node _node_2 = this.host.getNode();
+      Node _node = this.host.getNode();
       BoundingBox _boundingBox = new BoundingBox(0, 0, this.radiusX, this.radiusY);
-      final Bounds radiusBounds = CoreExtensions.localToRootDiagram(_node_2, _boundingBox);
+      final Bounds radiusBounds = CoreExtensions.localToRootDiagram(_node, _boundingBox);
       double _width = radiusBounds.getWidth();
       double _height = radiusBounds.getHeight();
       final Dimension2D radiusInRootDiagram = new Dimension2D(_width, _height);
@@ -135,13 +132,10 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
     if (_equals) {
       return null;
     }
+    final Bounds bounds = this.getBoundsInRoot();
     Node _node = this.host.getNode();
-    Node _node_1 = this.host.getNode();
-    Bounds _layoutBounds = _node_1.getLayoutBounds();
-    final Bounds bounds = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
-    Node _node_2 = this.host.getNode();
     BoundingBox _boundingBox = new BoundingBox(0, 0, this.radiusX, this.radiusY);
-    final Bounds radius = CoreExtensions.localToRootDiagram(_node_2, _boundingBox);
+    final Bounds radius = CoreExtensions.localToRootDiagram(_node, _boundingBox);
     if (side != null) {
       switch (side) {
         case TOP:

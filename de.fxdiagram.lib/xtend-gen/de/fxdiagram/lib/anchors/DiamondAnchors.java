@@ -2,26 +2,23 @@ package de.fxdiagram.lib.anchors;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.anchors.ManhattanAnchors;
+import de.fxdiagram.core.anchors.AbstractAnchors;
 import de.fxdiagram.core.extensions.BoundsExtensions;
-import de.fxdiagram.core.extensions.CoreExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 
-@FinalFieldsConstructor
 @SuppressWarnings("all")
-public class DiamondAnchors implements Anchors, ManhattanAnchors {
+public class DiamondAnchors extends AbstractAnchors {
   private final static int CORNER_DELTA = 4;
   
-  private final XNode host;
+  public DiamondAnchors(final XNode host) {
+    super(host);
+  }
   
   @Override
   public Point2D getAnchor(final double x, final double y) {
-    Bounds _boundsInLocal = this.host.getBoundsInLocal();
-    final Bounds bounds = CoreExtensions.localToRootDiagram(this.host, _boundsInLocal);
+    final Bounds bounds = this.getBoundsInRoot();
     boolean _equals = Objects.equal(bounds, null);
     if (_equals) {
       return null;
@@ -114,8 +111,7 @@ public class DiamondAnchors implements Anchors, ManhattanAnchors {
   
   @Override
   public Point2D getManhattanAnchor(final double x, final double y, final Side side) {
-    Bounds _boundsInLocal = this.host.getBoundsInLocal();
-    final Bounds bounds = CoreExtensions.localToRootDiagram(this.host, _boundsInLocal);
+    final Bounds bounds = this.getBoundsInRoot();
     boolean _equals = Objects.equal(bounds, null);
     if (_equals) {
       return null;
@@ -192,10 +188,5 @@ public class DiamondAnchors implements Anchors, ManhattanAnchors {
       }
     }
     return null;
-  }
-  
-  public DiamondAnchors(final XNode host) {
-    super();
-    this.host = host;
   }
 }

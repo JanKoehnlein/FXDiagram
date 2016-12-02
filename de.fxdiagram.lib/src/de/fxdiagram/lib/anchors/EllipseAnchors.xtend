@@ -1,26 +1,24 @@
 package de.fxdiagram.lib.anchors
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.anchors.Anchors
+import de.fxdiagram.core.anchors.AbstractAnchors
+import javafx.geometry.Bounds
 import javafx.geometry.Point2D
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import javafx.geometry.Side
 
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
-import javafx.geometry.Side
-import de.fxdiagram.core.anchors.ManhattanAnchors
-import javafx.geometry.Bounds
 
-@FinalFieldsConstructor
-class EllipseAnchors implements Anchors, ManhattanAnchors {
+class EllipseAnchors extends AbstractAnchors {
 
-	val XNode host
-
+	new(XNode host) {
+		super(host)
+	}
+	
 	override getAnchor(double x, double y) {
-		val bounds = host.node.localToRootDiagram(host.node.boundsInLocal)
+		val bounds = boundsInRoot
 		if(bounds == null)
 			return null
 		val center = bounds.center
@@ -29,7 +27,7 @@ class EllipseAnchors implements Anchors, ManhattanAnchors {
 	}
 	
 	override getManhattanAnchor(double x, double y, Side side) {
-		val bounds = host.node.localToRootDiagram(host.node.boundsInLocal)
+		val bounds = boundsInRoot
 		val center = bounds.center
 		switch side {
 			case TOP:

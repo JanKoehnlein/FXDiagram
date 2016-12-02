@@ -7,4 +7,7 @@ interface ManhattanAnchors {
 	
 	def Point2D getManhattanAnchor(double x, double y, Side side)
 
+	def Point2D getDefaultAnchor(Side side)
+
+	def Point2D getDefaultSnapAnchor(Side side)
 }

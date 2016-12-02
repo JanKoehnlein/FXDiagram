@@ -326,62 +326,62 @@ class ManhattanRouter {
 		if ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE)
 			return RIGHT -> LEFT
 
-		sourcePoint = sourceAnchors.get(LEFT)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(LEFT)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE)
 			return LEFT -> RIGHT
 
-		sourcePoint = sourceAnchors.get(TOP)
-		targetPoint = targetAnchors.get(BOTTOM)
+		sourcePoint = sourceAnchors.getUnselected(TOP)
+		targetPoint = targetAnchors.getUnselected(BOTTOM)
 		if ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE)
 			return TOP -> BOTTOM
 
-		sourcePoint = sourceAnchors.get(BOTTOM)
-		targetPoint = targetAnchors.get(TOP)
+		sourcePoint = sourceAnchors.getUnselected(BOTTOM)
+		targetPoint = targetAnchors.getUnselected(TOP)
 		if ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE)
 			return BOTTOM -> TOP
 
 		// One additional point
-		sourcePoint = sourceAnchors.get(RIGHT)
-		targetPoint = targetAnchors.get(TOP)
+		sourcePoint = sourceAnchors.getUnselected(RIGHT)
+		targetPoint = targetAnchors.getUnselected(TOP)
 		if (((targetPoint.x - sourcePoint.x) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE))
 			return RIGHT -> TOP
 
-		targetPoint = targetAnchors.get(BOTTOM)
+		targetPoint = targetAnchors.getUnselected(BOTTOM)
 		if (((targetPoint.x - sourcePoint.x) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE))
 			return RIGHT -> BOTTOM
 
-		sourcePoint = sourceAnchors.get(LEFT)
-		targetPoint = targetAnchors.get(BOTTOM)
+		sourcePoint = sourceAnchors.getUnselected(LEFT)
+		targetPoint = targetAnchors.getUnselected(BOTTOM)
 		if (((sourcePoint.x - targetPoint.x) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.y - targetPoint.y) > STANDARD_DISTANCE))
 			return LEFT -> BOTTOM
 
-		targetPoint = targetAnchors.get(TOP)
+		targetPoint = targetAnchors.getUnselected(TOP)
 		if (((sourcePoint.x - targetPoint.x) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.y - sourcePoint.y) > STANDARD_DISTANCE))
 			return LEFT -> TOP
 
-		sourcePoint = sourceAnchors.get(TOP)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(TOP)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if (((sourcePoint.y - targetPoint.y) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE))
 			return TOP -> RIGHT
 
-		targetPoint = targetAnchors.get(LEFT)
+		targetPoint = targetAnchors.getUnselected(LEFT)
 		if (((sourcePoint.y - targetPoint.y) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE))
 			return TOP -> LEFT
 
-		sourcePoint = sourceAnchors.get(BOTTOM)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(BOTTOM)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if (((targetPoint.y - sourcePoint.y) > 0.5 * STANDARD_DISTANCE) && ((sourcePoint.x - targetPoint.x) > STANDARD_DISTANCE))
 			return BOTTOM -> RIGHT
 
-		targetPoint = targetAnchors.get(LEFT)
+		targetPoint = targetAnchors.getUnselected(LEFT)
 		if (((targetPoint.y - sourcePoint.y) > 0.5 * STANDARD_DISTANCE) && ((targetPoint.x - sourcePoint.x) > STANDARD_DISTANCE))
 			return BOTTOM -> LEFT
 
 		// Two points
 		// priority NN >> EE >> NE >> NW >> SE >> SW
-		sourcePoint = sourceAnchors.get(TOP)
-		targetPoint = targetAnchors.get(TOP)
+		sourcePoint = sourceAnchors.getUnselected(TOP)
+		targetPoint = targetAnchors.getUnselected(TOP)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint))) {
 			if ((sourcePoint.y - targetPoint.y) < 0) {
 				if (Math.abs(sourcePoint.x - targetPoint.x) > ((sourceAnchors.width + STANDARD_DISTANCE) / 2))
@@ -392,8 +392,8 @@ class ManhattanRouter {
 			}
 		}
 
-		sourcePoint = sourceAnchors.get(RIGHT)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(RIGHT)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint))) {
 			if ((sourcePoint.x - targetPoint.x) > 0) {
 				if (Math.abs(sourcePoint.y - targetPoint.y) > ((sourceAnchors.height + STANDARD_DISTANCE) / 2))
@@ -403,22 +403,22 @@ class ManhattanRouter {
 		}
 
 		// Secondly, judge NE NW is available
-		sourcePoint = sourceAnchors.get(TOP)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(TOP)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return TOP -> RIGHT
 
-		targetPoint = targetAnchors.get(LEFT)
+		targetPoint = targetAnchors.getUnselected(LEFT)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return TOP -> LEFT
 
 		// Finally, judge SE SW is available
-		sourcePoint = sourceAnchors.get(BOTTOM)
-		targetPoint = targetAnchors.get(RIGHT)
+		sourcePoint = sourceAnchors.getUnselected(BOTTOM)
+		targetPoint = targetAnchors.getUnselected(RIGHT)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return BOTTOM -> RIGHT
 
-		targetPoint = targetAnchors.get(LEFT)
+		targetPoint = targetAnchors.getUnselected(LEFT)
 		if ((!targetAnchors.contains(sourcePoint)) && (!sourceAnchors.contains(targetPoint)))
 			return BOTTOM -> LEFT
 
@@ -437,18 +437,20 @@ class CachedAnchors {
 	new(XNode host) {
 		this.host = host
 		this.bounds = host.localToRootDiagram(host.node.boundsInLocal)
-		val center = this.bounds.center
-		side2point.put(TOP, new Point2D(center.x, bounds.minY))
-		side2point.put(BOTTOM, new Point2D(center.x, bounds.maxY))
-		side2point.put(LEFT, new Point2D(bounds.minX, center.y))
-		side2point.put(RIGHT, new Point2D(bounds.maxX, center.y))
-		
-		val snapBounds = host.parent.localToRootDiagram(host.snapBounds)
-		val snapCenter = snapBounds.center
-		side2pointUnselected.put(TOP, new Point2D(snapCenter.x, snapBounds.minY))
-		side2pointUnselected.put(BOTTOM, new Point2D(snapCenter.x, snapBounds.maxY))
-		side2pointUnselected.put(LEFT, new Point2D(snapBounds.minX, snapCenter.y))
-		side2pointUnselected.put(RIGHT, new Point2D(snapBounds.maxX, snapCenter.y))
+		if(!(host?.anchors instanceof ManhattanAnchors)) {
+			val center = this.bounds.center
+			side2point.put(TOP, new Point2D(center.x, bounds.minY))
+			side2point.put(BOTTOM, new Point2D(center.x, bounds.maxY))
+			side2point.put(LEFT, new Point2D(bounds.minX, center.y))
+			side2point.put(RIGHT, new Point2D(bounds.maxX, center.y))
+			
+			val snapBounds = host.parent.localToRootDiagram(host.snapBounds)
+			val snapCenter = snapBounds.center
+			side2pointUnselected.put(TOP, new Point2D(snapCenter.x, snapBounds.minY))
+			side2pointUnselected.put(BOTTOM, new Point2D(snapCenter.x, snapBounds.maxY))
+			side2pointUnselected.put(LEFT, new Point2D(snapBounds.minX, snapCenter.y))
+			side2pointUnselected.put(RIGHT, new Point2D(snapBounds.maxX, snapCenter.y))
+		}
 	}
 
 	def get(XControlPoint referencePoint, Side side) {
@@ -460,11 +462,19 @@ class CachedAnchors {
 	}
 	
 	def getUnselected(Side side) {
-		side2pointUnselected.get(side)
+		val anchors = host.anchors
+		if(anchors instanceof ManhattanAnchors)
+			anchors.getDefaultSnapAnchor(side)
+		else 
+			side2pointUnselected.get(side)
 	}
 
 	def get(Side side) {
-		side2point.get(side)
+		val anchors = host.anchors
+		if(anchors instanceof ManhattanAnchors)
+			anchors.getDefaultAnchor(side)
+		else
+			side2point.get(side)
 	}
 
 	def contains(Point2D point) {

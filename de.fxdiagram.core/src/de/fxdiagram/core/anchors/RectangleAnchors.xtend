@@ -2,23 +2,19 @@ package de.fxdiagram.core.anchors
 
 import de.fxdiagram.core.XNode
 import javafx.geometry.Point2D
+import javafx.geometry.Side
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.geometry.Side
-
-class RectangleAnchors implements Anchors, ManhattanAnchors {
-
-	protected XNode host
+class RectangleAnchors extends AbstractAnchors {
 
 	new(XNode host) {
-		this.host = host
+		super(host)
 	}
 
 	override getAnchor(double x, double y) {
-		val boundsInRootDiagram = host.node.localToRootDiagram(host.node.layoutBounds) 
+		val boundsInRootDiagram = boundsInRoot 
 		if(boundsInRootDiagram == null)
 			return null
 		val centerX = 0.5 * (boundsInRootDiagram.minX + boundsInRootDiagram.maxX)
@@ -54,7 +50,7 @@ class RectangleAnchors implements Anchors, ManhattanAnchors {
 	}
 	
 	override getManhattanAnchor(double x, double y, Side side) {
-		val bounds = host.node.localToRootDiagram(host.node.layoutBounds)
+		val bounds = boundsInRoot
 		switch side {
 			case TOP:
 				return new Point2D(max(min(x, bounds.maxX), bounds.minX), bounds.minY)	

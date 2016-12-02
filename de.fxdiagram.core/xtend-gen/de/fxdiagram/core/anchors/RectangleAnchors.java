@@ -2,32 +2,24 @@ package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.anchors.ManhattanAnchors;
+import de.fxdiagram.core.anchors.AbstractAnchors;
 import de.fxdiagram.core.anchors.NearestPointFinder;
-import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import javafx.scene.Node;
 
 @SuppressWarnings("all")
-public class RectangleAnchors implements Anchors, ManhattanAnchors {
-  protected XNode host;
-  
+public class RectangleAnchors extends AbstractAnchors {
   public RectangleAnchors(final XNode host) {
-    this.host = host;
+    super(host);
   }
   
   @Override
   public Point2D getAnchor(final double x, final double y) {
     Point2D _xblockexpression = null;
     {
-      Node _node = this.host.getNode();
-      Node _node_1 = this.host.getNode();
-      Bounds _layoutBounds = _node_1.getLayoutBounds();
-      final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+      final Bounds boundsInRootDiagram = this.getBoundsInRoot();
       boolean _equals = Objects.equal(boundsInRootDiagram, null);
       if (_equals) {
         return null;
@@ -98,10 +90,7 @@ public class RectangleAnchors implements Anchors, ManhattanAnchors {
   
   @Override
   public Point2D getManhattanAnchor(final double x, final double y, final Side side) {
-    Node _node = this.host.getNode();
-    Node _node_1 = this.host.getNode();
-    Bounds _layoutBounds = _node_1.getLayoutBounds();
-    final Bounds bounds = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+    final Bounds bounds = this.getBoundsInRoot();
     if (side != null) {
       switch (side) {
         case TOP:

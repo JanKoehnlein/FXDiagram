@@ -207,6 +207,7 @@ class XConnection extends XDomainObjectShape {
 		var boolean controlPointPicked = false
 		for(controlPoint: controlPoints) {
 			if(controlPoint.boundsInParent.contains(mousePos)) {
+//				selected = false
 				controlPoint.selected = true
 				controlPoint.getBehavior(MoveBehavior)?.startDrag(screenX, screenY)
 				controlPointPicked = true
