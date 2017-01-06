@@ -127,7 +127,7 @@ public class Debug {
         Point2D _localToParent_1 = current.localToParent(currentPosition);
         currentPosition = _localToParent_1;
         StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append(null, "");
+        _builder_1.append("", "");
         _builder_1.append("\tin ");
         Parent _parent = current.getParent();
         Class<? extends Parent> _class_1 = _parent.getClass();

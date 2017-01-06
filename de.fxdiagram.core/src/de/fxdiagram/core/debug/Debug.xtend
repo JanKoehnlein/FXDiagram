@@ -57,19 +57,19 @@ class Debug {
 		var message = '''
 			Bounds of «class.simpleName»:
 				(«layoutX»:«layoutY») «layoutBounds»
-		 '''
-		 var current = it
-		 var currentPosition = new Point2D(layoutX, layoutY)
-		 var currentBounds = layoutBounds
-		 while(current.parent != null) {
-		 	currentBounds = current.localToParent(currentBounds)
-		 	currentPosition = current.localToParent(currentPosition)
-		 	message = message + '''
-		 		«null»	in «current.parent.class.simpleName»: («currentPosition.x»:«currentPosition.y») «currentBounds»
-		 	'''
-		 	current = current.parent
-		 }
-		 LOG.info(message)
+		'''
+		var current = it
+		var currentPosition = new Point2D(layoutX, layoutY)
+		var currentBounds = layoutBounds
+		while(current.parent != null) {
+			currentBounds = current.localToParent(currentBounds)
+			currentPosition = current.localToParent(currentPosition)
+			message = message + '''
+				«""»	in «current.parent.class.simpleName»: («currentPosition.x»:«currentPosition.y») «currentBounds»
+			'''
+			current = current.parent
+		}
+		LOG.info(message)
 	}
 	
 	def static checkRectilinearity(XConnection connection) {
