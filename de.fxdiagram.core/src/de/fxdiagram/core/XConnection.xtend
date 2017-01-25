@@ -34,6 +34,8 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import javafx.scene.effect.Effect
+import javafx.scene.effect.DropShadow
 
 /**
  * A line connecting two {@link XNode}s.
@@ -75,6 +77,9 @@ class XConnection extends XDomainObjectShape {
 	@FxProperty ConnectionRouter connectionRouter
 	
 	boolean isGraphicsInitialized 
+	
+	Effect selectionEffect
+	
 
 	new() {
 		addOppositeListeners
@@ -128,6 +133,7 @@ class XConnection extends XDomainObjectShape {
 				children.add(0, newNode)
 			}
 		}
+		selectionEffect = createSelectionEffect
 		nodeProperty.get
 	}
 	
@@ -224,9 +230,12 @@ class XConnection extends XDomainObjectShape {
 	override selectionFeedback(boolean isSelected) {
 		if(isSelected) {
 			toFront
+			effect = selectionEffect
 			showControlPoints			
-		} else if(!controlPoints.exists[selected]) {
-			hideControlPoints
+		} else {
+			effect = null
+			if(!controlPoints.exists[selected]) 
+				hideControlPoints
 		}
 	}
 	
@@ -236,6 +245,13 @@ class XConnection extends XDomainObjectShape {
 
 	def hideControlPoints() {
 		controlPointGroup.visible = false
+	}
+	
+	protected def createSelectionEffect() {
+		new DropShadow() => [
+			offsetX = 4.0
+			offsetY = 4.0
+		]
 	}
 	
 	override toFront() {

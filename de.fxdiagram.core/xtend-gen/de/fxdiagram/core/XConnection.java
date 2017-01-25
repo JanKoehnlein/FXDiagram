@@ -48,6 +48,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.CubicCurve;
@@ -102,6 +104,8 @@ public class XConnection extends XDomainObjectShape {
   private ChangeListener<Number> controlPointListener;
   
   private boolean isGraphicsInitialized;
+  
+  private Effect selectionEffect;
   
   public XConnection() {
     this.addOppositeListeners();
@@ -194,6 +198,8 @@ public class XConnection extends XDomainObjectShape {
           _children.add(0, newNode);
         }
       }
+      DropShadow _createSelectionEffect = this.createSelectionEffect();
+      this.selectionEffect = _createSelectionEffect;
       ObjectProperty<Node> _nodeProperty_2 = this.nodeProperty();
       _xblockexpression = _nodeProperty_2.get();
     }
@@ -382,8 +388,10 @@ public class XConnection extends XDomainObjectShape {
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.toFront();
+      this.setEffect(this.selectionEffect);
       this.showControlPoints();
     } else {
+      this.setEffect(null);
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       final Function1<XControlPoint, Boolean> _function = (XControlPoint it) -> {
         return Boolean.valueOf(it.getSelected());
@@ -402,6 +410,15 @@ public class XConnection extends XDomainObjectShape {
   
   public void hideControlPoints() {
     this.controlPointGroup.setVisible(false);
+  }
+  
+  protected DropShadow createSelectionEffect() {
+    DropShadow _dropShadow = new DropShadow();
+    final Procedure1<DropShadow> _function = (DropShadow it) -> {
+      it.setOffsetX(4.0);
+      it.setOffsetY(4.0);
+    };
+    return ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
   }
   
   @Override
