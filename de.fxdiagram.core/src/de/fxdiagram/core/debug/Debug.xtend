@@ -65,7 +65,7 @@ class Debug {
 		 	currentBounds = current.localToParent(currentBounds)
 		 	currentPosition = current.localToParent(currentPosition)
 		 	message = message + '''
-		 		«null»	in «current.parent.class.simpleName»: («currentPosition.x»:«currentPosition.y») «currentBounds»
+		 		in «current.parent.class.simpleName»: («currentPosition.x»:«currentPosition.y») «currentBounds»
 		 	'''
 		 	current = current.parent
 		 }
