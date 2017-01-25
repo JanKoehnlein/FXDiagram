@@ -887,7 +887,8 @@ public class ModelNodeTest {
   
   protected void assertCompilesTo(final CharSequence source, final CharSequence target) {
     Class<? extends ModelNodeTest> _class = this.getClass();
-    final XtendCompilerTester compilerTester = XtendCompilerTester.newXtendCompilerTester(_class);
+    ClassLoader _classLoader = _class.getClassLoader();
+    final XtendCompilerTester compilerTester = XtendCompilerTester.newXtendCompilerTester(_classLoader);
     compilerTester.assertCompilesTo(source, target);
   }
   

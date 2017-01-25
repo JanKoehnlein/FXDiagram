@@ -412,7 +412,7 @@ class ModelNodeTest {
 	}
 	
 	protected def assertCompilesTo(CharSequence source, CharSequence target) {
-		val compilerTester = XtendCompilerTester.newXtendCompilerTester(class)
+		val compilerTester = XtendCompilerTester.newXtendCompilerTester(class.classLoader)
 		compilerTester.assertCompilesTo(source, target)
 	}
 	
