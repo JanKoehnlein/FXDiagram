@@ -32,12 +32,13 @@ class ManhattanRouter {
 	}
 
 	def calculatePoints() {
-		if(connection.controlPoints.size == 0 && sourceAnchors != null)
+		if((connection.controlPoints.size == 0 && sourceAnchors != null) 
+			|| !(connection.source.isActive && connection.target.isActive))
 			return
 		val newSourceAnchors = new CachedAnchors(connection.source)
 		val newTargetAnchors = new CachedAnchors(connection.target)
-		if (sourceAnchors != null && targetAnchors != null 
-			&& connection.controlPoints.exists[manuallyPlaced || getBehavior(MoveBehavior)?.hasMoved]) {
+		val manuallyMoved = connection.controlPoints.exists[manuallyPlaced || getBehavior(MoveBehavior)?.hasMoved]
+		if (sourceAnchors != null && targetAnchors != null && manuallyMoved) {
 			sourceAnchors = newSourceAnchors
 			targetAnchors = newTargetAnchors
 			partiallyRerouteIfNecessary(sourceAnchors, connection.controlPoints.head, true) 
@@ -46,8 +47,10 @@ class ManhattanRouter {
 		} else {
 			sourceAnchors = newSourceAnchors
 			targetAnchors = newTargetAnchors
-			val newControlPoints = defaultPoints
-			connection.controlPoints.setAll(newControlPoints)
+			if(!manuallyMoved) {
+				val newControlPoints = defaultPoints
+				connection.controlPoints.setAll(newControlPoints)
+			}
 			reroutingEnabled = true
 		}
 	}

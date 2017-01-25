@@ -27,7 +27,7 @@ import static extension java.lang.Math.*
  * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li> 
  * <li> 
  */
-@ModelNode('layoutX', 'layoutY', 'type', 'side')
+@ModelNode('layoutX', 'layoutY', 'type', 'side', 'manuallyPlaced')
 class XControlPoint extends XShape {
 
 	@FxProperty Type type = CONTROL_POINT

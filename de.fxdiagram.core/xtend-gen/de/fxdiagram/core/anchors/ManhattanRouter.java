@@ -39,14 +39,15 @@ public class ManhattanRouter {
   }
   
   public void calculatePoints() {
-    if (((this.connection.getControlPoints().size() == 0) && (!Objects.equal(this.sourceAnchors, null)))) {
+    if ((((this.connection.getControlPoints().size() == 0) && (!Objects.equal(this.sourceAnchors, null))) || (!(this.connection.getSource().getIsActive() && this.connection.getTarget().getIsActive())))) {
       return;
     }
     XNode _source = this.connection.getSource();
     final CachedAnchors newSourceAnchors = new CachedAnchors(_source);
     XNode _target = this.connection.getTarget();
     final CachedAnchors newTargetAnchors = new CachedAnchors(_target);
-    if ((((!Objects.equal(this.sourceAnchors, null)) && (!Objects.equal(this.targetAnchors, null))) && IterableExtensions.<XControlPoint>exists(this.connection.getControlPoints(), ((Function1<XControlPoint, Boolean>) (XControlPoint it) -> {
+    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+    final Function1<XControlPoint, Boolean> _function = (XControlPoint it) -> {
       boolean _or = false;
       boolean _manuallyPlaced = it.getManuallyPlaced();
       if (_manuallyPlaced) {
@@ -60,22 +61,26 @@ public class ManhattanRouter {
         _or = _hasMoved;
       }
       return Boolean.valueOf(_or);
-    })))) {
+    };
+    final boolean manuallyMoved = IterableExtensions.<XControlPoint>exists(_controlPoints, _function);
+    if ((((!Objects.equal(this.sourceAnchors, null)) && (!Objects.equal(this.targetAnchors, null))) && manuallyMoved)) {
       this.sourceAnchors = newSourceAnchors;
       this.targetAnchors = newTargetAnchors;
-      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
-      XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints);
-      this.partiallyRerouteIfNecessary(this.sourceAnchors, _head, true);
       ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
-      XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_1);
+      XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_1);
+      this.partiallyRerouteIfNecessary(this.sourceAnchors, _head, true);
+      ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
+      XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_2);
       this.partiallyRerouteIfNecessary(this.targetAnchors, _last, false);
       return;
     } else {
       this.sourceAnchors = newSourceAnchors;
       this.targetAnchors = newTargetAnchors;
-      final ArrayList<XControlPoint> newControlPoints = this.getDefaultPoints();
-      ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
-      _controlPoints_2.setAll(newControlPoints);
+      if ((!manuallyMoved)) {
+        final ArrayList<XControlPoint> newControlPoints = this.getDefaultPoints();
+        ObservableList<XControlPoint> _controlPoints_3 = this.connection.getControlPoints();
+        _controlPoints_3.setAll(newControlPoints);
+      }
       this.reroutingEnabled = true;
     }
   }

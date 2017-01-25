@@ -37,7 +37,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li>
  * <li>
  */
-@ModelNode({ "layoutX", "layoutY", "type", "side" })
+@ModelNode({ "layoutX", "layoutY", "type", "side", "manuallyPlaced" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
   public enum Type {
@@ -220,6 +220,7 @@ public class XControlPoint extends XShape implements XModelProvider {
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(typeProperty, XControlPoint.Type.class);
     modelElement.addProperty(sideProperty, Side.class);
+    modelElement.addProperty(manuallyPlacedProperty(), Boolean.class);
   }
   
   public String toString() {
