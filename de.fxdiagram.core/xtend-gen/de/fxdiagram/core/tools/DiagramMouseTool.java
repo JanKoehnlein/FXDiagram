@@ -354,9 +354,7 @@ public class DiagramMouseTool implements XDiagramTool {
       _xifexpression = _xifexpression_1;
     } else {
       DiagramMouseTool.State _xifexpression_2 = null;
-      MouseButton _button = event.getButton();
-      boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-      if (_equals) {
+      if ((Objects.equal(event.getButton(), MouseButton.PRIMARY) || event.isPrimaryButtonDown())) {
         DiagramMouseTool.State _xifexpression_3 = null;
         boolean _isShiftDown_1 = event.isShiftDown();
         if (_isShiftDown_1) {
@@ -448,8 +446,8 @@ public class DiagramMouseTool implements XDiagramTool {
         CoreExtensions.<Rectangle>safeAdd(_children, this.marquee);
         HashSet<XShape> _newHashSet = CollectionLiterals.<XShape>newHashSet();
         this.previousSelection = _newHashSet;
-        boolean _equals_1 = Objects.equal(newState, DiagramMouseTool.State.MARQUEE_XOR);
-        if (_equals_1) {
+        boolean _equals = Objects.equal(newState, DiagramMouseTool.State.MARQUEE_XOR);
+        if (_equals) {
           Iterable<XShape> _currentSelection = this.root.getCurrentSelection();
           Iterables.<XShape>addAll(this.previousSelection, _currentSelection);
         }

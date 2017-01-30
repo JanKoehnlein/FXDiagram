@@ -153,7 +153,7 @@ class DiagramMouseTool implements XDiagramTool {
 					ZOOM_OUT
 				else
 					ZOOM_IN
-			else if (event.button == PRIMARY)
+			else if (event.button == PRIMARY || event.primaryButtonDown)
 				if (event.isShiftDown)
 					MARQUEE_XOR
 				else
