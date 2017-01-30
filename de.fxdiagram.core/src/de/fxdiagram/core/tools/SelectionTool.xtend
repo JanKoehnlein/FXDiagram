@@ -60,6 +60,7 @@ class SelectionTool implements XDiagramTool {
 					targetShape.getBehavior(MoveBehavior)?.startDrag(event.screenX, event.screenY)
 					updatePositionTooltip(selection, event.sceneX, event.sceneY)
 					defer([|showPositionTooltip], 200.millis)
+					event.consume
 				}
 			}
 		]

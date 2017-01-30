@@ -120,6 +120,7 @@ public class SelectionTool implements XDiagramTool {
             };
             Duration _millis = DurationExtensions.millis(200);
             TimerExtensions.defer(_function_4, _millis);
+            event.consume();
           }
         }
       }
