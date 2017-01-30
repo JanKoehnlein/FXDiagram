@@ -102,7 +102,7 @@ class FXDiagramTab {
 			'Save diagram',
 			null,
 			'''
-				'«tabName»' has been modified.
+				Diagram '«tabName»' has been modified.
 				Save changes?
 			''',			
 			MessageDialog.QUESTION_WITH_CANCEL,

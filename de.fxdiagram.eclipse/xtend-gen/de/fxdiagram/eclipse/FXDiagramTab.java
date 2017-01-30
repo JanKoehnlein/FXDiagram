@@ -191,7 +191,7 @@ public class FXDiagramTab {
     CTabFolder _parent = this.tab.getParent();
     Shell _shell = _parent.getShell();
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("\'");
+    _builder.append("Diagram \'");
     String _tabName = this.getTabName();
     _builder.append(_tabName, "");
     _builder.append("\' has been modified.");
