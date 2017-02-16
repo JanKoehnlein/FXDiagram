@@ -130,19 +130,6 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 			}				
 		]
 		contentsInitializer?.apply(this)
-		if(layoutOnActivate && layoutParameters != null) {
-			nodes.forEach [
-				node.autosize
-			]
-			connections.forEach [
-				node
-				labels.forEach[
-					node.autosize
-				]
-			]
-			new Layouter().layout(layoutParameters, this, null)
-			layoutOnActivate = false
-		}
 		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
 			add = [
 				initializeGraphics
@@ -177,6 +164,19 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 				]
 			]
 		])
+		if(layoutOnActivate && layoutParameters != null) {
+			nodes.forEach [
+				node.autosize
+			]
+			connections.forEach [
+				node
+				labels.forEach[
+					node.autosize
+				]
+			]
+			new Layouter().layout(layoutParameters, this, null)
+			layoutOnActivate = false
+		}
 		auxiliaryLinesSupport = if(!isRootDiagram && parentDiagram?.auxiliaryLinesSupport != null)
 				parentDiagram.auxiliaryLinesSupport
 			else 
