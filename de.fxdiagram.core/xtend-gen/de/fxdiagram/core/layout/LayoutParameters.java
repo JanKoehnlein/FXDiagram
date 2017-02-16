@@ -1,21 +1,20 @@
 package de.fxdiagram.core.layout;
 
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-@ModelNode({ "type", "useSplines" })
+@ModelNode({ "type", "connectionKind" })
 @SuppressWarnings("all")
 public class LayoutParameters implements XModelProvider {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(typeProperty, LayoutType.class);
-    modelElement.addProperty(useSplinesProperty, Boolean.class);
+    modelElement.addProperty(connectionKindProperty, XConnection.Kind.class);
   }
   
   public String toString() {
@@ -40,21 +39,21 @@ public class LayoutParameters implements XModelProvider {
     return this.typeProperty;
   }
   
-  private SimpleBooleanProperty useSplinesProperty = new SimpleBooleanProperty(this, "useSplines",_initUseSplines());
+  private SimpleObjectProperty<XConnection.Kind> connectionKindProperty = new SimpleObjectProperty<XConnection.Kind>(this, "connectionKind",_initConnectionKind());
   
-  private static final boolean _initUseSplines() {
-    return true;
+  private static final XConnection.Kind _initConnectionKind() {
+    return XConnection.Kind.CUBIC_CURVE;
   }
   
-  public boolean getUseSplines() {
-    return this.useSplinesProperty.get();
+  public XConnection.Kind getConnectionKind() {
+    return this.connectionKindProperty.get();
   }
   
-  public void setUseSplines(final boolean useSplines) {
-    this.useSplinesProperty.set(useSplines);
+  public void setConnectionKind(final XConnection.Kind connectionKind) {
+    this.connectionKindProperty.set(connectionKind);
   }
   
-  public BooleanProperty useSplinesProperty() {
-    return this.useSplinesProperty;
+  public ObjectProperty<XConnection.Kind> connectionKindProperty() {
+    return this.connectionKindProperty;
   }
 }

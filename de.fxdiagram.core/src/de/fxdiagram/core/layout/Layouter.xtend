@@ -111,7 +111,8 @@ class Layouter {
 					xElement.labels.forEach[place(true)]
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
-					val newKind = if(diagram.layoutParameters.useSplines) {
+					val newKind = switch diagram.layoutParameters.connectionKind {
+						case CUBIC_CURVE, case QUAD_CURVE: 
 							switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
 								case EdgeRouting.SPLINES: {
 									if ((layoutPoints.size - 1) % 3 == 0)
@@ -124,9 +125,9 @@ class Layouter {
 								default:
 									POLYLINE
 							}
-						} else {
-							POLYLINE
-						}
+						default:
+							diagram.layoutParameters.connectionKind
+					}
 					if(newKind == POLYLINE) 
 						layoutPoints.removeDuplicates
 					xElement.kind = newKind
@@ -190,7 +191,8 @@ class Layouter {
 					xElement.labels.forEach[place(true)]
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
-					val newKind = if(diagram.layoutParameters.useSplines) {
+					val newKind = switch diagram.layoutParameters.connectionKind {
+						case CUBIC_CURVE, case QUAD_CURVE: 
 							switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
 								case EdgeRouting.SPLINES: {
 									if ((layoutPoints.size - 1) % 3 == 0)
@@ -203,9 +205,9 @@ class Layouter {
 								default:
 									POLYLINE
 							}
-						} else {
-							POLYLINE
-						}
+						default:
+							diagram.layoutParameters.connectionKind
+					}
 					if(newKind == POLYLINE) 
 						layoutPoints.removeDuplicates
 					xElement.connectionRouter.splineShapeKeeperEnabled = false
@@ -297,10 +299,15 @@ class Layouter {
 //		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		shapeLayout.setProperty(LayoutOptions.LAYOUT_HIERARCHY, true)
 //		shapeLayout.setProperty(LayoutOptions.BORDER_SPACING, 20f)
-		if(parameters.useSplines) 
-			shapeLayout.setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.SPLINES)
-		else 
-			shapeLayout.setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.POLYLINE)
+		val edgeRouting = switch parameters.connectionKind {
+			case CUBIC_CURVE, case QUAD_CURVE:
+				EdgeRouting.SPLINES
+			case RECTILINEAR:
+				EdgeRouting.ORTHOGONAL
+			default:
+				EdgeRouting.POLYLINE
+		}
+		shapeLayout.setProperty(LayoutOptions.EDGE_ROUTING, edgeRouting)
 
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
