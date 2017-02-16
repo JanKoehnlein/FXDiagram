@@ -25,7 +25,7 @@ abstract class AbstractAnchors implements Anchors, ManhattanAnchors {
 	}
 	
 	protected def Bounds getBoundsInRoot() {
-		host.localToRootDiagram(host.node.boundsInLocal)
+		host.node.localToRootDiagram(host.node.layoutBounds)
 	}
 
 	protected def Bounds getSnapBoundsInRoot() {

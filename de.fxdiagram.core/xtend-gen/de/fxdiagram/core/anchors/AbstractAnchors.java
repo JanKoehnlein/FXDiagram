@@ -54,8 +54,9 @@ public abstract class AbstractAnchors implements Anchors, ManhattanAnchors {
   
   protected Bounds getBoundsInRoot() {
     Node _node = this.host.getNode();
-    Bounds _boundsInLocal = _node.getBoundsInLocal();
-    return CoreExtensions.localToRootDiagram(this.host, _boundsInLocal);
+    Node _node_1 = this.host.getNode();
+    Bounds _layoutBounds = _node_1.getLayoutBounds();
+    return CoreExtensions.localToRootDiagram(_node, _layoutBounds);
   }
   
   protected Bounds getSnapBoundsInRoot() {
