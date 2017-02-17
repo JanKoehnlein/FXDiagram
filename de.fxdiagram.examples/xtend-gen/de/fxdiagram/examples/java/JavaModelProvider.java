@@ -52,6 +52,10 @@ public class JavaModelProvider implements DomainObjectProvider {
     
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

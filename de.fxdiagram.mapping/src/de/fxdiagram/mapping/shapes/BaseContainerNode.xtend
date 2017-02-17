@@ -19,13 +19,12 @@ import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.layout.VBox
 
+import static de.fxdiagram.core.behavior.DirtyState.*
 import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static javafx.geometry.Side.*
-import static de.fxdiagram.core.behavior.DirtyState.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 /**
  * Base implementation for an {@link XNode} that contains other nodes and belongs to an {@link IMappedElementDescriptor}.
@@ -43,12 +42,12 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 	
 	Group diagramGroup
 	
-	new() {
-		initializeLazily
-	}
-
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
+	}
+	
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
 	}
 	
 	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
@@ -89,7 +88,7 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 			]
 		])
 		addLazyBehavior(domainObjectDescriptor)
-		addBehavior(new ReconcileBehavior(this))
+		addBehavior(new de.fxdiagram.mapping.shapes.BaseContainerNode.ReconcileBehavior(this))
 		// move container node when the inner diagram grows to the upper/left
 		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
 			if(!layoutXProperty.bound && !layoutYProperty.bound) {

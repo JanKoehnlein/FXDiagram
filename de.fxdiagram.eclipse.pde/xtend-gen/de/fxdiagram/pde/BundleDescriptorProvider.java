@@ -59,4 +59,8 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
     }
     return _switchResult;
   }
+  
+  @Override
+  public void postLoad() {
+  }
 }

@@ -43,6 +43,10 @@ public abstract class ModelTest extends Polygon implements XModelProvider {
     modelElement.addProperty(selfRef, ModelTest.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

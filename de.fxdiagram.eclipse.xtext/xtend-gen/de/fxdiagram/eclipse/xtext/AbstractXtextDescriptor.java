@@ -45,6 +45,10 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
     super.populate(modelElement);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

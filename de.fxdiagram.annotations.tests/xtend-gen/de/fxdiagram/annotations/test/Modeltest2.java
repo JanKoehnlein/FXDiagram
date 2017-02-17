@@ -17,6 +17,10 @@ public class Modeltest2 implements XModelProvider {
     modelElement.addProperty(objectsProperty, DomainObjectDescriptor.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

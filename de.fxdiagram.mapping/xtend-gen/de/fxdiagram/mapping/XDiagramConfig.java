@@ -3,6 +3,7 @@ package de.fxdiagram.mapping;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XDomainObjectOwner;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
+import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.mapping.AbstractDiagramConfig;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -125,5 +126,12 @@ public interface XDiagramConfig {
   
   public abstract IMappedElementDescriptorProvider getDomainObjectProvider();
   
+  /**
+   * Hook for common configuration for a specific kind of shape, e.g. force a certain
+   * connection kind.
+   * 
+   * All base shapes call this in {@link XModelProvider#postLoad()} as such allow to override
+   * the saved configuration.
+   */
   public abstract void initialize(final XDomainObjectOwner shape);
 }

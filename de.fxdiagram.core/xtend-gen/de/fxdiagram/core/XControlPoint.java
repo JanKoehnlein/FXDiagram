@@ -223,6 +223,10 @@ public class XControlPoint extends XShape implements XModelProvider {
     modelElement.addProperty(manuallyPlacedProperty(), Boolean.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

@@ -120,6 +120,10 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

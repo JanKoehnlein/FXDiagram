@@ -97,6 +97,10 @@ public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescr
     modelElement.addProperty(oppositeUriProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

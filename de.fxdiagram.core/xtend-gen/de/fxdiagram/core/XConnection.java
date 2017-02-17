@@ -859,6 +859,10 @@ public class XConnection extends XDomainObjectShape {
     modelElement.addProperty(strokeProperty, Paint.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

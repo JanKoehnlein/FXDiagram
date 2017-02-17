@@ -3,19 +3,22 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.reconcile.DiagramReconcileBehavior
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 import de.fxdiagram.mapping.behavior.ConnectAllBehavior
+import de.fxdiagram.mapping.reconcile.DiagramReconcileBehavior
 
 @ModelNode
 class BaseDiagram<T> extends XDiagram {
 	
-	new() {
-		initializeLazily
-	}
-	
 	new(IMappedElementDescriptor<T> domainObjectDescriptor) {
 		super(domainObjectDescriptor)
+	}
+
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
+	}
+	
+	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as IMappedElementDescriptor<T>
 	}
 	
 	override doActivate() {

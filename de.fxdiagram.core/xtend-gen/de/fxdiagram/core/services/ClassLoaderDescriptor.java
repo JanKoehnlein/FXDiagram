@@ -44,6 +44,10 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
     modelElement.addProperty(providerProperty, ClassLoaderProvider.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

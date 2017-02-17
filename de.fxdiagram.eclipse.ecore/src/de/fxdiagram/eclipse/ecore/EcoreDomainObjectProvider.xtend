@@ -73,5 +73,7 @@ class EcoreDomainObjectProvider implements IMappedElementDescriptorProvider {
 		}
 	}
 	
+	override postLoad() {
+	}
 	
 }

@@ -61,6 +61,10 @@ public class XLabel extends XDomainObjectShape {
     modelElement.addProperty(typeProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   private SimpleObjectProperty<Text> textProperty = new SimpleObjectProperty<Text>(this, "text",_initText());
   
   private static final Text _initText() {

@@ -93,6 +93,10 @@ public class BrowserNode extends FlipNode {
     modelElement.addProperty(pageUrlProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

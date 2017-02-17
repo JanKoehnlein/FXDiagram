@@ -185,6 +185,10 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     modelElement.addProperty(nameSegmentsProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

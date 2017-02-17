@@ -44,6 +44,10 @@ public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSu
     super.populate(modelElement);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

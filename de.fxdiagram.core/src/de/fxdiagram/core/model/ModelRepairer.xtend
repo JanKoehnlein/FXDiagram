@@ -31,7 +31,7 @@ class ModelRepairer {
 	def dispatch boolean repair(XNode node) {
 		node.outgoingConnections.forEach [
 			if (source != node) {
-				LOG.severe('Node ' + it + ' is not source of outgoning connection ' + it)
+				LOG.severe('Node ' + it + ' is not source of outgoing connection ' + it)
 				source = node
 			}
 		]

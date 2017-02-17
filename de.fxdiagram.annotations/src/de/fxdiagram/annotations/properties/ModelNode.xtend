@@ -83,7 +83,11 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 				«ENDFOR»
 			'''
 		])
-		
+		if(!annotatedClass.declaredMethods.exists[simpleName == 'postLoad' && parameters.empty]) {
+			annotatedClass.addMethod('postLoad',[
+				body = ''''''
+			])
+		}
 		if(!annotatedClass.declaredMethods.exists[simpleName == 'toString' && parameters.empty]) {
 			annotatedClass.addMethod('toString') [
 				returnType = newTypeReference(String)

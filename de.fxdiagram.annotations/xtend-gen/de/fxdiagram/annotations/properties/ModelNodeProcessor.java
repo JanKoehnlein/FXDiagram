@@ -140,12 +140,29 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     annotatedClass.addMethod("populate", _function_2);
     Iterable<? extends MutableMethodDeclaration> _declaredMethods = annotatedClass.getDeclaredMethods();
     final Function1<MutableMethodDeclaration, Boolean> _function_3 = (MutableMethodDeclaration it) -> {
-      return Boolean.valueOf((Objects.equal(it.getSimpleName(), "toString") && IterableExtensions.isEmpty(it.getParameters())));
+      return Boolean.valueOf((Objects.equal(it.getSimpleName(), "postLoad") && IterableExtensions.isEmpty(it.getParameters())));
     };
     boolean _exists = IterableExtensions.exists(_declaredMethods, _function_3);
     boolean _not_1 = (!_exists);
     if (_not_1) {
       final Procedure1<MutableMethodDeclaration> _function_4 = (MutableMethodDeclaration it) -> {
+        StringConcatenationClient _client = new StringConcatenationClient() {
+          @Override
+          protected void appendTo(StringConcatenationClient.TargetStringConcatenation _builder) {
+          }
+        };
+        it.setBody(_client);
+      };
+      annotatedClass.addMethod("postLoad", _function_4);
+    }
+    Iterable<? extends MutableMethodDeclaration> _declaredMethods_1 = annotatedClass.getDeclaredMethods();
+    final Function1<MutableMethodDeclaration, Boolean> _function_5 = (MutableMethodDeclaration it) -> {
+      return Boolean.valueOf((Objects.equal(it.getSimpleName(), "toString") && IterableExtensions.isEmpty(it.getParameters())));
+    };
+    boolean _exists_1 = IterableExtensions.exists(_declaredMethods_1, _function_5);
+    boolean _not_2 = (!_exists_1);
+    if (_not_2) {
+      final Procedure1<MutableMethodDeclaration> _function_6 = (MutableMethodDeclaration it) -> {
         TypeReference _newTypeReference = this.context.newTypeReference(String.class);
         it.setReturnType(_newTypeReference);
         StringConcatenationClient _client = new StringConcatenationClient() {
@@ -160,7 +177,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
         };
         it.setBody(_client);
       };
-      annotatedClass.addMethod("toString", _function_4);
+      annotatedClass.addMethod("toString", _function_6);
     }
   }
   

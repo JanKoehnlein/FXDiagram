@@ -105,6 +105,10 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
     modelElement.addProperty(nameProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

@@ -127,6 +127,10 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     modelElement.addProperty(versionProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

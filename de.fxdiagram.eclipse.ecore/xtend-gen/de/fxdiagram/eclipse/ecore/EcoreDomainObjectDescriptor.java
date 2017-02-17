@@ -119,6 +119,10 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
     modelElement.addProperty(nameProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

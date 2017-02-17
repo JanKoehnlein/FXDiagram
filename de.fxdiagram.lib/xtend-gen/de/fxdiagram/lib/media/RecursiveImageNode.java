@@ -253,6 +253,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     modelElement.addProperty(scaleProperty, Double.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

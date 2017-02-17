@@ -28,6 +28,10 @@ public class StringDescriptor implements DomainObjectDescriptor {
     modelElement.addProperty(nameProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

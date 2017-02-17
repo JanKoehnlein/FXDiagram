@@ -79,6 +79,10 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> implements 
     modelElement.addProperty(providerProperty, DomainObjectProvider.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

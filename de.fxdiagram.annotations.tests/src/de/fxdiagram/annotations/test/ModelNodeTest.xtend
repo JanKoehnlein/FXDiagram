@@ -30,6 +30,10 @@ class ModelNodeTest {
 			    
 			  }
 			  
+			  public void postLoad() {
+			    
+			  }
+			  
 			  public String toString() {
 			    return ToString.toString(this);
 			  }
@@ -65,6 +69,10 @@ class ModelNodeTest {
 			  }
 			  
 			  public void populate(final ModelElementImpl modelElement) {
+			    
+			  }
+			  
+			  public void postLoad() {
 			    
 			  }
 			  
@@ -143,6 +151,10 @@ class ModelNodeTest {
 			    modelElement.addProperty(selfRef, ModelTest.class);
 			  }
 			  
+			  public void postLoad() {
+			    
+			  }
+			  
 			  public String toString() {
 			    return ToString.toString(this);
 			  }
@@ -189,6 +201,10 @@ class ModelNodeTest {
 			    modelElement.addProperty(myStringProperty, String.class);
 			    modelElement.addProperty(myObjectProperty, Object.class);
 			    modelElement.addProperty(myListProperty, String.class);
+			  }
+			  
+			  public void postLoad() {
+			    
 			  }
 			  
 			  public String toString() {
@@ -290,6 +306,10 @@ class ModelNodeTest {
 			    super.populate(modelElement);
 			  }
 			  
+			  public void postLoad() {
+			    
+			  }
+			  
 			  public String toString() {
 			    return ToString.toString(this);
 			  }
@@ -310,6 +330,10 @@ class ModelNodeTest {
 			  
 			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(bool, Boolean.class);
+			  }
+			  
+			  public void postLoad() {
+			    
 			  }
 			  
 			  public String toString() {
@@ -350,6 +374,10 @@ class ModelNodeTest {
 			    
 			  }
 			  
+			  public void postLoad() {
+			    
+			  }
+			  
 			  public String toString() {
 			    return ToString.toString(this);
 			  }
@@ -370,6 +398,10 @@ class ModelNodeTest {
 			  
 			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(bool, Boolean.class);
+			  }
+			  
+			  public void postLoad() {
+			    
 			  }
 			  
 			  public String toString() {
@@ -406,6 +438,46 @@ class ModelNodeTest {
 			  
 			  public void populate(final ModelElementImpl modelElement) {
 			    
+			  }
+			  
+			  public void postLoad() {
+			    
+			  }
+			}
+		''')
+	}
+	
+	@Test
+	def void testNoPostLoad() {
+		assertCompilesTo('''
+			import de.fxdiagram.annotations.properties.ModelNode
+			import javafx.beans.property.BooleanProperty
+			
+			@ModelNode
+			class Foo {
+				override postLoad() {
+					return
+				}
+			}
+		''', '''
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
+			import de.fxdiagram.core.model.XModelProvider;
+			
+			@ModelNode
+			@SuppressWarnings("all")
+			public class Foo implements XModelProvider {
+			  public void postLoad() {
+			    return;
+			  }
+			  
+			  public void populate(final ModelElementImpl modelElement) {
+			    
+			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
 			  }
 			}
 		''')

@@ -78,6 +78,10 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
     
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

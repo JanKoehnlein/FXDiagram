@@ -202,6 +202,10 @@ public class XConnectionLabel extends XLabel {
     modelElement.addProperty(positionProperty, Double.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

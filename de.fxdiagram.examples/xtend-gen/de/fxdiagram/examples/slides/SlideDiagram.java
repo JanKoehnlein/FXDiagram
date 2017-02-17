@@ -192,6 +192,10 @@ public class SlideDiagram extends XDiagram {
     modelElement.addProperty(slidesProperty, Slide.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

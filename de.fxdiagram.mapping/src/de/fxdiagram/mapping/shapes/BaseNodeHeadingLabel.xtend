@@ -5,15 +5,11 @@ import javafx.geometry.Insets
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
+import de.fxdiagram.annotations.properties.ModelNode
 
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-
+@ModelNode
 class BaseNodeHeadingLabel<T> extends BaseNodeLabel<T> {
 	
-	new() {
-		initializeLazily
-	}
-
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
 	}

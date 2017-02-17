@@ -155,6 +155,10 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
     modelElement.addProperty(relativeFragmentProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   private ReadOnlyObjectWrapper<XtextEObjectID> parentIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "parentID");
   
   public XtextEObjectID getParentID() {

@@ -5,8 +5,6 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.reconcile.ConnectionReconcileBehavior
 
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-
 /**
  * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
  * 
@@ -16,15 +14,15 @@ import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 @ModelNode
 class BaseConnection<T> extends XConnection  {
 	
-	new() {
-		initializeLazily
-	}
-
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
 	}
 
-	override getDomainObjectDescriptor() {
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
+	}
+
+	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
 		super.domainObjectDescriptor as IMappedElementDescriptor<T>
 	}
 	

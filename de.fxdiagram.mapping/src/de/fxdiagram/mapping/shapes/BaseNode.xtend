@@ -16,7 +16,6 @@ import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -29,12 +28,12 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	
 	public static val NODE_HEADING = 'nodeHeading'
 	
-	new() {
-		initializeLazily
-	}
-
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
+	}
+	
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
 	}
 	
 	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {

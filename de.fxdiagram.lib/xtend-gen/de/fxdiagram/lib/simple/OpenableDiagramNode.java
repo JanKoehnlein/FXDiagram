@@ -456,6 +456,10 @@ public class OpenableDiagramNode extends XNode implements XDiagramContainer {
     modelElement.addProperty(innerDiagramProperty, XDiagram.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

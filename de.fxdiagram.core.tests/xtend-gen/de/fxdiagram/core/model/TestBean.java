@@ -15,6 +15,10 @@ public class TestBean implements XModelProvider {
     modelElement.addProperty(testEnumProperty, TestEnum.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

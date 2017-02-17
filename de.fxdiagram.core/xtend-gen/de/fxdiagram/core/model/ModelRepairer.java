@@ -59,7 +59,7 @@ public class ModelRepairer {
         XNode _source = it.getSource();
         boolean _notEquals = (!Objects.equal(_source, node));
         if (_notEquals) {
-          ModelRepairer.LOG.severe(((("Node " + it) + " is not source of outgoning connection ") + it));
+          ModelRepairer.LOG.severe(((("Node " + it) + " is not source of outgoing connection ") + it));
           it.setSource(node);
         }
       };

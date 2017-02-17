@@ -113,6 +113,10 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
     modelElement.addProperty(importVersionRangeProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

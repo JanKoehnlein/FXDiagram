@@ -1,15 +1,18 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.model.CrossRefData;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
 import de.fxdiagram.core.model.ModelRepairer;
 import de.fxdiagram.core.model.ParseException;
+import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.actions.LoadAction;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,8 @@ import javax.json.JsonValue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 /**
  * Functionality of a {@link LoadAction}.
@@ -55,14 +60,24 @@ public class ModelLoad {
     this.idMap = _newHashMap;
     final JsonReader reader = Json.createReader(in);
     final JsonObject jsonObject = reader.readObject();
-    final Object node = this.readNode(jsonObject, "");
+    final Object rootNode = this.readNode(jsonObject, "");
     final Consumer<CrossRefData> _function = (CrossRefData it) -> {
       this.resolveCrossReference(it);
     };
     this.crossRefs.forEach(_function);
     ModelRepairer _modelRepairer = new ModelRepairer();
-    _modelRepairer.repair(node);
-    return node;
+    _modelRepairer.repair(rootNode);
+    Collection<ModelElement> _values = this.idMap.values();
+    final Function1<ModelElement, Object> _function_1 = (ModelElement it) -> {
+      return it.getNode();
+    };
+    Iterable<Object> _map = IterableExtensions.<ModelElement, Object>map(_values, _function_1);
+    Iterable<XModelProvider> _filter = Iterables.<XModelProvider>filter(_map, XModelProvider.class);
+    final Consumer<XModelProvider> _function_2 = (XModelProvider it) -> {
+      it.postLoad();
+    };
+    _filter.forEach(_function_2);
+    return rootNode;
   }
   
   protected Object readNode(final JsonObject jsonObject, final String currentID) {

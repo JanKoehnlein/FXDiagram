@@ -450,6 +450,10 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     modelElement.addProperty(layoutParametersProperty, LayoutParameters.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

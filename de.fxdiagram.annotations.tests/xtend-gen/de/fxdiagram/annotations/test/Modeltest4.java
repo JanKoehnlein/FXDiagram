@@ -16,6 +16,10 @@ public class Modeltest4 implements XModelProvider {
     modelElement.addProperty(fqnProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

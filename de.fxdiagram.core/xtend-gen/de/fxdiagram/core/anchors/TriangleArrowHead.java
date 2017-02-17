@@ -93,6 +93,10 @@ public class TriangleArrowHead extends ArrowHead {
     modelElement.addProperty(fillProperty, Paint.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

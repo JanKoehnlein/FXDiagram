@@ -38,10 +38,13 @@ class ModelLoad {
 		idMap = newHashMap
 		val reader = Json.createReader(in)
 		val jsonObject = reader.readObject
-		val node = readNode(jsonObject, '')
+		val rootNode = readNode(jsonObject, '')
 		crossRefs.forEach[resolveCrossReference]
-		new ModelRepairer().repair(node)
-		return node
+		new ModelRepairer().repair(rootNode)
+		idMap.values.map[node].filter(XModelProvider).forEach[
+			postLoad
+		]
+		return rootNode
 	}
 	
 	protected def Object readNode(JsonObject jsonObject, String currentID) {

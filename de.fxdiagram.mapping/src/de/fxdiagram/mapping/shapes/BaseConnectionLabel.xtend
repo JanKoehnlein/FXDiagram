@@ -3,16 +3,17 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.reconcile.LabelReconcileBehavior
+import de.fxdiagram.annotations.properties.ModelNode
 
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-
+@ModelNode
 class BaseConnectionLabel<T> extends XConnectionLabel {
-	new() {
-		initializeLazily
-	}
 
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
+	}
+	
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
 	}
 
 	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {

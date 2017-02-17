@@ -200,6 +200,10 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
     modelElement.addProperty(inflatedProperty, Boolean.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

@@ -27,6 +27,10 @@ public abstract class XDomainObjectShape extends XShape implements XDomainObject
     modelElement.addProperty(domainObjectDescriptorProperty, DomainObjectDescriptor.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

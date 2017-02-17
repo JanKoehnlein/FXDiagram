@@ -28,6 +28,10 @@ public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<Stri
     super.populate(modelElement);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

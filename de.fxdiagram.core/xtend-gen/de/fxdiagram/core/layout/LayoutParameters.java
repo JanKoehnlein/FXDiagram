@@ -17,6 +17,10 @@ public class LayoutParameters implements XModelProvider {
     modelElement.addProperty(connectionKindProperty, XConnection.Kind.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

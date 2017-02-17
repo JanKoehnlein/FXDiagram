@@ -330,6 +330,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     modelElement.addProperty(diagramProperty, XDiagram.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

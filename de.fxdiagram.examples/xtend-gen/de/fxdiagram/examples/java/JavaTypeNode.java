@@ -245,4 +245,8 @@ public class JavaTypeNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
   }
+  
+  public void postLoad() {
+    
+  }
 }

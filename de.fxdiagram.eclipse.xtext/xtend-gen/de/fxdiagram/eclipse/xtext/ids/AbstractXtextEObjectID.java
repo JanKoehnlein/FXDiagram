@@ -129,6 +129,10 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
     modelElement.addProperty(uriAsStringProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

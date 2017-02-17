@@ -17,4 +17,6 @@ public interface XModelProvider {
   public default boolean isTransient() {
     return false;
   }
+  
+  public abstract void postLoad();
 }

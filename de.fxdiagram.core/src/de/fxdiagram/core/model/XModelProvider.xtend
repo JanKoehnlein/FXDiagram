@@ -15,4 +15,6 @@ interface XModelProvider {
 	def boolean isTransient() {
 		false
 	}
+	
+	def void postLoad() 
 }

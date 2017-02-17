@@ -131,6 +131,9 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 		true
 	}
 	
+	override postLoad() {
+	}
+	
 }
 
 

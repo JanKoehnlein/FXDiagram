@@ -126,6 +126,10 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
     modelElement.addProperty(elementIDProperty, XtextEObjectID.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   private ReadOnlyObjectWrapper<XtextEObjectID> elementIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "elementID");
   
   public XtextEObjectID getElementID() {

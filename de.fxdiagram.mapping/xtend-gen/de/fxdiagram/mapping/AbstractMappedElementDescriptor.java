@@ -87,6 +87,10 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
     modelElement.addProperty(mappingIDProperty, String.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

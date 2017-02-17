@@ -348,6 +348,10 @@ public class XNode extends XDomainObjectShape {
     modelElement.addProperty(placementHintProperty, Side.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

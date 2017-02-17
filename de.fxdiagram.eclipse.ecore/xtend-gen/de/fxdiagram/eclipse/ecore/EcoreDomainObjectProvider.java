@@ -180,4 +180,8 @@ public class EcoreDomainObjectProvider implements IMappedElementDescriptorProvid
     }
     return _xtrycatchfinallyexpression;
   }
+  
+  @Override
+  public void postLoad() {
+  }
 }

@@ -31,7 +31,6 @@ import static javafx.scene.input.MouseButton.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 @ModelNode('showPackage', 'showAttributes', 'showMethods', 'bgColor')
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
@@ -60,12 +59,12 @@ class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 
 	@Accessors(PUBLIC_GETTER) Inflator inflator
 
-	new() {
-		initializeLazily
-	}
-
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
+	}
+
+	override postLoad() {
+		domainObjectDescriptor?.mapping?.config?.initialize(this)
 	}
 
 	def getDefaultBgPaint() {

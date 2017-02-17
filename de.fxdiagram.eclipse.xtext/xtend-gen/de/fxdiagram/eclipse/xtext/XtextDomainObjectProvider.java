@@ -252,4 +252,8 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   public boolean isTransient() {
     return true;
   }
+  
+  @Override
+  public void postLoad() {
+  }
 }

@@ -30,5 +30,8 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
 				null
 		}
 	}
+	
+	override postLoad() {
+	}
 }
 

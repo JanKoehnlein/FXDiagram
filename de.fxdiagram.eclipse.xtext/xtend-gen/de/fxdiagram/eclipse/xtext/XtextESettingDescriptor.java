@@ -197,6 +197,10 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     modelElement.addProperty(indexProperty, Integer.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

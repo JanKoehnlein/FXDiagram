@@ -101,6 +101,10 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
     modelElement.addProperty(elementIDProperty, XtextEObjectID.class);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }

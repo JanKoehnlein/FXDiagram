@@ -51,6 +51,10 @@ public class SmallDotNode extends XNode {
     super.populate(modelElement);
   }
   
+  public void postLoad() {
+    
+  }
+  
   public String toString() {
     return ToString.toString(this);
   }
