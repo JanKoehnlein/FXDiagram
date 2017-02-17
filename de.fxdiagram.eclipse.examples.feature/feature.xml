@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.eclipse.examples.feature"
       label="FXDiagram Eclipse Examples"
-      version="0.33.1.qualifier"
+      version="0.34.0.qualifier"
       provider-name="JanKoehnlein">
 
    <description>
