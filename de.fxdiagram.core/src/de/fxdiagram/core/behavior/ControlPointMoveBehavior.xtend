@@ -7,7 +7,6 @@ import de.fxdiagram.core.command.RemoveDanglingControlPointsCommand
 import java.util.List
 import javafx.collections.ObservableList
 import javafx.geometry.Point2D
-import javafx.scene.input.MouseEvent
 
 import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.XControlPoint.Type.*
@@ -19,9 +18,6 @@ import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
-
-	double lastMouseX
-	double lastMouseY
 
 	new(XControlPoint host) {
 		super(host)
@@ -40,12 +36,6 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 		]
 	}
 	
-	override mouseDragged(MouseEvent it) {
-		super.mouseDragged(it)
-		lastMouseX = sceneX
-		lastMouseY = sceneY
-	}
-
 	override protected dragTo(Point2D newPositionInDiagram) {
 		if (newPositionInDiagram != null) {
 			val moveDeltaX = newPositionInDiagram.x - host.layoutX

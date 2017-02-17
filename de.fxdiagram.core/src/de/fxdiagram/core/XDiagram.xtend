@@ -31,6 +31,8 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import javafx.geometry.Point2D
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -66,6 +68,9 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	@FxProperty Paint foregroundPaint = Color.BLACK
 	@FxProperty Paint connectionPaint = Color.gray(0.2)
 	@FxProperty(readOnly=true) DomainObjectDescriptor domainObjectDescriptor
+
+	@FxProperty boolean gridEnabled = true
+	@FxProperty double gridSize = 10
 
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group;
@@ -246,5 +251,24 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 		if(!isRootDiagram && parentDiagram?.buttonLayer != null)
 			return parentDiagram.buttonLayer
 		buttonLayer
+	}
+	
+	def Point2D getSnappedPosition(Point2D newPositionInDiagram) {
+		newPositionInDiagram.snapToGrid(gridSize)
+	}
+	
+	def Point2D getSnappedPosition(Point2D newPositionInDiagram, XShape shape, boolean force) {
+		if(force) {
+			val hostCenterDelta =  shape.localToParent(shape.snapBounds.center) - new Point2D(shape.layoutX, shape.layoutY)
+			val newCenterPosition = newPositionInDiagram + hostCenterDelta
+			val snappedCenter = newCenterPosition.snapToGrid(gridSize)			
+			val correction = snappedCenter - newCenterPosition
+			return newPositionInDiagram + correction
+		}
+		return newPositionInDiagram		
+	}
+	
+	def Point2D getSnappedPosition(Point2D newPositionInDiagram, XShape shape) {
+		getSnappedPosition(newPositionInDiagram, shape, gridEnabled)
 	}
 }

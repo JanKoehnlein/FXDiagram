@@ -19,6 +19,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
+import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.layout.LayoutParameters;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -38,6 +40,7 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -439,6 +442,34 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     return _xblockexpression;
   }
   
+  public Point2D getSnappedPosition(final Point2D newPositionInDiagram) {
+    double _gridSize = this.getGridSize();
+    return Point2DExtensions.snapToGrid(newPositionInDiagram, _gridSize);
+  }
+  
+  public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape, final boolean force) {
+    if (force) {
+      Bounds _snapBounds = shape.getSnapBounds();
+      Point2D _center = BoundsExtensions.center(_snapBounds);
+      Point2D _localToParent = shape.localToParent(_center);
+      double _layoutX = shape.getLayoutX();
+      double _layoutY = shape.getLayoutY();
+      Point2D _point2D = new Point2D(_layoutX, _layoutY);
+      final Point2D hostCenterDelta = Point2DExtensions.operator_minus(_localToParent, _point2D);
+      final Point2D newCenterPosition = Point2DExtensions.operator_plus(newPositionInDiagram, hostCenterDelta);
+      double _gridSize = this.getGridSize();
+      final Point2D snappedCenter = Point2DExtensions.snapToGrid(newCenterPosition, _gridSize);
+      final Point2D correction = Point2DExtensions.operator_minus(snappedCenter, newCenterPosition);
+      return Point2DExtensions.operator_plus(newPositionInDiagram, correction);
+    }
+    return newPositionInDiagram;
+  }
+  
+  public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape) {
+    boolean _gridEnabled = this.getGridEnabled();
+    return this.getSnappedPosition(newPositionInDiagram, shape, _gridEnabled);
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XDiagram");
     ;
   
@@ -646,5 +677,41 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   
   public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectDescriptorProperty() {
     return this.domainObjectDescriptorProperty.getReadOnlyProperty();
+  }
+  
+  private SimpleBooleanProperty gridEnabledProperty = new SimpleBooleanProperty(this, "gridEnabled",_initGridEnabled());
+  
+  private static final boolean _initGridEnabled() {
+    return true;
+  }
+  
+  public boolean getGridEnabled() {
+    return this.gridEnabledProperty.get();
+  }
+  
+  public void setGridEnabled(final boolean gridEnabled) {
+    this.gridEnabledProperty.set(gridEnabled);
+  }
+  
+  public BooleanProperty gridEnabledProperty() {
+    return this.gridEnabledProperty;
+  }
+  
+  private SimpleDoubleProperty gridSizeProperty = new SimpleDoubleProperty(this, "gridSize",_initGridSize());
+  
+  private static final double _initGridSize() {
+    return 10;
+  }
+  
+  public double getGridSize() {
+    return this.gridSizeProperty.get();
+  }
+  
+  public void setGridSize(final double gridSize) {
+    this.gridSizeProperty.set(gridSize);
+  }
+  
+  public DoubleProperty gridSizeProperty() {
+    return this.gridSizeProperty;
   }
 }

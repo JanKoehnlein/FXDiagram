@@ -105,4 +105,8 @@ class Point2DExtensions {
 		val cosTheta = (d0x*d1x + d0y*d1y) / norm0 / norm1
 		return abs(cosTheta) > COS_EPSILON 
 	}
+	
+	static def snapToGrid(Point2D p, double grid) {
+		new Point2D(round(p.x / grid) * grid, round(p.y / grid) * grid) 
+	}	
 }

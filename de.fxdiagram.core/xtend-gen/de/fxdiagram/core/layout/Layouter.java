@@ -183,13 +183,14 @@ public class Layouter {
           }
           final Point2D correction = _xifexpression;
           float _xpos = shapeLayout.getXpos();
-          double _x = correction.getX();
-          double _minus = (_xpos - _x);
-          ((XNode)xElement).setLayoutX(_minus);
           float _ypos = shapeLayout.getYpos();
-          double _y = correction.getY();
-          double _minus_1 = (_ypos - _y);
-          ((XNode)xElement).setLayoutY(_minus_1);
+          Point2D _point2D = new Point2D(_xpos, _ypos);
+          final Point2D newPosition = Point2DExtensions.operator_minus(_point2D, correction);
+          final Point2D snappedPosition = diagram.getSnappedPosition(newPosition, ((XShape)xElement));
+          double _x = snappedPosition.getX();
+          ((XNode)xElement).setLayoutX(_x);
+          double _y = snappedPosition.getY();
+          ((XNode)xElement).setLayoutY(_y);
         }
         if (!_matched) {
           if (xElement instanceof XConnection) {
@@ -322,10 +323,10 @@ public class Layouter {
                 ObservableList<XControlPoint> _controlPoints_1 = ((XConnection)xElement).getControlPoints();
                 final XControlPoint controlPoint = _controlPoints_1.get((i).intValue());
                 Point2D _get = xLayoutPoints.get((i).intValue());
-                double _x = _get.getX();
+                final Point2D snappedPosition = diagram.getSnappedPosition(_get, controlPoint);
+                double _x = snappedPosition.getX();
                 controlPoint.setLayoutX(_x);
-                Point2D _get_1 = xLayoutPoints.get((i).intValue());
-                double _y = _get_1.getY();
+                double _y = snappedPosition.getY();
                 controlPoint.setLayoutY(_y);
                 controlPoint.setManuallyPlaced(false);
               }
@@ -389,12 +390,13 @@ public class Layouter {
           }
           final Point2D correction = _xifexpression;
           float _xpos = shapeLayout.getXpos();
-          double _x = correction.getX();
-          double _minus = (_xpos - _x);
           float _ypos = shapeLayout.getYpos();
-          double _y = correction.getY();
-          double _minus_1 = (_ypos - _y);
-          MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1, 
+          Point2D _point2D = new Point2D(_xpos, _ypos);
+          final Point2D newPosition = Point2DExtensions.operator_minus(_point2D, correction);
+          final Point2D snappedPosition = diagram.getSnappedPosition(newPosition, ((XShape)xElement));
+          double _x = snappedPosition.getX();
+          double _y = snappedPosition.getY();
+          MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _x, _y, 
             true);
           final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
             it.setExecuteDuration(duration);
@@ -508,17 +510,18 @@ public class Layouter {
             Iterable<Point2D> _layoutPointsInRoot = this.layoutPointsInRoot(layoutPoints, kSource);
             List<Point2D> _list = IterableExtensions.<Point2D>toList(_layoutPointsInRoot);
             final Function1<Point2D, Point2D> _function_2 = (Point2D it) -> {
-              return Point2DExtensions.operator_minus(it, correction);
+              Point2D _minus_2 = Point2DExtensions.operator_minus(it, correction);
+              return diagram.getSnappedPosition(_minus_2);
             };
             List<Point2D> _map = ListExtensions.<Point2D, Point2D>map(_list, _function_2);
             final Function1<Point2D, XControlPoint> _function_3 = (Point2D p) -> {
               XControlPoint _xControlPoint = new XControlPoint();
               final Procedure1<XControlPoint> _function_4 = (XControlPoint it) -> {
+                it.setManuallyPlaced(false);
                 double _x = p.getX();
                 it.setLayoutX(_x);
                 double _y = p.getY();
                 it.setLayoutY(_y);
-                it.setManuallyPlaced(false);
               };
               return ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_4);
             };

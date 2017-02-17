@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.ControlPointMoveBehavior
 import de.fxdiagram.core.images.Magnet
 import java.util.List
+import javafx.geometry.BoundingBox
 import javafx.geometry.Side
 import javafx.scene.effect.DropShadow
 import javafx.scene.paint.Color
@@ -100,6 +101,10 @@ class XControlPoint extends XShape {
 	override isSelectable() {
 		type != ANCHOR && super.isSelectable()
 	}	
+	
+	override getSnapBounds() {
+		new BoundingBox(0,0,0,0)
+	}
 
 	def update(List<XControlPoint> siblings) {
 		if (type == CONTROL_POINT) {

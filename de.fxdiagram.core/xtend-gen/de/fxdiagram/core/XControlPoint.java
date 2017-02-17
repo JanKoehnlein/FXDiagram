@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -154,6 +155,11 @@ public class XControlPoint extends XShape implements XModelProvider {
   @Override
   public boolean isSelectable() {
     return ((!Objects.equal(this.getType(), XControlPoint.Type.ANCHOR)) && super.isSelectable());
+  }
+  
+  @Override
+  public Bounds getSnapBounds() {
+    return new BoundingBox(0, 0, 0, 0);
   }
   
   public Boolean update(final List<XControlPoint> siblings) {

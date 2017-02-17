@@ -22,16 +22,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
-  private double lastMouseX;
-  
-  private double lastMouseY;
-  
   public ControlPointMoveBehavior(final XControlPoint host) {
     super(host);
   }
@@ -60,15 +55,6 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
       }
     };
     _selectedProperty.addListener(_function);
-  }
-  
-  @Override
-  public void mouseDragged(final MouseEvent it) {
-    super.mouseDragged(it);
-    double _sceneX = it.getSceneX();
-    this.lastMouseX = _sceneX;
-    double _sceneY = it.getSceneY();
-    this.lastMouseY = _sceneY;
   }
   
   @Override

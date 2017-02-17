@@ -165,4 +165,16 @@ public class Point2DExtensions {
     double _abs = Math.abs(cosTheta);
     return (_abs > Point2DExtensions.COS_EPSILON);
   }
+  
+  public static Point2D snapToGrid(final Point2D p, final double grid) {
+    double _x = p.getX();
+    double _divide = (_x / grid);
+    long _round = Math.round(_divide);
+    double _multiply = (_round * grid);
+    double _y = p.getY();
+    double _divide_1 = (_y / grid);
+    long _round_1 = Math.round(_divide_1);
+    double _multiply_1 = (_round_1 * grid);
+    return new Point2D(_multiply, _multiply_1);
+  }
 }

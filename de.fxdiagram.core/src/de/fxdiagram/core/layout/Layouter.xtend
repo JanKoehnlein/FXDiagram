@@ -104,8 +104,10 @@ class Layouter {
 							val insets = (kElement.eContainer as KNode).getData(KShapeLayout).insets
 							new Point2D(-insets?.left, -insets?.top)
 						}
-					xElement.layoutX = shapeLayout.xpos - correction.x
-					xElement.layoutY = shapeLayout.ypos - correction.y
+					val newPosition = new Point2D(shapeLayout.xpos, shapeLayout.ypos) - correction
+					val snappedPosition = diagram.getSnappedPosition(newPosition, xElement)
+					xElement.layoutX = snappedPosition.x
+					xElement.layoutY = snappedPosition.y
 				}
 				XConnection: {
 					xElement.labels.forEach[place(true)]
@@ -146,8 +148,9 @@ class Layouter {
 					val xLayoutPoints = layoutPoints.layoutPointsInRoot(kSource).toList.map[it - correction]
 					for (i : 1 ..< layoutPoints.size - 1) {
 						val controlPoint = xElement.controlPoints.get(i)
-						controlPoint.layoutX = xLayoutPoints.get(i).x
-						controlPoint.layoutY = xLayoutPoints.get(i).y
+						val snappedPosition = diagram.getSnappedPosition(xLayoutPoints.get(i), controlPoint)
+						controlPoint.layoutX = snappedPosition.x
+						controlPoint.layoutY = snappedPosition.y
 						controlPoint.manuallyPlaced = false
 					}
 				}
@@ -178,10 +181,12 @@ class Layouter {
 							val insets = (kElement.eContainer as KNode).getData(KShapeLayout).insets
 							new Point2D(-insets?.left, -insets?.top)
 						}
+					val newPosition = new Point2D(shapeLayout.xpos, shapeLayout.ypos) - correction
+					val snappedPosition = diagram.getSnappedPosition(newPosition, xElement)
 					composite += new MoveCommand(
 						xElement,
-						shapeLayout.xpos - correction.x,
-						shapeLayout.ypos - correction.y,
+						snappedPosition.x,
+						snappedPosition.y,
 						true
 					) => [
 						executeDuration = duration
@@ -218,13 +223,17 @@ class Layouter {
 							val insets = (kSource.eContainer as KNode).getData(KShapeLayout).insets
 							new Point2D(delta.x - insets?.left, delta.y - insets?.top)
 						} 
-					val xLayoutPoints = layoutPoints.layoutPointsInRoot(kSource).toList.map[it - correction].map[ p |
-						new XControlPoint => [
-							layoutX = p.x
-							layoutY = p.y
-							manuallyPlaced = false
+					val xLayoutPoints = layoutPoints
+						.layoutPointsInRoot(kSource)
+						.toList
+						.map[diagram.getSnappedPosition(it - correction)]
+						.map[ p |
+							new XControlPoint => [
+								manuallyPlaced = false
+								layoutX = p.x
+								layoutY = p.y
+							]
 						]
-					]
 					xLayoutPoints.head?.setType(XControlPoint.Type.ANCHOR)
 					xLayoutPoints.last?.setType(XControlPoint.Type.ANCHOR)
 					composite += new ConnectionRelayoutCommand(xElement, newKind, xLayoutPoints) => [ 

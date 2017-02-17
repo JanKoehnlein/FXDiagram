@@ -52,8 +52,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			host.layoutY,
 			screenX,
 			screenY,
-			initialPositionInScene
-		)
+			initialPositionInScene)
 		if(host instanceof XNode) {
 			val node = host as XNode
 			(node.incomingConnections + node.outgoingConnections).forEach[
@@ -67,9 +66,9 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
 			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
 		val newPositionInDiagram = host.parent.sceneToLocal(newPositionInScene)
-		dragTo(newPositionInDiagram)
+		val isSnap = host.diagram.gridEnabled.xor(shortcutDown)
+		dragTo(host.diagram.getSnappedPosition(newPositionInDiagram, host, isSnap))
 	}
-	
 	
 	def void mouseReleased(MouseEvent it) {
 		if(hasMoved) {

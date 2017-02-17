@@ -3,6 +3,7 @@ package de.fxdiagram.core.behavior;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -205,7 +206,16 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     T _host = this.getHost();
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
-    this.dragTo(newPositionInDiagram);
+    T _host_1 = this.getHost();
+    XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
+    boolean _gridEnabled = _diagram.getGridEnabled();
+    boolean _isShortcutDown = it.isShortcutDown();
+    final boolean isSnap = (_gridEnabled ^ _isShortcutDown);
+    T _host_2 = this.getHost();
+    XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_2);
+    T _host_3 = this.getHost();
+    Point2D _snappedPosition = _diagram_1.getSnappedPosition(newPositionInDiagram, _host_3, isSnap);
+    this.dragTo(_snappedPosition);
   }
   
   public void mouseReleased(final MouseEvent it) {
