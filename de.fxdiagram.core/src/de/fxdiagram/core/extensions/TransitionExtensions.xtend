@@ -63,8 +63,8 @@ class TransitionExtensions {
 			}
 		}
 		morph.onFinished = [
-			connection.connectionRouter.shrinkToSize(to.size)
 			connection.kind = toMemento.kind
+			connection.connectionRouter.shrinkToSize(to.size)
 			connection.controlPoints.head => [
 				val toCP = toMemento.controlPoints.head
 				layoutX = toCP.layoutX

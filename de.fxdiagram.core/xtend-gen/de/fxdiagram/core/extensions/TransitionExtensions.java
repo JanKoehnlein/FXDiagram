@@ -130,11 +130,11 @@ public class TransitionExtensions {
       }
     }
     final EventHandler<ActionEvent> _function = (ActionEvent it) -> {
+      XConnection.Kind _kind = toMemento.getKind();
+      connection.setKind(_kind);
       ConnectionRouter _connectionRouter_2 = connection.getConnectionRouter();
       int _size_2 = to.size();
       _connectionRouter_2.shrinkToSize(_size_2);
-      XConnection.Kind _kind = toMemento.getKind();
-      connection.setKind(_kind);
       ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
       XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints);
       final Procedure1<XControlPoint> _function_1 = (XControlPoint it_1) -> {
