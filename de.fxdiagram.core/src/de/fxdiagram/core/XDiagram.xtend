@@ -69,7 +69,7 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	@FxProperty Paint connectionPaint = Color.gray(0.2)
 	@FxProperty(readOnly=true) DomainObjectDescriptor domainObjectDescriptor
 
-	@FxProperty boolean gridEnabled = true
+	@FxProperty boolean gridEnabled = false
 	@FxProperty double gridSize = 10
 
 	Group nodeLayer = new Group
@@ -254,21 +254,26 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	}
 	
 	def Point2D getSnappedPosition(Point2D newPositionInDiagram) {
-		newPositionInDiagram.snapToGrid(gridSize)
+		if(gridEnabled)
+			newPositionInDiagram.snapToGrid(gridSize)
+		else 
+			newPositionInDiagram
 	}
 	
-	def Point2D getSnappedPosition(Point2D newPositionInDiagram, XShape shape, boolean force) {
-		if(force) {
-			val hostCenterDelta =  shape.localToParent(shape.snapBounds.center) - new Point2D(shape.layoutX, shape.layoutY)
+	def Point2D getSnappedPosition(Point2D newPositionInDiagram, XShape shape, boolean useGrid, boolean useAuxLines) {
+		if(useGrid) {
+			val hostCenterDelta = shape.localToParent(shape.layoutBounds.center) - new Point2D(shape.layoutX, shape.layoutY)
 			val newCenterPosition = newPositionInDiagram + hostCenterDelta
 			val snappedCenter = newCenterPosition.snapToGrid(gridSize)			
 			val correction = snappedCenter - newCenterPosition
 			return newPositionInDiagram + correction
+		} else if(useAuxLines) {
+			return auxiliaryLinesSupport.getSnappedPosition(shape, newPositionInDiagram)
 		}
 		return newPositionInDiagram		
 	}
 	
 	def Point2D getSnappedPosition(Point2D newPositionInDiagram, XShape shape) {
-		getSnappedPosition(newPositionInDiagram, shape, gridEnabled)
+		getSnappedPosition(newPositionInDiagram, shape, gridEnabled, true)
 	}
 }

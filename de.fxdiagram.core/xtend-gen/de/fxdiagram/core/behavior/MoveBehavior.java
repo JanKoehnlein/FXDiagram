@@ -210,11 +210,13 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
     boolean _gridEnabled = _diagram.getGridEnabled();
     boolean _isShortcutDown = it.isShortcutDown();
-    final boolean isSnap = (_gridEnabled ^ _isShortcutDown);
+    final boolean useGrid = (_gridEnabled ^ _isShortcutDown);
+    boolean _isShortcutDown_1 = it.isShortcutDown();
+    final boolean useAuxlines = (!_isShortcutDown_1);
     T _host_2 = this.getHost();
     XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_2);
     T _host_3 = this.getHost();
-    Point2D _snappedPosition = _diagram_1.getSnappedPosition(newPositionInDiagram, _host_3, isSnap);
+    Point2D _snappedPosition = _diagram_1.getSnappedPosition(newPositionInDiagram, _host_3, useGrid, useAuxlines);
     this.dragTo(_snappedPosition);
   }
   

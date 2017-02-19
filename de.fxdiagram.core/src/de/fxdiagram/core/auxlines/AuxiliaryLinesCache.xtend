@@ -12,9 +12,13 @@ import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Bounds
 import javafx.geometry.Orientation
+import javafx.geometry.Point2D
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import javafx.geometry.BoundingBox
 
 class AuxiliaryLinesCache {
 
@@ -31,6 +35,8 @@ class AuxiliaryLinesCache {
 	AuxiliaryLineMap<Bounds> topMap = new AuxiliaryLineMap
 	AuxiliaryLineMap<Bounds> centerYMap = new AuxiliaryLineMap
 	AuxiliaryLineMap<Bounds> bottomMap = new AuxiliaryLineMap
+	
+	double magnetDist = 10
 
 	new(XDiagram diagram) {
 		nodesListener = new InitializingListListener<XNode>() => [
@@ -69,6 +75,60 @@ class AuxiliaryLinesCache {
 			emptyList
 		else 
 			lines
+	}
+	
+	def getSnappedPosition(XNode node, Point2D newPositionInDiagram) {
+		val boundsInDiagram = node.localToDiagram(node.snapBounds)
+		val newBoundsInDiagram = new BoundingBox(
+			newPositionInDiagram.x - node.layoutX + boundsInDiagram.minX,
+			newPositionInDiagram.y - node.layoutY + boundsInDiagram.minY,
+			boundsInDiagram.width,
+			boundsInDiagram.height
+		) 
+		val boundsInRootDiagram = node.diagram.localToRootDiagram(newBoundsInDiagram)
+		val excluded = <XShape>newHashSet
+		excluded += node
+		node.outgoingConnections.forEach[
+			if(kind == XConnection.Kind.RECTILINEAR && controlPoints.size > 2)
+				excluded += controlPoints.get(1)
+		]
+		node.incomingConnections.forEach[
+			if(kind == XConnection.Kind.RECTILINEAR && controlPoints.size > 2)
+				excluded += controlPoints.get(controlPoints.size - 2)
+		]
+		var dx = magnetDist
+		dx = centerXMap.getNearestLineDelta(0.5 * (boundsInRootDiagram.minX + boundsInRootDiagram.maxX), dx, excluded)
+		dx = leftMap.getNearestLineDelta(boundsInRootDiagram.minX, dx, excluded)
+		dx = rightMap.getNearestLineDelta(boundsInRootDiagram.maxX, dx, excluded)
+
+		var dy = magnetDist
+		dy = centerYMap.getNearestLineDelta(0.5 * (boundsInRootDiagram.minY + boundsInRootDiagram.maxY), dy, excluded)
+		dy = topMap.getNearestLineDelta(boundsInRootDiagram.minY, dy, excluded)
+		dy = bottomMap.getNearestLineDelta(boundsInRootDiagram.maxY, dy, excluded)
+		return toLocal(dx, dy, newPositionInDiagram, node)
+	}
+	
+	def getSnappedPosition(XControlPoint point, Point2D newPositionInDiagram) {
+		val centerInDiagram = point.parent.localToRootDiagram(newPositionInDiagram)
+		val dx = centerXMap.getNearestLineDelta(centerInDiagram.x, magnetDist, #{point})
+		val dy = centerYMap.getNearestLineDelta(centerInDiagram.y, magnetDist, #{point})
+		return toLocal(dx, dy, newPositionInDiagram, point)
+	}
+
+	protected def toLocal(double dx, double dy, Point2D newPointInDiagram, XShape shape) {
+		val deltaX = if(dx >= magnetDist)
+				0
+			else 
+				dx
+		val deltaY = if(dy >= magnetDist)
+				0
+			else 
+				dy		
+		val delta = new Point2D(deltaX, deltaY)
+		if(delta.norm < EPSILON)
+			return newPointInDiagram
+		val deltaLocal = shape.parent.sceneToLocal(shape.getRootDiagram.localToScene(delta))
+		return new Point2D(newPointInDiagram.x + deltaLocal.x, newPointInDiagram.y + deltaLocal.y)
 	}
 	
 	protected def watchDiagram(XDiagram diagram) {
@@ -188,24 +248,32 @@ class AuxiliaryLinesCache {
 		]
 		controlPoint.layoutXProperty.addListener(scalarListener)
 		controlPoint.layoutYProperty.addListener(scalarListener)
+		controlPoint.typeProperty.addListener [ p, o, n |
+			if(n == XControlPoint.Type.ANCHOR)
+				centerXMap.removeByShape(controlPoint)
+			else 
+				updateControlPoint(controlPoint)
+		]
 		shape2scalarListener.put(controlPoint, scalarListener)
 		updateControlPoint(controlPoint)
 	}
 	
 	protected def updateControlPoint(XControlPoint point) {
-		val boundsInDiagram = point.localToRootDiagram(point.boundsInLocal)
-		centerXMap.add(
-			new NodeLine(
-				boundsInDiagram.center.x,
-				Orientation.VERTICAL,
-				point,
-				boundsInDiagram))
-		centerYMap.add(
-			new NodeLine(
-				boundsInDiagram.center.y,
-				Orientation.HORIZONTAL,
-				point,
-				boundsInDiagram))
+		if(point.type != XControlPoint.Type.ANCHOR) {
+			val boundsInDiagram = point.localToRootDiagram(point.boundsInLocal)
+			centerXMap.add(
+				new NodeLine(
+					boundsInDiagram.center.x,
+					Orientation.VERTICAL,
+					point,
+					boundsInDiagram))
+			centerYMap.add(
+				new NodeLine(
+					boundsInDiagram.center.y,
+					Orientation.HORIZONTAL,
+					point,
+					boundsInDiagram))
+		}
 	}
 	
 	protected def unwatchControlPoint(XControlPoint point) {

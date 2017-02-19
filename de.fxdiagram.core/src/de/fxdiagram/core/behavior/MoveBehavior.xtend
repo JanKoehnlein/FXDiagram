@@ -66,8 +66,9 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
 			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
 		val newPositionInDiagram = host.parent.sceneToLocal(newPositionInScene)
-		val isSnap = host.diagram.gridEnabled.xor(shortcutDown)
-		dragTo(host.diagram.getSnappedPosition(newPositionInDiagram, host, isSnap))
+		val useGrid = host.diagram.gridEnabled.xor(shortcutDown)
+		val useAuxlines = !shortcutDown
+		dragTo(host.diagram.getSnappedPosition(newPositionInDiagram, host, useGrid, useAuxlines))
 	}
 	
 	def void mouseReleased(MouseEvent it) {

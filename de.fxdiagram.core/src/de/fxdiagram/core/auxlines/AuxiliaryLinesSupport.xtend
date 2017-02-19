@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import javafx.scene.Group
+import javafx.geometry.Point2D
 
 class AuxiliaryLinesSupport {
 	
@@ -29,6 +30,17 @@ class AuxiliaryLinesSupport {
 				val lines = cache.getAuxiliaryLines(selectedControlPoints.head)
 				lines.forEach[ group.children += createNode ]
 			}
+		}
+	}
+	
+	def getSnappedPosition(XShape shape, Point2D newPositionInDiagram) {
+		switch shape {
+			XControlPoint:
+				cache.getSnappedPosition(shape, newPositionInDiagram)
+			XNode:
+				cache.getSnappedPosition(shape, newPositionInDiagram)
+			default:
+				new Point2D(shape.layoutX, shape.layoutY)
 		}
 	}
 	

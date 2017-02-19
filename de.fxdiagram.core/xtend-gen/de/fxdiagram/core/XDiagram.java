@@ -443,14 +443,21 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public Point2D getSnappedPosition(final Point2D newPositionInDiagram) {
-    double _gridSize = this.getGridSize();
-    return Point2DExtensions.snapToGrid(newPositionInDiagram, _gridSize);
+    Point2D _xifexpression = null;
+    boolean _gridEnabled = this.getGridEnabled();
+    if (_gridEnabled) {
+      double _gridSize = this.getGridSize();
+      _xifexpression = Point2DExtensions.snapToGrid(newPositionInDiagram, _gridSize);
+    } else {
+      _xifexpression = newPositionInDiagram;
+    }
+    return _xifexpression;
   }
   
-  public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape, final boolean force) {
-    if (force) {
-      Bounds _snapBounds = shape.getSnapBounds();
-      Point2D _center = BoundsExtensions.center(_snapBounds);
+  public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape, final boolean useGrid, final boolean useAuxLines) {
+    if (useGrid) {
+      Bounds _layoutBounds = shape.getLayoutBounds();
+      Point2D _center = BoundsExtensions.center(_layoutBounds);
       Point2D _localToParent = shape.localToParent(_center);
       double _layoutX = shape.getLayoutX();
       double _layoutY = shape.getLayoutY();
@@ -461,13 +468,17 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       final Point2D snappedCenter = Point2DExtensions.snapToGrid(newCenterPosition, _gridSize);
       final Point2D correction = Point2DExtensions.operator_minus(snappedCenter, newCenterPosition);
       return Point2DExtensions.operator_plus(newPositionInDiagram, correction);
+    } else {
+      if (useAuxLines) {
+        return this.auxiliaryLinesSupport.getSnappedPosition(shape, newPositionInDiagram);
+      }
     }
     return newPositionInDiagram;
   }
   
   public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape) {
     boolean _gridEnabled = this.getGridEnabled();
-    return this.getSnappedPosition(newPositionInDiagram, shape, _gridEnabled);
+    return this.getSnappedPosition(newPositionInDiagram, shape, _gridEnabled, true);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XDiagram");
@@ -682,7 +693,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   private SimpleBooleanProperty gridEnabledProperty = new SimpleBooleanProperty(this, "gridEnabled",_initGridEnabled());
   
   private static final boolean _initGridEnabled() {
-    return true;
+    return false;
   }
   
   public boolean getGridEnabled() {

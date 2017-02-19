@@ -9,6 +9,7 @@ import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesCache;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -57,6 +58,27 @@ public class AuxiliaryLinesSupport {
         lines_1.forEach(_function_1);
       }
     }
+  }
+  
+  public Point2D getSnappedPosition(final XShape shape, final Point2D newPositionInDiagram) {
+    Point2D _switchResult = null;
+    boolean _matched = false;
+    if (shape instanceof XControlPoint) {
+      _matched=true;
+      _switchResult = this.cache.getSnappedPosition(((XControlPoint)shape), newPositionInDiagram);
+    }
+    if (!_matched) {
+      if (shape instanceof XNode) {
+        _matched=true;
+        _switchResult = this.cache.getSnappedPosition(((XNode)shape), newPositionInDiagram);
+      }
+    }
+    if (!_matched) {
+      double _layoutX = shape.getLayoutX();
+      double _layoutY = shape.getLayoutY();
+      _switchResult = new Point2D(_layoutX, _layoutY);
+    }
+    return _switchResult;
   }
   
   public void hide() {

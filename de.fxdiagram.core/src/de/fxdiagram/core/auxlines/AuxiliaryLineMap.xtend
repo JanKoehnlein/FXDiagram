@@ -4,10 +4,13 @@ import com.google.common.collect.HashMultimap
 import com.google.common.collect.Multimap
 import de.fxdiagram.core.XShape
 import java.util.Map
+import java.util.Set
+
+import static java.lang.Math.*
 
 class AuxiliaryLineMap<T> {
 	
-	Multimap<Integer, AuxiliaryLine> store = HashMultimap.create
+	Multimap<Long, AuxiliaryLine> store = HashMultimap.create
 	Map<XShape, AuxiliaryLine> shape2entry = newHashMap
 	
 	double threshold
@@ -39,6 +42,29 @@ class AuxiliaryLineMap<T> {
 		store.get(position.getKey)
 	}
 	
+	def getNearestLineDelta(double position, double maxDistance, Set<XShape> excluded) {
+		val key = getKey(position)
+		val steps = (maxDistance / threshold) as int
+		val at = store.get(key)  
+		if(at.containsUnskipped(excluded))
+			return position - key
+		for(var i=1; i< steps; i++) { 
+			val before = store.get(key - i)
+			if(before.containsUnskipped(excluded)) {
+				return position - key - i as double * threshold 
+			}
+			val after = store.get(key + i)
+			if(after.containsUnskipped(excluded)) {
+				return position - key + i as double * threshold
+			}
+		}
+		return maxDistance
+	}
+	
+	protected def containsUnskipped(Iterable<AuxiliaryLine> lines, Set<XShape> excluded) {
+		lines.exists[relatedShapes.exists[!excluded.contains(it)]]
+	}
+	
 	def getByShape(XShape shape) {
 		shape2entry.get(shape)
 	}
@@ -48,7 +74,7 @@ class AuxiliaryLineMap<T> {
 	}
 	
 	protected def getKey(double position) {
-		(position / threshold + 0.5) as int
+		round(position / threshold)
 	}
 }
 
