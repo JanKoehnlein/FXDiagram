@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Eclipse Integration
 Bundle-SymbolicName: de.fxdiagram.eclipse;singleton:=true
-Bundle-Version: 0.34.0.qualifier
+Bundle-Version: 0.35.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
 Require-Bundle: de.fxdiagram.annotations,
  de.fxdiagram.core;visibility:=reexport,
