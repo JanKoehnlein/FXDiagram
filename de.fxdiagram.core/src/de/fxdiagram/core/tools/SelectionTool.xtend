@@ -18,6 +18,7 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.XConnection
 
 class SelectionTool implements XDiagramTool {
 
@@ -91,7 +92,10 @@ class SelectionTool implements XDiagramTool {
 	}
 	
 	protected def updatePositionTooltip(Iterable<? extends XShape> selection, double screenX, double screenY) {
-		var selectionBounds = selection.map[localToRootDiagram(snapBounds)].reduce[a, b | a + b]
+		var selectionBounds = selection
+			.filter[!(it instanceof XConnection)]
+			.map[localToRootDiagram(snapBounds)]
+			.reduce[a, b | a + b]
 		if(selectionBounds != null) {
 			val positionString = String.format("(%.3f : %.3f)", selectionBounds.minX, selectionBounds.minY)
 			positionTip = positionTip ?: new SoftTooltip(root.headsUpDisplay, positionString)

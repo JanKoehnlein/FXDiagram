@@ -3,6 +3,7 @@ package de.fxdiagram.core.tools;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XButton;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -182,15 +183,19 @@ public class SelectionTool implements XDiagramTool {
   }
   
   protected void updatePositionTooltip(final Iterable<? extends XShape> selection, final double screenX, final double screenY) {
-    final Function1<XShape, Bounds> _function = (XShape it) -> {
+    final Function1<XShape, Boolean> _function = (XShape it) -> {
+      return Boolean.valueOf((!(it instanceof XConnection)));
+    };
+    Iterable<? extends XShape> _filter = IterableExtensions.filter(selection, _function);
+    final Function1<XShape, Bounds> _function_1 = (XShape it) -> {
       Bounds _snapBounds = it.getSnapBounds();
       return CoreExtensions.localToRootDiagram(it, _snapBounds);
     };
-    Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
-    final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds a, Bounds b) -> {
+    Iterable<Bounds> _map = IterableExtensions.map(_filter, _function_1);
+    final Function2<Bounds, Bounds, Bounds> _function_2 = (Bounds a, Bounds b) -> {
       return BoundsExtensions.operator_plus(a, b);
     };
-    Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
+    Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_2);
     boolean _notEquals = (!Objects.equal(selectionBounds, null));
     if (_notEquals) {
       double _minX = selectionBounds.getMinX();
