@@ -64,13 +64,18 @@ class ManhattanRouter {
 			points.set(points.size-1, connection.targetArrowHead.correctAnchor(points.get(points.size - 2).x, points.get(points.size - 2).y, points.last))
 		val newControlPoints = newArrayList
 		points.forEach [ point, i |
+			val isAnchorPoint = i==0 || i == points.size - 1
 			newControlPoints += new XControlPoint => [
-				layoutX = point.x
-				layoutY = point.y
-				type = if (i==0 || i == points.size - 1)
-						ANCHOR
-					else  
-				 		INTERPOLATED
+				if (isAnchorPoint) {
+					layoutX = point.x
+					layoutY = point.y
+					type = ANCHOR					
+				} else {
+					val snappedPoint = connection.diagram.getSnappedPosition(point)
+					layoutX = snappedPoint.x
+					layoutY = snappedPoint.y
+					type = INTERPOLATED
+				}  
 			]
 		]
 		newControlPoints.head.side = connectionDir.key

@@ -3,10 +3,12 @@ package de.fxdiagram.core.anchors;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.CachedAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -122,19 +124,24 @@ public class ManhattanRouter {
     }
     final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
     final Procedure2<Point2D, Integer> _function = (Point2D point, Integer i) -> {
+      final boolean isAnchorPoint = (((i).intValue() == 0) || ((i).intValue() == (points.size() - 1)));
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function_1 = (XControlPoint it) -> {
-        double _x_2 = point.getX();
-        it.setLayoutX(_x_2);
-        double _y_2 = point.getY();
-        it.setLayoutY(_y_2);
-        XControlPoint.Type _xifexpression = null;
-        if ((((i).intValue() == 0) || ((i).intValue() == (points.size() - 1)))) {
-          _xifexpression = XControlPoint.Type.ANCHOR;
+        if (isAnchorPoint) {
+          double _x_2 = point.getX();
+          it.setLayoutX(_x_2);
+          double _y_2 = point.getY();
+          it.setLayoutY(_y_2);
+          it.setType(XControlPoint.Type.ANCHOR);
         } else {
-          _xifexpression = XControlPoint.Type.INTERPOLATED;
+          XDiagram _diagram = CoreExtensions.getDiagram(this.connection);
+          final Point2D snappedPoint = _diagram.getSnappedPosition(point);
+          double _x_3 = snappedPoint.getX();
+          it.setLayoutX(_x_3);
+          double _y_3 = snappedPoint.getY();
+          it.setLayoutY(_y_3);
+          it.setType(XControlPoint.Type.INTERPOLATED);
         }
-        it.setType(_xifexpression);
       };
       XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_1);
       newControlPoints.add(_doubleArrow);
