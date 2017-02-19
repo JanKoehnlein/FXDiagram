@@ -41,6 +41,7 @@ import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
@@ -67,7 +68,12 @@ public class XDiagramConfigInterpreter {
       context.setIsReplaceRootDiagram(replaceDiagram);
       XDiagram _xifexpression = null;
       if (replaceDiagram) {
-        _xifexpression = diagramMapping.createDiagram(descriptor);
+        XDiagram _createDiagram = diagramMapping.createDiagram(descriptor);
+        final Procedure1<XDiagram> _function = (XDiagram it) -> {
+          XDiagramConfig _config = diagramMapping.getConfig();
+          _config.initialize(it);
+        };
+        _xifexpression = ObjectExtensions.<XDiagram>operator_doubleArrow(_createDiagram, _function);
       } else {
         _xifexpression = context.getDiagram();
       }
@@ -81,8 +87,8 @@ public class XDiagramConfigInterpreter {
       final InterpreterContext newContext = _xifexpression_1;
       if (isOnDemand) {
         diagram.setLayoutOnActivate(true);
-        final Procedure1<XDiagram> _function = (XDiagram it) -> {
-          final Function1<T, Object> _function_1 = (T domainObject) -> {
+        final Procedure1<XDiagram> _function_1 = (XDiagram it) -> {
+          final Function1<T, Object> _function_2 = (T domainObject) -> {
             Object _xblockexpression_1 = null;
             {
               this.<T>populateDiagram(diagramMapping, domainObject, newContext);
@@ -94,9 +100,9 @@ public class XDiagramConfigInterpreter {
             }
             return _xblockexpression_1;
           };
-          descriptor.<Object>withDomainObject(_function_1);
+          descriptor.<Object>withDomainObject(_function_2);
         };
-        diagram.setContentsInitializer(_function);
+        diagram.setContentsInitializer(_function_1);
       } else {
         this.<T>populateDiagram(diagramMapping, diagramObject, newContext);
       }

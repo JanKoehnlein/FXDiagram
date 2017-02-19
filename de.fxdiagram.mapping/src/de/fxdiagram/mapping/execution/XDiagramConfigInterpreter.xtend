@@ -41,10 +41,13 @@ class XDiagramConfigInterpreter {
 			return null
 		val replaceDiagram = context.diagram.domainObjectDescriptor != descriptor
 		context.isReplaceRootDiagram = replaceDiagram
-		val diagram = if(replaceDiagram) 
-			 	diagramMapping.createDiagram(descriptor)
-			else
+		val diagram = if(replaceDiagram) {
+			 	diagramMapping.createDiagram(descriptor) => [
+			 		diagramMapping.config.initialize(it)
+			 	]
+			} else {			
 				context.diagram
+			}
 		val newContext = if(replaceDiagram) 
 				new InterpreterContext(diagram, context)
 			else
