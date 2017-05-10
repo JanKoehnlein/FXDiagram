@@ -43,7 +43,7 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     return AddControlPointBehavior.class;
   }
   
-  public Object addControlPoint(final Point2D newPointLocalPosition) {
+  public void addControlPoint(final Point2D newPointLocalPosition) {
     final SetControlPointsCommand createCommand = this.createAddControlPointCommand(newPointLocalPosition);
     boolean _notEquals = (!Objects.equal(createCommand, null));
     if (_notEquals) {
@@ -52,7 +52,6 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
       CommandStack _commandStack = _root.getCommandStack();
       _commandStack.execute(createCommand);
     }
-    return null;
   }
   
   protected SetControlPointsCommand createAddControlPointCommand(final Point2D localPosition) {
