@@ -169,6 +169,10 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 				]
 			]
 		])
+		auxiliaryLinesSupport = if(!isRootDiagram && parentDiagram?.auxiliaryLinesSupport != null)
+				parentDiagram.auxiliaryLinesSupport
+			else 
+				new AuxiliaryLinesSupport(this)
 		if(layoutOnActivate && layoutParameters != null) {
 			nodes.forEach [
 				node.autosize
@@ -182,10 +186,6 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 			new Layouter().layout(layoutParameters, this, null)
 			layoutOnActivate = false
 		}
-		auxiliaryLinesSupport = if(!isRootDiagram && parentDiagram?.auxiliaryLinesSupport != null)
-				parentDiagram.auxiliaryLinesSupport
-			else 
-				new AuxiliaryLinesSupport(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
 		behaviors.addInitializingListener(new InitializingMapListener => [

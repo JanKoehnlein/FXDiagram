@@ -249,6 +249,28 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     };
     InitializingListListener<XConnection> _doubleArrow_1 = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener_1, _function_2);
     CoreExtensions.<XConnection>addInitializingListener(_connections, _doubleArrow_1);
+    AuxiliaryLinesSupport _xifexpression = null;
+    boolean _and = false;
+    boolean _isRootDiagram = this.getIsRootDiagram();
+    boolean _not = (!_isRootDiagram);
+    if (!_not) {
+      _and = false;
+    } else {
+      XDiagram _parentDiagram = this.getParentDiagram();
+      AuxiliaryLinesSupport _auxiliaryLinesSupport = null;
+      if (_parentDiagram!=null) {
+        _auxiliaryLinesSupport=_parentDiagram.auxiliaryLinesSupport;
+      }
+      boolean _notEquals = (!Objects.equal(_auxiliaryLinesSupport, null));
+      _and = _notEquals;
+    }
+    if (_and) {
+      XDiagram _parentDiagram_1 = this.getParentDiagram();
+      _xifexpression = _parentDiagram_1.auxiliaryLinesSupport;
+    } else {
+      _xifexpression = new AuxiliaryLinesSupport(this);
+    }
+    this.auxiliaryLinesSupport = _xifexpression;
     if ((this.getLayoutOnActivate() && (!Objects.equal(this.getLayoutParameters(), null)))) {
       ObservableList<XNode> _nodes_1 = this.getNodes();
       final Consumer<XNode> _function_3 = (XNode it) -> {
@@ -272,28 +294,6 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       _layouter.layout(_layoutParameters, this, null);
       this.setLayoutOnActivate(false);
     }
-    AuxiliaryLinesSupport _xifexpression = null;
-    boolean _and = false;
-    boolean _isRootDiagram = this.getIsRootDiagram();
-    boolean _not = (!_isRootDiagram);
-    if (!_not) {
-      _and = false;
-    } else {
-      XDiagram _parentDiagram = this.getParentDiagram();
-      AuxiliaryLinesSupport _auxiliaryLinesSupport = null;
-      if (_parentDiagram!=null) {
-        _auxiliaryLinesSupport=_parentDiagram.auxiliaryLinesSupport;
-      }
-      boolean _notEquals = (!Objects.equal(_auxiliaryLinesSupport, null));
-      _and = _notEquals;
-    }
-    if (_and) {
-      XDiagram _parentDiagram_1 = this.getParentDiagram();
-      _xifexpression = _parentDiagram_1.auxiliaryLinesSupport;
-    } else {
-      _xifexpression = new AuxiliaryLinesSupport(this);
-    }
-    this.auxiliaryLinesSupport = _xifexpression;
     NavigationBehavior _behavior = this.<NavigationBehavior>getBehavior(NavigationBehavior.class);
     boolean _equals = Objects.equal(_behavior, null);
     if (_equals) {
