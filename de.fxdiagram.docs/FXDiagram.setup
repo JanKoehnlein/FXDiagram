@@ -29,10 +29,6 @@
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
-      name="xtext.examples"
-      value="http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_8_4/"/>
-  <setupTask
-      xsi:type="setup:VariableTask"
       name="efxclipse.ide.release"
       value="http://download.eclipse.org/efxclipse/updates-released/2.4.0/site"
       label=""/>
@@ -53,6 +49,10 @@
       xsi:type="setup:VariableTask"
       name="fxdiagram.swtfx.git.clone.location"
       value="${installation.location/git/}${fxdiagram.swtfx.git.clone.remoteURI|gitRepository}"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="fxdiagram.xtext.examples.git.clone.location"
+      value="${installation.location/git/}${fxdiagram.xtext.examples.git.clone.remoteURI|gitRepository}"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="kieler.git.clone.location"
@@ -148,10 +148,30 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
-    <description>
-      JavaFX/SWT Gesture Bridge
-
-    </description>
+    <description>JavaFX/SWT Gesture Bridge</description>
+  </setupTask>
+  <setupTask
+      xsi:type="git:GitCloneTask"
+      id="fxdiagram.xtext.examples.git.clone"
+      remoteURI="JanKoehnlein/fxdiagram-xtext-examples"
+      pushURI=""
+      checkoutBranch="master">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/InducedChoices">
+      <detail
+          key="inherit">
+        <value>github.remoteURIs</value>
+      </detail>
+      <detail
+          key="label">
+        <value>Xtext Examples</value>
+      </detail>
+      <detail
+          key="target">
+        <value>remoteURI</value>
+      </detail>
+    </annotation>
+    <description>Xtext Examples</description>
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
@@ -174,6 +194,9 @@
     <choice
         value="http://download.eclipse.org/releases/neon"
         label="Neon - 4.6"/>
+    <choice
+        value="http://download.eclipse.org/releases/oxygen"
+        label="Oxygen - 4.7"/>
     <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
   </setupTask>
   <setupTask
@@ -202,10 +225,14 @@
           name="de.fxdiagram.eclipse.updatesite"/>
       <requirement
           name="org.eclipse.jdt.feature.group"/>
+      <requirement
+          name="org.eclipse.mwe2.launcher.feature.feature.group"/>
       <sourceLocator
           rootFolder="${fxdiagram.git.clone.location}"/>
       <sourceLocator
           rootFolder="${fxdiagram.swtfx.git.clone.location}"/>
+      <sourceLocator
+          rootFolder="${fxdiagram.xtext.examples.git.clone.location}"/>
       <sourceLocator
           rootFolder="${kieler.git.clone.location}"/>
       <repositoryList
@@ -218,8 +245,6 @@
             url="${efxclipse.runtime.release}"/>
         <repository
             url="${efxclipse.ide.release}"/>
-        <repository
-            url="${xtext.examples}"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -308,6 +333,12 @@
               pattern="de\.fxdiagram\.docs"/>
         </operand>
       </predicate>
+    </workingSet>
+    <workingSet
+        name="Xtext examples">
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="org\.eclipse\.xtext\.example\.*"/>
     </workingSet>
   </setupTask>
   <stream name="master"/>
