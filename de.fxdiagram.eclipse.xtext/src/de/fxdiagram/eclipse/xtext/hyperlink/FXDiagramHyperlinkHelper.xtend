@@ -48,7 +48,7 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 	override createHyperlinksByOffset(XtextResource resource, int offset, IHyperlinkAcceptor acceptor) {
 		val selectedElement = EObjectAtOffsetHelper.resolveElementAt(resource, offset)
 		val editor = workbench?.activeWorkbenchWindow?.activePage?.activeEditor
-		if (selectedElement != null) {
+		if (selectedElement !== null) {
 			val entryCalls = XDiagramConfig.Registry.instance.configurations
 				.map[getEntryCalls(selectedElement)]
 				.flatten

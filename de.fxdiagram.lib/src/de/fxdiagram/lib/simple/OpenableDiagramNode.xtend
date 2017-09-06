@@ -112,7 +112,7 @@ class OpenableDiagramNode extends XNode implements XDiagramContainer {
 		pane.tooltip = "Double-click to open"
 		cursor = Cursor.HAND
 		this.root = getRoot
-		if(innerDiagram == null) {
+		if(innerDiagram === null) {
 			LOG.severe('Nested diagram not set. Deactivating open behavior')
 		} else {
 			node.onMouseClicked = [

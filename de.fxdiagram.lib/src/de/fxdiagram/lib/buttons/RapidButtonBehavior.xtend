@@ -88,7 +88,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 				diagram.buttonLayer.children += allButtons
 			]
 			unset = [
-				if(it != null)
+				if(it !== null)
 					diagram.buttonLayer.children -= allButtons				
 			]
 		])
@@ -133,7 +133,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	protected def layout() {
 		val hostBounds = host.localToRootDiagram(host.layoutBounds)
 		val hostCenter = hostBounds?.center
-		if(hostCenter != null) {
+		if(hostCenter !== null) {
 			for(entry: pos2group.entrySet) {
 				val pos = entry.key
 				val group = entry.value

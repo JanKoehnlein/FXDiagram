@@ -71,7 +71,7 @@ class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 			text = name
 			tooltip = "Zoom to reveal content"
 		]	
-		if(innerDiagram == null) {
+		if(innerDiagram === null) {
 			LOG.severe('No inner diagram set on node ' + name + '. LOD behavior deactivated')
 		} else {
 			pane.children += innerDiagramGroup = new Group => [

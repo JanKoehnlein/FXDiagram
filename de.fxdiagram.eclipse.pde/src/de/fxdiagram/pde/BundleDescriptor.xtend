@@ -29,7 +29,7 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 	
 	override <U> withDomainObject((BundleDescription)=>U lambda) {
 		val bundle = findBundle(symbolicName, version)
-		if(bundle == null) 
+		if(bundle === null) 
 			throw new NoSuchElementException('Bundle ' + symbolicName + ' not found')
 		lambda.apply(bundle)
 	}
@@ -40,7 +40,7 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 	
 	def <U> withPlugin((IPluginModelBase)=>U lambda) {
 		val plugin = PluginRegistry.findModel(symbolicName, version, IMatchRules.PERFECT, null)
-		if(plugin != null) {
+		if(plugin !== null) {
 			lambda.apply(plugin)
 		} else {
 			LOG.warn('Invalid BundleDescriptor ' + this) 

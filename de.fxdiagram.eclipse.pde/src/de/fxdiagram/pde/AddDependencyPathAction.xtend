@@ -86,7 +86,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 
 			override protected nodeChosen(XNode choice) {
 				super.nodeChosen(choice)
-				if (choice != null) {
+				if (choice !== null) {
 					root.commandStack.execute(
 						new Layouter().createLayoutCommand(host.root.diagram, 500.millis))
 				}

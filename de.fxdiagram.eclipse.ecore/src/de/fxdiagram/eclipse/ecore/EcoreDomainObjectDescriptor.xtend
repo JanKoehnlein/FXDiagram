@@ -28,7 +28,7 @@ class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObjec
 	
 	override <U> withDomainObject((EObject)=>U lambda) {
 		val element = provider.resolveEObject(uri)
-		if(element != null) 
+		if(element !== null) 
 			return lambda.apply(element)
 		else
 			throw new NoSuchElementException('Cannot resolve EObject ' + uri)

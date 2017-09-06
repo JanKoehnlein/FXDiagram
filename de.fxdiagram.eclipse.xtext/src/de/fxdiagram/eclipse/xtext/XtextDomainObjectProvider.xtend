@@ -50,7 +50,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 				return new XtextEObjectDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID) as IMappedElementDescriptor<T>
 			}
 			ESetting<?>: {
-				if(owner == null || owner.eIsProxy || target == null)
+				if(owner === null || owner.eIsProxy || target === null)
 					return null
 				return new XtextESettingDescriptor(owner.createXtextEObjectID, target.createXtextEObjectID, reference, index, mapping.config.ID, mapping.ID)
 			}
@@ -70,7 +70,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	def IResourceDescriptions getIndex(XtextEObjectID context) {
 		val rsp = context.resourceServiceProvider
 		val project = rsp.get(ProjectUtil)?.getProject(context.URI)
-		if(project == null)
+		if(project === null)
 			throw new NoSuchElementException('Project ' + context.URI + ' does not exist')
 		val resourceSet = rsp.get(IResourceSetProvider).get(project)
 		resourceSet.loadOptions.put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, true)
@@ -92,7 +92,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 						val eObject = elementID.resolve(resourceSet)
 						val locationInFileProvider = resourceServiceProvider.get(ILocationInFileProvider)
 						val textRegion = locationInFileProvider.getSignificantTextRegion(eObject)
-						if(textRegion != null) 
+						if(textRegion !== null) 
 							cachedEditor.selectAndReveal(textRegion.offset, textRegion.length)
 						null
 					]
@@ -102,7 +102,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 		}
 		val activePart = activePage.activePart
 		val editor = Access.IURIEditorOpener.get.open(resourceURI, isSelect)
-		if(editor != null)
+		if(editor !== null)
 			editorCache.put(resourceURI, new CachedEditor(editor)) 
 		if(!isActivate)
 			activePage.activate(activePart)

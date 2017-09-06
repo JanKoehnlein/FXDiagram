@@ -190,7 +190,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			node.layout
 			calculateVisibleNodes
 			group.children += node
-			if(choiceInfo != null)
+			if(choiceInfo !== null)
 				node2choiceInfo.put(node, choiceInfo)
 			true
 		} else {
@@ -240,7 +240,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			textFill = diagram.foregroundPaint
 			toFront
 		]
-		if (minusButton != null) {
+		if (minusButton !== null) {
 			diagram.buttonLayer.children += plusButton
 			diagram.buttonLayer.children += minusButton
 			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
@@ -271,7 +271,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
 		blurDiagram = false
-		if (minusButton != null) {
+		if (minusButton !== null) {
 			diagram.buttonLayer.children -= minusButton
 			diagram.buttonLayer.children -= plusButton
 		}
@@ -280,12 +280,12 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	}
 
 	protected def nodeChosen(XNode choice) {
-		if (choice != null) {
+		if (choice !== null) {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
 			val shapesToAdd = <XShape>newArrayList
 			var existingChoice = diagram.nodes.findFirst[domainObjectDescriptor == choice.domainObjectDescriptor]
-			if(existingChoice == null) {
+			if(existingChoice === null) {
 				existingChoice = choice
 				val unlayoutedBounds = choice.layoutBounds
 				choice.effect = null

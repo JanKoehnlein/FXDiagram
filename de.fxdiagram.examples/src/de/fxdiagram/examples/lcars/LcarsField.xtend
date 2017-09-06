@@ -135,7 +135,7 @@ class LcarsField extends Parent {
 	}
 	
 	def resetVisuals() {
-		if(queryProgress != null) {
+		if(queryProgress !== null) {
 			(lcarsNode.node as Pane).children -= queryProgress
 			queryProgress = null			
 		}

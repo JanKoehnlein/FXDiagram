@@ -122,7 +122,7 @@ class BundleUtil {
 				result += new FragmentHost(bundle, it)
 			]
 		}
-		return result.filter [ dependency != null && (considerOptional || !optional) ]
+		return result.filter [ dependency !== null && (considerOptional || !optional) ]
 	}
 	
 	static def getInverseBundleDependencies(BundleDescription bundle) {
@@ -141,7 +141,7 @@ class BundleUtil {
 			if(considerFragments && bundle.host?.supplier?.supplier == owner) 
 				result += new FragmentHost(owner, bundle)
 		]
-		return result.filter [ dependency != null && (considerOptional || !optional) ]
+		return result.filter [ dependency !== null && (considerOptional || !optional) ]
 	}
 	
 	static def allBundles() {
@@ -167,21 +167,21 @@ class BundleUtil {
 				val requireBundle = owner.requiredBundles.findFirst [
 					supplier?.name == dependencyID && versionRange == dependencyVersionRange
 				]
-				if(requireBundle != null)
+				if(requireBundle !== null)
 					return new RequireBundle(owner, requireBundle)
 			}
 			case PACKAGE_IMPORT: {
 				val packageImport = owner.importPackages.findFirst [
 					(supplier as ExportPackageDescription).exporter.name == dependencyID && versionRange == dependencyVersionRange
 				]
-				if(packageImport != null) 
+				if(packageImport !== null) 
 					return new PackageImport(owner, packageImport)
 			}
 			case FRAGMENT_HOST: {
 				val fragment = owner.fragments.findFirst [
 					symbolicName == dependencyID
 				]
-				if(fragment != null)
+				if(fragment !== null)
 					return new FragmentHost(owner, fragment)
 			}
 			case UNQUALIFIED: {

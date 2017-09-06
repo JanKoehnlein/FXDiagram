@@ -22,9 +22,9 @@ class JvmAssociationSelectionExtractor implements ISelectionExtractor {
 						val associations = resourceServiceProvider.get(IJvmModelAssociations)
 						val eObjectAtOffsetHelper = resourceServiceProvider.get(EObjectAtOffsetHelper)
 						val selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, selection.offset)
-						if (selectedElement != null) {
+						if (selectedElement !== null) {
 							val primary = associations.getPrimaryJvmElement(selectedElement)
-							if(primary != null)
+							if(primary !== null)
 								return acceptor.accept(primary)
 						}
 					}

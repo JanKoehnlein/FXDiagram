@@ -24,7 +24,7 @@ class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
 	
 	override resolve(ResourceSet resourceSet) {
 		val element = resourceSet.getEObject(URI, true)
-		if(element == null || element.eIsProxy)
+		if(element === null || element.eIsProxy)
 			throw new NoSuchElementException('Could not resolve ' + URI)
 		if(!EClass.isInstance(element))
 			throw new NoSuchElementException('Expected ' + EClass.name + ' but got ' + element.eClass.name)

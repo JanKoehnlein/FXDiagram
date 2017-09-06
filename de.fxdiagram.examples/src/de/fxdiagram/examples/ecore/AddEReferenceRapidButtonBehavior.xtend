@@ -53,14 +53,14 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 						new LineArrowHead(it, false)
 				sourceArrowHead = if (reference.containment) 
 						new DiamondArrowHead(it, true)
-					else if(!reference.container && reference.EOpposite != null) 
+					else if(!reference.container && reference.EOpposite !== null) 
 						new LineArrowHead(it, true)
 
 				new XConnectionLabel(it) => [
 					text.text = reference.name
 					position = 0.8
 				]
-				if(reference.EOpposite != null) {
+				if(reference.EOpposite !== null) {
 					new XConnectionLabel(it) => [
 						text.text = reference.EOpposite.name
 						position = 0.2

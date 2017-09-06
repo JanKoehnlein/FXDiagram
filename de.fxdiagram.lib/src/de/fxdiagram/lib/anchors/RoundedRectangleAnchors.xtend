@@ -25,10 +25,10 @@ class RoundedRectangleAnchors extends RectangleAnchors {
 
 	override getAnchor(double x, double y) {
 		val rectAnchor = super.getAnchor(x, y)
-		if(rectAnchor == null)
+		if(rectAnchor === null)
 			return null
 		val boundsInRootDiagram = boundsInRoot
-		if(boundsInRootDiagram == null)
+		if(boundsInRootDiagram === null)
 			return null
 		val radiusBounds = host.node.localToRootDiagram(new BoundingBox(0, 0, radiusX, radiusY))
 		val radiusInRootDiagram = new Dimension2D(radiusBounds.width, radiusBounds.height)
@@ -67,7 +67,7 @@ class RoundedRectangleAnchors extends RectangleAnchors {
 	
 	override getManhattanAnchor(double x, double y, Side side) {
 		val rectAnchor = super.getManhattanAnchor(x, y, side)
-		if(rectAnchor == null)
+		if(rectAnchor === null)
 			return null
 		val bounds = boundsInRoot
 		val radius= host.node.localToRootDiagram(new BoundingBox(0, 0, radiusX, radiusY))

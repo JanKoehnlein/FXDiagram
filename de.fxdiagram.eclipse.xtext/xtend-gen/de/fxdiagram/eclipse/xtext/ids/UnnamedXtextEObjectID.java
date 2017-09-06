@@ -33,40 +33,32 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   public IEObjectDescription findInIndex(final IResourceDescriptions index) {
     IEObjectDescription _xblockexpression = null;
     {
-      URI _uRI = this.getURI();
-      URI _trimFragment = _uRI.trimFragment();
-      final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
-      EClass _eClass = this.getEClass();
-      Iterable<IEObjectDescription> _exportedObjectsByType = resourceDescription.getExportedObjectsByType(_eClass);
+      final IResourceDescription resourceDescription = index.getResourceDescription(this.getURI().trimFragment());
       final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
-        URI _uRI_1 = this.getURI();
+        URI _uRI = this.getURI();
         URI _eObjectURI = it.getEObjectURI();
-        return Boolean.valueOf(Objects.equal(_uRI_1, _eObjectURI));
+        return Boolean.valueOf(Objects.equal(_uRI, _eObjectURI));
       };
-      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjectsByType, _function);
+      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(resourceDescription.getExportedObjectsByType(this.getEClass()), _function);
     }
     return _xblockexpression;
   }
   
   @Override
   public EObject resolve(final ResourceSet resourceSet) {
-    URI _uRI = this.getURI();
-    final EObject element = resourceSet.getEObject(_uRI, true);
-    if ((Objects.equal(element, null) || element.eIsProxy())) {
-      URI _uRI_1 = this.getURI();
-      String _plus = ("Could not resolve " + _uRI_1);
+    final EObject element = resourceSet.getEObject(this.getURI(), true);
+    if (((element == null) || element.eIsProxy())) {
+      URI _uRI = this.getURI();
+      String _plus = ("Could not resolve " + _uRI);
       throw new NoSuchElementException(_plus);
     }
-    EClass _eClass = this.getEClass();
-    boolean _isInstance = _eClass.isInstance(element);
+    boolean _isInstance = this.getEClass().isInstance(element);
     boolean _not = (!_isInstance);
     if (_not) {
-      EClass _eClass_1 = this.getEClass();
-      String _name = _eClass_1.getName();
+      String _name = this.getEClass().getName();
       String _plus_1 = ("Expected " + _name);
       String _plus_2 = (_plus_1 + " but got ");
-      EClass _eClass_2 = element.eClass();
-      String _name_1 = _eClass_2.getName();
+      String _name_1 = element.eClass().getName();
       String _plus_3 = (_plus_2 + _name_1);
       throw new NoSuchElementException(_plus_3);
     }

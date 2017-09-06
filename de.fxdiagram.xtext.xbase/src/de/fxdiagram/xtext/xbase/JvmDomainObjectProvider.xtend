@@ -36,7 +36,7 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 					if(eResource.URI.scheme.endsWith('java')) {
 						val identifiableJvmElement = getContainerOfType(JvmIdentifiableElement)
 						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(identifiableJvmElement)
-						if(javaElement != null)
+						if(javaElement !== null)
 							return new JavaElementDescriptor(elementID, javaElement.handleIdentifier, mapping.config.ID, mapping.ID)
 								as IMappedElementDescriptor<T>	
 					}
@@ -94,11 +94,11 @@ class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDescriptor
 	
 	override <T> withDomainObject((ECLASS)=>T lambda) {
 		val javaElement = JavaCore.create(handleIdentifier)
-		if(javaElement == null)
+		if(javaElement === null)
 			throw new NoSuchElementException('Java element ' + handleIdentifier + ' not found')
 		val domainUtil = (provider as JvmDomainObjectProvider).getJvmDomainUtil(elementID.URI)
 		val jvmElement = domainUtil.getJvmElement(javaElement)
-		if(jvmElement == null)
+		if(jvmElement === null)
 			throw new NoSuchElementException('JVM element for ' + javaElement.elementName + ' not found')
 		val realJvmElement = jvmElement.eResource.getEObject(elementID.URI.fragment)
 		lambda.apply(realJvmElement as ECLASS)

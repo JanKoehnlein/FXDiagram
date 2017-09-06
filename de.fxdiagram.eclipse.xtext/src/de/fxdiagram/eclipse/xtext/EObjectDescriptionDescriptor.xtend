@@ -24,7 +24,7 @@ class EObjectDescriptionDescriptor extends AbstractMappedElementDescriptor<IEObj
 	override <U> withDomainObject((IEObjectDescription)=>U lambda) {
 		val index = provider.getIndex(elementID)
 		val description = elementID.findInIndex(index)
-		if(description == null)
+		if(description === null)
 			throw new NoSuchElementException('Element ' + elementID + ' does not exist')
 		lambda.apply(description)
 	}

@@ -48,7 +48,7 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 	override resolve(ResourceSet resourceSet) {
 		val resourceURI = getURI.trimFragment
 		val resource = resourceSet.getResource(resourceURI, true)
-		if (resource == null)
+		if (resource === null)
 			throw new NoSuchElementException('Cannot load resource ' + resourceURI)
 		val resourceDescription = resourceServiceProvider.resourceDescriptionManager.
 			getResourceDescription(resource)
@@ -61,21 +61,21 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 				val elementByName = resource.allContents
 					.filter[eClass == this.EClass]
 					.findFirst[fullyQualifiedName == this.qualifiedName]
-				if(elementByName != null)
+				if(elementByName !== null)
 					return elementByName
 			}
 			throw new NoSuchElementException('''Cannot find element named «qualifiedName» of type «EClass.name» in «resource.URI»''')
 		}
 		val eObjectDescription = eObjectDescriptions.head
 		val element = EcoreUtil.resolve(eObjectDescription.EObjectOrProxy, resource)
-		if (element == null || element.eIsProxy)
+		if (element === null || element.eIsProxy)
 			throw new NoSuchElementException('Cannot resolve element ' + eObjectDescription.EObjectURI)
 		return element
 	}
 	
 	override findInIndex(IResourceDescriptions index) {
 		val resourceDescription = index.getResourceDescription(URI.trimFragment)
-		if(resourceDescription == null)
+		if(resourceDescription === null)
 			throw new NoSuchElementException('Resource ' + URI.trimFragment + ' does not exist in index')
 		resourceDescription.getExportedObjects(EClass, getQualifiedName, false).head
 	}

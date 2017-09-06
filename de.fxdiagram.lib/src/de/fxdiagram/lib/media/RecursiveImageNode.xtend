@@ -176,7 +176,7 @@ class FirstRecursiveImageNode extends XNode {
 			val bounds = child.localToScene(child.boundsInLocal)
 			val area = bounds.width * bounds.height
 			if (area <= 10) {
-				if (parent != null) {
+				if (parent !== null) {
 					parent.children -= child
 				} else {
 					// never remove the first image

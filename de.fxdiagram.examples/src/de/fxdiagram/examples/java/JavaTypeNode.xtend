@@ -51,7 +51,7 @@ class JavaTypeNode extends XNode {
 	}
 	
 	def getJavaTypeModel() {
-		if(model == null) 
+		if(model === null) 
 			model = new JavaTypeModel(javaType)
 		model
 	}

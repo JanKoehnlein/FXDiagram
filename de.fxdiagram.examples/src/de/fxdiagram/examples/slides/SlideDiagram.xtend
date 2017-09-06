@@ -36,7 +36,7 @@ class SlideDiagram extends XDiagram {
 	}
 	
 	def boolean next() {
-		val newSlide = if(currentSlide != null) {
+		val newSlide = if(currentSlide !== null) {
 				val nextIndex = slides.indexOf(currentSlide) + 1
 				if(nextIndex == slides.size) {
 					getBehavior(CloseBehavior)?.close					
@@ -52,7 +52,7 @@ class SlideDiagram extends XDiagram {
 	
 	def boolean previous() {
 		val slides = slides
-		val newSlide = if(currentSlide != null) {
+		val newSlide = if(currentSlide !== null) {
 				val previousIndex = slides.indexOf(currentSlide) - 1
 				if(previousIndex < 0) {
 					getBehavior(CloseBehavior)?.close					
@@ -68,7 +68,7 @@ class SlideDiagram extends XDiagram {
 	
 	protected def showSlide(Slide newSlide) {
 		val oldSlide = currentSlide
-		val fade = if(oldSlide != null) {
+		val fade = if(oldSlide !== null) {
 						new FadeTransition => [
 							node = oldSlide
 							duration = 200.millis
@@ -77,7 +77,7 @@ class SlideDiagram extends XDiagram {
 							onFinished = [ nodes -= oldSlide ]
 						]
 					} else null
-		val appear = if(newSlide != null) {
+		val appear = if(newSlide !== null) {
 						nodes += newSlide
 						newSlide.selected = true
 						new FadeTransition => [
@@ -87,7 +87,7 @@ class SlideDiagram extends XDiagram {
 							toValue = 1
 						]
 					} else null
-		if(fade != null && appear != null) {
+		if(fade !== null && appear !== null) {
 			new ParallelTransition => [
 				children += fade
 				children += appear

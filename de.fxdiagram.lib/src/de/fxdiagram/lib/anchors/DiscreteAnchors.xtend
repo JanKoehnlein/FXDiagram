@@ -35,7 +35,7 @@ class DiscreteAnchors implements Anchors {
 
 	protected def calculatePoints() {
 		val bounds = referenceNode?.boundsInLocal
-		if (bounds != null) {
+		if (bounds !== null) {
 			val deltaX = (bounds.maxX - bounds.minX) / (numAnchorsPerSide + 1)
 			val deltaY = (bounds.maxY - bounds.minY) / (numAnchorsPerSide + 1)
 			val anchors = newArrayList

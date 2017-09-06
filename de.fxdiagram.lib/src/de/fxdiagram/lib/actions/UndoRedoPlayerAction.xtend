@@ -110,7 +110,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 	}
 	
 	protected def show() {
-		if(fadeTransition != null)
+		if(fadeTransition !== null)
 			fadeTransition.stop
 		controlPanel.opacity = 1
 	}	
@@ -130,7 +130,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 	}	
 	
 	protected def stopFastMode() {
-		if(animationQueueListener != null)
+		if(animationQueueListener !== null)
 			root.getCommandStack.getContext.getAnimationQueue.removeListener(animationQueueListener)
 	}
 

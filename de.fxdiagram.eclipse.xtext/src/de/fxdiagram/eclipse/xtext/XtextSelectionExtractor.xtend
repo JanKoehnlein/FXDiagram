@@ -40,7 +40,7 @@ class XtextSelectionExtractor implements ISelectionExtractor, IChangeSource {
 	override removeChangeListener(IWorkbenchPart part, ModelChangeBroker broker) {
 		if (part instanceof XtextEditor) {
 			val listener = editor2listener.remove(part)
-			if(listener != null)
+			if(listener !== null)
 				part.document.removeModelListener(listener)
 		}
 	}

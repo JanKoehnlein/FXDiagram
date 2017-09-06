@@ -28,7 +28,7 @@ class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleD
 
 	override <U> withDomainObject((BundleDependency)=>U lambda) {
 		val dependency = findBundleDependency(kind, ownerSymbolicName, ownerVersion, importSymbolicName, importVersionRange)
-		if(dependency == null)
+		if(dependency === null)
 			throw new NoSuchElementException('Bundle dependency from ' + ownerSymbolicName + ' to ' + importSymbolicName + ' not found')
 		lambda.apply(dependency)
 	}

@@ -84,7 +84,7 @@ class FxPropertyCompilationParticipant implements TransformationParticipant<Muta
 	def createField(MutableFieldDeclaration f, MutableClassDeclaration clazz,
 		String propName, TypeReference propType, String fieldName, TypeReference fieldType, boolean isReadOnly,
 		boolean isList, TypeReference propTypeAPI) {
-		if (f.initializer == null) {
+		if (f.initializer === null) {
 			clazz.addField(propName) [
 				type = propType
 				initializer = ['''new «toJavaCode(propType)»(this, "«fieldName»")''']

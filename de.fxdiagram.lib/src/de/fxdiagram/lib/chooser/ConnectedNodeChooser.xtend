@@ -105,12 +105,12 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 	}
 	
 	protected def addConnection(XConnection connection) {
-		if(connection != null && connection.source.diagram != null && connection.target.diagram != null) 
+		if(connection !== null && connection.source.diagram !== null && connection.target.diagram !== null) 
 			diagram.connections += connection
 	}
 
 	protected def removeConnection(XConnection connection) {
-		if(connection != null) {
+		if(connection !== null) {
 			diagram.connections -= connection
 			connection.source.outgoingConnections.remove(connection)
 			connection.target.incomingConnections.remove(connection)

@@ -19,7 +19,7 @@ class EllipseAnchors extends AbstractAnchors {
 	
 	override getAnchor(double x, double y) {
 		val bounds = boundsInRoot
-		if(bounds == null)
+		if(bounds === null)
 			return null
 		val center = bounds.center
 		val angle = atan2(y - center.y, x - center.x)		

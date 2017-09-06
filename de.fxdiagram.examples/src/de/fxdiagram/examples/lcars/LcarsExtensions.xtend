@@ -10,7 +10,7 @@ class LcarsExtensions {
 	
 	static def lcarsFont(double size) {
 		val cachedFont = cache.get(size)
-		if(cachedFont != null)
+		if(cachedFont !== null)
 			return cachedFont
 		val input = LcarsExtensions.classLoader.getResourceAsStream("de/fxdiagram/examples/lcars/LCARSGTJ3.ttf")
 		val font = Font.loadFont(input, size)

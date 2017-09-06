@@ -162,7 +162,7 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 	val eReferenceToName = new ConnectionLabelMapping<EReference>(this, 'eReferenceToName') {
 		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
 			super.createLabel(descriptor, labelElement) => [ 
-				if(labelElement.EOpposite == null)
+				if(labelElement.EOpposite === null)
 					position = 0.5
 				else
 					position = 1 - EREFERENCE_LABEL_POS
@@ -177,7 +177,7 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 	val eReferenceFroName = new ConnectionLabelMapping<EReference>(this, 'eReferenceFroName') {
 		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
 			super.createLabel(descriptor, labelElement) => [ 
-				if(labelElement.EOpposite == null)
+				if(labelElement.EOpposite === null)
 					position = 0.5
 				else
 					position = EREFERENCE_LABEL_POS

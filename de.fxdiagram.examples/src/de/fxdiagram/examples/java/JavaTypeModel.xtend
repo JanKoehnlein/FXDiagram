@@ -28,7 +28,7 @@ class JavaTypeModel {
 			.filter[isPublic(it.modifiers)]
 			.forEach[ method |
 				val nameAndType = method.propertyNameAndType
-				if(nameAndType != null)
+				if(nameAndType !== null)
 					propertyMethods.put(nameAndType.key, nameAndType.value -> method)
 			]
 		for(propertyName: propertyMethods.keySet) {
@@ -46,7 +46,7 @@ class JavaTypeModel {
 		}
 		operations.sortInplaceBy[name]
 		properties.sortInplaceBy[name]
-		if(javaType.superclass != null)
+		if(javaType.superclass !== null)
 			superTypes.add(javaType.superclass)
 		superTypes.addAll(javaType.interfaces)
 	}

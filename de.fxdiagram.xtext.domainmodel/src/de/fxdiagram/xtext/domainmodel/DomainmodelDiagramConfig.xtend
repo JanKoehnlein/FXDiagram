@@ -61,13 +61,13 @@ class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
 
 		override calls() {
 			entityName.labelFor[it]
-			attribute.labelForEach[features.filter(Property).filter[type.referencedEntity == null]]
+			attribute.labelForEach[features.filter(Property).filter[type.referencedEntity === null]]
 			operation.labelForEach[features.filter(Operation)]
 			propertyConnection.outConnectionForEach [
-				features.filter(Property).filter[domainModelUtil.getReferencedEntity(type) != null]
+				features.filter(Property).filter[domainModelUtil.getReferencedEntity(type) !== null]
 			].asButton[getArrowButton("Add property")]
 			superTypeConnection.outConnectionFor [
-				if (superType.referencedEntity != null)
+				if (superType.referencedEntity !== null)
 					superType
 				else
 					null

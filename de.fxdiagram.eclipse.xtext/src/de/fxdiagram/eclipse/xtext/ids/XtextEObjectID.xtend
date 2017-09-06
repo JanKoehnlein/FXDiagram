@@ -35,15 +35,15 @@ interface XtextEObjectID {
 	class Factory {
 		def XtextEObjectID createXtextEObjectID(EObject it) {
 			var currentName = qualifiedName
-			if (currentName != null)
+			if (currentName !== null)
 				return new DefaultXtextEObjectID(currentName, eClass, URI)
 			var EObject currentParent = it
 			do {
 				currentParent = currentParent.eContainer
-				if (currentParent == null)
+				if (currentParent === null)
 					return new UnnamedXtextEObjectID(eClass, URI)
 				currentName = currentParent.qualifiedName
-			} while (currentName == null)
+			} while (currentName === null)
 			val parentID = currentParent.createXtextEObjectID
 			return new RelativeXtextEObjectID(parentID, eClass, URI)
 		}
@@ -95,14 +95,14 @@ abstract class AbstractXtextEObjectID implements XtextEObjectID {
 	}
 
 	protected def getEClass(String uriAsString) {
-		if (uriAsString == null)
+		if (uriAsString === null)
 			return null
 		val eClassURI = uriAsString.createURI
 		val ePackage = EPackage.Registry.INSTANCE.getEPackage(eClassURI.trimFragment.toString)
-		if (ePackage == null)
+		if (ePackage === null)
 			throw new NoSuchElementException('Cannot find EPackage ' + eClassURI.trimFragment)
 		eClass = ePackage.eResource.getEObject(eClassURI.fragment) as EClass
-		if (eClass == null)
+		if (eClass === null)
 			throw new NoSuchElementException('Cannot find EClass ' + eClassURI)
 		eClass
 	}

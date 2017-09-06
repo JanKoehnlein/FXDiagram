@@ -43,7 +43,7 @@ class EcoreDomainObjectProvider implements IMappedElementDescriptorProvider {
 	def EObject resolveEObject(String uri) {
 		val theURI = URI.createURI(uri)
 		val editor = openEditor(theURI, false)
-		if (editor != null)
+		if (editor !== null)
 			editor.editingDomain.resourceSet.getEObject(theURI, true)
 		else
 			null

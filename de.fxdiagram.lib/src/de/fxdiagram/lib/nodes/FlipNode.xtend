@@ -53,9 +53,9 @@ class FlipNode extends XNode {
 	
 	override initializeGraphics() {
 		super.initializeGraphics()
-		if(front == null)
+		if(front === null)
 			LOG.severe('FlipNode.front not set')
-		if(back == null)
+		if(back === null)
 			LOG.severe('FlipNode.back not set')
 	}
 	
@@ -70,7 +70,7 @@ class FlipNode extends XNode {
 	def registerOnClick() {
 		onMouseClicked = [ 
 			if (button == PRIMARY && clickCount == 2) {
-				if (front != null && back != null) 
+				if (front !== null && back !== null) 
 					flip(isHorizontal(it))
 			}
 		]
@@ -126,7 +126,7 @@ class FlipNode extends XNode {
 	}
 
 	def setFront(Node front) {
-		if(this.front != null) 
+		if(this.front !== null) 
 			pane.children -= this.front
 		this.front = front
 		pane.children += front
@@ -138,7 +138,7 @@ class FlipNode extends XNode {
 	}
 
 	def setBack(Node back) {
-		if(this.back != null) 
+		if(this.back !== null) 
 			pane.children -= this.back
 		this.back = back
 		pane.children += back
