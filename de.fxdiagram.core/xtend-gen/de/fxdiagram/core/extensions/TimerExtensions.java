@@ -16,7 +16,6 @@ public class TimerExtensions {
         throw Exceptions.sneakyThrow(_e);
       }
     };
-    Thread _thread = new Thread(_function);
-    _thread.start();
+    new Thread(_function).start();
   }
 }

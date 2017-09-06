@@ -6,7 +6,6 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ResourceDescriptor;
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,12 +33,8 @@ public class ImageNode extends XNode {
       String _uRI = ((ResourceDescriptor) _domainObjectDescriptor).toURI();
       Image _image = new Image(_uRI);
       it.setImage(_image);
-      DoubleProperty _fitWidthProperty = it.fitWidthProperty();
-      DoubleProperty _widthProperty = this.widthProperty();
-      _fitWidthProperty.bind(_widthProperty);
-      DoubleProperty _fitHeightProperty = it.fitHeightProperty();
-      DoubleProperty _heightProperty = this.heightProperty();
-      _fitHeightProperty.bind(_heightProperty);
+      it.fitWidthProperty().bind(this.widthProperty());
+      it.fitHeightProperty().bind(this.heightProperty());
     };
     return ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
   }

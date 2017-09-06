@@ -17,14 +17,10 @@ public class InitializingMapListener<T extends Object, U extends Object> impleme
   @Override
   public void onChanged(final MapChangeListener.Change<? extends T, ? extends U> c) {
     if (((!Objects.equal(this.remove, null)) && c.wasRemoved())) {
-      T _key = c.getKey();
-      U _valueRemoved = c.getValueRemoved();
-      this.remove.apply(_key, _valueRemoved);
+      this.remove.apply(c.getKey(), c.getValueRemoved());
     }
     if (((!Objects.equal(this.put, null)) && c.wasAdded())) {
-      T _key_1 = c.getKey();
-      U _valueAdded = c.getValueAdded();
-      this.put.apply(_key_1, _valueAdded);
+      this.put.apply(c.getKey(), c.getValueAdded());
     }
   }
   

@@ -20,12 +20,9 @@ public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSu
     try {
       JavaSuperTypeHandle _xblockexpression = null;
       {
-        String _id = this.getId();
-        final String[] split = _id.split("->");
-        String _get = split[0];
-        Class<?> _forName = Class.forName(_get);
-        String _get_1 = split[1];
-        Class<?> _forName_1 = Class.forName(_get_1);
+        final String[] split = this.getId().split("->");
+        Class<?> _forName = Class.forName(split[0]);
+        Class<?> _forName_1 = Class.forName(split[1]);
         _xblockexpression = new JavaSuperTypeHandle(_forName, _forName_1);
       }
       return _xblockexpression;

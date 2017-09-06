@@ -10,13 +10,11 @@ import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
@@ -32,26 +30,21 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   public <U extends Object> U withDomainObject(final Function1<? super T, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      XtextDomainObjectProvider _provider = this.getProvider();
-      XtextEObjectID _elementID = this.getElementID();
-      final IEditorPart editor = _provider.getCachedEditor(_elementID, false, false);
+      final IEditorPart editor = this.getProvider().getCachedEditor(this.getElementID(), false, false);
       U _xifexpression = null;
       if ((editor instanceof XtextEditor)) {
-        IXtextDocument _document = ((XtextEditor)editor).getDocument();
         final IUnitOfWork<U, XtextResource> _function = (XtextResource it) -> {
           U _xblockexpression_1 = null;
           {
-            XtextEObjectID _elementID_1 = this.getElementID();
-            ResourceSet _resourceSet = it.getResourceSet();
-            final EObject element = _elementID_1.resolve(_resourceSet);
+            final EObject element = this.getElementID().resolve(it.getResourceSet());
             _xblockexpression_1 = lambda.apply(((T) element));
           }
           return _xblockexpression_1;
         };
-        _xifexpression = _document.<U>readOnly(_function);
+        _xifexpression = ((XtextEditor)editor).getDocument().<U>readOnly(_function);
       } else {
-        XtextEObjectID _elementID_1 = this.getElementID();
-        String _plus = ("Cannot open an Xtext editor for " + _elementID_1);
+        XtextEObjectID _elementID = this.getElementID();
+        String _plus = ("Cannot open an Xtext editor for " + _elementID);
         throw new NoSuchElementException(_plus);
       }
       _xblockexpression = _xifexpression;
@@ -61,16 +54,13 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   
   @Override
   public Object openInEditor(final boolean select) {
-    XtextDomainObjectProvider _provider = this.getProvider();
-    XtextEObjectID _elementID = this.getElementID();
-    return _provider.getCachedEditor(_elementID, select, select);
+    return this.getProvider().getCachedEditor(this.getElementID(), select, select);
   }
   
   @Override
   public String getName() {
     String _elvis = null;
-    XtextEObjectID _elementID = this.getElementID();
-    QualifiedName _qualifiedName = _elementID.getQualifiedName();
+    QualifiedName _qualifiedName = this.getElementID().getQualifiedName();
     String _lastSegment = null;
     if (_qualifiedName!=null) {
       _lastSegment=_qualifiedName.getLastSegment();
@@ -95,23 +85,20 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    XtextEObjectID _elementID = this.getElementID();
-    int _hashCode_1 = _elementID.hashCode();
+    int _hashCode_1 = this.getElementID().hashCode();
     int _multiply = (17 * _hashCode_1);
     return (_hashCode + _multiply);
   }
   
   @Override
   protected IResourceServiceProvider getResourceServiceProvider() {
-    XtextEObjectID _elementID = this.getElementID();
-    return _elementID.getResourceServiceProvider();
+    return this.getElementID().getResourceServiceProvider();
   }
   
   @Override
   public String toString() {
     XtextDomainObjectProvider _provider = this.getProvider();
-    XtextEObjectID _elementID = this.getElementID();
-    String _string = _elementID.toString();
+    String _string = this.getElementID().toString();
     return (_provider + _string);
   }
   

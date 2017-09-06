@@ -53,21 +53,21 @@ class JvmDomainUtil {
 		if(simpleName.startsWith('set') && parameters.size == 1) {
 			val field = fields.get(simpleName.substring(3).toFirstLower)
 			val fieldType = field?.type?.lightweight
-			if(fieldType!=null) 
+			if(fieldType !== null) 
 				return fieldType.isAssignableFrom(parameters.head.parameterType.lightweight)
 		}
 		return false
 	}
 
 	protected def isGetter(JvmOperation it, Map<String, JvmField> fields) {
-		if(parameters.size == 0 && returnType != null) {
+		if(parameters.size == 0 && returnType !== null) {
 			val field = 
 				if(simpleName.startsWith('get'))
 					fields.get(simpleName.substring(3).toFirstLower)
 				else if(simpleName.startsWith('is')) 
 					fields.get(simpleName.substring(2).toFirstLower)
 				else return false
-			if(field != null)
+			if(field !== null)
 				return returnType.lightweight.isAssignableFrom(field?.type.lightweight)
 		} 
 		return false
@@ -94,7 +94,7 @@ class JvmDomainUtil {
 	}
 	
 	protected def getLightweight(JvmTypeReference it) {
-		return if(it == null)
+		return if(it === null)
 				null 
 			else 
 		 		new StandardTypeReferenceOwner(services, it).toLightweightTypeReference(it)

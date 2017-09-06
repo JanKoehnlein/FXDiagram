@@ -5,12 +5,10 @@ import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
-import javafx.collections.ObservableList;
 
 @SuppressWarnings("all")
 public class Model {
@@ -23,8 +21,7 @@ public class Model {
   public Model(final Object rootNode) {
     ModelFactory _modelFactory = new ModelFactory();
     this.modelFactory = _modelFactory;
-    ModelElement _addElement = this.addElement(rootNode);
-    this.rootElement = _addElement;
+    this.rootElement = this.addElement(rootNode);
   }
   
   Map<Object, ModelElement> getIndex() {
@@ -62,7 +59,6 @@ public class Model {
       }
       final ModelElement element = _elvis;
       this.index.put(node, element);
-      List<? extends Property<?>> _properties = element.getProperties();
       final Consumer<Property<?>> _function = (Property<?> it) -> {
         boolean _isPrimitive = element.isPrimitive(it);
         boolean _not = (!_isPrimitive);
@@ -73,22 +69,20 @@ public class Model {
           }
         }
       };
-      _properties.forEach(_function);
-      List<? extends ListProperty<?>> _listProperties = element.getListProperties();
+      element.getProperties().forEach(_function);
       final Consumer<ListProperty<?>> _function_1 = (ListProperty<?> it) -> {
         boolean _isPrimitive = element.isPrimitive(it);
         boolean _not = (!_isPrimitive);
         if (_not) {
-          ObservableList<?> _value = it.getValue();
           final Consumer<Object> _function_2 = (Object it_1) -> {
             if (it_1!=null) {
               this.addElement(it_1);
             }
           };
-          _value.forEach(_function_2);
+          it.getValue().forEach(_function_2);
         }
       };
-      _listProperties.forEach(_function_1);
+      element.getListProperties().forEach(_function_1);
       _xblockexpression = element;
     }
     return _xblockexpression;

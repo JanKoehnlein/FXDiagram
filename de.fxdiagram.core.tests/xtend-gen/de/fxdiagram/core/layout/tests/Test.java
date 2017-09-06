@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout.tests;
 
-import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -28,8 +27,7 @@ public class Test extends Application {
   public void start(final Stage primaryStage) throws Exception {
     XRoot _xRoot = new XRoot();
     final Procedure1<XRoot> _function = (XRoot it) -> {
-      HeadsUpDisplay _headsUpDisplay = it.getHeadsUpDisplay();
-      ObservableList<Node> _children = _headsUpDisplay.getChildren();
+      ObservableList<Node> _children = it.getHeadsUpDisplay().getChildren();
       Rectangle _rectangle = new Rectangle(10, 10, 10, 10);
       Node _r = (this.r = _rectangle);
       _children.add(_r);
@@ -45,9 +43,7 @@ public class Test extends Application {
         try {
           Thread.sleep(1000);
           final Runnable _function = () -> {
-            HeadsUpDisplay _headsUpDisplay = Test.this.root.getHeadsUpDisplay();
-            ObservableList<Node> _children = _headsUpDisplay.getChildren();
-            _children.remove(Test.this.r);
+            Test.this.root.getHeadsUpDisplay().getChildren().remove(Test.this.r);
             InputOutput.<String>println("click");
           };
           Platform.runLater(_function);

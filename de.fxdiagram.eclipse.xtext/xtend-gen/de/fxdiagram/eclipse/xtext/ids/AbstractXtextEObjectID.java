@@ -13,7 +13,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 
@@ -26,12 +25,9 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
   
   public AbstractXtextEObjectID(final EClass eClass, final URI elementURI) {
     this.uri = elementURI;
-    String _string = elementURI.toString();
-    this.uriAsStringProperty.set(_string);
+    this.uriAsStringProperty.set(elementURI.toString());
     this.eClass = eClass;
-    URI _uRI = EcoreUtil.getURI(eClass);
-    String _string_1 = _uRI.toString();
-    this.eClassURIAsStringProperty.set(_string_1);
+    this.eClassURIAsStringProperty.set(EcoreUtil.getURI(eClass).toString());
   }
   
   @Override
@@ -40,9 +36,7 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
     if (this.uri != null) {
       _elvis = this.uri;
     } else {
-      String _uriAsString = this.getUriAsString();
-      URI _createURI = URI.createURI(_uriAsString);
-      _elvis = this.uri = _createURI;
+      _elvis = this.uri = URI.createURI(this.getUriAsString());
     }
     return _elvis;
   }
@@ -53,10 +47,7 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
     if (this.eClass != null) {
       _elvis = this.eClass;
     } else {
-      String _eClassURIAsString = this.getEClassURIAsString();
-      EClass _eClass = this.getEClass(_eClassURIAsString);
-      EClass _eClass_1 = (this.eClass = _eClass);
-      _elvis = _eClass_1;
+      _elvis = (this.eClass = this.getEClass(this.getEClassURIAsString()));
     }
     return _elvis;
   }
@@ -64,26 +55,19 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
   protected EClass getEClass(final String uriAsString) {
     EClass _xblockexpression = null;
     {
-      boolean _equals = Objects.equal(uriAsString, null);
-      if (_equals) {
+      if ((uriAsString == null)) {
         return null;
       }
       final URI eClassURI = URI.createURI(uriAsString);
-      URI _trimFragment = eClassURI.trimFragment();
-      String _string = _trimFragment.toString();
-      final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(_string);
-      boolean _equals_1 = Objects.equal(ePackage, null);
-      if (_equals_1) {
-        URI _trimFragment_1 = eClassURI.trimFragment();
-        String _plus = ("Cannot find EPackage " + _trimFragment_1);
+      final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(eClassURI.trimFragment().toString());
+      if ((ePackage == null)) {
+        URI _trimFragment = eClassURI.trimFragment();
+        String _plus = ("Cannot find EPackage " + _trimFragment);
         throw new NoSuchElementException(_plus);
       }
-      Resource _eResource = ePackage.eResource();
-      String _fragment = eClassURI.fragment();
-      EObject _eObject = _eResource.getEObject(_fragment);
+      EObject _eObject = ePackage.eResource().getEObject(eClassURI.fragment());
       this.eClass = ((EClass) _eObject);
-      boolean _equals_2 = Objects.equal(this.eClass, null);
-      if (_equals_2) {
+      if ((this.eClass == null)) {
         throw new NoSuchElementException(("Cannot find EClass " + eClassURI));
       }
       _xblockexpression = this.eClass;
@@ -102,20 +86,16 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
   
   @Override
   public int hashCode() {
-    URI _uRI = this.getURI();
-    URI _trimFragment = _uRI.trimFragment();
-    int _hashCode = _trimFragment.hashCode();
+    int _hashCode = this.getURI().trimFragment().hashCode();
     int _multiply = (_hashCode * 29);
-    EClass _eClass = this.getEClass();
-    int _hashCode_1 = _eClass.hashCode();
+    int _hashCode_1 = this.getEClass().hashCode();
     int _multiply_1 = (_hashCode_1 * 173);
     return (_multiply + _multiply_1);
   }
   
   @Override
   public IResourceServiceProvider getResourceServiceProvider() {
-    URI _uRI = this.getURI();
-    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_uRI);
+    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(this.getURI());
   }
   
   /**

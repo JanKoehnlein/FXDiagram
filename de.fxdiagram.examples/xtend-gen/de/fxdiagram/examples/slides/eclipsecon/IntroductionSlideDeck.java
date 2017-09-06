@@ -17,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -55,24 +54,21 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = it_3.getChildren();
             Text _createText = EclipseConSlideFactory.createText("Eclipse Discovery Channel", 36);
             final Procedure1<Text> _function_4 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_4);
             _children_1.add(_doubleArrow);
             ObservableList<Node> _children_2 = it_3.getChildren();
             Text _createText_1 = EclipseConSlideFactory.createText("presents", 30);
             final Procedure1<Text> _function_5 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
             };
             Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createText_1, _function_5);
             _children_2.add(_doubleArrow_1);
             ObservableList<Node> _children_3 = it_3.getChildren();
             Text _createText_2 = EclipseConSlideFactory.createText("Eclipse Diagram Editors", 93);
             final Procedure1<Text> _function_6 = (Text it_4) -> {
-              Color _rgb = Color.rgb(238, 191, 171);
-              it_4.setFill(_rgb);
+              it_4.setFill(Color.rgb(238, 191, 171));
             };
             Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createText_2, _function_6);
             _children_3.add(_doubleArrow_2);
@@ -105,22 +101,18 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = it_3.getChildren();
             Text _createJungleText = EclipseConSlideFactory.createJungleText("GEF", 48);
             final Procedure1<Text> _function_5 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setRotate(16);
               it_4.setLayoutX(80);
               it_4.setLayoutY(665);
-              Color _jungleDarkGreen_1 = EclipseConSlideFactory.jungleDarkGreen();
-              Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
-              Animations.flicker(it_4, _jungleDarkGreen_1, _jungleDarkestGreen);
+              Animations.flicker(it_4, EclipseConSlideFactory.jungleDarkGreen(), EclipseConSlideFactory.jungleDarkestGreen());
             };
             Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function_5);
             _children_1.add(_doubleArrow_1);
             ObservableList<Node> _children_2 = it_3.getChildren();
             Text _createJungleText_1 = EclipseConSlideFactory.createJungleText("Draw2D", 48);
             final Procedure1<Text> _function_6 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setRotate(338);
               it_4.setLayoutX(380);
               it_4.setLayoutY(132);
@@ -131,8 +123,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_3 = it_3.getChildren();
             Text _createJungleText_2 = EclipseConSlideFactory.createJungleText("GMF RT", 48);
             final Procedure1<Text> _function_7 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setRotate(10);
               it_4.setLayoutX(560);
               it_4.setLayoutY(300);
@@ -143,22 +134,18 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_4 = it_3.getChildren();
             Text _createJungleText_3 = EclipseConSlideFactory.createJungleText("GMF Tooling", 48);
             final Procedure1<Text> _function_8 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setRotate(332);
               it_4.setLayoutX(640);
               it_4.setLayoutY(620);
-              Color _jungleDarkGreen_1 = EclipseConSlideFactory.jungleDarkGreen();
-              Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
-              Animations.breathe(it_4, _jungleDarkGreen_1, _jungleDarkestGreen);
+              Animations.breathe(it_4, EclipseConSlideFactory.jungleDarkGreen(), EclipseConSlideFactory.jungleDarkestGreen());
             };
             Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_3, _function_8);
             _children_4.add(_doubleArrow_4);
             ObservableList<Node> _children_5 = it_3.getChildren();
             Text _createJungleText_4 = EclipseConSlideFactory.createJungleText("Graphiti", 48);
             final Procedure1<Text> _function_9 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setLayoutX(111);
               it_4.setLayoutY(167);
               Animations.dangle(it_4);
@@ -168,14 +155,11 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_6 = it_3.getChildren();
             Text _createJungleText_5 = EclipseConSlideFactory.createJungleText("Sirius", 48);
             final Procedure1<Text> _function_10 = (Text it_4) -> {
-              Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-              it_4.setFill(_jungleDarkGreen);
+              it_4.setFill(EclipseConSlideFactory.jungleDarkGreen());
               it_4.setRotate(5);
               it_4.setLayoutX(190);
               it_4.setLayoutY(480);
-              Color _jungleDarkGreen_1 = EclipseConSlideFactory.jungleDarkGreen();
-              Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
-              Animations.breathe(it_4, _jungleDarkGreen_1, _jungleDarkestGreen);
+              Animations.breathe(it_4, EclipseConSlideFactory.jungleDarkGreen(), EclipseConSlideFactory.jungleDarkestGreen());
             };
             Text _doubleArrow_6 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_5, _function_10);
             _children_6.add(_doubleArrow_6);
@@ -193,25 +177,19 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_4 = it.getSlides();
       ClickThroughSlide _createClickThroughSlide = EclipseConSlideFactory.createClickThroughSlide("Darkness images");
       final Procedure1<ClickThroughSlide> _function_3 = (ClickThroughSlide it_1) -> {
-        Pane _pane = it_1.getPane();
-        ObservableList<Node> _children = _pane.getChildren();
+        ObservableList<Node> _children = it_1.getPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_4 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/darkness1.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/darkness1.png"));
           it_2.setLayoutX(45);
           it_2.setLayoutY(45);
         };
         ImageView _doubleArrow_2 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_4);
         _children.add(_doubleArrow_2);
-        Pane _pane_1 = it_1.getPane();
-        ObservableList<Node> _children_1 = _pane_1.getChildren();
+        ObservableList<Node> _children_1 = it_1.getPane().getChildren();
         ImageView _imageView_1 = new ImageView();
         final Procedure1<ImageView> _function_5 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/darkness2.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/darkness2.png"));
           it_2.setLayoutX(420);
           it_2.setLayoutY(374);
         };
@@ -226,25 +204,19 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_6 = it.getSlides();
       ClickThroughSlide _createClickThroughSlide_1 = EclipseConSlideFactory.createClickThroughSlide("Behavior images");
       final Procedure1<ClickThroughSlide> _function_4 = (ClickThroughSlide it_1) -> {
-        Pane _pane = it_1.getPane();
-        ObservableList<Node> _children = _pane.getChildren();
+        ObservableList<Node> _children = it_1.getPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_5 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/graphiti.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/graphiti.png"));
           it_2.setLayoutX(50);
           it_2.setLayoutY(44);
         };
         ImageView _doubleArrow_3 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_5);
         _children.add(_doubleArrow_3);
-        Pane _pane_1 = it_1.getPane();
-        ObservableList<Node> _children_1 = _pane_1.getChildren();
+        ObservableList<Node> _children_1 = it_1.getPane().getChildren();
         ImageView _imageView_1 = new ImageView();
         final Procedure1<ImageView> _function_6 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/properties.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/properties.png"));
           it_2.setLayoutX(295);
           it_2.setLayoutY(332);
         };
@@ -264,9 +236,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
           ObservableList<Node> _children = it_2.getChildren();
           ImageView _imageView = new ImageView();
           final Procedure1<ImageView> _function_7 = (ImageView it_3) -> {
-            ImageCache _get = ImageCache.get();
-            Image _image = _get.getImage(this, "images/onion.png");
-            it_3.setImage(_image);
+            it_3.setImage(ImageCache.get().getImage(this, "images/onion.png"));
             it_3.setFitWidth(570);
             it_3.setPreserveRatio(true);
             it_3.setLayoutX(227);
@@ -290,8 +260,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_10 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(244.0), Double.valueOf(226.0), Double.valueOf(537.0), Double.valueOf(356.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_6 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_10);
@@ -315,8 +284,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_11 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(176.0), Double.valueOf(439.0), Double.valueOf(501.0), Double.valueOf(367.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_7 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_11);
@@ -340,8 +308,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_12 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(307.0), Double.valueOf(611.0), Double.valueOf(489.0), Double.valueOf(433.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_8 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_12);
@@ -365,8 +332,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_13 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(714.0), Double.valueOf(662.0), Double.valueOf(588.0), Double.valueOf(458.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_9 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_13);
@@ -394,8 +360,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_14 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(803.0), Double.valueOf(462.0), Double.valueOf(658.0), Double.valueOf(416.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_10 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_14);
@@ -423,8 +388,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_15 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(766.0), Double.valueOf(206.0), Double.valueOf(662.0), Double.valueOf(281.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_11 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_15);
@@ -448,8 +412,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<Polyline> _function_16 = (Polyline it_4) -> {
               ObservableList<Double> _points = it_4.getPoints();
               Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(519.0), Double.valueOf(101.0), Double.valueOf(525.0), Double.valueOf(188.0))));
-              Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-              it_4.setStroke(_jungleGreen);
+              it_4.setStroke(EclipseConSlideFactory.jungleGreen());
               it_4.setStrokeWidth(2);
             };
             Polyline _doubleArrow_12 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_16);
@@ -468,20 +431,16 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_10 = it.getSlides();
       ClickThroughSlide _createClickThroughSlide_3 = EclipseConSlideFactory.createClickThroughSlide("Reproduction images");
       final Procedure1<ClickThroughSlide> _function_6 = (ClickThroughSlide it_1) -> {
-        Pane _pane = it_1.getPane();
-        ObservableList<Node> _children = _pane.getChildren();
+        ObservableList<Node> _children = it_1.getPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_7 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/graphiti_code.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/graphiti_code.png"));
           it_2.setLayoutX(43);
           it_2.setLayoutY(41);
         };
         ImageView _doubleArrow_5 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_7);
         _children.add(_doubleArrow_5);
-        Pane _pane_1 = it_1.getPane();
-        ObservableList<Node> _children_1 = _pane_1.getChildren();
+        ObservableList<Node> _children_1 = it_1.getPane().getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_8 = (VBox it_2) -> {
           it_2.setLayoutX(313);
@@ -514,13 +473,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         VBox _doubleArrow_6 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_8);
         _children_1.add(_doubleArrow_6);
-        Pane _pane_2 = it_1.getPane();
-        ObservableList<Node> _children_2 = _pane_2.getChildren();
+        ObservableList<Node> _children_2 = it_1.getPane().getChildren();
         ImageView _imageView_1 = new ImageView();
         final Procedure1<ImageView> _function_9 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/gmf_dashboard.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/gmf_dashboard.png"));
           it_2.setLayoutX(284);
           it_2.setLayoutY(406);
         };
@@ -535,13 +491,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_12 = it.getSlides();
       ClickThroughSlide _createClickThroughSlide_4 = EclipseConSlideFactory.createClickThroughSlide("Tablet");
       final Procedure1<ClickThroughSlide> _function_7 = (ClickThroughSlide it_1) -> {
-        Pane _pane = it_1.getPane();
-        ObservableList<Node> _children = _pane.getChildren();
+        ObservableList<Node> _children = it_1.getPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_8 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/tablet.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/tablet.png"));
           it_2.setLayoutX(183);
           it_2.setLayoutY(210);
           it_2.setFitWidth(587);
@@ -549,13 +502,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ImageView _doubleArrow_6 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_8);
         _children.add(_doubleArrow_6);
-        Pane _pane_1 = it_1.getPane();
-        ObservableList<Node> _children_1 = _pane_1.getChildren();
+        ObservableList<Node> _children_1 = it_1.getPane().getChildren();
         ImageView _imageView_1 = new ImageView();
         final Procedure1<ImageView> _function_9 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/hand.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/hand.png"));
           it_2.setLayoutX(540);
           it_2.setLayoutY(244);
         };
@@ -589,8 +539,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_3 = it_3.getChildren();
             Text _createText_2 = EclipseConSlideFactory.createText("Eclipse Diagram Editors", 96);
             final Procedure1<Text> _function_13 = (Text it_4) -> {
-              Color _rgb = Color.rgb(238, 191, 171);
-              it_4.setFill(_rgb);
+              it_4.setFill(Color.rgb(238, 191, 171));
             };
             Text _doubleArrow_9 = ObjectExtensions.<Text>operator_doubleArrow(_createText_2, _function_13);
             _children_3.add(_doubleArrow_9);
@@ -627,9 +576,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
           ObservableList<Node> _children = it_2.getChildren();
           ImageView _imageView = new ImageView();
           final Procedure1<ImageView> _function_11 = (ImageView it_3) -> {
-            ImageCache _get = ImageCache.get();
-            Image _image = _get.getImage(this, "images/javafx.png");
-            it_3.setImage(_image);
+            it_3.setImage(ImageCache.get().getImage(this, "images/javafx.png"));
             it_3.setFitWidth(587);
             it_3.setPreserveRatio(true);
           };

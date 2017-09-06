@@ -56,15 +56,14 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   @Override
   public <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping) {
     if (((mapping instanceof AbstractLabelMapping<?>) || (!this.mappings.containsKey(mapping.getID())))) {
-      String _iD = mapping.getID();
-      this.mappings.put(_iD, mapping);
+      this.mappings.put(mapping.getID(), mapping);
     } else {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("Duplicate mapping id=");
-      String _iD_1 = mapping.getID();
-      _builder.append(_iD_1, "");
+      String _iD = mapping.getID();
+      _builder.append(_iD);
       _builder.append(" in ");
-      _builder.append(this.ID, "");
+      _builder.append(this.ID);
       AbstractDiagramConfig.LOG.severe(_builder.toString());
     }
   }
@@ -75,9 +74,7 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
     if (this.domainObjectProvider != null) {
       _elvis = this.domainObjectProvider;
     } else {
-      IMappedElementDescriptorProvider _createDomainObjectProvider = this.createDomainObjectProvider();
-      IMappedElementDescriptorProvider _domainObjectProvider = (this.domainObjectProvider = _createDomainObjectProvider);
-      _elvis = _domainObjectProvider;
+      _elvis = (this.domainObjectProvider = this.createDomainObjectProvider());
     }
     return _elvis;
   }

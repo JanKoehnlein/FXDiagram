@@ -27,7 +27,6 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
-import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -49,12 +48,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Transform;
@@ -105,14 +102,11 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     _children_1.add(this.buttonLayer);
     ViewportTransform _viewportTransform = new ViewportTransform();
     this.viewportTransform = _viewportTransform;
-    ObservableList<Transform> _transforms = this.getTransforms();
-    Transform _transform = this.viewportTransform.getTransform();
-    _transforms.setAll(_transform);
-    ObservableList<Transform> _transforms_1 = this.getTransforms();
+    this.getTransforms().setAll(this.viewportTransform.getTransform());
     final ListChangeListener<Transform> _function = (ListChangeListener.Change<? extends Transform> change) -> {
       throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram");
     };
-    _transforms_1.addListener(_function);
+    this.getTransforms().addListener(_function);
   }
   
   public XDiagram() {
@@ -134,8 +128,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          XDiagram.LOG.severe(_message);
+          XDiagram.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);
@@ -145,26 +138,16 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public void doActivate() {
-    BooleanProperty _isRootDiagramProperty = this.isRootDiagramProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
       if ((n).booleanValue()) {
-        ObservableList<XConnection> _connections = this.getConnections();
         final Consumer<XConnection> _function_1 = (XConnection it) -> {
-          ObservableList<Node> _children = this.nodeLayer.getChildren();
-          CoreExtensions.<XConnection>safeAdd(_children, it);
-          ObservableList<Node> _children_1 = this.nodeLayer.getChildren();
-          ArrowHead _sourceArrowHead = it.getSourceArrowHead();
-          CoreExtensions.<ArrowHead>safeAdd(_children_1, _sourceArrowHead);
-          ObservableList<Node> _children_2 = this.nodeLayer.getChildren();
-          ArrowHead _targetArrowHead = it.getTargetArrowHead();
-          CoreExtensions.<ArrowHead>safeAdd(_children_2, _targetArrowHead);
-          ObservableList<Node> _children_3 = this.nodeLayer.getChildren();
-          ObservableList<XConnectionLabel> _labels = it.getLabels();
-          CoreExtensions.<XConnectionLabel>safeAdd(_children_3, _labels);
+          CoreExtensions.<XConnection>safeAdd(this.nodeLayer.getChildren(), it);
+          CoreExtensions.<ArrowHead>safeAdd(this.nodeLayer.getChildren(), it.getSourceArrowHead());
+          CoreExtensions.<ArrowHead>safeAdd(this.nodeLayer.getChildren(), it.getTargetArrowHead());
+          CoreExtensions.<XConnectionLabel>safeAdd(this.nodeLayer.getChildren(), it.getLabels());
         };
-        _connections.forEach(_function_1);
+        this.getConnections().forEach(_function_1);
       } else {
-        ObservableList<XConnection> _connections_1 = this.getConnections();
         final Consumer<XConnection> _function_2 = (XConnection it) -> {
           ObservableList<Node> _children = this.nodeLayer.getChildren();
           _children.remove(it);
@@ -178,10 +161,10 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
           ObservableList<XConnectionLabel> _labels = it.getLabels();
           Iterables.removeAll(_children_3, _labels);
         };
-        _connections_1.forEach(_function_2);
+        this.getConnections().forEach(_function_2);
       }
     };
-    _isRootDiagramProperty.addListener(_function);
+    this.isRootDiagramProperty().addListener(_function);
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }
@@ -190,8 +173,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     final Procedure1<InitializingListListener<XNode>> _function_1 = (InitializingListListener<XNode> it) -> {
       final Procedure1<XNode> _function_2 = (XNode it_1) -> {
         it_1.initializeGraphics();
-        Group _nodeLayer = this.getNodeLayer();
-        ObservableList<Node> _children = _nodeLayer.getChildren();
+        ObservableList<Node> _children = this.getNodeLayer().getChildren();
         _children.add(it_1);
         boolean _isActive = this.getIsActive();
         if (_isActive) {
@@ -200,9 +182,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       };
       it.setAdd(_function_2);
       final Procedure1<XNode> _function_3 = (XNode it_1) -> {
-        Group _nodeLayer = this.getNodeLayer();
-        ObservableList<Node> _children = _nodeLayer.getChildren();
-        CoreExtensions.<XNode>safeDelete(_children, it_1);
+        CoreExtensions.<XNode>safeDelete(this.getNodeLayer().getChildren(), it_1);
       };
       it.setRemove(_function_3);
     };
@@ -212,19 +192,15 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     InitializingListListener<XConnection> _initializingListListener_1 = new InitializingListListener<XConnection>();
     final Procedure1<InitializingListListener<XConnection>> _function_2 = (InitializingListListener<XConnection> it) -> {
       final Procedure1<XConnection> _function_3 = (XConnection it_1) -> {
-        Group _connectionLayer = this.getConnectionLayer();
-        final ObservableList<Node> clChildren = _connectionLayer.getChildren();
+        final ObservableList<Node> clChildren = this.getConnectionLayer().getChildren();
         CoreExtensions.<XConnection>safeAdd(clChildren, it_1);
         it_1.initializeGraphics();
-        ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
-        CoreExtensions.<ArrowHead>safeAdd(clChildren, _sourceArrowHead);
-        ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
-        CoreExtensions.<ArrowHead>safeAdd(clChildren, _targetArrowHead);
-        ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+        CoreExtensions.<ArrowHead>safeAdd(clChildren, it_1.getSourceArrowHead());
+        CoreExtensions.<ArrowHead>safeAdd(clChildren, it_1.getTargetArrowHead());
         final Consumer<XConnectionLabel> _function_4 = (XConnectionLabel it_2) -> {
           CoreExtensions.<XConnectionLabel>safeAdd(clChildren, it_2);
         };
-        _labels.forEach(_function_4);
+        it_1.getLabels().forEach(_function_4);
         boolean _isActive = this.getIsActive();
         if (_isActive) {
           it_1.activate();
@@ -232,18 +208,14 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       };
       it.setAdd(_function_3);
       final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
-        Group _connectionLayer = this.getConnectionLayer();
-        final ObservableList<Node> clChildren = _connectionLayer.getChildren();
+        final ObservableList<Node> clChildren = this.getConnectionLayer().getChildren();
         CoreExtensions.<XConnection>safeDelete(clChildren, it_1);
-        ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
-        CoreExtensions.<ArrowHead>safeDelete(clChildren, _sourceArrowHead);
-        ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
-        CoreExtensions.<ArrowHead>safeDelete(clChildren, _targetArrowHead);
-        ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+        CoreExtensions.<ArrowHead>safeDelete(clChildren, it_1.getSourceArrowHead());
+        CoreExtensions.<ArrowHead>safeDelete(clChildren, it_1.getTargetArrowHead());
         final Consumer<XConnectionLabel> _function_5 = (XConnectionLabel it_2) -> {
           CoreExtensions.<XConnectionLabel>safeDelete(clChildren, it_2);
         };
-        _labels.forEach(_function_5);
+        it_1.getLabels().forEach(_function_5);
       };
       it.setRemove(_function_4);
     };
@@ -265,33 +237,25 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       _and = _notEquals;
     }
     if (_and) {
-      XDiagram _parentDiagram_1 = this.getParentDiagram();
-      _xifexpression = _parentDiagram_1.auxiliaryLinesSupport;
+      _xifexpression = this.getParentDiagram().auxiliaryLinesSupport;
     } else {
       _xifexpression = new AuxiliaryLinesSupport(this);
     }
     this.auxiliaryLinesSupport = _xifexpression;
     if ((this.getLayoutOnActivate() && (!Objects.equal(this.getLayoutParameters(), null)))) {
-      ObservableList<XNode> _nodes_1 = this.getNodes();
       final Consumer<XNode> _function_3 = (XNode it) -> {
-        Node _node = it.getNode();
-        _node.autosize();
+        it.getNode().autosize();
       };
-      _nodes_1.forEach(_function_3);
-      ObservableList<XConnection> _connections_1 = this.getConnections();
+      this.getNodes().forEach(_function_3);
       final Consumer<XConnection> _function_4 = (XConnection it) -> {
         it.getNode();
-        ObservableList<XConnectionLabel> _labels = it.getLabels();
         final Consumer<XConnectionLabel> _function_5 = (XConnectionLabel it_1) -> {
-          Node _node = it_1.getNode();
-          _node.autosize();
+          it_1.getNode().autosize();
         };
-        _labels.forEach(_function_5);
+        it.getLabels().forEach(_function_5);
       };
-      _connections_1.forEach(_function_4);
-      Layouter _layouter = new Layouter();
-      LayoutParameters _layoutParameters = this.getLayoutParameters();
-      _layouter.layout(_layoutParameters, this, null);
+      this.getConnections().forEach(_function_4);
+      new Layouter().layout(this.getLayoutParameters(), this, null);
       this.setLayoutOnActivate(false);
     }
     NavigationBehavior _behavior = this.<NavigationBehavior>getBehavior(NavigationBehavior.class);
@@ -314,36 +278,25 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   public void centerDiagram(final boolean useForce) {
     if ((this.needsCentering || useForce)) {
       this.layout();
-      Bounds _layoutBounds = this.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      Bounds _layoutBounds_1 = this.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
+      double _width = this.getLayoutBounds().getWidth();
+      double _height = this.getLayoutBounds().getHeight();
       double _multiply = (_width * _height);
       boolean _greaterThan = (_multiply > 1);
       if (_greaterThan) {
-        Scene _scene = this.getScene();
-        double _width_1 = _scene.getWidth();
-        Bounds _layoutBounds_2 = this.getLayoutBounds();
-        double _width_2 = _layoutBounds_2.getWidth();
+        double _width_1 = this.getScene().getWidth();
+        double _width_2 = this.getLayoutBounds().getWidth();
         double _divide = (_width_1 / _width_2);
-        Scene _scene_1 = this.getScene();
-        double _height_1 = _scene_1.getHeight();
-        Bounds _layoutBounds_3 = this.getLayoutBounds();
-        double _height_2 = _layoutBounds_3.getHeight();
+        double _height_1 = this.getScene().getHeight();
+        double _height_2 = this.getLayoutBounds().getHeight();
         double _divide_1 = (_height_1 / _height_2);
-        double _min = Math.min(_divide, _divide_1);
-        final double scale = Math.min(1, _min);
+        final double scale = Math.min(1, Math.min(_divide, _divide_1));
         this.viewportTransform.setScale(scale);
-        Bounds _boundsInLocal = this.getBoundsInLocal();
-        Bounds _localToScene = this.localToScene(_boundsInLocal);
-        final Point2D centerInScene = BoundsExtensions.center(_localToScene);
-        Scene _scene_2 = this.getScene();
-        double _width_3 = _scene_2.getWidth();
+        final Point2D centerInScene = BoundsExtensions.center(this.localToScene(this.getBoundsInLocal()));
+        double _width_3 = this.getScene().getWidth();
         double _multiply_1 = (0.5 * _width_3);
         double _x = centerInScene.getX();
         double _minus = (_multiply_1 - _x);
-        Scene _scene_3 = this.getScene();
-        double _height_3 = _scene_3.getHeight();
+        double _height_3 = this.getScene().getHeight();
         double _multiply_2 = (0.5 * _height_3);
         double _y = centerInScene.getY();
         double _minus_1 = (_multiply_2 - _y);
@@ -359,8 +312,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public Behavior addBehavior(final Behavior behavior) {
-    Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
-    return this.behaviors.put(_behaviorKey, behavior);
+    return this.behaviors.put(behavior.getBehaviorKey(), behavior);
   }
   
   public Behavior removeBehavior(final String key) {
@@ -369,8 +321,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   
   protected void addArrowHead(final Property<? extends Node> property, final ChangeListener<? super Node> listener) {
     if (((!Objects.equal(property.getValue(), null)) && (!this.getConnectionLayer().getChildren().contains(property.getValue())))) {
-      Group _connectionLayer = this.getConnectionLayer();
-      ObservableList<Node> _children = _connectionLayer.getChildren();
+      ObservableList<Node> _children = this.getConnectionLayer().getChildren();
       Node _value = property.getValue();
       _children.add(_value);
     }
@@ -382,8 +333,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public Iterable<XShape> getAllShapes() {
-    Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(this);
-    return Iterables.<XShape>filter(_allChildren, XShape.class);
+    return Iterables.<XShape>filter(CoreExtensions.getAllChildren(this), XShape.class);
   }
   
   public Procedure1<? super XDiagram> setContentsInitializer(final Procedure1<? super XDiagram> contentsInitializer) {
@@ -410,8 +360,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
       _and = _notEquals;
     }
     if (_and) {
-      XDiagram _parentDiagram_1 = this.getParentDiagram();
-      return _parentDiagram_1.getConnectionLayer();
+      return this.getParentDiagram().getConnectionLayer();
     }
     return this.nodeLayer;
   }
@@ -434,8 +383,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
         _and = _notEquals;
       }
       if (_and) {
-        XDiagram _parentDiagram_1 = this.getParentDiagram();
-        return _parentDiagram_1.buttonLayer;
+        return this.getParentDiagram().buttonLayer;
       }
       _xblockexpression = this.buttonLayer;
     }
@@ -446,8 +394,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
     Point2D _xifexpression = null;
     boolean _gridEnabled = this.getGridEnabled();
     if (_gridEnabled) {
-      double _gridSize = this.getGridSize();
-      _xifexpression = Point2DExtensions.snapToGrid(newPositionInDiagram, _gridSize);
+      _xifexpression = Point2DExtensions.snapToGrid(newPositionInDiagram, this.getGridSize());
     } else {
       _xifexpression = newPositionInDiagram;
     }
@@ -456,16 +403,13 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   
   public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape, final boolean useGrid, final boolean useAuxLines) {
     if (useGrid) {
-      Bounds _layoutBounds = shape.getLayoutBounds();
-      Point2D _center = BoundsExtensions.center(_layoutBounds);
-      Point2D _localToParent = shape.localToParent(_center);
+      Point2D _localToParent = shape.localToParent(BoundsExtensions.center(shape.getLayoutBounds()));
       double _layoutX = shape.getLayoutX();
       double _layoutY = shape.getLayoutY();
       Point2D _point2D = new Point2D(_layoutX, _layoutY);
       final Point2D hostCenterDelta = Point2DExtensions.operator_minus(_localToParent, _point2D);
       final Point2D newCenterPosition = Point2DExtensions.operator_plus(newPositionInDiagram, hostCenterDelta);
-      double _gridSize = this.getGridSize();
-      final Point2D snappedCenter = Point2DExtensions.snapToGrid(newCenterPosition, _gridSize);
+      final Point2D snappedCenter = Point2DExtensions.snapToGrid(newCenterPosition, this.getGridSize());
       final Point2D correction = Point2DExtensions.operator_minus(snappedCenter, newCenterPosition);
       return Point2DExtensions.operator_plus(newPositionInDiagram, correction);
     } else {
@@ -477,8 +421,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public Point2D getSnappedPosition(final Point2D newPositionInDiagram, final XShape shape) {
-    boolean _gridEnabled = this.getGridEnabled();
-    return this.getSnappedPosition(newPositionInDiagram, shape, _gridEnabled, true);
+    return this.getSnappedPosition(newPositionInDiagram, shape, this.getGridEnabled(), true);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XDiagram");
@@ -533,8 +476,7 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   private SimpleObjectProperty<ObservableMap<Node, Pos>> fixedButtonsProperty = new SimpleObjectProperty<ObservableMap<Node, Pos>>(this, "fixedButtons",_initFixedButtons());
   
   private static final ObservableMap<Node, Pos> _initFixedButtons() {
-    HashMap<Node, Pos> _newHashMap = CollectionLiterals.<Node, Pos>newHashMap();
-    ObservableMap<Node, Pos> _observableMap = FXCollections.<Node, Pos>observableMap(_newHashMap);
+    ObservableMap<Node, Pos> _observableMap = FXCollections.<Node, Pos>observableMap(CollectionLiterals.<Node, Pos>newHashMap());
     return _observableMap;
   }
   

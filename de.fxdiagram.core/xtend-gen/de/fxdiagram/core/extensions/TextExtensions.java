@@ -1,10 +1,8 @@
 package de.fxdiagram.core.extensions;
 
 import com.sun.javafx.tk.FontLoader;
-import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import javafx.geometry.Dimension2D;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 @SuppressWarnings("all")
@@ -16,21 +14,14 @@ public class TextExtensions {
   }
   
   public static float getOfflineWidth(final Text it) {
-    FontLoader _fontLoader = TextExtensions.getFontLoader();
-    String _text = it.getText();
-    Font _font = it.getFont();
-    return _fontLoader.computeStringWidth(_text, _font);
+    return TextExtensions.getFontLoader().computeStringWidth(it.getText(), it.getFont());
   }
   
   public static float getOfflineHeight(final Text it) {
-    FontLoader _fontLoader = TextExtensions.getFontLoader();
-    Font _font = it.getFont();
-    FontMetrics _fontMetrics = _fontLoader.getFontMetrics(_font);
-    return _fontMetrics.getLineHeight();
+    return TextExtensions.getFontLoader().getFontMetrics(it.getFont()).getLineHeight();
   }
   
   private static FontLoader getFontLoader() {
-    Toolkit _toolkit = Toolkit.getToolkit();
-    return _toolkit.getFontLoader();
+    return Toolkit.getToolkit().getFontLoader();
   }
 }

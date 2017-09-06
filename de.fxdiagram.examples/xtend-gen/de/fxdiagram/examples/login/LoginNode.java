@@ -56,8 +56,7 @@ public class LoginNode extends FlipNode {
       };
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
-      RectangleBorderPane _createForm = this.createForm();
-      this.setBack(_createForm);
+      this.setBack(this.createForm());
       _xblockexpression = node;
     }
     return _xblockexpression;
@@ -80,10 +79,8 @@ public class LoginNode extends FlipNode {
           Text _text = new Text();
           final Procedure1<Text> _function_2 = (Text it_2) -> {
             it_2.setTextOrigin(VPos.TOP);
-            Font _font = Font.font("Tahoma", FontWeight.NORMAL, 20);
-            it_2.setFont(_font);
-            StringProperty _textProperty = it_2.textProperty();
-            _textProperty.bind(welcomeMessage);
+            it_2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+            it_2.textProperty().bind(welcomeMessage);
           };
           Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
           it_1.add(_doubleArrow, 0, 0, 2, 1);
@@ -91,8 +88,7 @@ public class LoginNode extends FlipNode {
           it_1.add(_label, 0, 1);
           TextField _textField = new TextField();
           final Procedure1<TextField> _function_3 = (TextField it_2) -> {
-            StringProperty _textProperty = it_2.textProperty();
-            _textProperty.bindBidirectional(this.userNameProperty);
+            it_2.textProperty().bindBidirectional(this.userNameProperty);
           };
           TextField _doubleArrow_1 = ObjectExtensions.<TextField>operator_doubleArrow(_textField, _function_3);
           it_1.add(_doubleArrow_1, 1, 1);
@@ -100,8 +96,7 @@ public class LoginNode extends FlipNode {
           it_1.add(_label_1, 0, 2);
           PasswordField _passwordField = new PasswordField();
           final Procedure1<PasswordField> _function_4 = (PasswordField it_2) -> {
-            StringProperty _textProperty = it_2.textProperty();
-            _textProperty.bindBidirectional(this.passwordProperty);
+            it_2.textProperty().bindBidirectional(this.passwordProperty);
           };
           PasswordField _doubleArrow_2 = ObjectExtensions.<PasswordField>operator_doubleArrow(_passwordField, _function_4);
           it_1.add(_doubleArrow_2, 1, 2);

@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.anchors;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -28,13 +27,11 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
     Point2D _xblockexpression = null;
     {
       final Point2D rectAnchor = super.getAnchor(x, y);
-      boolean _equals = Objects.equal(rectAnchor, null);
-      if (_equals) {
+      if ((rectAnchor == null)) {
         return null;
       }
       final Bounds boundsInRootDiagram = this.getBoundsInRoot();
-      boolean _equals_1 = Objects.equal(boundsInRootDiagram, null);
-      if (_equals_1) {
+      if ((boundsInRootDiagram == null)) {
         return null;
       }
       Node _node = this.host.getNode();
@@ -128,8 +125,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
   @Override
   public Point2D getManhattanAnchor(final double x, final double y, final Side side) {
     final Point2D rectAnchor = super.getManhattanAnchor(x, y, side);
-    boolean _equals = Objects.equal(rectAnchor, null);
-    if (_equals) {
+    if ((rectAnchor == null)) {
       return null;
     }
     final Bounds bounds = this.getBoundsInRoot();

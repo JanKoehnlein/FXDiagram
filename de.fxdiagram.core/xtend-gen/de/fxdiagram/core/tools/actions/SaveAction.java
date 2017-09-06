@@ -10,11 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
@@ -53,23 +51,19 @@ public class SaveAction implements DiagramAction {
             ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
             FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
             _extensionFilters.add(_extensionFilter);
-            Scene _scene = root.getScene();
-            Window _window = _scene.getWindow();
-            _xblockexpression = fileChooser.showSaveDialog(_window);
+            _xblockexpression = fileChooser.showSaveDialog(root.getScene().getWindow());
           }
           _xifexpression = _xblockexpression;
         }
         final File file = _xifexpression;
         boolean _notEquals_2 = (!Objects.equal(file, null));
         if (_notEquals_2) {
-          File _parentFile = file.getParentFile();
-          _parentFile.mkdirs();
+          file.getParentFile().mkdirs();
           ModelSave _modelSave = new ModelSave();
           FileOutputStream _fileOutputStream = new FileOutputStream(file);
           OutputStreamWriter _outputStreamWriter = new OutputStreamWriter(_fileOutputStream, "UTF-8");
           _modelSave.save(root, _outputStreamWriter);
-          String _path = file.getPath();
-          root.setFileName(_path);
+          root.setFileName(file.getPath());
           root.setNeedsSave(false);
         }
       }

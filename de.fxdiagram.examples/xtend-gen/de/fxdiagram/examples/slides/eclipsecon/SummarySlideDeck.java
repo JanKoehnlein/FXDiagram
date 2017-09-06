@@ -13,12 +13,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -51,17 +48,14 @@ public class SummarySlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_2 = it.getSlides();
       Slide _createSlide_2 = EclipseConSlideFactory.createSlide("JavaFX advantages");
       final Procedure1<Slide> _function_1 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_2 = (VBox it_2) -> {
           it_2.setAlignment(Pos.CENTER);
           ObservableList<Node> _children_1 = it_2.getChildren();
           ImageView _imageView = new ImageView();
           final Procedure1<ImageView> _function_3 = (ImageView it_3) -> {
-            ImageCache _get = ImageCache.get();
-            Image _image = _get.getImage(this, "images/javafx.png");
-            it_3.setImage(_image);
+            it_3.setImage(ImageCache.get().getImage(this, "images/javafx.png"));
             it_3.setFitWidth(300);
             it_3.setPreserveRatio(true);
             Insets _insets = new Insets(0, 0, (-30), 0);
@@ -98,8 +92,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
       ObservableList<Slide> _slides_4 = it.getSlides();
       Slide _createSlide_4 = EclipseConSlideFactory.createSlide("Thanks");
       final Procedure1<Slide> _function_2 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_3 = (VBox it_2) -> {
           it_2.setAlignment(Pos.CENTER);
@@ -149,9 +142,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
       ObservableList<Node> _children = it.getChildren();
       Text _createJungleText = EclipseConSlideFactory.createJungleText(jungleText, 36);
       final Procedure1<Text> _function_1 = (Text it_1) -> {
-        Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
-        Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
-        Animations.breathe(it_1, _jungleDarkGreen, _jungleDarkestGreen);
+        Animations.breathe(it_1, EclipseConSlideFactory.jungleDarkGreen(), EclipseConSlideFactory.jungleDarkestGreen());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function_1);
       _children.add(_doubleArrow);

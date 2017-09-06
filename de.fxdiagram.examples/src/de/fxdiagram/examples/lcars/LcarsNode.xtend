@@ -203,7 +203,7 @@ class LcarsNode extends XNode {
 				.filter[get('url').toString == imageUrl]
 				.head.get('data') as byte[] 
 		])
-		if(image != null) {	
+		if(image !== null) {	
 			currentImageUrl = imageUrl
 			imageView => [
 				it.image = image

@@ -29,11 +29,8 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   public IMappedElementDescriptorProvider getProvider() {
     boolean _equals = Objects.equal(this.provider, null);
     if (_equals) {
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      String _mappingConfigID = this.getMappingConfigID();
-      final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
-      IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
-      this.provider = _domainObjectProvider;
+      final XDiagramConfig config = XDiagramConfig.Registry.getInstance().getConfigByID(this.getMappingConfigID());
+      this.provider = config.getDomainObjectProvider();
     }
     return this.provider;
   }
@@ -44,11 +41,8 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
     {
       boolean _equals = Objects.equal(this.mapping, null);
       if (_equals) {
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        String _mappingConfigID = this.getMappingConfigID();
-        final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
-        String _mappingID = this.getMappingID();
-        AbstractMapping<?> _mappingByID = config.getMappingByID(_mappingID);
+        final XDiagramConfig config = XDiagramConfig.Registry.getInstance().getConfigByID(this.getMappingConfigID());
+        AbstractMapping<?> _mappingByID = config.getMappingByID(this.getMappingID());
         this.mapping = ((AbstractMapping<T>) _mappingByID);
       }
       _xblockexpression = this.mapping;
@@ -67,11 +61,9 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   
   @Override
   public int hashCode() {
-    String _mappingConfigID = this.getMappingConfigID();
-    int _hashCode = _mappingConfigID.hashCode();
+    int _hashCode = this.getMappingConfigID().hashCode();
     int _multiply = (31 * _hashCode);
-    String _mappingID = this.getMappingID();
-    int _hashCode_1 = _mappingID.hashCode();
+    int _hashCode_1 = this.getMappingID().hashCode();
     int _multiply_1 = (37 * _hashCode_1);
     return (_multiply + _multiply_1);
   }

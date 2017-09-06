@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.slides;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -22,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -34,8 +32,7 @@ public class SlideDiagram extends XDiagram {
   }
   
   public boolean operator_add(final Slide slide) {
-    ObservableList<Slide> _slides = this.getSlides();
-    return _slides.add(slide);
+    return this.getSlides().add(slide);
   }
   
   @Override
@@ -44,9 +41,7 @@ public class SlideDiagram extends XDiagram {
     this.setBackgroundPaint(Color.BLACK);
     SlideNavigation _slideNavigation = new SlideNavigation(this);
     this.addBehavior(_slideNavigation);
-    ObservableList<Slide> _slides = this.getSlides();
-    Slide _head = IterableExtensions.<Slide>head(_slides);
-    this.showSlide(_head);
+    this.showSlide(IterableExtensions.<Slide>head(this.getSlides()));
   }
   
   public boolean next() {
@@ -54,16 +49,13 @@ public class SlideDiagram extends XDiagram {
     {
       Slide _xifexpression = null;
       Slide _currentSlide = this.getCurrentSlide();
-      boolean _notEquals = (!Objects.equal(_currentSlide, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_currentSlide != null);
+      if (_tripleNotEquals) {
         Slide _xblockexpression_1 = null;
         {
-          ObservableList<Slide> _slides = this.getSlides();
-          Slide _currentSlide_1 = this.getCurrentSlide();
-          int _indexOf = _slides.indexOf(_currentSlide_1);
+          int _indexOf = this.getSlides().indexOf(this.getCurrentSlide());
           final int nextIndex = (_indexOf + 1);
-          ObservableList<Slide> _slides_1 = this.getSlides();
-          int _size = _slides_1.size();
+          int _size = this.getSlides().size();
           boolean _equals = (nextIndex == _size);
           if (_equals) {
             CloseBehavior _behavior = this.<CloseBehavior>getBehavior(CloseBehavior.class);
@@ -72,13 +64,11 @@ public class SlideDiagram extends XDiagram {
             }
             return false;
           }
-          ObservableList<Slide> _slides_2 = this.getSlides();
-          _xblockexpression_1 = _slides_2.get(nextIndex);
+          _xblockexpression_1 = this.getSlides().get(nextIndex);
         }
         _xifexpression = _xblockexpression_1;
       } else {
-        ObservableList<Slide> _slides = this.getSlides();
-        _xifexpression = IterableExtensions.<Slide>head(_slides);
+        _xifexpression = IterableExtensions.<Slide>head(this.getSlides());
       }
       final Slide newSlide = _xifexpression;
       this.showSlide(newSlide);
@@ -93,12 +83,11 @@ public class SlideDiagram extends XDiagram {
       final ObservableList<Slide> slides = this.getSlides();
       Slide _xifexpression = null;
       Slide _currentSlide = this.getCurrentSlide();
-      boolean _notEquals = (!Objects.equal(_currentSlide, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_currentSlide != null);
+      if (_tripleNotEquals) {
         Slide _xblockexpression_1 = null;
         {
-          Slide _currentSlide_1 = this.getCurrentSlide();
-          int _indexOf = slides.indexOf(_currentSlide_1);
+          int _indexOf = slides.indexOf(this.getCurrentSlide());
           final int previousIndex = (_indexOf - 1);
           if ((previousIndex < 0)) {
             CloseBehavior _behavior = this.<CloseBehavior>getBehavior(CloseBehavior.class);
@@ -123,13 +112,11 @@ public class SlideDiagram extends XDiagram {
   protected void showSlide(final Slide newSlide) {
     final Slide oldSlide = this.getCurrentSlide();
     FadeTransition _xifexpression = null;
-    boolean _notEquals = (!Objects.equal(oldSlide, null));
-    if (_notEquals) {
+    if ((oldSlide != null)) {
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
         it.setNode(oldSlide);
-        Duration _millis = DurationExtensions.millis(200);
-        it.setDuration(_millis);
+        it.setDuration(DurationExtensions.millis(200));
         it.setFromValue(1);
         it.setToValue(0);
         final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
@@ -144,8 +131,7 @@ public class SlideDiagram extends XDiagram {
     }
     final FadeTransition fade = _xifexpression;
     FadeTransition _xifexpression_1 = null;
-    boolean _notEquals_1 = (!Objects.equal(newSlide, null));
-    if (_notEquals_1) {
+    if ((newSlide != null)) {
       FadeTransition _xblockexpression = null;
       {
         ObservableList<XNode> _nodes = this.getNodes();
@@ -154,8 +140,7 @@ public class SlideDiagram extends XDiagram {
         FadeTransition _fadeTransition_1 = new FadeTransition();
         final Procedure1<FadeTransition> _function_1 = (FadeTransition it) -> {
           it.setNode(newSlide);
-          Duration _millis = DurationExtensions.millis(200);
-          it.setDuration(_millis);
+          it.setDuration(DurationExtensions.millis(200));
           it.setFromValue(0);
           it.setToValue(1);
         };
@@ -166,7 +151,7 @@ public class SlideDiagram extends XDiagram {
       _xifexpression_1 = null;
     }
     final FadeTransition appear = _xifexpression_1;
-    if (((!Objects.equal(fade, null)) && (!Objects.equal(appear, null)))) {
+    if (((fade != null) && (appear != null))) {
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_1 = (ParallelTransition it) -> {
         ObservableList<Animation> _children = it.getChildren();

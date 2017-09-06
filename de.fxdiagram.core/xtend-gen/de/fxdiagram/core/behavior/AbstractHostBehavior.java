@@ -32,8 +32,7 @@ public abstract class AbstractHostBehavior<T extends Node> implements Behavior {
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          AbstractHostBehavior.LOG.severe(_message);
+          AbstractHostBehavior.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);

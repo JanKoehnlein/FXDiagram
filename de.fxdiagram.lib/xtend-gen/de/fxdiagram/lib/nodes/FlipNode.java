@@ -17,7 +17,6 @@ import javafx.animation.SequentialTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
@@ -65,12 +64,10 @@ public class FlipNode extends XNode {
   @Override
   public void initializeGraphics() {
     super.initializeGraphics();
-    boolean _equals = Objects.equal(this.front, null);
-    if (_equals) {
+    if ((this.front == null)) {
       FlipNode.LOG.severe("FlipNode.front not set");
     }
-    boolean _equals_1 = Objects.equal(this.back, null);
-    if (_equals_1) {
+    if ((this.back == null)) {
       FlipNode.LOG.severe("FlipNode.back not set");
     }
   }
@@ -93,9 +90,8 @@ public class FlipNode extends XNode {
   public void registerOnClick() {
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       if ((Objects.equal(it.getButton(), MouseButton.PRIMARY) && (it.getClickCount() == 2))) {
-        if (((!Objects.equal(this.front, null)) && (!Objects.equal(this.back, null)))) {
-          boolean _isHorizontal = this.isHorizontal(it);
-          this.flip(_isHorizontal);
+        if (((this.front != null) && (this.back != null))) {
+          this.flip(this.isHorizontal(it));
         }
       }
     };
@@ -120,19 +116,17 @@ public class FlipNode extends XNode {
       ObservableList<Animation> _children = it.getChildren();
       RotateTransition _rotateTransition = new RotateTransition();
       final Procedure1<RotateTransition> _function_1 = (RotateTransition it_1) -> {
-        Node _currentVisible = this.getCurrentVisible();
-        it_1.setNode(_currentVisible);
-        Duration _millis = Duration.millis(250);
-        it_1.setDuration(_millis);
+        it_1.setNode(this.getCurrentVisible());
+        it_1.setDuration(Duration.millis(250));
         it_1.setAxis(turnAxis);
         it_1.setFromAngle(0);
         it_1.setToAngle(90);
         final EventHandler<ActionEvent> _function_2 = (ActionEvent it_2) -> {
-          Node _currentVisible_1 = this.getCurrentVisible();
-          _currentVisible_1.setVisible(false);
+          Node _currentVisible = this.getCurrentVisible();
+          _currentVisible.setVisible(false);
           this.isCurrentFront = (!this.isCurrentFront);
-          Node _currentVisible_2 = this.getCurrentVisible();
-          _currentVisible_2.setVisible(true);
+          Node _currentVisible_1 = this.getCurrentVisible();
+          _currentVisible_1.setVisible(true);
         };
         it_1.setOnFinished(_function_2);
       };
@@ -141,10 +135,8 @@ public class FlipNode extends XNode {
       ObservableList<Animation> _children_1 = it.getChildren();
       RotateTransition _rotateTransition_1 = new RotateTransition();
       final Procedure1<RotateTransition> _function_2 = (RotateTransition it_1) -> {
-        Node _currentInvisible = this.getCurrentInvisible();
-        it_1.setNode(_currentInvisible);
-        Duration _millis = Duration.millis(250);
-        it_1.setDuration(_millis);
+        it_1.setNode(this.getCurrentInvisible());
+        it_1.setDuration(Duration.millis(250));
         it_1.setAxis(turnAxis);
         it_1.setFromAngle(90);
         it_1.setToAngle(0);
@@ -158,27 +150,21 @@ public class FlipNode extends XNode {
   
   public void alignFaces(final Node fixed, final Node toBeAligned) {
     double _layoutX = fixed.getLayoutX();
-    Bounds _layoutBounds = toBeAligned.getLayoutBounds();
-    double _width = _layoutBounds.getWidth();
-    Bounds _layoutBounds_1 = fixed.getLayoutBounds();
-    double _width_1 = _layoutBounds_1.getWidth();
+    double _width = toBeAligned.getLayoutBounds().getWidth();
+    double _width_1 = fixed.getLayoutBounds().getWidth();
     double _minus = (_width - _width_1);
     double _divide = (_minus / 2);
     double _minus_1 = (_layoutX - _divide);
-    Bounds _layoutBounds_2 = toBeAligned.getLayoutBounds();
-    double _minX = _layoutBounds_2.getMinX();
+    double _minX = toBeAligned.getLayoutBounds().getMinX();
     double _minus_2 = (_minus_1 - _minX);
     toBeAligned.setLayoutX(_minus_2);
     double _layoutY = fixed.getLayoutY();
-    Bounds _layoutBounds_3 = toBeAligned.getLayoutBounds();
-    double _height = _layoutBounds_3.getHeight();
-    Bounds _layoutBounds_4 = fixed.getLayoutBounds();
-    double _height_1 = _layoutBounds_4.getHeight();
+    double _height = toBeAligned.getLayoutBounds().getHeight();
+    double _height_1 = fixed.getLayoutBounds().getHeight();
     double _minus_3 = (_height - _height_1);
     double _divide_1 = (_minus_3 / 2);
     double _minus_4 = (_layoutY - _divide_1);
-    Bounds _layoutBounds_5 = toBeAligned.getLayoutBounds();
-    double _minY = _layoutBounds_5.getMinY();
+    double _minY = toBeAligned.getLayoutBounds().getMinY();
     double _minus_5 = (_minus_4 - _minY);
     toBeAligned.setLayoutY(_minus_5);
   }
@@ -187,10 +173,8 @@ public class FlipNode extends XNode {
     double _sceneX = event.getSceneX();
     double _sceneY = event.getSceneY();
     final Point2D clickInScene = new Point2D(_sceneX, _sceneY);
-    Node _currentVisible = this.getCurrentVisible();
-    final Point2D clickInLocal = _currentVisible.sceneToLocal(clickInScene);
-    Bounds _boundsInLocal = this.getBoundsInLocal();
-    final Point2D center = BoundsExtensions.center(_boundsInLocal);
+    final Point2D clickInLocal = this.getCurrentVisible().sceneToLocal(clickInScene);
+    final Point2D center = BoundsExtensions.center(this.getBoundsInLocal());
     double _x = clickInLocal.getX();
     double _x_1 = center.getX();
     double _minus = (_x - _x_1);
@@ -202,8 +186,7 @@ public class FlipNode extends XNode {
   }
   
   public void setFront(final Node front) {
-    boolean _notEquals = (!Objects.equal(this.front, null));
-    if (_notEquals) {
+    if ((this.front != null)) {
       ObservableList<Node> _children = this.pane.getChildren();
       _children.remove(this.front);
     }
@@ -218,8 +201,7 @@ public class FlipNode extends XNode {
   }
   
   public void setBack(final Node back) {
-    boolean _notEquals = (!Objects.equal(this.back, null));
-    if (_notEquals) {
+    if ((this.back != null)) {
       ObservableList<Node> _children = this.pane.getChildren();
       _children.remove(this.back);
     }

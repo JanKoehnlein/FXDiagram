@@ -26,8 +26,7 @@ public class NodeLabelMapping<T extends Object> extends AbstractLabelMapping<T> 
     BaseNodeLabel<T> _baseNodeLabel = new BaseNodeLabel<T>(descriptor);
     final Procedure1<BaseNodeLabel<T>> _function = (BaseNodeLabel<T> it) -> {
       Text _text = it.getText();
-      String _text_1 = this.getText(labelElement);
-      _text.setText(_text_1);
+      _text.setText(this.getText(labelElement));
     };
     return ObjectExtensions.<BaseNodeLabel<T>>operator_doubleArrow(_baseNodeLabel, _function);
   }

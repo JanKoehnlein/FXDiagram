@@ -11,7 +11,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.util.Duration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -33,8 +32,7 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function_1 = (FadeTransition it_1) -> {
         it_1.setNode(host);
-        Duration _millis = DurationExtensions.millis(300);
-        it_1.setDuration(_millis);
+        it_1.setDuration(DurationExtensions.millis(300));
         it_1.setFromValue(1);
         it_1.setToValue(0.2);
       };
@@ -44,8 +42,7 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
       FadeTransition _fadeTransition_1 = new FadeTransition();
       final Procedure1<FadeTransition> _function_2 = (FadeTransition it_1) -> {
         it_1.setNode(host);
-        Duration _millis = DurationExtensions.millis(300);
-        it_1.setDuration(_millis);
+        it_1.setDuration(DurationExtensions.millis(300));
         it_1.setFromValue(0.2);
         it_1.setToValue(1);
       };
@@ -64,8 +61,7 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
   
   @Override
   protected void doActivate() {
-    DirtyState _dirtyState = this.getDirtyState();
-    this.showDirtyState(_dirtyState);
+    this.showDirtyState(this.getDirtyState());
   }
   
   @Override

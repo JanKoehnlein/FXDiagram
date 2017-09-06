@@ -17,8 +17,7 @@ public class EReferenceWithOpposite {
   
   public EReferenceWithOpposite(final EReference to) {
     this.to = to;
-    EReference _eOpposite = to.getEOpposite();
-    this.fro = _eOpposite;
+    this.fro = to.getEOpposite();
   }
   
   @Override

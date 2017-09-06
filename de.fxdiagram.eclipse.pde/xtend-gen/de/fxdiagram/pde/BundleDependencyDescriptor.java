@@ -30,19 +30,13 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   public <U extends Object> U withDomainObject(final Function1<? super BundleDependency, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      BundleDependency.Kind _kind = this.getKind();
-      String _ownerSymbolicName = this.getOwnerSymbolicName();
-      String _ownerVersion = this.getOwnerVersion();
-      String _importSymbolicName = this.getImportSymbolicName();
-      String _importVersionRange = this.getImportVersionRange();
-      final BundleDependency dependency = BundleUtil.findBundleDependency(_kind, _ownerSymbolicName, _ownerVersion, _importSymbolicName, _importVersionRange);
-      boolean _equals = Objects.equal(dependency, null);
-      if (_equals) {
-        String _ownerSymbolicName_1 = this.getOwnerSymbolicName();
-        String _plus = ("Bundle dependency from " + _ownerSymbolicName_1);
+      final BundleDependency dependency = BundleUtil.findBundleDependency(this.getKind(), this.getOwnerSymbolicName(), this.getOwnerVersion(), this.getImportSymbolicName(), this.getImportVersionRange());
+      if ((dependency == null)) {
+        String _ownerSymbolicName = this.getOwnerSymbolicName();
+        String _plus = ("Bundle dependency from " + _ownerSymbolicName);
         String _plus_1 = (_plus + " to ");
-        String _importSymbolicName_1 = this.getImportSymbolicName();
-        String _plus_2 = (_plus_1 + _importSymbolicName_1);
+        String _importSymbolicName = this.getImportSymbolicName();
+        String _plus_2 = (_plus_1 + _importSymbolicName);
         String _plus_3 = (_plus_2 + " not found");
         throw new NoSuchElementException(_plus_3);
       }
@@ -76,24 +70,19 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    BundleDependency.Kind _kind = this.getKind();
-    int _hashCode_1 = _kind.hashCode();
+    int _hashCode_1 = this.getKind().hashCode();
     int _multiply = (71 * _hashCode_1);
     int _plus = (_hashCode + _multiply);
-    String _ownerSymbolicName = this.getOwnerSymbolicName();
-    int _hashCode_2 = _ownerSymbolicName.hashCode();
+    int _hashCode_2 = this.getOwnerSymbolicName().hashCode();
     int _multiply_1 = (73 * _hashCode_2);
     int _plus_1 = (_plus + _multiply_1);
-    String _ownerVersion = this.getOwnerVersion();
-    int _hashCode_3 = _ownerVersion.hashCode();
+    int _hashCode_3 = this.getOwnerVersion().hashCode();
     int _multiply_2 = (79 * _hashCode_3);
     int _plus_2 = (_plus_1 + _multiply_2);
-    String _importSymbolicName = this.getImportSymbolicName();
-    int _hashCode_4 = _importSymbolicName.hashCode();
+    int _hashCode_4 = this.getImportSymbolicName().hashCode();
     int _multiply_3 = (83 * _hashCode_4);
     int _plus_3 = (_plus_2 + _multiply_3);
-    String _importVersionRange = this.getImportVersionRange();
-    int _hashCode_5 = _importVersionRange.hashCode();
+    int _hashCode_5 = this.getImportVersionRange().hashCode();
     int _multiply_4 = (89 * _hashCode_5);
     return (_plus_3 + _multiply_4);
   }

@@ -26,8 +26,7 @@ public class ConnectionLabelMapping<T extends Object> extends AbstractLabelMappi
     BaseConnectionLabel<T> _baseConnectionLabel = new BaseConnectionLabel<T>(descriptor);
     final Procedure1<BaseConnectionLabel<T>> _function = (BaseConnectionLabel<T> it) -> {
       Text _text = it.getText();
-      String _text_1 = this.getText(labelElement);
-      _text.setText(_text_1);
+      _text.setText(this.getText(labelElement));
     };
     return ObjectExtensions.<BaseConnectionLabel<T>>operator_doubleArrow(_baseConnectionLabel, _function);
   }

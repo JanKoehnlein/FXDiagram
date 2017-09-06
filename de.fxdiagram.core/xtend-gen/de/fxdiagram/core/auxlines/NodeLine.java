@@ -26,16 +26,12 @@ public class NodeLine extends AuxiliaryLine {
     if (orientation != null) {
       switch (orientation) {
         case HORIZONTAL:
-          double _minX = boundsInDiagram.getMinX();
-          this.min = _minX;
-          double _maxX = boundsInDiagram.getMaxX();
-          this.max = _maxX;
+          this.min = boundsInDiagram.getMinX();
+          this.max = boundsInDiagram.getMaxX();
           break;
         case VERTICAL:
-          double _minY = boundsInDiagram.getMinY();
-          this.min = _minY;
-          double _maxY = boundsInDiagram.getMaxY();
-          this.max = _maxY;
+          this.min = boundsInDiagram.getMinY();
+          this.max = boundsInDiagram.getMaxY();
           break;
         default:
           break;
@@ -57,22 +53,18 @@ public class NodeLine extends AuxiliaryLine {
           Line _line = new Line();
           final Procedure1<Line> _function = (Line it) -> {
             it.setStartX((this.min - this.overlap));
-            double _position = this.getPosition();
-            it.setStartY(_position);
+            it.setStartY(this.getPosition());
             it.setEndX((this.max + this.overlap));
-            double _position_1 = this.getPosition();
-            it.setEndY(_position_1);
+            it.setEndY(this.getPosition());
           };
           _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line, _function);
           break;
         case VERTICAL:
           Line _line_1 = new Line();
           final Procedure1<Line> _function_1 = (Line it) -> {
-            double _position = this.getPosition();
-            it.setStartX(_position);
+            it.setStartX(this.getPosition());
             it.setStartY((this.min - this.overlap));
-            double _position_1 = this.getPosition();
-            it.setEndX(_position_1);
+            it.setEndX(this.getPosition());
             it.setEndY((this.max + this.overlap));
           };
           _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line_1, _function_1);

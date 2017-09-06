@@ -3,13 +3,11 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
@@ -62,13 +60,10 @@ public class RevealAction implements DiagramAction {
       _elvis = this.nodes;
     } else {
       Iterable<? extends XShape> _xifexpression = null;
-      Iterable<XShape> _currentSelection = root.getCurrentSelection();
-      boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
+      boolean _isEmpty = IterableExtensions.isEmpty(root.getCurrentSelection());
       if (_isEmpty) {
-        XDiagram _diagram = root.getDiagram();
-        ObservableList<XNode> _nodes = _diagram.getNodes();
-        XDiagram _diagram_1 = root.getDiagram();
-        ObservableList<XConnection> _connections = _diagram_1.getConnections();
+        ObservableList<XNode> _nodes = root.getDiagram().getNodes();
+        ObservableList<XConnection> _connections = root.getDiagram().getConnections();
         _xifexpression = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
       } else {
         _xifexpression = root.getCurrentSelection();
@@ -77,14 +72,12 @@ public class RevealAction implements DiagramAction {
     }
     final Iterable<? extends XShape> theNodes = _elvis;
     final Function1<XShape, Bounds> _function = (XShape it) -> {
-      Bounds _boundsInLocal = it.getBoundsInLocal();
-      return it.localToScene(_boundsInLocal);
+      return it.localToScene(it.getBoundsInLocal());
     };
-    Iterable<Bounds> _map = IterableExtensions.map(theNodes, _function);
     final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds $0, Bounds $1) -> {
       return BoundsExtensions.operator_plus($0, $1);
     };
-    return IterableExtensions.<Bounds>reduce(_map, _function_1);
+    return IterableExtensions.<Bounds>reduce(IterableExtensions.map(theNodes, _function), _function_1);
   }
   
   @Override
@@ -99,8 +92,7 @@ public class RevealAction implements DiagramAction {
         }
         final Scene scene = root.getScene();
         if (((scene.getWidth() < boundsInScene.getWidth()) || (scene.getHeight() < boundsInScene.getHeight()))) {
-          XDiagram _diagram = root.getDiagram();
-          final Bounds boundsInDiagram = _diagram.sceneToLocal(boundsInScene);
+          final Bounds boundsInDiagram = root.getDiagram().sceneToLocal(boundsInScene);
           if (((boundsInDiagram.getWidth() > NumberExpressionExtensions.EPSILON) && (boundsInDiagram.getHeight() > NumberExpressionExtensions.EPSILON))) {
             double _width = scene.getWidth();
             double _width_1 = boundsInDiagram.getWidth();
@@ -153,8 +145,7 @@ public class RevealAction implements DiagramAction {
           _xifexpression_2 = _xifexpression_3;
         }
         final double deltaY = _xifexpression_2;
-        XDiagram _diagram_1 = root.getDiagram();
-        final ViewportTransform currentViewport = _diagram_1.getViewportTransform();
+        final ViewportTransform currentViewport = root.getDiagram().getViewportTransform();
         double _translateX = currentViewport.getTranslateX();
         double _plus = (_translateX + deltaX);
         double _translateY = currentViewport.getTranslateY();
@@ -167,7 +158,6 @@ public class RevealAction implements DiagramAction {
       }
     };
     final ViewportCommand command = _function;
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.execute(command);
+    root.getCommandStack().execute(command);
   }
 }

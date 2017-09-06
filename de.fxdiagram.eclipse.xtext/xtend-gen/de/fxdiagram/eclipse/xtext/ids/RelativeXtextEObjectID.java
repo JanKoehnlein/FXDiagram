@@ -13,7 +13,6 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -29,15 +28,12 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
   public RelativeXtextEObjectID(final XtextEObjectID parentID, final EClass eClass, final URI elementURI) {
     super(eClass, elementURI);
     this.parentIDProperty.set(parentID);
-    URI _uRI = this.getURI();
-    final String fragment = _uRI.fragment();
-    URI _uRI_1 = parentID.getURI();
-    final String parentFragment = _uRI_1.fragment();
+    final String fragment = this.getURI().fragment();
+    final String parentFragment = parentID.getURI().fragment();
     String _xifexpression = null;
     boolean _startsWith = fragment.startsWith(parentFragment);
     if (_startsWith) {
-      int _length = parentFragment.length();
-      _xifexpression = fragment.substring(_length);
+      _xifexpression = fragment.substring(parentFragment.length());
     } else {
       _xifexpression = ("#" + fragment);
     }
@@ -61,11 +57,9 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
   
   @Override
   public int hashCode() {
-    XtextEObjectID _parentID = this.getParentID();
-    int _hashCode = _parentID.hashCode();
+    int _hashCode = this.getParentID().hashCode();
     int _multiply = (461 * _hashCode);
-    String _relativeFragment = this.getRelativeFragment();
-    int _hashCode_1 = _relativeFragment.hashCode();
+    int _hashCode_1 = this.getRelativeFragment().hashCode();
     int _multiply_1 = (503 * _hashCode_1);
     int _plus = (_multiply + _multiply_1);
     int _hashCode_2 = super.hashCode();
@@ -77,8 +71,7 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
   public String toString() {
     String _xblockexpression = null;
     {
-      XtextEObjectID _parentID = this.getParentID();
-      _parentID.toString();
+      this.getParentID().toString();
       String _relativeFragment = this.getRelativeFragment();
       _xblockexpression = ("->" + _relativeFragment);
     }
@@ -89,54 +82,43 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
   public IEObjectDescription findInIndex(final IResourceDescriptions index) {
     IEObjectDescription _xblockexpression = null;
     {
-      URI _uRI = this.getURI();
-      URI _trimFragment = _uRI.trimFragment();
-      final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
-      EClass _eClass = this.getEClass();
-      Iterable<IEObjectDescription> _exportedObjectsByType = resourceDescription.getExportedObjectsByType(_eClass);
+      final IResourceDescription resourceDescription = index.getResourceDescription(this.getURI().trimFragment());
       final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
-        URI _uRI_1 = this.getURI();
+        URI _uRI = this.getURI();
         URI _eObjectURI = it.getEObjectURI();
-        return Boolean.valueOf(Objects.equal(_uRI_1, _eObjectURI));
+        return Boolean.valueOf(Objects.equal(_uRI, _eObjectURI));
       };
-      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjectsByType, _function);
+      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(resourceDescription.getExportedObjectsByType(this.getEClass()), _function);
     }
     return _xblockexpression;
   }
   
   @Override
   public EObject resolve(final ResourceSet resourceSet) {
-    XtextEObjectID _parentID = this.getParentID();
-    final EObject parent = _parentID.resolve(resourceSet);
+    final EObject parent = this.getParentID().resolve(resourceSet);
     String _xifexpression = null;
-    String _relativeFragment = this.getRelativeFragment();
-    boolean _startsWith = _relativeFragment.startsWith("#");
+    boolean _startsWith = this.getRelativeFragment().startsWith("#");
     if (_startsWith) {
       _xifexpression = this.getRelativeFragment();
     } else {
-      URI _uRI = EcoreUtil.getURI(parent);
-      String _fragment = _uRI.fragment();
-      String _relativeFragment_1 = this.getRelativeFragment();
-      _xifexpression = (_fragment + _relativeFragment_1);
+      String _fragment = EcoreUtil.getURI(parent).fragment();
+      String _relativeFragment = this.getRelativeFragment();
+      _xifexpression = (_fragment + _relativeFragment);
     }
     final String elementFragment = _xifexpression;
-    Resource _eResource = parent.eResource();
-    final EObject element = _eResource.getEObject(elementFragment);
-    if ((Objects.equal(element, null) || element.eIsProxy())) {
+    final EObject element = parent.eResource().getEObject(elementFragment);
+    if (((element == null) || element.eIsProxy())) {
       String _string = this.toString();
       String _plus = ("Could not resolve element " + _string);
       throw new NoSuchElementException(_plus);
     }
-    EClass _eClass = this.getEClass();
-    boolean _isInstance = _eClass.isInstance(element);
+    boolean _isInstance = this.getEClass().isInstance(element);
     boolean _not = (!_isInstance);
     if (_not) {
-      EClass _eClass_1 = this.getEClass();
-      String _name = _eClass_1.getName();
+      String _name = this.getEClass().getName();
       String _plus_1 = ("Expected " + _name);
       String _plus_2 = (_plus_1 + " but got ");
-      EClass _eClass_2 = element.eClass();
-      String _name_1 = _eClass_2.getName();
+      String _name_1 = element.eClass().getName();
       String _plus_3 = (_plus_2 + _name_1);
       throw new NoSuchElementException(_plus_3);
     }

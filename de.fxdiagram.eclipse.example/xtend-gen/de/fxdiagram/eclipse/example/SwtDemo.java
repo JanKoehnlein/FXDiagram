@@ -12,8 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 @SuppressWarnings("all")
 public class SwtDemo {
   private static Scene createScene() {
-    Demo _demo = new Demo();
-    return _demo.createScene();
+    return new Demo().createScene();
   }
   
   public static void main(final String[] args) {

@@ -25,7 +25,6 @@ import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import de.fxdiagram.core.viewport.ViewportTransform;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,11 +33,9 @@ import java.util.logging.Logger;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,13 +44,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -103,11 +97,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     _children.add(this.diagramCanvas);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.headsUpDisplay);
-    ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
     final InvalidationListener _function = (Observable o) -> {
       this.domainObjectProviderCache = null;
     };
-    _domainObjectProviders.addListener(_function);
+    this.getDomainObjectProviders().addListener(_function);
   }
   
   public void setRootDiagram(final XDiagram rootDiagram) {
@@ -123,9 +116,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       XDiagram _diagram_1 = this.getDiagram();
       _children.remove(_diagram_1);
       ObservableList<Node> _children_1 = this.headsUpDisplay.getChildren();
-      XDiagram _diagram_2 = this.getDiagram();
-      ObservableMap<Node, Pos> _fixedButtons = _diagram_2.getFixedButtons();
-      Set<Node> _keySet = _fixedButtons.keySet();
+      Set<Node> _keySet = this.getDiagram().getFixedButtons().keySet();
       Iterables.removeAll(_children_1, _keySet);
     }
     this.diagramProperty.set(newDiagram);
@@ -137,27 +128,20 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     }
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("-fx-background-color: ");
-    Paint _backgroundPaint = newDiagram.getBackgroundPaint();
-    CharSequence _css = JavaToCss.toCss(_backgroundPaint);
-    _builder.append(_css, "");
+    CharSequence _css = JavaToCss.toCss(newDiagram.getBackgroundPaint());
+    _builder.append(_css);
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("-fx-text-fill: ");
-    Paint _foregroundPaint = newDiagram.getForegroundPaint();
-    CharSequence _css_1 = JavaToCss.toCss(_foregroundPaint);
-    _builder.append(_css_1, "");
+    CharSequence _css_1 = JavaToCss.toCss(newDiagram.getForegroundPaint());
+    _builder.append(_css_1);
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     this.diagramCanvas.setStyle(_builder.toString());
-    XDiagram _diagram_3 = this.getDiagram();
-    ObservableMap<Node, Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
-    Set<Map.Entry<Node, Pos>> _entrySet = _fixedButtons_1.entrySet();
     final Consumer<Map.Entry<Node, Pos>> _function = (Map.Entry<Node, Pos> it) -> {
-      Node _key = it.getKey();
-      Pos _value = it.getValue();
-      this.headsUpDisplay.add(_key, _value);
+      this.headsUpDisplay.add(it.getKey(), it.getValue());
     };
-    _entrySet.forEach(_function);
+    this.getDiagram().getFixedButtons().entrySet().forEach(_function);
     newDiagram.centerDiagram(false);
   }
   
@@ -170,8 +154,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public ViewportTransform getViewportTransform() {
-    XDiagram _diagram = this.getDiagram();
-    return _diagram.getViewportTransform();
+    return this.getDiagram().getViewportTransform();
   }
   
   @Override
@@ -185,8 +168,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          XRoot.LOG.severe(_message);
+          XRoot.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);
@@ -202,14 +184,8 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       _diagram.activate();
     }
     final Procedure1<Pane> _function = (Pane it) -> {
-      DoubleProperty _prefWidthProperty = it.prefWidthProperty();
-      Scene _scene = it.getScene();
-      ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
-      _prefWidthProperty.bind(_widthProperty);
-      DoubleProperty _prefHeightProperty = it.prefHeightProperty();
-      Scene _scene_1 = it.getScene();
-      ReadOnlyDoubleProperty _heightProperty = _scene_1.heightProperty();
-      _prefHeightProperty.bind(_heightProperty);
+      it.prefWidthProperty().bind(it.getScene().widthProperty());
+      it.prefHeightProperty().bind(it.getScene().heightProperty());
     };
     ObjectExtensions.<Pane>operator_doubleArrow(
       this.diagramCanvas, _function);
@@ -268,12 +244,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public Iterable<XShape> getCurrentSelection() {
-    XDiagram _diagram = this.getDiagram();
-    Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Function1<XShape, Boolean> _function = (XShape it) -> {
       return Boolean.valueOf((it.isSelectable() && it.getSelected()));
     };
-    return IterableExtensions.<XShape>filter(_allShapes, _function);
+    return IterableExtensions.<XShape>filter(this.getDiagram().getAllShapes(), _function);
   }
   
   public <T extends DomainObjectProvider> T getDomainObjectProvider(final Class<T> providerClazz) {
@@ -281,14 +255,11 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     {
       boolean _equals = Objects.equal(this.domainObjectProviderCache, null);
       if (_equals) {
-        HashMap<Class<? extends DomainObjectProvider>, DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
-        this.domainObjectProviderCache = _newHashMap;
-        ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
+        this.domainObjectProviderCache = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
         final Consumer<DomainObjectProvider> _function = (DomainObjectProvider it) -> {
-          Class<? extends DomainObjectProvider> _class = it.getClass();
-          this.domainObjectProviderCache.put(_class, it);
+          this.domainObjectProviderCache.put(it.getClass(), it);
         };
-        _domainObjectProviders.forEach(_function);
+        this.getDomainObjectProviders().forEach(_function);
       }
       DomainObjectProvider _get = this.domainObjectProviderCache.get(providerClazz);
       _xblockexpression = ((T) _get);
@@ -298,20 +269,15 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public void replaceDomainObjectProviders(final List<DomainObjectProvider> newDomainObjectProviders) {
     final Consumer<DomainObjectProvider> _function = (DomainObjectProvider newProvider) -> {
-      Class<? extends DomainObjectProvider> _class = newProvider.getClass();
-      final DomainObjectProvider oldProvider = this.getDomainObjectProvider(_class);
+      final DomainObjectProvider oldProvider = this.getDomainObjectProvider(newProvider.getClass());
       boolean _notEquals = (!Objects.equal(oldProvider, null));
       if (_notEquals) {
-        ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
-        ObservableList<DomainObjectProvider> _domainObjectProviders_1 = this.getDomainObjectProviders();
-        int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
-        _domainObjectProviders.set(_indexOf, newProvider);
+        this.getDomainObjectProviders().set(this.getDomainObjectProviders().indexOf(oldProvider), newProvider);
         if ((newProvider instanceof DomainObjectProviderWithState)) {
           ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
         }
       } else {
-        ObservableList<DomainObjectProvider> _domainObjectProviders_2 = this.getDomainObjectProviders();
-        _domainObjectProviders_2.add(newProvider);
+        this.getDomainObjectProviders().add(newProvider);
       }
     };
     newDomainObjectProviders.forEach(_function);

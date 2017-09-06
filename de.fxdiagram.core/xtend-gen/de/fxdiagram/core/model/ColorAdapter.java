@@ -19,14 +19,10 @@ public class ColorAdapter implements ValueAdapter<Color> {
   }
   
   public ColorAdapter(final Color color) {
-    double _red = color.getRed();
-    this.setRed(_red);
-    double _green = color.getGreen();
-    this.setGreen(_green);
-    double _blue = color.getBlue();
-    this.setBlue(_blue);
-    double _opacity = color.getOpacity();
-    this.setOpacity(_opacity);
+    this.setRed(color.getRed());
+    this.setGreen(color.getGreen());
+    this.setBlue(color.getBlue());
+    this.setOpacity(color.getOpacity());
     this.color = color;
   }
   

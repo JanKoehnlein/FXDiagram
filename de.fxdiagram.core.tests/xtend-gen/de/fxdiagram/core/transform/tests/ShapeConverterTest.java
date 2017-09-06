@@ -24,8 +24,7 @@ public class ShapeConverterTest {
       it.setEndX(3);
       it.setEndY(4);
     };
-    Line _doubleArrow = ObjectExtensions.<Line>operator_doubleArrow(_line, _function);
-    this.mustBecome(_doubleArrow, "M 1.0 2.0 L 3.0 4.0");
+    this.mustBecome(ObjectExtensions.<Line>operator_doubleArrow(_line, _function), "M 1.0 2.0 L 3.0 4.0");
   }
   
   @Test
@@ -36,8 +35,7 @@ public class ShapeConverterTest {
       it.setCenterX(2);
       it.setCenterY(2);
     };
-    Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-    this.mustBecome(_doubleArrow, "M 2.0 1.0 C 2.5522847498307932 1.0 3.0 1.4477152501692065 3.0 2.0 C 3.0 2.5522847498307932 2.5522847498307932 3.0 2.0 3.0 C 1.4477152501692065 3.0 1.0 2.5522847498307932 1.0 2.0 C 1.0 1.4477152501692065 1.4477152501692065 1.0 2.0 1.0 Z");
+    this.mustBecome(ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function), "M 2.0 1.0 C 2.5522847498307932 1.0 3.0 1.4477152501692065 3.0 2.0 C 3.0 2.5522847498307932 2.5522847498307932 3.0 2.0 3.0 C 1.4477152501692065 3.0 1.0 2.5522847498307932 1.0 2.0 C 1.0 1.4477152501692065 1.4477152501692065 1.0 2.0 1.0 Z");
   }
   
   @Test
@@ -51,8 +49,7 @@ public class ShapeConverterTest {
       it.setStartAngle(0);
       it.setLength(90);
     };
-    Arc _doubleArrow = ObjectExtensions.<Arc>operator_doubleArrow(_arc, _function);
-    this.mustBecome(_doubleArrow, "M 3.0 4.0 A 1.0 2.0 0 0 1 5.0 4.0");
+    this.mustBecome(ObjectExtensions.<Arc>operator_doubleArrow(_arc, _function), "M 3.0 4.0 A 1.0 2.0 0 0 1 5.0 4.0");
   }
   
   @Test
@@ -66,8 +63,7 @@ public class ShapeConverterTest {
       it.setEndX(5);
       it.setEndY(6);
     };
-    QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
-    this.mustBecome(_doubleArrow, "M 1.0 2.0 Q 3.0 4.0 5.0 6.0");
+    this.mustBecome(ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function), "M 1.0 2.0 Q 3.0 4.0 5.0 6.0");
   }
   
   @Test
@@ -83,8 +79,7 @@ public class ShapeConverterTest {
       it.setEndX(7);
       it.setEndY(8);
     };
-    CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
-    this.mustBecome(_doubleArrow, "M 1.0 2.0 C 3.0 4.0 5.0 6.0 7.0 8.0");
+    this.mustBecome(ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function), "M 1.0 2.0 C 3.0 4.0 5.0 6.0 7.0 8.0");
   }
   
   @Test
@@ -96,8 +91,7 @@ public class ShapeConverterTest {
       it.setWidth(3);
       it.setHeight(4);
     };
-    Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-    this.mustBecome(_doubleArrow, "M 1.0 2.0 H 4.0 V 6.0 H 1.0 V 2.0 Z");
+    this.mustBecome(ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function), "M 1.0 2.0 H 4.0 V 6.0 H 1.0 V 2.0 Z");
   }
   
   @Test
@@ -111,12 +105,10 @@ public class ShapeConverterTest {
       it.setArcWidth(5);
       it.setArcHeight(6);
     };
-    Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-    this.mustBecome(_doubleArrow, "M 6.0 2.0 L -1.0 2.0 Q 4.0 2.0 4.0 8.0 L 4.0 0.0 Q 4.0 6.0 -1.0 6.0 L 6.0 6.0 Q 1.0 6.0 1.0 0.0 L 1.0 8.0 Q 1.0 2.0 6.0 2.0 Z");
+    this.mustBecome(ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function), "M 6.0 2.0 L -1.0 2.0 Q 4.0 2.0 4.0 8.0 L 4.0 0.0 Q 4.0 6.0 -1.0 6.0 L 6.0 6.0 Q 1.0 6.0 1.0 0.0 L 1.0 8.0 Q 1.0 2.0 6.0 2.0 Z");
   }
   
   protected void mustBecome(final Shape shape, final String expectation) {
-    String _svgString = ShapeConverterExtensions.toSvgString(shape);
-    Assert.assertEquals(expectation, _svgString);
+    Assert.assertEquals(expectation, ShapeConverterExtensions.toSvgString(shape));
   }
 }

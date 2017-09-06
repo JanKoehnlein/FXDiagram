@@ -9,7 +9,6 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.NavigationBehavior;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -18,7 +17,6 @@ import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -42,8 +40,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   
   @Override
   public boolean next() {
-    XDiagram _host = this.getHost();
-    final ObservableList<XNode> nodes = _host.getNodes();
+    final ObservableList<XNode> nodes = this.getHost().getNodes();
     final Function1<XNode, Boolean> _function = (XNode it) -> {
       return Boolean.valueOf(it.getSelected());
     };
@@ -68,8 +65,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   
   @Override
   public boolean previous() {
-    XDiagram _host = this.getHost();
-    final ObservableList<XNode> nodes = _host.getNodes();
+    final ObservableList<XNode> nodes = this.getHost().getNodes();
     final Function1<XNode, Boolean> _function = (XNode it) -> {
       return Boolean.valueOf(it.getSelected());
     };
@@ -98,21 +94,15 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     final ViewportCommand _function = new ViewportCommand() {
       @Override
       public ViewportTransition createViewportTransiton(final CommandContext it) {
-        XDiagram _host = DiagramNavigationBehavior.this.getHost();
-        XRoot _root = CoreExtensions.getRoot(_host);
-        Bounds _boundsInLocal = node.getBoundsInLocal();
-        Point2D _center = BoundsExtensions.center(_boundsInLocal);
-        Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _center);
+        XRoot _root = CoreExtensions.getRoot(DiagramNavigationBehavior.this.getHost());
+        Point2D _localToDiagram = CoreExtensions.localToDiagram(node, BoundsExtensions.center(node.getBoundsInLocal()));
         ViewportTransition _viewportTransition = new ViewportTransition(_root, _localToDiagram, 1);
         final Procedure1<ViewportTransition> _function = (ViewportTransition it_1) -> {
           final EventHandler<ActionEvent> _function_1 = (ActionEvent it_2) -> {
-            XDiagram _host_1 = DiagramNavigationBehavior.this.getHost();
-            XRoot _root_1 = CoreExtensions.getRoot(_host_1);
-            Iterable<XShape> _currentSelection = _root_1.getCurrentSelection();
             final Consumer<XShape> _function_2 = (XShape it_3) -> {
               it_3.setSelected(false);
             };
-            _currentSelection.forEach(_function_2);
+            CoreExtensions.getRoot(DiagramNavigationBehavior.this.getHost()).getCurrentSelection().forEach(_function_2);
             node.setSelected(true);
           };
           it_1.setOnFinished(_function_1);
@@ -121,8 +111,6 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
       }
     };
     final ViewportCommand command = _function;
-    XRoot _root = CoreExtensions.getRoot(node);
-    CommandStack _commandStack = _root.getCommandStack();
-    _commandStack.execute(command);
+    CoreExtensions.getRoot(node).getCommandStack().execute(command);
   }
 }

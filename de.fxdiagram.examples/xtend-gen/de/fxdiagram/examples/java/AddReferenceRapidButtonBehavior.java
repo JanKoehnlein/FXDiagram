@@ -3,7 +3,6 @@ package de.fxdiagram.examples.java;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -12,7 +11,6 @@ import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
 import de.fxdiagram.examples.java.JavaPropertyDescriptor;
 import de.fxdiagram.examples.java.JavaTypeDescriptor;
-import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
@@ -38,30 +36,22 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
   
   @Override
   protected Iterable<JavaProperty> getInitialModelChoices() {
-    JavaTypeNode _host = this.getHost();
-    JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
-    return _javaTypeModel.getReferences();
+    return this.getHost().getJavaTypeModel().getReferences();
   }
   
   @Override
   protected JavaPropertyDescriptor getChoiceKey(final JavaProperty property) {
-    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    return _domainObjectProvider.createJavaPropertyDescriptor(property);
+    return this.getDomainObjectProvider().createJavaPropertyDescriptor(property);
   }
   
   @Override
   protected XNode createNode(final JavaPropertyDescriptor key) {
-    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    JavaProperty _domainObject = key.getDomainObject();
-    Class<?> _type = _domainObject.getType();
-    JavaTypeDescriptor _createJavaTypeDescriptor = _domainObjectProvider.createJavaTypeDescriptor(_type);
+    JavaTypeDescriptor _createJavaTypeDescriptor = this.getDomainObjectProvider().createJavaTypeDescriptor(key.getDomainObject().getType());
     return new JavaTypeNode(_createJavaTypeDescriptor);
   }
   
   protected JavaModelProvider getDomainObjectProvider() {
-    JavaTypeNode _host = this.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host);
-    return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
+    return CoreExtensions.getRoot(this.getHost()).<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
   @Override
@@ -73,8 +63,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
       CarusselChoice _carusselChoice = new CarusselChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
       final Consumer<JavaPropertyDescriptor> _function = (JavaPropertyDescriptor it) -> {
-        XNode _createNode = this.createNode(it);
-        chooser.addChoice(_createNode, it);
+        chooser.addChoice(this.createNode(it), it);
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor choiceInfo) -> {
@@ -88,9 +77,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
             XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
             final Procedure1<XConnectionLabel> _function_3 = (XConnectionLabel it_1) -> {
               Text _text = it_1.getText();
-              JavaProperty _domainObject = reference.getDomainObject();
-              String _name = _domainObject.getName();
-              _text.setText(_name);
+              _text.setText(reference.getDomainObject().getName());
             };
             ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_3);
           };

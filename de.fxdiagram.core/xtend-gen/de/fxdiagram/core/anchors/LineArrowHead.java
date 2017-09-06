@@ -6,8 +6,6 @@ import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import java.util.Collections;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -36,24 +34,15 @@ public class LineArrowHead extends ArrowHead {
       ObservableList<Node> _children = it.getChildren();
       Polyline _polyline = new Polyline();
       final Procedure1<Polyline> _function_1 = (Polyline it_1) -> {
-        ObservableList<Double> _points = it_1.getPoints();
         double _height = this.getHeight();
         double _multiply = ((-0.5) * _height);
         double _width = this.getWidth();
         double _height_1 = this.getHeight();
         double _multiply_1 = (0.5 * _height_1);
-        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
-        ObjectProperty<Paint> _strokeProperty = it_1.strokeProperty();
-        ObjectProperty<Paint> _strokeProperty_1 = this.strokeProperty();
-        _strokeProperty.bind(_strokeProperty_1);
-        DoubleProperty _strokeWidthProperty = it_1.strokeWidthProperty();
-        XConnection _connection = this.getConnection();
-        DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
-        _strokeWidthProperty.bind(_strokeWidthProperty_1);
-        DoubleProperty _opacityProperty = it_1.opacityProperty();
-        XConnection _connection_1 = this.getConnection();
-        DoubleProperty _opacityProperty_1 = _connection_1.opacityProperty();
-        _opacityProperty.bind(_opacityProperty_1);
+        it_1.getPoints().setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+        it_1.strokeProperty().bind(this.strokeProperty());
+        it_1.strokeWidthProperty().bind(this.getConnection().strokeWidthProperty());
+        it_1.opacityProperty().bind(this.getConnection().opacityProperty());
         it_1.setStrokeType(StrokeType.CENTERED);
       };
       Polyline _doubleArrow = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_1);
@@ -61,23 +50,13 @@ public class LineArrowHead extends ArrowHead {
       ObservableList<Node> _children_1 = it.getChildren();
       Polyline _polyline_1 = new Polyline();
       final Procedure1<Polyline> _function_2 = (Polyline it_1) -> {
-        ObservableList<Double> _points = it_1.getPoints();
         double _width = this.getWidth();
-        XConnection _connection = this.getConnection();
-        double _strokeWidth = _connection.getStrokeWidth();
+        double _strokeWidth = this.getConnection().getStrokeWidth();
         double _minus = (_width - _strokeWidth);
-        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
-        ObjectProperty<Paint> _strokeProperty = it_1.strokeProperty();
-        ObjectProperty<Paint> _strokeProperty_1 = this.strokeProperty();
-        _strokeProperty.bind(_strokeProperty_1);
-        DoubleProperty _strokeWidthProperty = it_1.strokeWidthProperty();
-        XConnection _connection_1 = this.getConnection();
-        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
-        _strokeWidthProperty.bind(_strokeWidthProperty_1);
-        DoubleProperty _opacityProperty = it_1.opacityProperty();
-        XConnection _connection_2 = this.getConnection();
-        DoubleProperty _opacityProperty_1 = _connection_2.opacityProperty();
-        _opacityProperty.bind(_opacityProperty_1);
+        it_1.getPoints().setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
+        it_1.strokeProperty().bind(this.strokeProperty());
+        it_1.strokeWidthProperty().bind(this.getConnection().strokeWidthProperty());
+        it_1.opacityProperty().bind(this.getConnection().opacityProperty());
         it_1.setStrokeType(StrokeType.CENTERED);
       };
       Polyline _doubleArrow_1 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline_1, _function_2);
@@ -89,8 +68,7 @@ public class LineArrowHead extends ArrowHead {
   @Override
   public double getLineCut() {
     double _width = this.getWidth();
-    XConnection _connection = this.getConnection();
-    double _strokeWidth = _connection.getStrokeWidth();
+    double _strokeWidth = this.getConnection().getStrokeWidth();
     return (_width + _strokeWidth);
   }
   

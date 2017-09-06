@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
 import java.io.InputStream;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -15,12 +14,10 @@ public class LcarsExtensions {
     Font _xblockexpression = null;
     {
       final Font cachedFont = LcarsExtensions.cache.get(Double.valueOf(size));
-      boolean _notEquals = (!Objects.equal(cachedFont, null));
-      if (_notEquals) {
+      if ((cachedFont != null)) {
         return cachedFont;
       }
-      ClassLoader _classLoader = LcarsExtensions.class.getClassLoader();
-      final InputStream input = _classLoader.getResourceAsStream("de/fxdiagram/examples/lcars/LCARSGTJ3.ttf");
+      final InputStream input = LcarsExtensions.class.getClassLoader().getResourceAsStream("de/fxdiagram/examples/lcars/LCARSGTJ3.ttf");
       final Font font = Font.loadFont(input, size);
       LcarsExtensions.cache.put(Double.valueOf(size), font);
       _xblockexpression = font;

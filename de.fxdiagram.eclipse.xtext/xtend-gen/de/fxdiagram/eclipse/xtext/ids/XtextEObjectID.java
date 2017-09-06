@@ -1,6 +1,5 @@
 package de.fxdiagram.eclipse.xtext.ids;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.eclipse.xtext.ids.DefaultXtextEObjectID;
 import de.fxdiagram.eclipse.xtext.ids.RelativeXtextEObjectID;
 import de.fxdiagram.eclipse.xtext.ids.UnnamedXtextEObjectID;
@@ -22,8 +21,7 @@ public interface XtextEObjectID {
   public static class Factory {
     public XtextEObjectID createXtextEObjectID(final EObject it) {
       QualifiedName currentName = this.getQualifiedName(it);
-      boolean _notEquals = (!Objects.equal(currentName, null));
-      if (_notEquals) {
+      if ((currentName != null)) {
         EClass _eClass = it.eClass();
         URI _uRI = EcoreUtil.getURI(it);
         return new DefaultXtextEObjectID(currentName, _eClass, _uRI);
@@ -31,18 +29,15 @@ public interface XtextEObjectID {
       EObject currentParent = it;
       do {
         {
-          EObject _eContainer = currentParent.eContainer();
-          currentParent = _eContainer;
-          boolean _equals = Objects.equal(currentParent, null);
-          if (_equals) {
+          currentParent = currentParent.eContainer();
+          if ((currentParent == null)) {
             EClass _eClass_1 = it.eClass();
             URI _uRI_1 = EcoreUtil.getURI(it);
             return new UnnamedXtextEObjectID(_eClass_1, _uRI_1);
           }
-          QualifiedName _qualifiedName = this.getQualifiedName(currentParent);
-          currentName = _qualifiedName;
+          currentName = this.getQualifiedName(currentParent);
         }
-      } while(Objects.equal(currentName, null));
+      } while((currentName == null));
       final XtextEObjectID parentID = this.createXtextEObjectID(currentParent);
       EClass _eClass_1 = it.eClass();
       URI _uRI_1 = EcoreUtil.getURI(it);
@@ -57,8 +52,7 @@ public interface XtextEObjectID {
     }
     
     protected QualifiedName getQualifiedName(final EObject domainObject) {
-      Resource _eResource = domainObject.eResource();
-      IResourceServiceProvider _resourceServiceProvider = this.getResourceServiceProvider(_eResource);
+      IResourceServiceProvider _resourceServiceProvider = this.getResourceServiceProvider(domainObject.eResource());
       IQualifiedNameProvider _get = null;
       if (_resourceServiceProvider!=null) {
         _get=_resourceServiceProvider.<IQualifiedNameProvider>get(IQualifiedNameProvider.class);
@@ -77,8 +71,7 @@ public interface XtextEObjectID {
         if ((resource instanceof XtextResource)) {
           _xifexpression = ((XtextResource)resource).getResourceServiceProvider();
         } else {
-          URI _uRI = resource.getURI();
-          _xifexpression = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_uRI);
+          _xifexpression = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(resource.getURI());
         }
         final IResourceServiceProvider resourceServiceProvider = _xifexpression;
         _xblockexpression = resourceServiceProvider;

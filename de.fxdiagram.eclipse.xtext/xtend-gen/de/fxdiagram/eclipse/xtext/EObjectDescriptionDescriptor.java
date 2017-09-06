@@ -34,15 +34,11 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   public <U extends Object> U withDomainObject(final Function1<? super IEObjectDescription, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      XtextDomainObjectProvider _provider = this.getProvider();
-      XtextEObjectID _elementID = this.getElementID();
-      final IResourceDescriptions index = _provider.getIndex(_elementID);
-      XtextEObjectID _elementID_1 = this.getElementID();
-      final IEObjectDescription description = _elementID_1.findInIndex(index);
-      boolean _equals = Objects.equal(description, null);
-      if (_equals) {
-        XtextEObjectID _elementID_2 = this.getElementID();
-        String _plus = ("Element " + _elementID_2);
+      final IResourceDescriptions index = this.getProvider().getIndex(this.getElementID());
+      final IEObjectDescription description = this.getElementID().findInIndex(index);
+      if ((description == null)) {
+        XtextEObjectID _elementID = this.getElementID();
+        String _plus = ("Element " + _elementID);
         String _plus_1 = (_plus + " does not exist");
         throw new NoSuchElementException(_plus_1);
       }
@@ -54,8 +50,7 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   @Override
   public Object openInEditor(final boolean select) {
     XtextDomainObjectProvider _provider = this.getProvider();
-    XtextEObjectID _elementID = this.getElementID();
-    return ((XtextDomainObjectProvider) _provider).getCachedEditor(_elementID, true, true);
+    return ((XtextDomainObjectProvider) _provider).getCachedEditor(this.getElementID(), true, true);
   }
   
   @Override
@@ -84,8 +79,7 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    XtextEObjectID _elementID = this.getElementID();
-    int _hashCode_1 = _elementID.hashCode();
+    int _hashCode_1 = this.getElementID().hashCode();
     int _multiply = (131 * _hashCode_1);
     return (_hashCode + _multiply);
   }

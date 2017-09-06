@@ -18,8 +18,7 @@ public class LabelReconcileBehavior extends AbstractReconcileBehavior<XLabel> {
   
   @Override
   public DirtyState getDirtyState() {
-    XLabel _host = this.getHost();
-    final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
+    final DomainObjectDescriptor descriptor = this.getHost().getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
       try {
         final Function1<Object, Object> _function = (Object it) -> {

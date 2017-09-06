@@ -1,7 +1,6 @@
 package de.fxdiagram.mapping.behavior;
 
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -16,9 +15,7 @@ public class ConnectAllBehavior<T extends Object> extends AbstractHostBehavior<X
   
   @Override
   protected void doActivate() {
-    XDiagram _host = this.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host);
-    DiagramActionRegistry _diagramActionRegistry = _root.getDiagramActionRegistry();
+    DiagramActionRegistry _diagramActionRegistry = CoreExtensions.getRoot(this.getHost()).getDiagramActionRegistry();
     ConnectAllAction<Object> _connectAllAction = new ConnectAllAction<Object>();
     _diagramActionRegistry.operator_add(_connectAllAction);
   }

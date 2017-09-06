@@ -27,8 +27,7 @@ public abstract class AbstractCloseBehavior implements CloseBehavior {
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          AbstractCloseBehavior.LOG.severe(_message);
+          AbstractCloseBehavior.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);

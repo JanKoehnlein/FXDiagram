@@ -10,7 +10,6 @@ import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.EmptyTransition;
 import de.fxdiagram.core.extensions.ConnectionExtensions;
-import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -36,15 +35,12 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
   @Override
   public boolean hasMoved() {
     boolean _switchResult = false;
-    XConnectionLabel _host = this.getHost();
-    XConnection _connection = _host.getConnection();
-    XConnection.Kind _kind = _connection.getKind();
+    XConnection.Kind _kind = this.getHost().getConnection().getKind();
     if (_kind != null) {
       switch (_kind) {
         case POLYLINE:
         case RECTILINEAR:
-          XConnectionLabel _host_1 = this.getHost();
-          double _position = _host_1.getPosition();
+          double _position = this.getHost().getPosition();
           _switchResult = (this.initialPosition != _position);
           break;
         default:
@@ -59,31 +55,22 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
   
   @Override
   public void mouseDragged(final MouseEvent it) {
-    XConnectionLabel _host = this.getHost();
-    final XConnection connection = _host.getConnection();
-    double _sceneX = it.getSceneX();
-    double _sceneY = it.getSceneY();
-    final Point2D mouseInLocal = connection.sceneToLocal(_sceneX, _sceneY);
-    ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
+    final XConnection connection = this.getHost().getConnection();
+    final Point2D mouseInLocal = connection.sceneToLocal(it.getSceneX(), it.getSceneY());
     final Function1<XControlPoint, Point2D> _function = (XControlPoint it_1) -> {
       return ConnectionExtensions.toPoint2D(it_1);
     };
-    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
-    XConnection.Kind _kind = connection.getKind();
-    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnConnection(mouseInLocal, _map, _kind);
+    final ConnectionExtensions.PointOnCurve nearestPoint = ConnectionExtensions.getNearestPointOnConnection(mouseInLocal, ListExtensions.<XControlPoint, Point2D>map(connection.getControlPoints(), _function), connection.getKind());
     boolean _notEquals = (!Objects.equal(nearestPoint, null));
     if (_notEquals) {
-      XConnectionLabel _host_1 = this.getHost();
-      double _parameter = nearestPoint.getParameter();
-      _host_1.setPosition(_parameter);
+      XConnectionLabel _host = this.getHost();
+      _host.setPosition(nearestPoint.getParameter());
     }
   }
   
   @Override
   public void startDrag(final double screenX, final double screenY) {
-    XConnectionLabel _host = this.getHost();
-    double _position = _host.getPosition();
-    this.initialPosition = _position;
+    this.initialPosition = this.getHost().getPosition();
   }
   
   @Override
@@ -102,9 +89,7 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
         EmptyTransition _xblockexpression = null;
         {
           this.oldPosition = ConnectionLabelMoveBehavior.this.initialPosition;
-          XConnectionLabel _host = ConnectionLabelMoveBehavior.this.getHost();
-          double _position = _host.getPosition();
-          this.newPosition = _position;
+          this.newPosition = ConnectionLabelMoveBehavior.this.getHost().getPosition();
           _xblockexpression = new EmptyTransition();
         }
         return _xblockexpression;
@@ -116,8 +101,7 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
         final Procedure1<Timeline> _function = (Timeline it) -> {
           ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
           Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-          XConnectionLabel _host = ConnectionLabelMoveBehavior.this.getHost();
-          DoubleProperty _positionProperty = _host.positionProperty();
+          DoubleProperty _positionProperty = ConnectionLabelMoveBehavior.this.getHost().positionProperty();
           KeyValue _keyValue = new <Number>KeyValue(_positionProperty, Double.valueOf(this.oldPosition));
           KeyFrame _keyFrame = new KeyFrame(_defaultUndoDuration, _keyValue);
           _keyFrames.add(_keyFrame);
@@ -131,8 +115,7 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
         final Procedure1<Timeline> _function = (Timeline it) -> {
           ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
           Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-          XConnectionLabel _host = ConnectionLabelMoveBehavior.this.getHost();
-          DoubleProperty _positionProperty = _host.positionProperty();
+          DoubleProperty _positionProperty = ConnectionLabelMoveBehavior.this.getHost().positionProperty();
           KeyValue _keyValue = new <Number>KeyValue(_positionProperty, Double.valueOf(this.newPosition));
           KeyFrame _keyFrame = new KeyFrame(_defaultUndoDuration, _keyValue);
           _keyFrames.add(_keyFrame);

@@ -8,7 +8,6 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import javafx.scene.Node;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 
 @FinalFieldsConstructor
@@ -53,27 +52,21 @@ public abstract class AbstractAnchors implements Anchors, ManhattanAnchors {
   }
   
   protected Bounds getBoundsInRoot() {
-    Node _node = this.host.getNode();
-    Node _node_1 = this.host.getNode();
-    Bounds _layoutBounds = _node_1.getLayoutBounds();
-    return CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+    return CoreExtensions.localToRootDiagram(this.host.getNode(), this.host.getNode().getLayoutBounds());
   }
   
   protected Bounds getSnapBoundsInRoot() {
-    Bounds _snapBounds = this.host.getSnapBounds();
-    return CoreExtensions.localToRootDiagram(this.host, _snapBounds);
+    return CoreExtensions.localToRootDiagram(this.host, this.host.getSnapBounds());
   }
   
   @Override
   public Point2D getDefaultAnchor(final Side side) {
-    Bounds _boundsInRoot = this.getBoundsInRoot();
-    return this.getDefaultAnchor(_boundsInRoot, side);
+    return this.getDefaultAnchor(this.getBoundsInRoot(), side);
   }
   
   @Override
   public Point2D getDefaultSnapAnchor(final Side side) {
-    Bounds _snapBoundsInRoot = this.getSnapBoundsInRoot();
-    return this.getDefaultAnchor(_snapBoundsInRoot, side);
+    return this.getDefaultAnchor(this.getSnapBoundsInRoot(), side);
   }
   
   public AbstractAnchors(final XNode host) {

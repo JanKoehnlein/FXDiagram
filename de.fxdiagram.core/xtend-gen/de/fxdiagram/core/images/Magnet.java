@@ -58,11 +58,10 @@ public class Magnet extends Parent {
       SVGPath _sVGPath_1 = new SVGPath();
       final Procedure1<SVGPath> _function_2 = (SVGPath it_1) -> {
         it_1.setContent("m 131.271,37.805 c -0.921,-9.047 -2.576,-18.107 -5.783,-26.644 -0.451,-1.198 -3.217,-9.319 -4.482,-9.319 -1.821,0 -3.643,0 -5.464,0 -7.674,0 -19.95,-3.54 -19.67,7.253 0.196,7.574 2.227,15.067 3.336,22.535 0.972,6.537 0.015,6.175 6.214,6.175 8.616,0 17.233,0 25.849,0 m -97.403,0 C 34.747,27.882 38.695,18.454 39.458,8.537 39.986,1.672 36.51,1.845 31.034,1.775 24.963,1.7 18.893,1.625 12.819,1.546 10.922,1.525 6.982,14.191 6.392,15.979 4.064,23.047 2.602,30.396 1.914,37.805 c 10.651,0 21.303,0 31.954,0");
-        Color _color = Color.color(
+        it_1.setFill(Color.color(
           0.8980392156862745, 
           0.8980392156862745, 
-          0.8980392156862745);
-        it_1.setFill(_color);
+          0.8980392156862745));
       };
       SVGPath _doubleArrow_1 = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath_1, _function_2);
       _children_1.add(_doubleArrow_1);
@@ -103,11 +102,10 @@ public class Magnet extends Parent {
       SVGPath _sVGPath_3 = new SVGPath();
       final Procedure1<SVGPath> _function_4 = (SVGPath it_1) -> {
         it_1.setContent("m 13.842,83.873 c 0,2.83 9.374,10.294 11.391,12.021 10.726,9.183 24.172,14.539 38.305,15.052 14.944,0.539 29.649,-3.849 42.247,-11.796 4.328,-2.729 8.4,-5.854 12.21,-9.27 0.515,-0.461 3.912,-4.399 4.675,-4.179 0.612,0.177 -12.533,14.285 -13.504,15.072 -12.204,9.93 -27.383,15.891 -43.197,15.891 -14.793,0 -28.845,-5.701 -39.604,-15.808 C 22.872,97.576 13.842,89.375 13.842,83.873");
-        Color _color = Color.color(
+        it_1.setFill(Color.color(
           1.0, 
           0.6392156862745098, 
-          0.6392156862745098);
-        it_1.setFill(_color);
+          0.6392156862745098));
       };
       SVGPath _doubleArrow_3 = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath_3, _function_4);
       _children_3.add(_doubleArrow_3);
@@ -115,11 +113,10 @@ public class Magnet extends Parent {
       SVGPath _sVGPath_4 = new SVGPath();
       final Procedure1<SVGPath> _function_5 = (SVGPath it_1) -> {
         it_1.setContent("m 34.692,64.009 c 0.196,2.275 6.695,7.454 8.483,8.884 8.192,6.55 18.279,8.777 28.609,7.948 9.901,-0.796 26.275,-5.766 29.778,-16.91 -3.592,11.425 -14.2,19.624 -25.682,21.923 -15.078,3.015 -39.553,-3 -41.188,-21.845");
-        Color _color = Color.color(
+        it_1.setFill(Color.color(
           0.6980392156862745, 
           0.050980392156862744, 
-          0.050980392156862744);
-        it_1.setFill(_color);
+          0.050980392156862744));
       };
       SVGPath _doubleArrow_4 = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath_4, _function_5);
       _children_4.add(_doubleArrow_4);

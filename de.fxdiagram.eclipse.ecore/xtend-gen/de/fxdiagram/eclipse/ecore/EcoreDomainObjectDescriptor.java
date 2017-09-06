@@ -10,7 +10,6 @@ import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -38,15 +37,12 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   
   @Override
   public <U extends Object> U withDomainObject(final Function1<? super EObject, ? extends U> lambda) {
-    EcoreDomainObjectProvider _provider = this.getProvider();
-    String _uri = this.getUri();
-    final EObject element = _provider.resolveEObject(_uri);
-    boolean _notEquals = (!Objects.equal(element, null));
-    if (_notEquals) {
+    final EObject element = this.getProvider().resolveEObject(this.getUri());
+    if ((element != null)) {
       return lambda.apply(element);
     } else {
-      String _uri_1 = this.getUri();
-      String _plus = ("Cannot resolve EObject " + _uri_1);
+      String _uri = this.getUri();
+      String _plus = ("Cannot resolve EObject " + _uri);
       throw new NoSuchElementException(_plus);
     }
   }
@@ -55,10 +51,8 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   public Object openInEditor(final boolean select) {
     IEditingDomainProvider _xblockexpression = null;
     {
-      String _uri = this.getUri();
-      final URI theURI = URI.createURI(_uri);
-      EcoreDomainObjectProvider _provider = this.getProvider();
-      _xblockexpression = _provider.openEditor(theURI, select);
+      final URI theURI = URI.createURI(this.getUri());
+      _xblockexpression = this.getProvider().openEditor(theURI, select);
     }
     return _xblockexpression;
   }
@@ -68,10 +62,8 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
     try {
       Object _xblockexpression = null;
       {
-        Class<? extends IEditorPart> _class = editor.getClass();
-        final Method method = _class.getMethod("setSelectionToViewer", Collection.class);
-        List<EObject> _singletonList = Collections.<EObject>singletonList(selectedElement);
-        _xblockexpression = method.invoke(editor, _singletonList);
+        final Method method = editor.getClass().getMethod("setSelectionToViewer", Collection.class);
+        _xblockexpression = method.invoke(editor, Collections.<EObject>singletonList(selectedElement));
       }
       _xtrycatchfinallyexpression = _xblockexpression;
     } catch (final Throwable _t) {
@@ -97,12 +89,10 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    String _uri = this.getUri();
-    int _hashCode_1 = _uri.hashCode();
+    int _hashCode_1 = this.getUri().hashCode();
     int _multiply = (563 * _hashCode_1);
     int _plus = (_hashCode + _multiply);
-    String _name = this.getName();
-    int _hashCode_2 = _name.hashCode();
+    int _hashCode_2 = this.getName().hashCode();
     int _multiply_1 = (547 * _hashCode_2);
     return (_plus + _multiply_1);
   }

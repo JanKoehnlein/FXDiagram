@@ -6,8 +6,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -33,10 +31,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -76,17 +72,13 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
   protected Map<Integer, XControlPoint> initialize() {
     Map<Integer, XControlPoint> _xblockexpression = null;
     {
-      XConnection.Kind _kind = this.connection.getKind();
-      this.fromKind = _kind;
-      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+      this.fromKind = this.connection.getKind();
       final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
         double _layoutX = it.getLayoutX();
         double _layoutY = it.getLayoutY();
         return new Point2D(_layoutX, _layoutY);
       };
-      List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
-      ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(_map, Point2D.class)));
-      this.fromPoints = _newArrayList;
+      this.fromPoints = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(ListExtensions.<XControlPoint, Point2D>map(this.connection.getControlPoints(), _function), Point2D.class)));
       final Set<XControlPoint> removePoints = this.calculateControlPointsToRemove(this.selectedPoints);
       final ObservableList<XControlPoint> controlPoints = this.connection.getControlPoints();
       int _size = controlPoints.size();
@@ -96,16 +88,13 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
       if (_equals) {
         this.toKind = XConnection.Kind.POLYLINE;
       } else {
-        XConnection.Kind _kind_1 = this.connection.getKind();
-        this.toKind = _kind_1;
+        this.toKind = this.connection.getKind();
       }
-      ArrayList<Point2D> _calculateToPoints = this.calculateToPoints(removePoints);
-      this.toPoints = _calculateToPoints;
+      this.toPoints = this.calculateToPoints(removePoints);
       final Function1<XControlPoint, Integer> _function_1 = (XControlPoint it) -> {
         return Integer.valueOf(controlPoints.indexOf(it));
       };
-      Map<Integer, XControlPoint> _map_1 = IterableExtensions.<Integer, XControlPoint>toMap(removePoints, _function_1);
-      _xblockexpression = this.removedPoints = _map_1;
+      _xblockexpression = this.removedPoints = IterableExtensions.<Integer, XControlPoint>toMap(removePoints, _function_1);
     }
     return _xblockexpression;
   }
@@ -164,10 +153,8 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
           break;
       }
     }
-    XControlPoint _head = IterableExtensions.<XControlPoint>head(controlPoints);
-    removePoints.remove(_head);
-    XControlPoint _last = IterableExtensions.<XControlPoint>last(controlPoints);
-    removePoints.remove(_last);
+    removePoints.remove(IterableExtensions.<XControlPoint>head(controlPoints));
+    removePoints.remove(IterableExtensions.<XControlPoint>last(controlPoints));
     return removePoints;
   }
   
@@ -199,14 +186,11 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
                   double _layoutY = controlPoint.getLayoutY();
                   _xifexpression_1 = new Point2D(_layoutX, _layoutY);
                 } else {
-                  XNode _target = this.connection.getTarget();
-                  _xifexpression_1 = this.midPoint(_target);
+                  _xifexpression_1 = this.midPoint(this.connection.getTarget());
                 }
                 final Point2D anchorRefPoint = _xifexpression_1;
-                ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
-                XNode _source = this.connection.getSource();
-                ArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
-                _xblockexpression = _connectionRouter.getNearestAnchor(_source, anchorRefPoint, _sourceArrowHead);
+                _xblockexpression = this.connection.getConnectionRouter().getNearestAnchor(
+                  this.connection.getSource(), anchorRefPoint, this.connection.getSourceArrowHead());
               }
               _xifexpression = _xblockexpression;
             } else {
@@ -227,14 +211,11 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
                   double _layoutY_1 = lastRemaining.getLayoutY();
                   _xifexpression_2 = new Point2D(_layoutX_1, _layoutY_1);
                 } else {
-                  XNode _source = this.connection.getSource();
-                  _xifexpression_2 = this.midPoint(_source);
+                  _xifexpression_2 = this.midPoint(this.connection.getSource());
                 }
                 final Point2D anchorRefPoint = _xifexpression_2;
-                ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
-                XNode _target = this.connection.getTarget();
-                ArrowHead _targetArrowHead = this.connection.getTargetArrowHead();
-                _xblockexpression_1 = _connectionRouter.getNearestAnchor(_target, anchorRefPoint, _targetArrowHead);
+                _xblockexpression_1 = this.connection.getConnectionRouter().getNearestAnchor(
+                  this.connection.getTarget(), anchorRefPoint, this.connection.getTargetArrowHead());
               }
               _xifexpression_1 = _xblockexpression_1;
             } else {
@@ -274,10 +255,7 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
   }
   
   protected Point2D midPoint(final XNode node) {
-    Node _node = node.getNode();
-    Bounds _boundsInLocal = _node.getBoundsInLocal();
-    Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    return CoreExtensions.localToRootDiagram(node, _center);
+    return CoreExtensions.localToRootDiagram(node, BoundsExtensions.center(node.getNode().getBoundsInLocal()));
   }
   
   @Override
@@ -285,82 +263,66 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
     ParallelTransition _xblockexpression = null;
     {
       this.initialize();
-      Map<Integer, XControlPoint> _emptyMap = CollectionLiterals.<Integer, XControlPoint>emptyMap();
-      Duration _executeDuration = this.getExecuteDuration(context);
-      _xblockexpression = this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _emptyMap, this.removedPoints, _executeDuration);
+      _xblockexpression = this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, 
+        CollectionLiterals.<Integer, XControlPoint>emptyMap(), this.removedPoints, this.getExecuteDuration(context));
     }
     return _xblockexpression;
   }
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    Map<Integer, XControlPoint> _emptyMap = CollectionLiterals.<Integer, XControlPoint>emptyMap();
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return this.createMorphTransition(this.toPoints, this.fromKind, this.fromPoints, 
-      this.removedPoints, _emptyMap, _defaultUndoDuration);
+      this.removedPoints, CollectionLiterals.<Integer, XControlPoint>emptyMap(), context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    Map<Integer, XControlPoint> _emptyMap = CollectionLiterals.<Integer, XControlPoint>emptyMap();
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _emptyMap, this.removedPoints, _defaultUndoDuration);
+    return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, 
+      CollectionLiterals.<Integer, XControlPoint>emptyMap(), this.removedPoints, context.getDefaultUndoDuration());
   }
   
   protected ParallelTransition createMorphTransition(final List<Point2D> from, final XConnection.Kind toKind, final List<Point2D> to, final Map<Integer, XControlPoint> addBefore, final Map<Integer, XControlPoint> removeAfter, final Duration duration) {
     final ParallelTransition morph = new ParallelTransition();
     final HashMap<XConnectionLabel, Point2D> label2position = CollectionLiterals.<XConnectionLabel, Point2D>newHashMap();
-    ObservableList<XConnectionLabel> _labels = this.connection.getLabels();
     final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
-      double _position = it.getPosition();
-      Point2D _at = this.connection.at(_position);
-      label2position.put(it, _at);
+      label2position.put(it, this.connection.at(it.getPosition()));
     };
-    _labels.forEach(_function);
-    ObservableList<XConnectionLabel> _labels_1 = this.connection.getLabels();
+    this.connection.getLabels().forEach(_function);
     final Consumer<XConnectionLabel> _function_1 = (XConnectionLabel label) -> {
-      Point2D _get = label2position.get(label);
-      final ConnectionExtensions.PointOnCurve startPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(_get, from, this.fromKind);
-      Point2D _get_1 = label2position.get(label);
-      final ConnectionExtensions.PointOnCurve endPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(_get_1, to, toKind);
-      double _parameter = startPointOnCurve.getParameter();
-      label.setPosition(_parameter);
+      final ConnectionExtensions.PointOnCurve startPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(label2position.get(label), from, this.fromKind);
+      final ConnectionExtensions.PointOnCurve endPointOnCurve = ConnectionExtensions.getNearestPointOnConnection(label2position.get(label), to, toKind);
+      label.setPosition(startPointOnCurve.getParameter());
       ObservableList<Animation> _children = morph.getChildren();
       Timeline _timeline = new Timeline();
       final Procedure1<Timeline> _function_2 = (Timeline it) -> {
         ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
         Duration _millis = DurationExtensions.millis(0);
         DoubleProperty _positionProperty = label.positionProperty();
-        double _parameter_1 = startPointOnCurve.getParameter();
-        KeyValue _keyValue = new <Number>KeyValue(_positionProperty, Double.valueOf(_parameter_1));
+        double _parameter = startPointOnCurve.getParameter();
+        KeyValue _keyValue = new <Number>KeyValue(_positionProperty, Double.valueOf(_parameter));
         KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
         _keyFrames.add(_keyFrame);
         ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
         DoubleProperty _positionProperty_1 = label.positionProperty();
-        double _parameter_2 = endPointOnCurve.getParameter();
-        KeyValue _keyValue_1 = new <Number>KeyValue(_positionProperty_1, Double.valueOf(_parameter_2));
+        double _parameter_1 = endPointOnCurve.getParameter();
+        KeyValue _keyValue_1 = new <Number>KeyValue(_positionProperty_1, Double.valueOf(_parameter_1));
         KeyFrame _keyFrame_1 = new KeyFrame(duration, _keyValue_1);
         _keyFrames_1.add(_keyFrame_1);
       };
       Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_2);
       _children.add(_doubleArrow);
     };
-    _labels_1.forEach(_function_1);
+    this.connection.getLabels().forEach(_function_1);
     ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
     final ArrayList<XControlPoint> newControlPoints = new ArrayList<XControlPoint>(_controlPoints);
-    Set<Map.Entry<Integer, XControlPoint>> _entrySet = addBefore.entrySet();
     final Function1<Map.Entry<Integer, XControlPoint>, Integer> _function_2 = (Map.Entry<Integer, XControlPoint> it) -> {
       return it.getKey();
     };
-    List<Map.Entry<Integer, XControlPoint>> _sortBy = IterableExtensions.<Map.Entry<Integer, XControlPoint>, Integer>sortBy(_entrySet, _function_2);
     final Consumer<Map.Entry<Integer, XControlPoint>> _function_3 = (Map.Entry<Integer, XControlPoint> it) -> {
-      Integer _key = it.getKey();
-      XControlPoint _value = it.getValue();
-      newControlPoints.add((_key).intValue(), _value);
+      newControlPoints.add((it.getKey()).intValue(), it.getValue());
     };
-    _sortBy.forEach(_function_3);
-    ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
-    _controlPoints_1.setAll(newControlPoints);
+    IterableExtensions.<Map.Entry<Integer, XControlPoint>, Integer>sortBy(addBefore.entrySet(), _function_2).forEach(_function_3);
+    this.connection.getControlPoints().setAll(newControlPoints);
     int _size = newControlPoints.size();
     int _minus = (_size - 1);
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
@@ -380,25 +342,18 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
     }
     final EventHandler<ActionEvent> _function_4 = (ActionEvent it) -> {
       this.connection.setKind(toKind);
-      ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
-      int _size_1 = to.size();
-      _connectionRouter.shrinkToSize(_size_1);
-      ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
+      this.connection.getConnectionRouter().shrinkToSize(to.size());
+      ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
       Collection<XControlPoint> _values = removeAfter.values();
-      Iterables.removeAll(_controlPoints_2, _values);
-      ObservableList<XConnectionLabel> _labels_2 = this.connection.getLabels();
+      Iterables.removeAll(_controlPoints_1, _values);
       final Consumer<XConnectionLabel> _function_5 = (XConnectionLabel it_1) -> {
-        Point2D _get = label2position.get(it_1);
-        ObservableList<XControlPoint> _controlPoints_3 = this.connection.getControlPoints();
         final Function1<XControlPoint, Point2D> _function_6 = (XControlPoint it_2) -> {
           return ConnectionExtensions.toPoint2D(it_2);
         };
-        List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints_3, _function_6);
-        ConnectionExtensions.PointOnCurve _nearestPointOnConnection = ConnectionExtensions.getNearestPointOnConnection(_get, _map, toKind);
-        double _parameter = _nearestPointOnConnection.getParameter();
-        it_1.setPosition(_parameter);
+        it_1.setPosition(ConnectionExtensions.getNearestPointOnConnection(label2position.get(it_1), 
+          ListExtensions.<XControlPoint, Point2D>map(this.connection.getControlPoints(), _function_6), toKind).getParameter());
       };
-      _labels_2.forEach(_function_5);
+      this.connection.getLabels().forEach(_function_5);
       this.connection.updateShapes();
     };
     morph.setOnFinished(_function_4);
@@ -410,18 +365,12 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
     {
       Group _group = new Group();
       final Procedure1<Group> _function = (Group it) -> {
-        double _x = from.getX();
-        it.setTranslateX(_x);
-        double _y = from.getY();
-        it.setTranslateY(_y);
+        it.setTranslateX(from.getX());
+        it.setTranslateY(from.getY());
       };
       final Group dummyNode = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-      DoubleProperty _layoutXProperty = shape.layoutXProperty();
-      DoubleProperty _translateXProperty = dummyNode.translateXProperty();
-      _layoutXProperty.bind(_translateXProperty);
-      DoubleProperty _layoutYProperty = shape.layoutYProperty();
-      DoubleProperty _translateYProperty = dummyNode.translateYProperty();
-      _layoutYProperty.bind(_translateYProperty);
+      shape.layoutXProperty().bind(dummyNode.translateXProperty());
+      shape.layoutYProperty().bind(dummyNode.translateYProperty());
       PathTransition _pathTransition = new PathTransition();
       final Procedure1<PathTransition> _function_1 = (PathTransition it) -> {
         it.setNode(dummyNode);
@@ -444,14 +393,10 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
         it.setPath(_doubleArrow);
         final EventHandler<ActionEvent> _function_3 = (ActionEvent it_1) -> {
           final Procedure1<XControlPoint> _function_4 = (XControlPoint it_2) -> {
-            DoubleProperty _layoutXProperty_1 = it_2.layoutXProperty();
-            _layoutXProperty_1.unbind();
-            DoubleProperty _layoutYProperty_1 = it_2.layoutYProperty();
-            _layoutYProperty_1.unbind();
-            double _x = to.getX();
-            it_2.setLayoutX(_x);
-            double _y = to.getY();
-            it_2.setLayoutY(_y);
+            it_2.layoutXProperty().unbind();
+            it_2.layoutYProperty().unbind();
+            it_2.setLayoutX(to.getX());
+            it_2.setLayoutY(to.getY());
           };
           ObjectExtensions.<XControlPoint>operator_doubleArrow(shape, _function_4);
         };

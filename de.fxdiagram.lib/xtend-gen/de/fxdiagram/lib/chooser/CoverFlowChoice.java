@@ -1,22 +1,15 @@
 package de.fxdiagram.lib.chooser;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.lib.chooser.AbstractBaseChooser;
 import de.fxdiagram.lib.chooser.AbstractChoiceGraphics;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Reflection;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
@@ -43,30 +36,23 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
   
   @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
-    ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
-    int _size = _choiceNodes.size();
+    int _size = this.getChoiceNodes().size();
     boolean _notEquals = (_size != 0);
     if (_notEquals) {
-      ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
       final Function1<XNode, Double> _function = (XNode it) -> {
-        Bounds _layoutBounds = it.getLayoutBounds();
-        return Double.valueOf(_layoutBounds.getWidth());
+        return Double.valueOf(it.getLayoutBounds().getWidth());
       };
-      List<Double> _map = ListExtensions.<XNode, Double>map(_choiceNodes_1, _function);
       final Function2<Double, Double, Double> _function_1 = (Double a, Double b) -> {
         return Double.valueOf(DoubleExtensions.operator_plus(a, b));
       };
-      Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
-      ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
-      int _size_1 = _choiceNodes_2.size();
+      Double _reduce = IterableExtensions.<Double>reduce(ListExtensions.<XNode, Double>map(this.getChoiceNodes(), _function), _function_1);
+      int _size_1 = this.getChoiceNodes().size();
       double _divide = ((_reduce).doubleValue() / _size_1);
       this.gap = _divide;
-      ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
-      int _size_2 = _choiceNodes_3.size();
+      int _size_2 = this.getChoiceNodes().size();
       final int currentIndex = (((int) interpolatedPosition) % _size_2);
       int _xifexpression = (int) 0;
-      ArrayList<XNode> _choiceNodes_4 = this.getChoiceNodes();
-      int _size_3 = _choiceNodes_4.size();
+      int _size_3 = this.getChoiceNodes().size();
       int _minus = (_size_3 - 1);
       boolean _equals = (currentIndex == _minus);
       if (_equals) {
@@ -76,8 +62,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
       }
       final int leftIndex = _xifexpression;
       int _xifexpression_1 = (int) 0;
-      ArrayList<XNode> _choiceNodes_5 = this.getChoiceNodes();
-      int _size_4 = _choiceNodes_5.size();
+      int _size_4 = this.getChoiceNodes().size();
       int _minus_1 = (_size_4 - 1);
       boolean _equals_1 = (currentIndex == _minus_1);
       if (_equals_1) {
@@ -90,8 +75,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
       for (final Integer i : _doubleDotLessThan) {
         this.transformNode((i).intValue(), interpolatedPosition, true, 1);
       }
-      ArrayList<XNode> _choiceNodes_6 = this.getChoiceNodes();
-      int _size_5 = _choiceNodes_6.size();
+      int _size_5 = this.getChoiceNodes().size();
       ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, (rightIndex + 1), false);
       for (final Integer i_1 : _greaterThanDoubleDot) {
         this.transformNode((i_1).intValue(), interpolatedPosition, false, 1);
@@ -99,9 +83,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
       this.transformNode(rightIndex, interpolatedPosition, false, (rightIndex - interpolatedPosition));
       this.transformNode(leftIndex, interpolatedPosition, true, (interpolatedPosition - leftIndex));
       if (((rightIndex > 0) && (Math.abs((leftIndex - interpolatedPosition)) > Math.abs((rightIndex - interpolatedPosition))))) {
-        ArrayList<XNode> _choiceNodes_7 = this.getChoiceNodes();
-        XNode _get = _choiceNodes_7.get(rightIndex);
-        _get.toFront();
+        this.getChoiceNodes().get(rightIndex).toFront();
       }
     }
   }
@@ -111,8 +93,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
     if ((i >= 0)) {
       XNode _xblockexpression = null;
       {
-        ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
-        final XNode node = _choiceNodes.get(i);
+        final XNode node = this.getChoiceNodes().get(i);
         final double distanceFromSelection = Math.abs((i - interpolatedPosition));
         final double opacity = (1 - (0.2 * distanceFromSelection));
         XNode _xifexpression_1 = null;
@@ -130,25 +111,20 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
               _xifexpression_2 = 1;
             }
             final int direction = _xifexpression_2;
-            Bounds _layoutBounds = node.getLayoutBounds();
-            double _width = _layoutBounds.getWidth();
+            double _width = node.getLayoutBounds().getWidth();
             double _multiply = ((-0.5) * _width);
-            Bounds _layoutBounds_1 = node.getLayoutBounds();
-            double _height = _layoutBounds_1.getHeight();
+            double _height = node.getLayoutBounds().getHeight();
             double _multiply_1 = ((-0.5) * _height);
             TransformExtensions.translate(trafo, _multiply, _multiply_1, 0);
             Point3D _point3D = new Point3D(0, 1, 0);
             TransformExtensions.rotate(trafo, ((direction * this.angle) * fraction), _point3D);
             TransformExtensions.translate(trafo, (((i - interpolatedPosition) * this.deltaX) + (((0.5 * fraction) * direction) * this.gap)), 0, (-fraction));
             final Procedure1<XNode> _function = (XNode it) -> {
-              ObservableList<Transform> _transforms = node.getTransforms();
-              _transforms.setAll(trafo);
+              node.getTransforms().setAll(trafo);
               node.toFront();
               ColorAdjust _colorAdjust = new ColorAdjust();
               final Procedure1<ColorAdjust> _function_1 = (ColorAdjust it_1) -> {
-                AbstractBaseChooser _chooser = this.getChooser();
-                XDiagram _diagram = _chooser.getDiagram();
-                Paint _backgroundPaint = _diagram.getBackgroundPaint();
+                Paint _backgroundPaint = this.getChooser().getDiagram().getBackgroundPaint();
                 boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
                 if (_equals) {
                   it_1.setBrightness((opacity - 1));

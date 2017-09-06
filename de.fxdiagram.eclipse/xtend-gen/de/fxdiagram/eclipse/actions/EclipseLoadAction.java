@@ -1,20 +1,15 @@
 package de.fxdiagram.eclipse.actions;
 
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.tools.actions.LoadAction;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import javafx.collections.ObservableList;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
@@ -34,10 +29,8 @@ public class EclipseLoadAction extends LoadAction {
   @Override
   public void perform(final XRoot root) {
     try {
-      Display _default = Display.getDefault();
-      final Shell shell = _default.getActiveShell();
-      IWorkspace _workspace = ResourcesPlugin.getWorkspace();
-      final IWorkspaceRoot workspaceRoot = _workspace.getRoot();
+      final Shell shell = Display.getDefault().getActiveShell();
+      final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
       final ResourceListSelectionDialog dialog = new ResourceListSelectionDialog(shell, workspaceRoot, IResource.FILE) {
         @Override
         protected Control createDialogArea(final Composite parent) {
@@ -68,8 +61,7 @@ public class EclipseLoadAction extends LoadAction {
         _and = _equals_1;
       }
       if (_and) {
-        Object[] _result_1 = dialog.getResult();
-        Object _head = IterableExtensions.<Object>head(((Iterable<Object>)Conversions.doWrapArray(_result_1)));
+        Object _head = IterableExtensions.<Object>head(((Iterable<Object>)Conversions.doWrapArray(dialog.getResult())));
         final IFile file = ((IFile) _head);
         NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
         file.refreshLocal(IResource.DEPTH_ONE, _nullProgressMonitor);
@@ -84,13 +76,9 @@ public class EclipseLoadAction extends LoadAction {
           InputStreamReader _inputStreamReader = new InputStreamReader(_contents, _charset);
           final Object node = _modelLoad.load(_inputStreamReader);
           if ((node instanceof XRoot)) {
-            ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
-            root.replaceDomainObjectProviders(_domainObjectProviders);
-            XDiagram _diagram = ((XRoot)node).getDiagram();
-            root.setRootDiagram(_diagram);
-            IPath _fullPath = file.getFullPath();
-            String _oSString = _fullPath.toOSString();
-            root.setFileName(_oSString);
+            root.replaceDomainObjectProviders(((XRoot)node).getDomainObjectProviders());
+            root.setRootDiagram(((XRoot)node).getDiagram());
+            root.setFileName(file.getFullPath().toOSString());
           }
         }
       }
@@ -100,7 +88,6 @@ public class EclipseLoadAction extends LoadAction {
   }
   
   private Text findTextWidget(final Composite composite) {
-    Control[] _children = composite.getChildren();
     final Function1<Control, Text> _function = (Control it) -> {
       Text _switchResult = null;
       boolean _matched = false;
@@ -119,8 +106,6 @@ public class EclipseLoadAction extends LoadAction {
       }
       return _switchResult;
     };
-    List<Text> _map = ListExtensions.<Control, Text>map(((List<Control>)Conversions.doWrapArray(_children)), _function);
-    Iterable<Text> _filterNull = IterableExtensions.<Text>filterNull(_map);
-    return IterableExtensions.<Text>head(_filterNull);
+    return IterableExtensions.<Text>head(IterableExtensions.<Text>filterNull(ListExtensions.<Control, Text>map(((List<Control>)Conversions.doWrapArray(composite.getChildren())), _function)));
   }
 }

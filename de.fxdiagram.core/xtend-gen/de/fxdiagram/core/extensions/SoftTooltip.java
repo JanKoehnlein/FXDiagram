@@ -50,14 +50,12 @@ public class SoftTooltip {
     
     public void restart() {
       long _currentTimeMillis = System.currentTimeMillis();
-      Duration _delay = this.tooltip.getDelay();
-      double _millis = _delay.toMillis();
+      double _millis = this.tooltip.getDelay().toMillis();
       long _plus = (_currentTimeMillis + ((long) _millis));
       this.endTime = _plus;
       if ((!this.isRunning)) {
         this.isRunning = true;
-        Thread _thread = new Thread(this);
-        _thread.start();
+        new Thread(this).start();
       }
     }
     
@@ -121,8 +119,7 @@ public class SoftTooltip {
       Text _text = new Text();
       final Procedure1<Text> _function_1 = (Text it_1) -> {
         it_1.setText(text);
-        StringProperty _textProperty = it_1.textProperty();
-        this.textProperty = _textProperty;
+        this.textProperty = it_1.textProperty();
         Insets _insets = new Insets(2, 2, 2, 2);
         StackPane.setMargin(it_1, _insets);
       };
@@ -143,9 +140,7 @@ public class SoftTooltip {
       if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
         _matched=true;
         this.isHideOnTrigger = false;
-        double _sceneX = it.getSceneX();
-        double _sceneY = it.getSceneY();
-        this.setReferencePosition(_sceneX, _sceneY);
+        this.setReferencePosition(it.getSceneX(), it.getSceneY());
         if (this.timer!=null) {
           this.timer.restart();
         }
@@ -159,9 +154,7 @@ public class SoftTooltip {
         if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED)) {
           _matched=true;
           this.isHideOnTrigger = false;
-          double _sceneX_1 = it.getSceneX();
-          double _sceneY_1 = it.getSceneY();
-          this.setReferencePosition(_sceneX_1, _sceneY_1);
+          this.setReferencePosition(it.getSceneX(), it.getSceneY());
           if (this.timer!=null) {
             this.timer.restart();
           }
@@ -170,9 +163,7 @@ public class SoftTooltip {
       if (!_matched) {
         if (Objects.equal(_eventType, MouseEvent.MOUSE_MOVED)) {
           _matched=true;
-          double _sceneX_2 = it.getSceneX();
-          double _sceneY_2 = it.getSceneY();
-          this.setReferencePosition(_sceneX_2, _sceneY_2);
+          this.setReferencePosition(it.getSceneX(), it.getSceneY());
           if (this.timer!=null) {
             this.timer.restart();
           }
@@ -238,8 +229,7 @@ public class SoftTooltip {
     boolean _xblockexpression = false;
     {
       if ((!this.isShowing)) {
-        XRoot _root = CoreExtensions.getRoot(this.host);
-        this.root = _root;
+        this.root = CoreExtensions.getRoot(this.host);
         Parent _parent = this.tooltip.getParent();
         HeadsUpDisplay _headsUpDisplay = null;
         if (this.root!=null) {

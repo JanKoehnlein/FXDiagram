@@ -2,7 +2,6 @@ package de.fxdiagram.core.command;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
@@ -82,11 +81,10 @@ public class AnimationQueue {
         this.executeNext();
       }
     } else {
-      ArrayList<AnimationQueue.Listener> _newArrayList = Lists.<AnimationQueue.Listener>newArrayList(this.listeners);
       final Consumer<AnimationQueue.Listener> _function_1 = (AnimationQueue.Listener it) -> {
         it.handleQueueEmpty();
       };
-      _newArrayList.forEach(_function_1);
+      Lists.<AnimationQueue.Listener>newArrayList(this.listeners).forEach(_function_1);
     }
   }
 }

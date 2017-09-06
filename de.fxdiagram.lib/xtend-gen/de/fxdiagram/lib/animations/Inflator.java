@@ -26,7 +26,6 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -68,11 +67,9 @@ public class Inflator {
       };
       final Rectangle spacer = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
       if (this.isInflated) {
-        ObservableList<Node> _children = this.container.getChildren();
-        _children.add(index, inflatable);
+        this.container.getChildren().add(index, inflatable);
       } else {
-        ObservableList<Node> _children_1 = this.container.getChildren();
-        _children_1.add(index, spacer);
+        this.container.getChildren().add(index, spacer);
       }
       _xblockexpression = this.inflatable2spacer.put(inflatable, spacer);
     }
@@ -103,8 +100,7 @@ public class Inflator {
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
-        Duration _millis = DurationExtensions.millis(200);
-        it.setDelay(_millis);
+        it.setDelay(DurationExtensions.millis(200));
         ObservableList<Animation> _children = it.getChildren();
         ParallelTransition _inflate = this.inflate();
         _children.add(_inflate);
@@ -216,9 +212,7 @@ public class Inflator {
         {
           final VBox inflatable = it.getKey();
           final Dimension2D size = this.calculateSize(inflatable);
-          double _width = size.getWidth();
-          double _max = Math.max(inflatedWidth, _width);
-          inflatedWidth = _max;
+          inflatedWidth = Math.max(inflatedWidth, size.getWidth());
           double _inflatedHeight = inflatedHeight;
           double _height = size.getHeight();
           inflatedHeight = (_inflatedHeight + _height);
@@ -298,12 +292,10 @@ public class Inflator {
           it_1.setAutoReverse(false);
           ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
           Duration _millis = DurationExtensions.millis(200);
-          Group _placementGroup = this.host.getPlacementGroup();
-          DoubleProperty _layoutXProperty = _placementGroup.layoutXProperty();
+          DoubleProperty _layoutXProperty = this.host.getPlacementGroup().layoutXProperty();
           double _x = inflatedHostPos.getX();
           KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
-          Group _placementGroup_1 = this.host.getPlacementGroup();
-          DoubleProperty _layoutYProperty = _placementGroup_1.layoutYProperty();
+          DoubleProperty _layoutYProperty = this.host.getPlacementGroup().layoutYProperty();
           double _y = inflatedHostPos.getY();
           KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
           KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -317,14 +309,12 @@ public class Inflator {
             {
               final VBox inflatable = it_2.getKey();
               final Rectangle spacer = it_2.getValue();
-              ObservableList<Node> _children_1 = inflatable.getChildren();
               final Consumer<Node> _function_3 = (Node it_3) -> {
                 it_3.setOpacity(0);
               };
-              _children_1.forEach(_function_3);
+              inflatable.getChildren().forEach(_function_3);
               final ObservableList<Node> siblings = this.container.getChildren();
-              int _indexOf = siblings.indexOf(spacer);
-              siblings.set(_indexOf, inflatable);
+              siblings.set(siblings.indexOf(spacer), inflatable);
             }
           }
         };
@@ -365,12 +355,10 @@ public class Inflator {
         it.setAutoReverse(false);
         ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
         Duration _millis = DurationExtensions.millis(200);
-        Group _placementGroup = this.host.getPlacementGroup();
-        DoubleProperty _layoutXProperty = _placementGroup.layoutXProperty();
+        DoubleProperty _layoutXProperty = this.host.getPlacementGroup().layoutXProperty();
         double _x = deflatedHostPos.getX();
         KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
-        Group _placementGroup_1 = this.host.getPlacementGroup();
-        DoubleProperty _layoutYProperty = _placementGroup_1.layoutYProperty();
+        DoubleProperty _layoutYProperty = this.host.getPlacementGroup().layoutYProperty();
         double _y = deflatedHostPos.getY();
         KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
         KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -398,8 +386,7 @@ public class Inflator {
             FadeTransition _fadeTransition = new FadeTransition();
             final Procedure1<FadeTransition> _function_2 = (FadeTransition it_1) -> {
               it_1.setNode(child);
-              Duration _millis = DurationExtensions.millis(30);
-              it_1.setDuration(_millis);
+              it_1.setDuration(DurationExtensions.millis(30));
               it_1.setFromValue(0);
               it_1.setToValue(1);
             };
@@ -416,12 +403,10 @@ public class Inflator {
   }
   
   protected Iterable<Node> getContents() {
-    Set<VBox> _keySet = this.inflatable2spacer.keySet();
     final Function1<VBox, ObservableList<Node>> _function = (VBox it) -> {
       return it.getChildren();
     };
-    Iterable<ObservableList<Node>> _map = IterableExtensions.<VBox, ObservableList<Node>>map(_keySet, _function);
-    return Iterables.<Node>concat(_map);
+    return Iterables.<Node>concat(IterableExtensions.<VBox, ObservableList<Node>>map(this.inflatable2spacer.keySet(), _function));
   }
   
   protected Transition disappear() {
@@ -444,8 +429,7 @@ public class Inflator {
             FadeTransition _fadeTransition = new FadeTransition();
             final Procedure1<FadeTransition> _function_2 = (FadeTransition it_1) -> {
               it_1.setNode(child);
-              Duration _millis = DurationExtensions.millis(30);
-              it_1.setDuration(_millis);
+              it_1.setDuration(DurationExtensions.millis(30));
               it_1.setFromValue(1);
               it_1.setToValue(0);
             };
@@ -454,24 +438,15 @@ public class Inflator {
           Iterable<FadeTransition> _map = IterableExtensions.<Node, FadeTransition>map(contents, _function_1);
           Iterables.<Animation>addAll(_children, _map);
           final EventHandler<ActionEvent> _function_2 = (ActionEvent it_1) -> {
-            Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
             final Consumer<Map.Entry<VBox, Rectangle>> _function_3 = (Map.Entry<VBox, Rectangle> it_2) -> {
-              ObservableList<Node> _children_1 = this.container.getChildren();
-              VBox _key = it_2.getKey();
-              final int index = _children_1.indexOf(_key);
+              final int index = this.container.getChildren().indexOf(it_2.getKey());
               Rectangle _value = it_2.getValue();
-              VBox _key_1 = it_2.getKey();
-              double _width = _key_1.getWidth();
-              _value.setWidth(_width);
+              _value.setWidth(it_2.getKey().getWidth());
               Rectangle _value_1 = it_2.getValue();
-              VBox _key_2 = it_2.getKey();
-              double _height = _key_2.getHeight();
-              _value_1.setHeight(_height);
-              ObservableList<Node> _children_2 = this.container.getChildren();
-              Rectangle _value_2 = it_2.getValue();
-              _children_2.set(index, _value_2);
+              _value_1.setHeight(it_2.getKey().getHeight());
+              this.container.getChildren().set(index, it_2.getValue());
             };
-            _entrySet.forEach(_function_3);
+            this.inflatable2spacer.entrySet().forEach(_function_3);
           };
           it.setOnFinished(_function_2);
         };
@@ -486,8 +461,7 @@ public class Inflator {
     Point2D _xblockexpression = null;
     {
       final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
-      Group _placementGroup = this.host.getPlacementGroup();
-      double _layoutX = _placementGroup.getLayoutX();
+      double _layoutX = this.host.getPlacementGroup().getLayoutX();
       double _switchResult = (double) 0;
       Side _placementHint = this.host.getPlacementHint();
       if (_placementHint != null) {
@@ -512,8 +486,7 @@ public class Inflator {
         _switchResult = 0;
       }
       double _minus_1 = (_layoutX - _switchResult);
-      Group _placementGroup_1 = this.host.getPlacementGroup();
-      double _layoutY = _placementGroup_1.getLayoutY();
+      double _layoutY = this.host.getPlacementGroup().getLayoutY();
       double _switchResult_1 = (double) 0;
       Side _placementHint_1 = this.host.getPlacementHint();
       if (_placementHint_1 != null) {
@@ -546,8 +519,7 @@ public class Inflator {
     Point2D _xblockexpression = null;
     {
       final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
-      Group _placementGroup = this.host.getPlacementGroup();
-      double _layoutX = _placementGroup.getLayoutX();
+      double _layoutX = this.host.getPlacementGroup().getLayoutX();
       double _switchResult = (double) 0;
       Side _placementHint = this.host.getPlacementHint();
       if (_placementHint != null) {
@@ -575,8 +547,7 @@ public class Inflator {
         _switchResult = 0;
       }
       double _plus = (_layoutX + _switchResult);
-      Group _placementGroup_1 = this.host.getPlacementGroup();
-      double _layoutY = _placementGroup_1.getLayoutY();
+      double _layoutY = this.host.getPlacementGroup().getLayoutY();
       double _switchResult_1 = (double) 0;
       Side _placementHint_1 = this.host.getPlacementHint();
       if (_placementHint_1 != null) {

@@ -97,8 +97,7 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
   @Override
   public void doActivate() {
     super.doActivate();
-    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, this.getDomainObjectDescriptor());
     NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
     this.addBehavior(_nodeReconcileBehavior);
   }

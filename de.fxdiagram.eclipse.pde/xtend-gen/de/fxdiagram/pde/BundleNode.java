@@ -20,7 +20,6 @@ import de.fxdiagram.pde.AddDependencyPathAction;
 import de.fxdiagram.pde.BundleDescriptor;
 import java.util.Collections;
 import java.util.List;
-import javafx.animation.Transition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
@@ -95,11 +94,10 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
         ObservableList<Node> _children = it.getChildren();
         _children.add(contentArea);
         List<Stop> _xifexpression = null;
-        BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
         final Function1<IPluginModelBase, Boolean> _function_3 = (IPluginModelBase it_1) -> {
           return Boolean.valueOf(it_1.isFragmentModel());
         };
-        Boolean _withPlugin = _domainObjectDescriptor.<Boolean>withPlugin(_function_3);
+        Boolean _withPlugin = this.getDomainObjectDescriptor().<Boolean>withPlugin(_function_3);
         if ((_withPlugin).booleanValue()) {
           Color _rgb = Color.rgb(255, 193, 210);
           Stop _stop = new Stop(0, _rgb);
@@ -175,12 +173,10 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
     boolean _not = (!_inflated);
     if (_not) {
       this.setInflated(true);
-      Transition _inflateAnimation = this.detailsInflator.getInflateAnimation();
-      _inflateAnimation.play();
+      this.detailsInflator.getInflateAnimation().play();
     } else {
       this.setInflated(false);
-      Transition _deflateAnimation = this.detailsInflator.getDeflateAnimation();
-      _deflateAnimation.play();
+      this.detailsInflator.getDeflateAnimation().play();
     }
   }
   

@@ -36,10 +36,8 @@ public abstract class ViewportCommand implements AnimationCommand {
       if (_notEquals) {
         ViewportTransition _xblockexpression_1 = null;
         {
-          ViewportMemento _from = transition.getFrom();
-          this.fromMemento = _from;
-          ViewportMemento _to = transition.getTo();
-          this.toMemento = _to;
+          this.fromMemento = transition.getFrom();
+          this.toMemento = transition.getTo();
           _xblockexpression_1 = transition;
         }
         _xifexpression = _xblockexpression_1;

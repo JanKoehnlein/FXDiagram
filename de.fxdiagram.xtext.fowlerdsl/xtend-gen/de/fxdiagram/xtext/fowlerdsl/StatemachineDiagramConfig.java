@@ -7,11 +7,9 @@ import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.MappingAcceptor;
-import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.shapes.BaseNode;
-import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import org.eclipse.emf.common.util.EList;
@@ -57,12 +55,10 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
       };
       this.<State>nodeForEach(StatemachineDiagramConfig.this.stateNode, _function);
       final Function1<Statemachine, Iterable<? extends Transition>> _function_1 = (Statemachine it) -> {
-        EList<State> _states = it.getStates();
         final Function1<State, EList<Transition>> _function_2 = (State it_1) -> {
           return it_1.getTransitions();
         };
-        List<EList<Transition>> _map = ListExtensions.<State, EList<Transition>>map(_states, _function_2);
-        return Iterables.<Transition>concat(_map);
+        return Iterables.<Transition>concat(ListExtensions.<State, EList<Transition>>map(it.getStates(), _function_2));
       };
       this.<Transition>connectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function_1);
     }
@@ -83,11 +79,10 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<State, Iterable<? extends Transition>> _function_1 = (State it) -> {
         return it.getTransitions();
       };
-      MultiConnectionMappingCall<Transition, State> _outConnectionForEach = this.<Transition>outConnectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function_1);
       final Function1<Side, Node> _function_2 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add transition");
       };
-      _outConnectionForEach.asButton(_function_2);
+      this.<Transition>outConnectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function_1).asButton(_function_2);
     }
   };
   

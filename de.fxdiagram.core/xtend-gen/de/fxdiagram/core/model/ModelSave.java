@@ -9,8 +9,6 @@ import de.fxdiagram.core.model.ModelRepairer;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import java.io.Writer;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -22,10 +20,8 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonGeneratorFactory;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Pair;
@@ -41,21 +37,15 @@ public class ModelSave {
   private Model model;
   
   public void save(final Object root, final Writer out) {
-    ModelRepairer _modelRepairer = new ModelRepairer();
-    _modelRepairer.repair(root);
+    new ModelRepairer().repair(root);
     Model _model = new Model(root);
     this.model = _model;
     ModelElement _rootElement = this.model.getRootElement();
     boolean _notEquals = (!Objects.equal(_rootElement, null));
     if (_notEquals) {
-      HashMap<ModelElement, String> _newHashMap = CollectionLiterals.<ModelElement, String>newHashMap();
-      this.idMap = _newHashMap;
+      this.idMap = CollectionLiterals.<ModelElement, String>newHashMap();
       Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(JsonGenerator.PRETTY_PRINTING, Boolean.valueOf(true));
-      JsonGeneratorFactory _createGeneratorFactory = Json.createGeneratorFactory(Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
-      JsonGenerator _createGenerator = _createGeneratorFactory.createGenerator(out);
-      ModelElement _rootElement_1 = this.model.getRootElement();
-      JsonGenerator _write = this.write(_createGenerator, _rootElement_1, null, "");
-      _write.close();
+      this.write(Json.createGeneratorFactory(Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo))).createGenerator(out), this.model.getRootElement(), null, "").close();
     }
   }
   
@@ -75,9 +65,7 @@ public class ModelSave {
         }
       } else {
         this.idMap.put(element, currentId);
-        Object _node = element.getNode();
-        Class<?> _class = _node.getClass();
-        final String className = ClassLoaderExtensions.serialize(_class);
+        final String className = ClassLoaderExtensions.serialize(element.getNode().getClass());
         boolean _notEquals_2 = (!Objects.equal(propertyName, null));
         if (_notEquals_2) {
           gen.writeStartObject(propertyName);
@@ -85,18 +73,14 @@ public class ModelSave {
           gen.writeStartObject();
         }
         gen.write("__class", className);
-        List<? extends Property<?>> _properties = element.getProperties();
         final Consumer<Property<?>> _function = (Property<?> it) -> {
-          Class<?> _type = element.getType(it);
-          this.write(gen, it, _type, currentId);
+          this.write(gen, it, element.getType(it), currentId);
         };
-        _properties.forEach(_function);
-        List<? extends ListProperty<?>> _listProperties = element.getListProperties();
+        element.getProperties().forEach(_function);
         final Consumer<ListProperty<?>> _function_1 = (ListProperty<?> it) -> {
-          Class<?> _type = element.getType(it);
-          this.write(gen, it, _type, currentId);
+          this.write(gen, it, element.getType(it), currentId);
         };
-        _listProperties.forEach(_function_1);
+        element.getListProperties().forEach(_function_1);
         gen.writeEnd();
       }
     }
@@ -110,69 +94,51 @@ public class ModelSave {
       boolean _matched = false;
       if (Objects.equal(propertyType, String.class)) {
         _matched=true;
-        String _name = property.getName();
-        String _value = ((StringProperty) property).getValue();
-        _switchResult = gen.write(_name, _value);
+        _switchResult = gen.write(property.getName(), ((StringProperty) property).getValue());
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Double.class)) {
           _matched=true;
-          String _name_1 = property.getName();
-          double _doubleValue = ((DoubleProperty) property).doubleValue();
-          _switchResult = gen.write(_name_1, _doubleValue);
+          _switchResult = gen.write(property.getName(), ((DoubleProperty) property).doubleValue());
         }
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Float.class)) {
           _matched=true;
-          String _name_2 = property.getName();
-          float _floatValue = ((FloatProperty) property).floatValue();
-          _switchResult = gen.write(_name_2, _floatValue);
+          _switchResult = gen.write(property.getName(), ((FloatProperty) property).floatValue());
         }
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Long.class)) {
           _matched=true;
-          String _name_3 = property.getName();
-          long _longValue = ((LongProperty) property).longValue();
-          _switchResult = gen.write(_name_3, _longValue);
+          _switchResult = gen.write(property.getName(), ((LongProperty) property).longValue());
         }
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Integer.class)) {
           _matched=true;
-          String _name_4 = property.getName();
-          int _intValue = ((IntegerProperty) property).intValue();
-          _switchResult = gen.write(_name_4, _intValue);
+          _switchResult = gen.write(property.getName(), ((IntegerProperty) property).intValue());
         }
       }
       if (!_matched) {
         if (Objects.equal(propertyType, Boolean.class)) {
           _matched=true;
-          String _name_5 = property.getName();
-          Boolean _value_1 = ((BooleanProperty) property).getValue();
-          boolean _booleanValue = _value_1.booleanValue();
-          _switchResult = gen.write(_name_5, _booleanValue);
+          _switchResult = gen.write(property.getName(), ((BooleanProperty) property).getValue().booleanValue());
         }
       }
       if (!_matched) {
         boolean _isAssignableFrom = Enum.class.isAssignableFrom(propertyType);
         if (_isAssignableFrom) {
           _matched=true;
-          String _name_6 = property.getName();
-          Object _value_2 = property.getValue();
-          String _string = _value_2.toString();
-          _switchResult = gen.write(_name_6, _string);
+          _switchResult = gen.write(property.getName(), property.getValue().toString());
         }
       }
       if (!_matched) {
-        Map<Object, ModelElement> _index = this.model.getIndex();
-        Object _value_3 = property.getValue();
-        ModelElement _get = _index.get(_value_3);
-        String _name_7 = property.getName();
-        String _name_8 = property.getName();
-        String _plus = ((currentId + "/") + _name_8);
-        _switchResult = this.write(gen, _get, _name_7, _plus);
+        ModelElement _get = this.model.getIndex().get(property.getValue());
+        String _name = property.getName();
+        String _name_1 = property.getName();
+        String _plus = ((currentId + "/") + _name_1);
+        _switchResult = this.write(gen, _get, _name, _plus);
       }
       _xifexpression = _switchResult;
     }
@@ -182,15 +148,12 @@ public class ModelSave {
   protected JsonGenerator write(final JsonGenerator gen, final ListProperty<?> property, final Class<?> propertyType, final String currentId) {
     JsonGenerator _xblockexpression = null;
     {
-      String _name = property.getName();
-      gen.writeStartArray(_name);
-      ObservableList<?> _value = property.getValue();
-      int _size = _value.size();
+      gen.writeStartArray(property.getName());
+      int _size = property.getValue().size();
       ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
       for (final Integer i : _doubleDotLessThan) {
         {
-          ObservableList<?> _value_1 = property.getValue();
-          final Object value = _value_1.get((i).intValue());
+          final Object value = property.getValue().get((i).intValue());
           boolean _matched = false;
           if (Objects.equal(propertyType, String.class)) {
             _matched=true;
@@ -199,54 +162,46 @@ public class ModelSave {
           if (!_matched) {
             if (Objects.equal(propertyType, Double.class)) {
               _matched=true;
-              double _doubleValue = ((Double) value).doubleValue();
-              gen.write(_doubleValue);
+              gen.write(((Double) value).doubleValue());
             }
           }
           if (!_matched) {
             if (Objects.equal(propertyType, Float.class)) {
               _matched=true;
-              float _floatValue = ((Float) value).floatValue();
-              gen.write(_floatValue);
+              gen.write(((Float) value).floatValue());
             }
           }
           if (!_matched) {
             if (Objects.equal(propertyType, Long.class)) {
               _matched=true;
-              long _longValue = ((Long) value).longValue();
-              gen.write(_longValue);
+              gen.write(((Long) value).longValue());
             }
           }
           if (!_matched) {
             if (Objects.equal(propertyType, Integer.class)) {
               _matched=true;
-              int _intValue = ((Integer) value).intValue();
-              gen.write(_intValue);
+              gen.write(((Integer) value).intValue());
             }
           }
           if (!_matched) {
             if (Objects.equal(propertyType, Boolean.class)) {
               _matched=true;
-              boolean _booleanValue = ((Boolean) value).booleanValue();
-              gen.write(_booleanValue);
+              gen.write(((Boolean) value).booleanValue());
             }
           }
           if (!_matched) {
             boolean _isAssignableFrom = Enum.class.isAssignableFrom(propertyType);
             if (_isAssignableFrom) {
               _matched=true;
-              String _string = value.toString();
-              gen.write(_string);
+              gen.write(value.toString());
             }
           }
           if (!_matched) {
-            Map<Object, ModelElement> _index = this.model.getIndex();
-            boolean _containsKey = _index.containsKey(value);
+            boolean _containsKey = this.model.getIndex().containsKey(value);
             if (_containsKey) {
-              Map<Object, ModelElement> _index_1 = this.model.getIndex();
-              ModelElement _get = _index_1.get(value);
-              String _name_1 = property.getName();
-              String _plus = ((currentId + "/") + _name_1);
+              ModelElement _get = this.model.getIndex().get(value);
+              String _name = property.getName();
+              String _plus = ((currentId + "/") + _name);
               String _plus_1 = (_plus + ".");
               String _plus_2 = (_plus_1 + i);
               this.write(gen, _get, 

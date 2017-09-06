@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.anchors;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.AbstractAnchors;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -18,8 +17,7 @@ public class EllipseAnchors extends AbstractAnchors {
   @Override
   public Point2D getAnchor(final double x, final double y) {
     final Bounds bounds = this.getBoundsInRoot();
-    boolean _equals = Objects.equal(bounds, null);
-    if (_equals) {
+    if ((bounds == null)) {
       return null;
     }
     final Point2D center = BoundsExtensions.center(bounds);

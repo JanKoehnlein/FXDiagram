@@ -2,10 +2,7 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.command.AbstractAnimationCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -28,10 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -71,17 +66,12 @@ public class EClassNode extends XNode {
         ObservableList<Node> _children_1 = it_1.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_2 = (Text it_2) -> {
-          EClass _eClass = this.getEClass();
-          String _name = _eClass.getName();
-          it_2.setText(_name);
+          it_2.setText(this.getEClass().getName());
           it_2.setTextOrigin(VPos.TOP);
-          Font _font = it_2.getFont();
-          String _family = _font.getFamily();
-          Font _font_1 = it_2.getFont();
-          double _size = _font_1.getSize();
+          String _family = it_2.getFont().getFamily();
+          double _size = it_2.getFont().getSize();
           double _multiply = (_size * 1.1);
-          Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
-          it_2.setFont(_font_2);
+          it_2.setFont(Font.font(_family, FontWeight.BOLD, _multiply));
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
         _children_1.add(_doubleArrow);
@@ -101,55 +91,44 @@ public class EClassNode extends XNode {
   public Object populateCompartments() {
     Object _xblockexpression = null;
     {
-      EClass _eClass = this.getEClass();
-      EList<EAttribute> _eAttributes = _eClass.getEAttributes();
-      List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
       final Consumer<EAttribute> _function = (EAttribute attribute) -> {
         ObservableList<Node> _children = this.attributeCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = (Text it) -> {
           StringConcatenation _builder = new StringConcatenation();
           String _name = attribute.getName();
-          _builder.append(_name, "");
+          _builder.append(_name);
           _builder.append(": ");
-          EClassifier _eType = attribute.getEType();
-          String _name_1 = _eType.getName();
-          _builder.append(_name_1, "");
+          String _name_1 = attribute.getEType().getName();
+          _builder.append(_name_1);
           it.setText(_builder.toString());
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
         _children.add(_doubleArrow);
       };
-      _limit.forEach(_function);
-      EClass _eClass_1 = this.getEClass();
-      EList<EOperation> _eOperations = _eClass_1.getEOperations();
-      List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
+      this.<EAttribute>limit(this.getEClass().getEAttributes()).forEach(_function);
       final Consumer<EOperation> _function_1 = (EOperation operation) -> {
         ObservableList<Node> _children = this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_2 = (Text it) -> {
           StringConcatenation _builder = new StringConcatenation();
           String _name = operation.getName();
-          _builder.append(_name, "");
+          _builder.append(_name);
           _builder.append("(");
-          EList<EParameter> _eParameters = operation.getEParameters();
           final Function1<EParameter, String> _function_3 = (EParameter it_1) -> {
-            EClassifier _eType = it_1.getEType();
-            return _eType.getName();
+            return it_1.getEType().getName();
           };
-          List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function_3);
-          String _join = IterableExtensions.join(_map, ", ");
-          _builder.append(_join, "");
+          String _join = IterableExtensions.join(ListExtensions.<EParameter, String>map(operation.getEParameters(), _function_3), ", ");
+          _builder.append(_join);
           _builder.append("): ");
-          EClassifier _eType = operation.getEType();
-          String _name_1 = _eType.getName();
-          _builder.append(_name_1, "");
+          String _name_1 = operation.getEType().getName();
+          _builder.append(_name_1);
           it.setText(_builder.toString());
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
         _children.add(_doubleArrow);
       };
-      _limit_1.forEach(_function_1);
+      this.<EOperation>limit(this.getEClass().getEOperations()).forEach(_function_1);
       _xblockexpression = null;
     }
     return _xblockexpression;
@@ -166,9 +145,7 @@ public class EClassNode extends XNode {
       if (_isActive) {
         _xifexpression_1 = list;
       } else {
-        int _size = list.size();
-        int _min = Math.min(_size, 4);
-        _xifexpression_1 = list.subList(0, _min);
+        _xifexpression_1 = list.subList(0, Math.min(list.size(), 4));
       }
       _xifexpression = _xifexpression_1;
     }
@@ -190,10 +167,7 @@ public class EClassNode extends XNode {
     this.addBehavior(_addESuperTypeRapidButtonBehavior);
     AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
     this.addBehavior(_addEReferenceRapidButtonBehavior);
-    XRoot _root = CoreExtensions.getRoot(this);
-    CommandStack _commandStack = _root.getCommandStack();
-    AbstractAnimationCommand _inflateCommand = inflator.getInflateCommand();
-    _commandStack.execute(_inflateCommand);
+    CoreExtensions.getRoot(this).getCommandStack().execute(inflator.getInflateCommand());
   }
   
   /**

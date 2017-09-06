@@ -48,9 +48,7 @@ public class BaseNodeLabel<T extends Object> extends XLabel {
   
   @Override
   public String getType() {
-    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
-    AbstractMapping<T> _mapping = _domainObjectDescriptor.getMapping();
-    return _mapping.getID();
+    return this.getDomainObjectDescriptor().getMapping().getID();
   }
   
   /**

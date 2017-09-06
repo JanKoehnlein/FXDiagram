@@ -239,24 +239,21 @@ public class ConnectionExtensions {
     double distMid = 0;
     while (((right - left) > Math.sqrt(NumberExpressionExtensions.EPSILON))) {
       {
-        double _linear = Point2DExtensions.linear(left, right, 0.5);
-        mid = _linear;
-        Point2D _apply_2 = curve.apply(Double.valueOf(mid));
-        midPoint = _apply_2;
+        mid = Point2DExtensions.linear(left, right, 0.5);
+        midPoint = curve.apply(Double.valueOf(mid));
         Point2D _minus_2 = Point2DExtensions.operator_minus(midPoint, pointInLocal);
-        double _norm = Point2DExtensions.norm(_minus_2);
-        distMid = _norm;
+        distMid = Point2DExtensions.norm(_minus_2);
         if ((distMid < NumberExpressionExtensions.EPSILON)) {
           return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
         }
-        Point2D _apply_3 = curve.apply(Double.valueOf((mid - NumberExpressionExtensions.EPSILON)));
-        Point2D _minus_3 = Point2DExtensions.operator_minus(_apply_3, pointInLocal);
-        double _norm_1 = Point2DExtensions.norm(_minus_3);
-        final double dLeftMid = (_norm_1 - distMid);
-        Point2D _apply_4 = curve.apply(Double.valueOf((mid + NumberExpressionExtensions.EPSILON)));
-        Point2D _minus_4 = Point2DExtensions.operator_minus(_apply_4, pointInLocal);
-        double _norm_2 = Point2DExtensions.norm(_minus_4);
-        final double dRightMid = (_norm_2 - distMid);
+        Point2D _apply_2 = curve.apply(Double.valueOf((mid - NumberExpressionExtensions.EPSILON)));
+        Point2D _minus_3 = Point2DExtensions.operator_minus(_apply_2, pointInLocal);
+        double _norm = Point2DExtensions.norm(_minus_3);
+        final double dLeftMid = (_norm - distMid);
+        Point2D _apply_3 = curve.apply(Double.valueOf((mid + NumberExpressionExtensions.EPSILON)));
+        Point2D _minus_4 = Point2DExtensions.operator_minus(_apply_3, pointInLocal);
+        double _norm_1 = Point2DExtensions.norm(_minus_4);
+        final double dRightMid = (_norm_1 - distMid);
         if ((dLeftMid < 0)) {
           if ((dRightMid < 0)) {
             return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);

@@ -19,7 +19,6 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -73,8 +72,7 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
         XDiagram _innerDiagram = this.getInnerDiagram();
         final Procedure1<XDiagram> _function_2 = (XDiagram it_2) -> {
           it_2.setIsRootDiagram(false);
-          XDiagram _diagram = CoreExtensions.getDiagram(this);
-          it_2.setParentDiagram(_diagram);
+          it_2.setParentDiagram(CoreExtensions.getDiagram(this));
         };
         XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_innerDiagram, _function_2);
         _children_1.add(_doubleArrow);
@@ -94,10 +92,7 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
   @Override
   public void doActivate() {
     super.doActivate();
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    _innerDiagram.activate();
-    XDiagram _innerDiagram_1 = this.getInnerDiagram();
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram_1.boundsInLocalProperty();
+    this.getInnerDiagram().activate();
     final ChangeListener<Bounds> _function = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
       double _layoutX = this.getLayoutX();
       double _minX = n.getMinX();
@@ -112,7 +107,7 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
       double _plus_1 = (_layoutY + _minus_1);
       this.setLayoutY(_plus_1);
     };
-    _boundsInLocalProperty.addListener(_function);
+    this.getInnerDiagram().boundsInLocalProperty().addListener(_function);
   }
   
   @Override
@@ -123,15 +118,12 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
   @Override
   public void toFront() {
     super.toFront();
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    ObservableList<XNode> _nodes = _innerDiagram.getNodes();
-    XDiagram _innerDiagram_1 = this.getInnerDiagram();
-    ObservableList<XConnection> _connections = _innerDiagram_1.getConnections();
-    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+    ObservableList<XNode> _nodes = this.getInnerDiagram().getNodes();
+    ObservableList<XConnection> _connections = this.getInnerDiagram().getConnections();
     final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
       it.toFront();
     };
-    _plus.forEach(_function);
+    Iterables.<XDomainObjectShape>concat(_nodes, _connections).forEach(_function);
   }
   
   @Override

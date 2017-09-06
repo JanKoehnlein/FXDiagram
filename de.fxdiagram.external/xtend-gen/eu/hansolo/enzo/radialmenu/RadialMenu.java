@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -39,23 +38,19 @@ import javafx.animation.Transition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -147,14 +142,10 @@ public class RadialMenu extends Pane {
   
   public RadialMenu(final Options OPTIONS, final List<MenuItem> ITEMS) {
     this.options = OPTIONS;
-    ObservableMap<Parent, MenuItem> _observableHashMap = FXCollections.<Parent, MenuItem>observableHashMap();
-    this.items = _observableHashMap;
+    this.items = FXCollections.<Parent, MenuItem>observableHashMap();
     SimpleObjectProperty<RadialMenu.State> _simpleObjectProperty = new SimpleObjectProperty<RadialMenu.State>(RadialMenu.State.CLOSED);
     this.state = _simpleObjectProperty;
-    double _degrees = this.options.getDegrees();
-    double _min = Math.min(360, _degrees);
-    double _max = Math.max(_min, 0);
-    this.degrees = _max;
+    this.degrees = Math.max(Math.min(360, this.options.getDegrees()), 0);
     int _xifexpression = (int) 0;
     int _compare = Double.compare(this.degrees, 360.0);
     boolean _tripleEquals = (_compare == 0);
@@ -165,12 +156,8 @@ public class RadialMenu extends Pane {
       _xifexpression = (_size - 1);
     }
     this.positions = _xifexpression;
-    int _size_1 = ITEMS.size();
-    Timeline[] _newArrayOfSize = new Timeline[_size_1];
-    this.openTimeLines = _newArrayOfSize;
-    int _size_2 = ITEMS.size();
-    Timeline[] _newArrayOfSize_1 = new Timeline[_size_2];
-    this.closeTimeLines = _newArrayOfSize_1;
+    this.openTimeLines = new Timeline[ITEMS.size()];
+    this.closeTimeLines = new Timeline[ITEMS.size()];
     Group _group = new Group();
     this.button = _group;
     this.isDirty = true;
@@ -179,8 +166,7 @@ public class RadialMenu extends Pane {
       EventType<? extends MouseEvent> _eventType = EVENT.getEventType();
       boolean _tripleEquals_1 = (MouseEvent.MOUSE_CLICKED == _eventType);
       if (_tripleEquals_1) {
-        Object _source = EVENT.getSource();
-        boolean _equals = _source.equals(this.mainMenuMouseCatcher);
+        boolean _equals = EVENT.getSource().equals(this.mainMenuMouseCatcher);
         if (_equals) {
           RadialMenu.State _state = this.getState();
           boolean _tripleEquals_2 = (RadialMenu.State.CLOSED == _state);
@@ -196,13 +182,11 @@ public class RadialMenu extends Pane {
         if (_tripleEquals_3) {
           boolean _equals_1 = SOURCE.equals(this.mainMenuMouseCatcher);
           if (_equals_1) {
-            Color _rgb = Color.rgb(0, 0, 0, 0.5);
-            this.mainMenuMouseCatcher.setFill(_rgb);
+            this.mainMenuMouseCatcher.setFill(Color.rgb(0, 0, 0, 0.5));
           } else {
+            this.select(this.items.get(SOURCE));
             MenuItem _get = this.items.get(SOURCE);
-            this.select(_get);
-            MenuItem _get_1 = this.items.get(SOURCE);
-            RadialMenu.ItemEvent _itemEvent = new RadialMenu.ItemEvent(_get_1, this, null, RadialMenu.ItemEvent.ITEM_SELECTED);
+            RadialMenu.ItemEvent _itemEvent = new RadialMenu.ItemEvent(_get, this, null, RadialMenu.ItemEvent.ITEM_SELECTED);
             this.fireItemEvent(_itemEvent);
             EVENT.consume();
           }
@@ -210,8 +194,7 @@ public class RadialMenu extends Pane {
           EventType<? extends MouseEvent> _eventType_2 = EVENT.getEventType();
           boolean _tripleEquals_4 = (MouseEvent.MOUSE_RELEASED == _eventType_2);
           if (_tripleEquals_4) {
-            Object _source_1 = EVENT.getSource();
-            boolean _equals_2 = _source_1.equals(this.mainMenuMouseCatcher);
+            boolean _equals_2 = EVENT.getSource().equals(this.mainMenuMouseCatcher);
             if (_equals_2) {
               this.mainMenuMouseCatcher.setFill(Color.TRANSPARENT);
             }
@@ -219,8 +202,7 @@ public class RadialMenu extends Pane {
             EventType<? extends MouseEvent> _eventType_3 = EVENT.getEventType();
             boolean _tripleEquals_5 = (MouseEvent.MOUSE_ENTERED == _eventType_3);
             if (_tripleEquals_5) {
-              Object _source_2 = EVENT.getSource();
-              boolean _equals_3 = _source_2.equals(this.mainMenuMouseCatcher);
+              boolean _equals_3 = EVENT.getSource().equals(this.mainMenuMouseCatcher);
               if (_equals_3) {
               } else {
               }
@@ -242,36 +224,27 @@ public class RadialMenu extends Pane {
     double _buttonSize = this.options.getButtonSize();
     double _multiply = (0.1590909091 * _buttonSize);
     SHADOW.setRadius(_multiply);
-    Color _rgb = Color.rgb(0, 0, 0, 0.6);
-    SHADOW.setColor(_rgb);
+    SHADOW.setColor(Color.rgb(0, 0, 0, 0.6));
     SHADOW.setBlurType(BlurType.TWO_PASS_BOX);
     for (int i = 0; (i < ITEMS.size()); i++) {
       {
         MenuItem item = ITEMS.get(i);
         final StackPane NODE = new StackPane();
-        ObservableList<Node> _children = NODE.getChildren();
-        Circle _createItemShape = this.createItemShape(item, SHADOW);
-        _children.add(_createItemShape);
+        NODE.getChildren().add(this.createItemShape(item, SHADOW));
         if (((SymbolType.NONE == item.getSymbol()) && item.getThumbnailImageName().isEmpty())) {
           String _string = Integer.toString(i);
           Text text = new Text(_string);
           double _size_1 = item.getSize();
           double _multiply_1 = (_size_1 * 0.5);
-          Font _font = Font.font("Verdana", FontWeight.BOLD, _multiply_1);
-          text.setFont(_font);
-          Color _foregroundColor = item.getForegroundColor();
-          text.setFill(_foregroundColor);
-          ObservableList<Node> _children_1 = NODE.getChildren();
-          _children_1.add(text);
+          text.setFont(Font.font("Verdana", FontWeight.BOLD, _multiply_1));
+          text.setFill(item.getForegroundColor());
+          NODE.getChildren().add(text);
         } else {
-          String _thumbnailImageName = item.getThumbnailImageName();
-          boolean _isEmpty = _thumbnailImageName.isEmpty();
+          boolean _isEmpty = item.getThumbnailImageName().isEmpty();
           boolean _not = (!_isEmpty);
           if (_not) {
             try {
-              ObservableList<Node> _children_2 = NODE.getChildren();
-              Canvas _createCanvasThumbnail = this.createCanvasThumbnail(item);
-              _children_2.add(_createCanvasThumbnail);
+              NODE.getChildren().add(this.createCanvasThumbnail(item));
             } catch (final Throwable _t) {
               if (_t instanceof IllegalArgumentException) {
                 final IllegalArgumentException exception = (IllegalArgumentException)_t;
@@ -279,12 +252,9 @@ public class RadialMenu extends Pane {
                 Text text_1 = new Text(_string_1);
                 double _size_2 = item.getSize();
                 double _multiply_2 = (_size_2 * 0.5);
-                Font _font_1 = Font.font("Verdana", FontWeight.BOLD, _multiply_2);
-                text_1.setFont(_font_1);
-                Color _foregroundColor_1 = item.getForegroundColor();
-                text_1.setFill(_foregroundColor_1);
-                ObservableList<Node> _children_3 = NODE.getChildren();
-                _children_3.add(text_1);
+                text_1.setFont(Font.font("Verdana", FontWeight.BOLD, _multiply_2));
+                text_1.setFill(item.getForegroundColor());
+                NODE.getChildren().add(text_1);
               } else {
                 throw Exceptions.sneakyThrow(_t);
               }
@@ -294,8 +264,7 @@ public class RadialMenu extends Pane {
             double _size_3 = item.getSize();
             double _multiply_3 = (0.7 * _size_3);
             Canvas symbol = SymbolCanvas.getSymbol(_symbol, _multiply_3, Color.WHITE);
-            ObservableList<Node> _children_4 = NODE.getChildren();
-            _children_4.add(symbol);
+            NODE.getChildren().add(symbol);
           }
         }
         double _size_4 = item.getSize();
@@ -303,16 +272,13 @@ public class RadialMenu extends Pane {
         Circle itemMouseCatcher = new Circle(_multiply_4);
         itemMouseCatcher.setFill(Color.TRANSPARENT);
         itemMouseCatcher.<MouseEvent>addEventFilter(MouseEvent.MOUSE_CLICKED, this.mouseHandler);
-        ObservableList<Node> _children_5 = NODE.getChildren();
-        _children_5.add(itemMouseCatcher);
+        NODE.getChildren().add(itemMouseCatcher);
         NODE.setOpacity(0.0);
         double _offset = this.options.getOffset();
         double _plus = (((this.degrees / this.positions) * i) + _offset);
         double degree = (_plus % 360);
-        double _radians = Math.toRadians(degree);
-        double _cos = Math.cos(_radians);
-        double _radians_1 = Math.toRadians(degree);
-        double _sin = Math.sin(_radians_1);
+        double _cos = Math.cos(Math.toRadians(degree));
+        double _sin = Math.sin(Math.toRadians(degree));
         Point2D position = new Point2D(_cos, _sin);
         double _x = position.getX();
         double _radius = this.options.getRadius();
@@ -328,14 +294,12 @@ public class RadialMenu extends Pane {
         {
           final Timeline[] _wrVal_openTimeLines = this.openTimeLines;
           final int _wrIndx_openTimeLines = i;
-          Timeline _createItemOpenTimeLine = this.createItemOpenTimeLine(NODE, x, y, delay);
-          _wrVal_openTimeLines[_wrIndx_openTimeLines] = _createItemOpenTimeLine;
+          _wrVal_openTimeLines[_wrIndx_openTimeLines] = this.createItemOpenTimeLine(NODE, x, y, delay);
         }
         {
           final Timeline[] _wrVal_closeTimeLines = this.closeTimeLines;
           final int _wrIndx_closeTimeLines = i;
-          Timeline _createItemCloseTimeLine = this.createItemCloseTimeLine(NODE, x, y, delay);
-          _wrVal_closeTimeLines[_wrIndx_closeTimeLines] = _createItemCloseTimeLine;
+          _wrVal_closeTimeLines[_wrIndx_closeTimeLines] = this.createItemCloseTimeLine(NODE, x, y, delay);
         }
         NODE.setOnMousePressed(this.mouseHandler);
         NODE.setOnMouseReleased(this.mouseHandler);
@@ -349,15 +313,11 @@ public class RadialMenu extends Pane {
   }
   
   private void initGraphics() {
-    ObservableList<Node> _children = this.getChildren();
-    Set<Parent> _keySet = this.items.keySet();
-    _children.setAll(_keySet);
-    ObservableList<Node> _children_1 = this.getChildren();
-    _children_1.add(this.button);
+    this.getChildren().setAll(this.items.keySet());
+    this.getChildren().add(this.button);
   }
   
   private void registerListeners() {
-    ReadOnlyDoubleProperty _widthProperty = this.widthProperty();
     final ChangeListener<Number> _function = (ObservableValue<? extends Number> ov, Number oldWidth, Number newWidth) -> {
       double _doubleValue = oldWidth.doubleValue();
       double _doubleValue_1 = newWidth.doubleValue();
@@ -366,8 +326,7 @@ public class RadialMenu extends Pane {
         this.isDirty = true;
       }
     };
-    _widthProperty.addListener(_function);
-    ReadOnlyDoubleProperty _heightProperty = this.heightProperty();
+    this.widthProperty().addListener(_function);
     final ChangeListener<Number> _function_1 = (ObservableValue<? extends Number> ov, Number oldHeight, Number newHeight) -> {
       double _doubleValue = oldHeight.doubleValue();
       double _doubleValue_1 = newHeight.doubleValue();
@@ -376,7 +335,7 @@ public class RadialMenu extends Pane {
         this.isDirty = true;
       }
     };
-    _heightProperty.addListener(_function_1);
+    this.heightProperty().addListener(_function_1);
   }
   
   @Override
@@ -418,8 +377,7 @@ public class RadialMenu extends Pane {
     if (((INDEX < 0) || (INDEX > this.items.size()))) {
       throw new IndexOutOfBoundsException();
     }
-    List<MenuItem> _items = this.getItems();
-    return _items.get(INDEX);
+    return this.getItems().get(INDEX);
   }
   
   public void addItem(final MenuItem ITEM) {
@@ -431,14 +389,13 @@ public class RadialMenu extends Pane {
   }
   
   public void removeItem(final MenuItem ITEM) {
-    Collection<MenuItem> _values = this.items.values();
-    boolean _contains = _values.contains(ITEM);
+    boolean _contains = this.items.values().contains(ITEM);
     boolean _not = (!_contains);
     if (_not) {
       return;
     }
-    Collection<MenuItem> _values_1 = this.items.values();
-    List<MenuItem> tmpItems = ((List<MenuItem>) _values_1);
+    Collection<MenuItem> _values = this.items.values();
+    List<MenuItem> tmpItems = ((List<MenuItem>) _values);
     tmpItems.remove(ITEM);
     this.initMenuItems(tmpItems);
     this.initGraphics();
@@ -506,10 +463,8 @@ public class RadialMenu extends Pane {
     final EventHandler<ActionEvent> _function = (ActionEvent actionEvent) -> {
       FadeTransition buttonFadeOut = new FadeTransition();
       buttonFadeOut.setNode(this.button);
-      Duration _millis = Duration.millis(100);
-      buttonFadeOut.setDuration(_millis);
-      double _buttonAlpha = this.options.getButtonAlpha();
-      buttonFadeOut.setToValue(_buttonAlpha);
+      buttonFadeOut.setDuration(Duration.millis(100));
+      buttonFadeOut.setToValue(this.options.getButtonAlpha());
       buttonFadeOut.play();
       RadialMenu.MenuEvent _menuEvent = new RadialMenu.MenuEvent(this, null, RadialMenu.MenuEvent.MENU_CLOSE_FINISHED);
       this.fireMenuEvent(_menuEvent);
@@ -537,10 +492,8 @@ public class RadialMenu extends Pane {
       this.button.setRotate(0);
       FadeTransition buttonFadeIn = new FadeTransition();
       buttonFadeIn.setNode(this.button);
-      Duration _millis = Duration.millis(200);
-      buttonFadeIn.setDuration(_millis);
-      double _buttonAlpha = this.options.getButtonAlpha();
-      buttonFadeIn.setToValue(_buttonAlpha);
+      buttonFadeIn.setDuration(Duration.millis(200));
+      buttonFadeIn.setToValue(this.options.getButtonAlpha());
       buttonFadeIn.play();
     }
     Set<Parent> _keySet = this.items.keySet();
@@ -571,8 +524,7 @@ public class RadialMenu extends Pane {
     Set<Parent> _keySet = this.items.keySet();
     for (final Parent node : _keySet) {
       {
-        MenuItem _get = this.items.get(node);
-        boolean _equals = _get.equals(SELECTED_ITEM);
+        boolean _equals = this.items.get(node).equals(SELECTED_ITEM);
         if (_equals) {
           Duration _millis = Duration.millis(300);
           ScaleTransition enlargeItem = new ScaleTransition(_millis, node);
@@ -593,8 +545,7 @@ public class RadialMenu extends Pane {
       }
     }
     ParallelTransition selectTransition = new ParallelTransition();
-    ObservableList<Animation> _children = selectTransition.getChildren();
-    _children.addAll(transitions);
+    selectTransition.getChildren().addAll(transitions);
     selectTransition.play();
     this.close();
   }
@@ -603,10 +554,8 @@ public class RadialMenu extends Pane {
     double _size = ITEM.getSize();
     double _multiply = (_size * 0.5);
     Circle circle = new Circle(_multiply);
-    Color _innerColor = ITEM.getInnerColor();
-    circle.setFill(_innerColor);
-    Color _frameColor = ITEM.getFrameColor();
-    circle.setStroke(_frameColor);
+    circle.setFill(ITEM.getInnerColor());
+    circle.setStroke(ITEM.getFrameColor());
     double _size_1 = ITEM.getSize();
     double _multiply_1 = (0.09375 * _size_1);
     circle.setStrokeWidth(_multiply_1);
@@ -741,14 +690,12 @@ public class RadialMenu extends Pane {
     for (final Parent node : _keySet) {
       {
         double _prefWidth_1 = this.getPrefWidth();
-        Bounds _layoutBounds = node.getLayoutBounds();
-        double _width = _layoutBounds.getWidth();
+        double _width = node.getLayoutBounds().getWidth();
         double _minus = (_prefWidth_1 - _width);
         double _multiply_2 = (_minus * 0.5);
         node.setLayoutX(_multiply_2);
         double _prefHeight_1 = this.getPrefHeight();
-        Bounds _layoutBounds_1 = node.getLayoutBounds();
-        double _height = _layoutBounds_1.getHeight();
+        double _height = node.getLayoutBounds().getHeight();
         double _minus_1 = (_prefHeight_1 - _height);
         double _multiply_3 = (_minus_1 * 0.5);
         node.setLayoutY(_multiply_3);
@@ -761,13 +708,11 @@ public class RadialMenu extends Pane {
   }
   
   public final void setOnItemSelected(final EventHandler<RadialMenu.ItemEvent> value) {
-    ObjectProperty<EventHandler<RadialMenu.ItemEvent>> _onItemSelectedProperty = this.onItemSelectedProperty();
-    _onItemSelectedProperty.set(value);
+    this.onItemSelectedProperty().set(value);
   }
   
   public final EventHandler<RadialMenu.ItemEvent> getOnItemSelected() {
-    ObjectProperty<EventHandler<RadialMenu.ItemEvent>> _onItemSelectedProperty = this.onItemSelectedProperty();
-    return _onItemSelectedProperty.get();
+    return this.onItemSelectedProperty().get();
   }
   
   private ObjectProperty<EventHandler<RadialMenu.ItemEvent>> onItemSelected = new ObjectPropertyBase<EventHandler<RadialMenu.ItemEvent>>() {
@@ -794,13 +739,11 @@ public class RadialMenu extends Pane {
   }
   
   public final void setOnMenuOpenStarted(final EventHandler<RadialMenu.MenuEvent> value) {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuOpenStartedProperty = this.onMenuOpenStartedProperty();
-    _onMenuOpenStartedProperty.set(value);
+    this.onMenuOpenStartedProperty().set(value);
   }
   
   public final EventHandler<RadialMenu.MenuEvent> getOnMenuOpenStarted() {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuOpenStartedProperty = this.onMenuOpenStartedProperty();
-    return _onMenuOpenStartedProperty.get();
+    return this.onMenuOpenStartedProperty().get();
   }
   
   private ObjectProperty<EventHandler<RadialMenu.MenuEvent>> onMenuOpenStarted = new ObjectPropertyBase<EventHandler<RadialMenu.MenuEvent>>() {
@@ -820,13 +763,11 @@ public class RadialMenu extends Pane {
   }
   
   public final void setOnMenuOpenFinished(final EventHandler<RadialMenu.MenuEvent> value) {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuOpenFinishedProperty = this.onMenuOpenFinishedProperty();
-    _onMenuOpenFinishedProperty.set(value);
+    this.onMenuOpenFinishedProperty().set(value);
   }
   
   public final EventHandler<RadialMenu.MenuEvent> getOnMenuOpenFinished() {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuOpenFinishedProperty = this.onMenuOpenFinishedProperty();
-    return _onMenuOpenFinishedProperty.get();
+    return this.onMenuOpenFinishedProperty().get();
   }
   
   private ObjectProperty<EventHandler<RadialMenu.MenuEvent>> onMenuOpenFinished = new ObjectPropertyBase<EventHandler<RadialMenu.MenuEvent>>() {
@@ -846,13 +787,11 @@ public class RadialMenu extends Pane {
   }
   
   public final void setOnMenuCloseStarted(final EventHandler<RadialMenu.MenuEvent> value) {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuCloseStartedProperty = this.onMenuCloseStartedProperty();
-    _onMenuCloseStartedProperty.set(value);
+    this.onMenuCloseStartedProperty().set(value);
   }
   
   public final EventHandler<RadialMenu.MenuEvent> getOnMenuCloseStarted() {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuCloseStartedProperty = this.onMenuCloseStartedProperty();
-    return _onMenuCloseStartedProperty.get();
+    return this.onMenuCloseStartedProperty().get();
   }
   
   private ObjectProperty<EventHandler<RadialMenu.MenuEvent>> onMenuCloseStarted = new ObjectPropertyBase<EventHandler<RadialMenu.MenuEvent>>() {
@@ -872,13 +811,11 @@ public class RadialMenu extends Pane {
   }
   
   public final void setOnMenuCloseFinished(final EventHandler<RadialMenu.MenuEvent> value) {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuCloseFinishedProperty = this.onMenuCloseFinishedProperty();
-    _onMenuCloseFinishedProperty.set(value);
+    this.onMenuCloseFinishedProperty().set(value);
   }
   
   public final EventHandler<RadialMenu.MenuEvent> getOnMenuCloseFinished() {
-    ObjectProperty<EventHandler<RadialMenu.MenuEvent>> _onMenuCloseFinishedProperty = this.onMenuCloseFinishedProperty();
-    return _onMenuCloseFinishedProperty.get();
+    return this.onMenuCloseFinishedProperty().get();
   }
   
   private ObjectProperty<EventHandler<RadialMenu.MenuEvent>> onMenuCloseFinished = new ObjectPropertyBase<EventHandler<RadialMenu.MenuEvent>>() {

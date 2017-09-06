@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.domainmodel;
 
 import com.google.inject.Inject;
-import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
@@ -50,8 +49,7 @@ public class DomainModelUtil {
   }
   
   public JvmTypeReference getComponentType(final JvmTypeReference it) {
-    StandardTypeReferenceOwner _standardTypeReferenceOwner = new StandardTypeReferenceOwner(this.services, it);
-    final LightweightTypeReference type = _standardTypeReferenceOwner.toLightweightTypeReference(it);
+    final LightweightTypeReference type = new StandardTypeReferenceOwner(this.services, it).toLightweightTypeReference(it);
     LightweightTypeReference _xifexpression = null;
     boolean _isArray = type.isArray();
     if (_isArray) {
@@ -59,9 +57,7 @@ public class DomainModelUtil {
     } else {
       LightweightTypeReference _xifexpression_1 = null;
       if ((type.isSubtypeOf(Iterable.class) && (!type.getTypeArguments().isEmpty()))) {
-        List<LightweightTypeReference> _typeArguments = type.getTypeArguments();
-        LightweightTypeReference _head = IterableExtensions.<LightweightTypeReference>head(_typeArguments);
-        _xifexpression_1 = _head.getInvariantBoundSubstitute();
+        _xifexpression_1 = IterableExtensions.<LightweightTypeReference>head(type.getTypeArguments()).getInvariantBoundSubstitute();
       } else {
         _xifexpression_1 = type;
       }

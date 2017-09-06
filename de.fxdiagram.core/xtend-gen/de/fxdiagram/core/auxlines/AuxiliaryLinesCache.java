@@ -16,15 +16,10 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -32,7 +27,6 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -112,36 +106,25 @@ public class AuxiliaryLinesCache {
   public Iterable<AuxiliaryLine> getAuxiliaryLines(final XNode node) {
     Iterable<AuxiliaryLine> _xblockexpression = null;
     {
-      Bounds _snapBounds = node.getSnapBounds();
-      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, _snapBounds);
+      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, node.getSnapBounds());
+      Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(this.leftMap.getByPosition(boundsInDiagram.getMinX()));
       double _minX = boundsInDiagram.getMinX();
-      Collection<AuxiliaryLine> _byPosition = this.leftMap.getByPosition(_minX);
-      Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
-      double _minX_1 = boundsInDiagram.getMinX();
       double _maxX = boundsInDiagram.getMaxX();
-      double _plus = (_minX_1 + _maxX);
+      double _plus = (_minX + _maxX);
       double _multiply = (0.5 * _plus);
-      Collection<AuxiliaryLine> _byPosition_1 = this.centerXMap.getByPosition(_multiply);
-      Iterable<AuxiliaryLine> _atLeastTwo_1 = this.atLeastTwo(_byPosition_1);
+      Iterable<AuxiliaryLine> _atLeastTwo_1 = this.atLeastTwo(this.centerXMap.getByPosition(_multiply));
       Iterable<AuxiliaryLine> _plus_1 = Iterables.<AuxiliaryLine>concat(_atLeastTwo, _atLeastTwo_1);
-      double _maxX_1 = boundsInDiagram.getMaxX();
-      Collection<AuxiliaryLine> _byPosition_2 = this.rightMap.getByPosition(_maxX_1);
-      Iterable<AuxiliaryLine> _atLeastTwo_2 = this.atLeastTwo(_byPosition_2);
+      Iterable<AuxiliaryLine> _atLeastTwo_2 = this.atLeastTwo(this.rightMap.getByPosition(boundsInDiagram.getMaxX()));
       Iterable<AuxiliaryLine> _plus_2 = Iterables.<AuxiliaryLine>concat(_plus_1, _atLeastTwo_2);
-      double _minY = boundsInDiagram.getMinY();
-      Collection<AuxiliaryLine> _byPosition_3 = this.topMap.getByPosition(_minY);
-      Iterable<AuxiliaryLine> _atLeastTwo_3 = this.atLeastTwo(_byPosition_3);
+      Iterable<AuxiliaryLine> _atLeastTwo_3 = this.atLeastTwo(this.topMap.getByPosition(boundsInDiagram.getMinY()));
       Iterable<AuxiliaryLine> _plus_3 = Iterables.<AuxiliaryLine>concat(_plus_2, _atLeastTwo_3);
-      double _minY_1 = boundsInDiagram.getMinY();
+      double _minY = boundsInDiagram.getMinY();
       double _maxY = boundsInDiagram.getMaxY();
-      double _plus_4 = (_minY_1 + _maxY);
+      double _plus_4 = (_minY + _maxY);
       double _multiply_1 = (0.5 * _plus_4);
-      Collection<AuxiliaryLine> _byPosition_4 = this.centerYMap.getByPosition(_multiply_1);
-      Iterable<AuxiliaryLine> _atLeastTwo_4 = this.atLeastTwo(_byPosition_4);
+      Iterable<AuxiliaryLine> _atLeastTwo_4 = this.atLeastTwo(this.centerYMap.getByPosition(_multiply_1));
       Iterable<AuxiliaryLine> _plus_5 = Iterables.<AuxiliaryLine>concat(_plus_3, _atLeastTwo_4);
-      double _maxY_1 = boundsInDiagram.getMaxY();
-      Collection<AuxiliaryLine> _byPosition_5 = this.bottomMap.getByPosition(_maxY_1);
-      Iterable<AuxiliaryLine> _atLeastTwo_5 = this.atLeastTwo(_byPosition_5);
+      Iterable<AuxiliaryLine> _atLeastTwo_5 = this.atLeastTwo(this.bottomMap.getByPosition(boundsInDiagram.getMaxY()));
       _xblockexpression = Iterables.<AuxiliaryLine>concat(_plus_5, _atLeastTwo_5);
     }
     return _xblockexpression;
@@ -150,15 +133,9 @@ public class AuxiliaryLinesCache {
   public Iterable<AuxiliaryLine> getAuxiliaryLines(final XControlPoint point) {
     Iterable<AuxiliaryLine> _xblockexpression = null;
     {
-      Bounds _boundsInLocal = point.getBoundsInLocal();
-      Point2D _center = BoundsExtensions.center(_boundsInLocal);
-      final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(point, _center);
-      double _x = centerInDiagram.getX();
-      Collection<AuxiliaryLine> _byPosition = this.centerXMap.getByPosition(_x);
-      Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
-      double _y = centerInDiagram.getY();
-      Collection<AuxiliaryLine> _byPosition_1 = this.centerYMap.getByPosition(_y);
-      Iterable<AuxiliaryLine> _atLeastTwo_1 = this.atLeastTwo(_byPosition_1);
+      final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(point, BoundsExtensions.center(point.getBoundsInLocal()));
+      Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(this.centerXMap.getByPosition(centerInDiagram.getX()));
+      Iterable<AuxiliaryLine> _atLeastTwo_1 = this.atLeastTwo(this.centerYMap.getByPosition(centerInDiagram.getY()));
       _xblockexpression = Iterables.<AuxiliaryLine>concat(_atLeastTwo, _atLeastTwo_1);
     }
     return _xblockexpression;
@@ -177,8 +154,7 @@ public class AuxiliaryLinesCache {
   }
   
   public Point2D getSnappedPosition(final XNode node, final Point2D newPositionInDiagram) {
-    Bounds _snapBounds = node.getSnapBounds();
-    final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _snapBounds);
+    final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, node.getSnapBounds());
     double _x = newPositionInDiagram.getX();
     double _layoutX = node.getLayoutX();
     double _minus = (_x - _layoutX);
@@ -192,67 +168,49 @@ public class AuxiliaryLinesCache {
     double _width = boundsInDiagram.getWidth();
     double _height = boundsInDiagram.getHeight();
     final BoundingBox newBoundsInDiagram = new BoundingBox(_plus, _plus_1, _width, _height);
-    XDiagram _diagram = CoreExtensions.getDiagram(node);
-    final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_diagram, newBoundsInDiagram);
+    final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(CoreExtensions.getDiagram(node), newBoundsInDiagram);
     final HashSet<XShape> excluded = CollectionLiterals.<XShape>newHashSet();
     excluded.add(node);
-    ObservableList<XConnection> _outgoingConnections = node.getOutgoingConnections();
     final Consumer<XConnection> _function = (XConnection it) -> {
       if ((Objects.equal(it.getKind(), XConnection.Kind.RECTILINEAR) && (it.getControlPoints().size() > 2))) {
-        ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
-        XControlPoint _get = _controlPoints.get(1);
+        XControlPoint _get = it.getControlPoints().get(1);
         excluded.add(_get);
       }
     };
-    _outgoingConnections.forEach(_function);
-    ObservableList<XConnection> _incomingConnections = node.getIncomingConnections();
+    node.getOutgoingConnections().forEach(_function);
     final Consumer<XConnection> _function_1 = (XConnection it) -> {
       if ((Objects.equal(it.getKind(), XConnection.Kind.RECTILINEAR) && (it.getControlPoints().size() > 2))) {
         ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
-        ObservableList<XControlPoint> _controlPoints_1 = it.getControlPoints();
-        int _size = _controlPoints_1.size();
+        int _size = it.getControlPoints().size();
         int _minus_2 = (_size - 2);
         XControlPoint _get = _controlPoints.get(_minus_2);
         excluded.add(_get);
       }
     };
-    _incomingConnections.forEach(_function_1);
+    node.getIncomingConnections().forEach(_function_1);
     double dx = this.magnetDist;
     double _minX_1 = boundsInRootDiagram.getMinX();
     double _maxX = boundsInRootDiagram.getMaxX();
     double _plus_2 = (_minX_1 + _maxX);
     double _multiply = (0.5 * _plus_2);
-    double _nearestLineDelta = this.centerXMap.getNearestLineDelta(_multiply, dx, excluded);
-    dx = _nearestLineDelta;
-    double _minX_2 = boundsInRootDiagram.getMinX();
-    double _nearestLineDelta_1 = this.leftMap.getNearestLineDelta(_minX_2, dx, excluded);
-    dx = _nearestLineDelta_1;
-    double _maxX_1 = boundsInRootDiagram.getMaxX();
-    double _nearestLineDelta_2 = this.rightMap.getNearestLineDelta(_maxX_1, dx, excluded);
-    dx = _nearestLineDelta_2;
+    dx = this.centerXMap.getNearestLineDelta(_multiply, dx, excluded);
+    dx = this.leftMap.getNearestLineDelta(boundsInRootDiagram.getMinX(), dx, excluded);
+    dx = this.rightMap.getNearestLineDelta(boundsInRootDiagram.getMaxX(), dx, excluded);
     double dy = this.magnetDist;
     double _minY_1 = boundsInRootDiagram.getMinY();
     double _maxY = boundsInRootDiagram.getMaxY();
     double _plus_3 = (_minY_1 + _maxY);
     double _multiply_1 = (0.5 * _plus_3);
-    double _nearestLineDelta_3 = this.centerYMap.getNearestLineDelta(_multiply_1, dy, excluded);
-    dy = _nearestLineDelta_3;
-    double _minY_2 = boundsInRootDiagram.getMinY();
-    double _nearestLineDelta_4 = this.topMap.getNearestLineDelta(_minY_2, dy, excluded);
-    dy = _nearestLineDelta_4;
-    double _maxY_1 = boundsInRootDiagram.getMaxY();
-    double _nearestLineDelta_5 = this.bottomMap.getNearestLineDelta(_maxY_1, dy, excluded);
-    dy = _nearestLineDelta_5;
+    dy = this.centerYMap.getNearestLineDelta(_multiply_1, dy, excluded);
+    dy = this.topMap.getNearestLineDelta(boundsInRootDiagram.getMinY(), dy, excluded);
+    dy = this.bottomMap.getNearestLineDelta(boundsInRootDiagram.getMaxY(), dy, excluded);
     return this.toLocal(dx, dy, newPositionInDiagram, node);
   }
   
   public Point2D getSnappedPosition(final XControlPoint point, final Point2D newPositionInDiagram) {
-    Parent _parent = point.getParent();
-    final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(_parent, newPositionInDiagram);
-    double _x = centerInDiagram.getX();
-    final double dx = this.centerXMap.getNearestLineDelta(_x, this.magnetDist, Collections.<XShape>unmodifiableSet(CollectionLiterals.<XShape>newHashSet(point)));
-    double _y = centerInDiagram.getY();
-    final double dy = this.centerYMap.getNearestLineDelta(_y, this.magnetDist, Collections.<XShape>unmodifiableSet(CollectionLiterals.<XShape>newHashSet(point)));
+    final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(point.getParent(), newPositionInDiagram);
+    final double dx = this.centerXMap.getNearestLineDelta(centerInDiagram.getX(), this.magnetDist, Collections.<XShape>unmodifiableSet(CollectionLiterals.<XShape>newHashSet(point)));
+    final double dy = this.centerYMap.getNearestLineDelta(centerInDiagram.getY(), this.magnetDist, Collections.<XShape>unmodifiableSet(CollectionLiterals.<XShape>newHashSet(point)));
     return this.toLocal(dx, dy, newPositionInDiagram, point);
   }
   
@@ -277,10 +235,7 @@ public class AuxiliaryLinesCache {
     if (_lessThan) {
       return newPointInDiagram;
     }
-    Parent _parent = shape.getParent();
-    XDiagram _rootDiagram = CoreExtensions.getRootDiagram(shape);
-    Point2D _localToScene = _rootDiagram.localToScene(delta);
-    final Point2D deltaLocal = _parent.sceneToLocal(_localToScene);
+    final Point2D deltaLocal = shape.getParent().sceneToLocal(CoreExtensions.getRootDiagram(shape).localToScene(delta));
     double _x = newPointInDiagram.getX();
     double _x_1 = deltaLocal.getX();
     double _plus = (_x + _x_1);
@@ -291,35 +246,27 @@ public class AuxiliaryLinesCache {
   }
   
   protected void watchDiagram(final XDiagram diagram) {
-    ObservableList<XNode> _nodes = diagram.getNodes();
-    CoreExtensions.<XNode>addInitializingListener(_nodes, this.nodesListener);
-    ObservableList<XConnection> _connections = diagram.getConnections();
-    CoreExtensions.<XConnection>addInitializingListener(_connections, this.connectionsListener);
+    CoreExtensions.<XNode>addInitializingListener(diagram.getNodes(), this.nodesListener);
+    CoreExtensions.<XConnection>addInitializingListener(diagram.getConnections(), this.connectionsListener);
   }
   
   protected void updateDiagram(final XDiagram diagram) {
-    ObservableList<XNode> _nodes = diagram.getNodes();
     final Consumer<XNode> _function = (XNode it) -> {
       this.updateNode(it);
     };
-    _nodes.forEach(_function);
-    ObservableList<XConnection> _connections = diagram.getConnections();
+    diagram.getNodes().forEach(_function);
     final Function1<XConnection, ObservableList<XControlPoint>> _function_1 = (XConnection it) -> {
       return it.getControlPoints();
     };
-    List<ObservableList<XControlPoint>> _map = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections, _function_1);
-    Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map);
     final Consumer<XControlPoint> _function_2 = (XControlPoint it) -> {
       this.updateControlPoint(it);
     };
-    _flatten.forEach(_function_2);
+    Iterables.<XControlPoint>concat(ListExtensions.<XConnection, ObservableList<XControlPoint>>map(diagram.getConnections(), _function_1)).forEach(_function_2);
   }
   
   protected void unwatchDiagram(final XDiagram diagram) {
-    ObservableList<XNode> _nodes = diagram.getNodes();
-    CoreExtensions.<XNode>removeInitializingListener(_nodes, this.nodesListener);
-    ObservableList<XConnection> _connections = diagram.getConnections();
-    CoreExtensions.<XConnection>removeInitializingListener(_connections, this.connectionsListener);
+    CoreExtensions.<XNode>removeInitializingListener(diagram.getNodes(), this.nodesListener);
+    CoreExtensions.<XConnection>removeInitializingListener(diagram.getConnections(), this.connectionsListener);
   }
   
   protected void watchNode(final XNode node) {
@@ -328,8 +275,7 @@ public class AuxiliaryLinesCache {
       if ((node instanceof XDiagramContainer)) {
         boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
         if (_isInnerDiagramActive) {
-          XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
-          this.updateDiagram(_innerDiagram);
+          this.updateDiagram(((XDiagramContainer)node).getInnerDiagram());
         }
       }
     };
@@ -339,33 +285,27 @@ public class AuxiliaryLinesCache {
       if ((node instanceof XDiagramContainer)) {
         boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
         if (_isInnerDiagramActive) {
-          XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
-          this.updateDiagram(_innerDiagram);
+          this.updateDiagram(((XDiagramContainer)node).getInnerDiagram());
         }
       }
     };
     final ChangeListener<Bounds> boundsListener = _function_1;
-    DoubleProperty _layoutXProperty = node.layoutXProperty();
-    _layoutXProperty.addListener(scalarListener);
-    DoubleProperty _layoutYProperty = node.layoutYProperty();
-    _layoutYProperty.addListener(scalarListener);
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = node.boundsInLocalProperty();
-    _boundsInLocalProperty.addListener(boundsListener);
+    node.layoutXProperty().addListener(scalarListener);
+    node.layoutYProperty().addListener(scalarListener);
+    node.boundsInLocalProperty().addListener(boundsListener);
     this.shape2scalarListener.put(node, scalarListener);
     this.node2boundsListener.put(node, boundsListener);
     this.updateNode(node);
     if ((node instanceof XDiagramContainer)) {
       boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
       if (_isInnerDiagramActive) {
-        XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
-        this.watchDiagram(_innerDiagram);
+        this.watchDiagram(((XDiagramContainer)node).getInnerDiagram());
       }
     }
   }
   
   protected void updateNode(final XNode node) {
-    Bounds _snapBounds = node.getSnapBounds();
-    final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, _snapBounds);
+    final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, node.getSnapBounds());
     double _minX = boundsInDiagram.getMinX();
     NodeLine _nodeLine = new NodeLine(_minX, 
       Orientation.VERTICAL, node, boundsInDiagram);
@@ -402,8 +342,7 @@ public class AuxiliaryLinesCache {
     if ((node instanceof XDiagramContainer)) {
       boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
       if (_isInnerDiagramActive) {
-        XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
-        this.unwatchDiagram(_innerDiagram);
+        this.unwatchDiagram(((XDiagramContainer)node).getInnerDiagram());
       }
     }
     this.leftMap.removeByShape(node);
@@ -413,23 +352,18 @@ public class AuxiliaryLinesCache {
     this.centerYMap.removeByShape(node);
     this.bottomMap.removeByShape(node);
     final ChangeListener<Bounds> boundsListener = this.node2boundsListener.remove(node);
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = node.boundsInLocalProperty();
-    _boundsInLocalProperty.removeListener(boundsListener);
+    node.boundsInLocalProperty().removeListener(boundsListener);
     final ChangeListener<Number> scalarListener = this.shape2scalarListener.remove(node);
-    DoubleProperty _layoutXProperty = node.layoutXProperty();
-    _layoutXProperty.removeListener(scalarListener);
-    DoubleProperty _layoutYProperty = node.layoutYProperty();
-    _layoutYProperty.removeListener(scalarListener);
+    node.layoutXProperty().removeListener(scalarListener);
+    node.layoutYProperty().removeListener(scalarListener);
   }
   
   protected void watchConnection(final XConnection connection) {
-    ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
-    CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, this.controlPointsListener);
+    CoreExtensions.<XControlPoint>addInitializingListener(connection.getControlPoints(), this.controlPointsListener);
   }
   
   protected void unwatchConnection(final XConnection connection) {
-    ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
-    CoreExtensions.<XControlPoint>removeInitializingListener(_controlPoints, this.controlPointsListener);
+    CoreExtensions.<XControlPoint>removeInitializingListener(connection.getControlPoints(), this.controlPointsListener);
   }
   
   protected void watchControlPoint(final XControlPoint controlPoint) {
@@ -437,11 +371,8 @@ public class AuxiliaryLinesCache {
       this.updateControlPoint(controlPoint);
     };
     final ChangeListener<Number> scalarListener = _function;
-    DoubleProperty _layoutXProperty = controlPoint.layoutXProperty();
-    _layoutXProperty.addListener(scalarListener);
-    DoubleProperty _layoutYProperty = controlPoint.layoutYProperty();
-    _layoutYProperty.addListener(scalarListener);
-    ObjectProperty<XControlPoint.Type> _typeProperty = controlPoint.typeProperty();
+    controlPoint.layoutXProperty().addListener(scalarListener);
+    controlPoint.layoutYProperty().addListener(scalarListener);
     final ChangeListener<XControlPoint.Type> _function_1 = (ObservableValue<? extends XControlPoint.Type> p, XControlPoint.Type o, XControlPoint.Type n) -> {
       boolean _equals = Objects.equal(n, XControlPoint.Type.ANCHOR);
       if (_equals) {
@@ -450,7 +381,7 @@ public class AuxiliaryLinesCache {
         this.updateControlPoint(controlPoint);
       }
     };
-    _typeProperty.addListener(_function_1);
+    controlPoint.typeProperty().addListener(_function_1);
     this.shape2scalarListener.put(controlPoint, scalarListener);
     this.updateControlPoint(controlPoint);
   }
@@ -459,15 +390,12 @@ public class AuxiliaryLinesCache {
     XControlPoint.Type _type = point.getType();
     boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.ANCHOR));
     if (_notEquals) {
-      Bounds _boundsInLocal = point.getBoundsInLocal();
-      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(point, _boundsInLocal);
-      Point2D _center = BoundsExtensions.center(boundsInDiagram);
-      double _x = _center.getX();
+      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(point, point.getBoundsInLocal());
+      double _x = BoundsExtensions.center(boundsInDiagram).getX();
       NodeLine _nodeLine = new NodeLine(_x, 
         Orientation.VERTICAL, point, boundsInDiagram);
       this.centerXMap.add(_nodeLine);
-      Point2D _center_1 = BoundsExtensions.center(boundsInDiagram);
-      double _y = _center_1.getY();
+      double _y = BoundsExtensions.center(boundsInDiagram).getY();
       NodeLine _nodeLine_1 = new NodeLine(_y, 
         Orientation.HORIZONTAL, point, boundsInDiagram);
       this.centerYMap.add(_nodeLine_1);
@@ -480,10 +408,8 @@ public class AuxiliaryLinesCache {
     final ChangeListener<Number> scalarListener = this.shape2scalarListener.remove(point);
     boolean _notEquals = (!Objects.equal(scalarListener, null));
     if (_notEquals) {
-      DoubleProperty _layoutXProperty = point.layoutXProperty();
-      _layoutXProperty.removeListener(scalarListener);
-      DoubleProperty _layoutYProperty = point.layoutYProperty();
-      _layoutYProperty.removeListener(scalarListener);
+      point.layoutXProperty().removeListener(scalarListener);
+      point.layoutYProperty().removeListener(scalarListener);
     }
   }
 }

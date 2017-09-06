@@ -51,20 +51,17 @@ public class NodeLabelMorphCommand extends AbstractCommand implements AbstractLa
     ObservableList<XLabel> _labels = this.host.getLabels();
     ArrayList<XLabel> _arrayList = new ArrayList<XLabel>(_labels);
     this.oldLabels = _arrayList;
-    ObservableList<XLabel> _labels_1 = this.host.getLabels();
-    _labels_1.setAll(this.newLabels);
+    this.host.getLabels().setAll(this.newLabels);
   }
   
   @Override
   public void undo(final CommandContext context) {
-    ObservableList<XLabel> _labels = this.host.getLabels();
-    _labels.setAll(this.oldLabels);
+    this.host.getLabels().setAll(this.oldLabels);
   }
   
   @Override
   public void redo(final CommandContext context) {
-    ObservableList<XLabel> _labels = this.host.getLabels();
-    _labels.setAll(this.newLabels);
+    this.host.getLabels().setAll(this.newLabels);
   }
   
   public NodeLabelMorphCommand(final XNode host) {

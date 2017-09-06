@@ -10,12 +10,10 @@ import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -39,18 +37,14 @@ public class ClickThroughSlide extends Slide {
   public void initializeGraphics() {
     super.initializeGraphics();
     final Procedure1<Pane> _function = (Pane it) -> {
-      ObservableList<Node> _children = it.getChildren();
-      Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
       final Consumer<Node> _function_1 = (Node it_1) -> {
         it_1.setOpacity(0);
       };
-      _tail.forEach(_function_1);
+      IterableExtensions.<Node>tail(it.getChildren()).forEach(_function_1);
     };
     ObjectExtensions.<Pane>operator_doubleArrow(
       this.pane, _function);
-    ObservableList<Node> _children = this.pane.getChildren();
-    Node _head = IterableExtensions.<Node>head(_children);
-    this.currentNode = _head;
+    this.currentNode = IterableExtensions.<Node>head(this.pane.getChildren());
   }
   
   @Override
@@ -70,10 +64,8 @@ public class ClickThroughSlide extends Slide {
   @Override
   public void doActivate() {
     super.doActivate();
-    Scene _scene = this.getScene();
-    double _width = _scene.getWidth();
-    Scene _scene_1 = this.getScene();
-    double _height = _scene_1.getHeight();
+    double _width = this.getScene().getWidth();
+    double _height = this.getScene().getHeight();
     Rectangle _rectangle = new Rectangle(0, 0, _width, _height);
     this.pane.setClip(_rectangle);
     RevealBehavior _revealBehavior = new RevealBehavior(this);
@@ -86,8 +78,7 @@ public class ClickThroughSlide extends Slide {
       it.setNode(childNode);
       it.setFromValue(0);
       it.setToValue(1);
-      Duration _millis = DurationExtensions.millis(200);
-      it.setDuration(_millis);
+      it.setDuration(DurationExtensions.millis(200));
     };
     return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
   }
@@ -105,10 +96,8 @@ public class ClickThroughSlide extends Slide {
       if (_equals) {
         return false;
       }
-      Node _get = children.get(nextIndex);
-      this.currentNode = _get;
-      FadeTransition _revealTransition = this.getRevealTransition(this.currentNode);
-      _revealTransition.play();
+      this.currentNode = children.get(nextIndex);
+      this.getRevealTransition(this.currentNode).play();
       return true;
     }
   }
@@ -125,8 +114,7 @@ public class ClickThroughSlide extends Slide {
         return false;
       }
       this.currentNode.setOpacity(0);
-      Node _get = children.get(previousIndex);
-      this.currentNode = _get;
+      this.currentNode = children.get(previousIndex);
       return true;
     }
   }

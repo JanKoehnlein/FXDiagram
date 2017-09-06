@@ -23,29 +23,26 @@ public class ModelRepairer {
   }
   
   protected boolean _repair(final XRoot root) {
-    XDiagram _diagram = root.getDiagram();
-    return this.repair(_diagram);
+    return this.repair(root.getDiagram());
   }
   
   protected boolean _repair(final XDiagram diagram) {
     boolean _xblockexpression = false;
     {
       final HashSet<XConnection> deleteThem = CollectionLiterals.<XConnection>newHashSet();
-      ObservableList<XConnection> _connections = diagram.getConnections();
       final Consumer<XConnection> _function = (XConnection it) -> {
         boolean _repair = this.repair(it);
         if (_repair) {
           deleteThem.add(it);
         }
       };
-      _connections.forEach(_function);
-      ObservableList<XConnection> _connections_1 = diagram.getConnections();
-      Iterables.removeAll(_connections_1, deleteThem);
-      ObservableList<XNode> _nodes = diagram.getNodes();
+      diagram.getConnections().forEach(_function);
+      ObservableList<XConnection> _connections = diagram.getConnections();
+      Iterables.removeAll(_connections, deleteThem);
       final Consumer<XNode> _function_1 = (XNode it) -> {
         this.repair(it);
       };
-      _nodes.forEach(_function_1);
+      diagram.getNodes().forEach(_function_1);
       _xblockexpression = false;
     }
     return _xblockexpression;
@@ -54,7 +51,6 @@ public class ModelRepairer {
   protected boolean _repair(final XNode node) {
     boolean _xblockexpression = false;
     {
-      ObservableList<XConnection> _outgoingConnections = node.getOutgoingConnections();
       final Consumer<XConnection> _function = (XConnection it) -> {
         XNode _source = it.getSource();
         boolean _notEquals = (!Objects.equal(_source, node));
@@ -63,8 +59,7 @@ public class ModelRepairer {
           it.setSource(node);
         }
       };
-      _outgoingConnections.forEach(_function);
-      ObservableList<XConnection> _incomingConnections = node.getIncomingConnections();
+      node.getOutgoingConnections().forEach(_function);
       final Consumer<XConnection> _function_1 = (XConnection it) -> {
         XNode _target = it.getTarget();
         boolean _notEquals = (!Objects.equal(_target, node));
@@ -73,10 +68,9 @@ public class ModelRepairer {
           it.setTarget(node);
         }
       };
-      _incomingConnections.forEach(_function_1);
+      node.getIncomingConnections().forEach(_function_1);
       if ((node instanceof XDiagramContainer)) {
-        XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
-        this.repair(_innerDiagram);
+        this.repair(((XDiagramContainer)node).getInnerDiagram());
       }
       _xblockexpression = false;
     }
@@ -91,15 +85,11 @@ public class ModelRepairer {
       ModelRepairer.LOG.severe((("Connection " + it) + " lacks source node"));
       deleteIt = true;
     } else {
-      XNode _source_1 = it.getSource();
-      ObservableList<XConnection> _outgoingConnections = _source_1.getOutgoingConnections();
-      boolean _contains = _outgoingConnections.contains(it);
+      boolean _contains = it.getSource().getOutgoingConnections().contains(it);
       boolean _not = (!_contains);
       if (_not) {
         ModelRepairer.LOG.severe((("Connection " + it) + " not contained in outgoing connections of source node"));
-        XNode _source_2 = it.getSource();
-        ObservableList<XConnection> _outgoingConnections_1 = _source_2.getOutgoingConnections();
-        _outgoingConnections_1.add(it);
+        it.getSource().getOutgoingConnections().add(it);
       }
     }
     XNode _target = it.getTarget();
@@ -108,15 +98,11 @@ public class ModelRepairer {
       ModelRepairer.LOG.severe((("Connection " + it) + " lacks target node"));
       deleteIt = true;
     } else {
-      XNode _target_1 = it.getTarget();
-      ObservableList<XConnection> _incomingConnections = _target_1.getIncomingConnections();
-      boolean _contains_1 = _incomingConnections.contains(it);
+      boolean _contains_1 = it.getTarget().getIncomingConnections().contains(it);
       boolean _not_1 = (!_contains_1);
       if (_not_1) {
         ModelRepairer.LOG.severe((("Connection " + it) + " not contained in incoming connections of target node"));
-        XNode _target_2 = it.getTarget();
-        ObservableList<XConnection> _incomingConnections_1 = _target_2.getIncomingConnections();
-        _incomingConnections_1.add(it);
+        it.getTarget().getIncomingConnections().add(it);
       }
     }
     return deleteIt;

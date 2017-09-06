@@ -29,11 +29,10 @@ public class SequentialAnimationCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    List<AnimationCommand> _reverseView = ListExtensions.<AnimationCommand>reverseView(this.commands);
     final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
       return it.getUndoAnimation(context);
     };
-    return ChainedAnimationUtil.<AnimationCommand>createChainedAnimation(_reverseView, _function);
+    return ChainedAnimationUtil.<AnimationCommand>createChainedAnimation(ListExtensions.<AnimationCommand>reverseView(this.commands), _function);
   }
   
   @Override

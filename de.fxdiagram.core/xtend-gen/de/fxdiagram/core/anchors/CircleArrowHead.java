@@ -6,7 +6,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -25,9 +24,7 @@ public class CircleArrowHead extends ArrowHead {
     if (_notEquals) {
       this.setFill(fill);
     }
-    DoubleProperty _heightProperty = this.heightProperty();
-    DoubleProperty _widthProperty = this.widthProperty();
-    _heightProperty.bindBidirectional(_widthProperty);
+    this.heightProperty().bindBidirectional(this.widthProperty());
   }
   
   public CircleArrowHead(final XConnection connection, final boolean isSource) {
@@ -41,31 +38,19 @@ public class CircleArrowHead extends ArrowHead {
       Paint _fill = this.getFill();
       boolean _equals = Objects.equal(_fill, null);
       if (_equals) {
-        XConnection _connection = this.getConnection();
-        ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
-        this.fillProperty.bind(_strokeProperty);
+        this.fillProperty.bind(this.getConnection().strokeProperty());
       }
       Circle _circle = new Circle();
       final Procedure1<Circle> _function = (Circle it) -> {
-        double _width = this.getWidth();
-        it.setRadius(_width);
+        it.setRadius(this.getWidth());
         double _radius = it.getRadius();
         double _minus = (-_radius);
         it.setLayoutX(_minus);
         it.setLayoutY(0);
-        ObjectProperty<Paint> _fillProperty = it.fillProperty();
-        _fillProperty.bind(this.fillProperty);
-        ObjectProperty<Paint> _strokeProperty_1 = it.strokeProperty();
-        ObjectProperty<Paint> _strokeProperty_2 = this.strokeProperty();
-        _strokeProperty_1.bind(_strokeProperty_2);
-        DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-        XConnection _connection_1 = this.getConnection();
-        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
-        _strokeWidthProperty.bind(_strokeWidthProperty_1);
-        DoubleProperty _opacityProperty = it.opacityProperty();
-        XConnection _connection_2 = this.getConnection();
-        DoubleProperty _opacityProperty_1 = _connection_2.opacityProperty();
-        _opacityProperty.bind(_opacityProperty_1);
+        it.fillProperty().bind(this.fillProperty);
+        it.strokeProperty().bind(this.strokeProperty());
+        it.strokeWidthProperty().bind(this.getConnection().strokeWidthProperty());
+        it.opacityProperty().bind(this.getConnection().opacityProperty());
         it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
@@ -76,8 +61,7 @@ public class CircleArrowHead extends ArrowHead {
   @Override
   public double getLineCut() {
     double _width = this.getWidth();
-    XConnection _connection = this.getConnection();
-    double _strokeWidth = _connection.getStrokeWidth();
+    double _strokeWidth = this.getConnection().getStrokeWidth();
     return (_width + _strokeWidth);
   }
   

@@ -1,7 +1,6 @@
 package de.fxdiagram.core.command;
 
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
@@ -30,28 +29,20 @@ public class ChangeDiagramCommand extends AbstractAnimationCommand {
   public Animation createExecuteAnimation(final CommandContext context) {
     SequentialTransition _xblockexpression = null;
     {
-      XRoot _root = context.getRoot();
-      XDiagram _diagram = _root.getDiagram();
-      this.oldDiagram = _diagram;
-      XRoot _root_1 = context.getRoot();
-      Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-      _xblockexpression = this.swap(_root_1, this.newDiagram, _defaultUndoDuration);
+      this.oldDiagram = context.getRoot().getDiagram();
+      _xblockexpression = this.swap(context.getRoot(), this.newDiagram, context.getDefaultUndoDuration());
     }
     return _xblockexpression;
   }
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    XRoot _root = context.getRoot();
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.swap(_root, this.oldDiagram, _defaultUndoDuration);
+    return this.swap(context.getRoot(), this.oldDiagram, context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    XRoot _root = context.getRoot();
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.swap(_root, this.newDiagram, _defaultUndoDuration);
+    return this.swap(context.getRoot(), this.newDiagram, context.getDefaultUndoDuration());
   }
   
   protected SequentialTransition swap(final XRoot root, final XDiagram appear, final Duration duration) {
@@ -60,15 +51,12 @@ public class ChangeDiagramCommand extends AbstractAnimationCommand {
       ObservableList<Animation> _children = it.getChildren();
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function_1 = (FadeTransition it_1) -> {
-        XDiagram _diagram = root.getDiagram();
-        it_1.setNode(_diagram);
+        it_1.setNode(root.getDiagram());
         it_1.setFromValue(1);
         it_1.setToValue(0);
         it_1.setCycleCount(1);
         Duration _xifexpression = null;
-        XDiagram _diagram_1 = root.getDiagram();
-        ObservableList<XNode> _nodes = _diagram_1.getNodes();
-        boolean _isEmpty = _nodes.isEmpty();
+        boolean _isEmpty = root.getDiagram().getNodes().isEmpty();
         if (_isEmpty) {
           _xifexpression = DurationExtensions.millis(0);
         } else {
@@ -95,8 +83,7 @@ public class ChangeDiagramCommand extends AbstractAnimationCommand {
         it_1.setToValue(1);
         it_1.setCycleCount(1);
         Duration _xifexpression = null;
-        ObservableList<XNode> _nodes = appear.getNodes();
-        boolean _isEmpty = _nodes.isEmpty();
+        boolean _isEmpty = appear.getNodes().isEmpty();
         if (_isEmpty) {
           _xifexpression = DurationExtensions.millis(0);
         } else {

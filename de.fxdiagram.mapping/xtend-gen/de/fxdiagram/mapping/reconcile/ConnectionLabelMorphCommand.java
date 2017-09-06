@@ -52,20 +52,17 @@ public class ConnectionLabelMorphCommand extends AbstractCommand implements Abst
     ObservableList<XConnectionLabel> _labels = this.host.getLabels();
     ArrayList<XConnectionLabel> _arrayList = new ArrayList<XConnectionLabel>(_labels);
     this.oldLabels = _arrayList;
-    ObservableList<XConnectionLabel> _labels_1 = this.host.getLabels();
-    _labels_1.setAll(this.newLabels);
+    this.host.getLabels().setAll(this.newLabels);
   }
   
   @Override
   public void undo(final CommandContext context) {
-    ObservableList<XConnectionLabel> _labels = this.host.getLabels();
-    _labels.setAll(this.oldLabels);
+    this.host.getLabels().setAll(this.oldLabels);
   }
   
   @Override
   public void redo(final CommandContext context) {
-    ObservableList<XConnectionLabel> _labels = this.host.getLabels();
-    _labels.setAll(this.newLabels);
+    this.host.getLabels().setAll(this.newLabels);
   }
   
   public ConnectionLabelMorphCommand(final XConnection host) {

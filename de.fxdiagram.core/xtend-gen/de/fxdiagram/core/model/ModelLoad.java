@@ -11,9 +11,6 @@ import de.fxdiagram.core.model.ParseException;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.actions.LoadAction;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -54,10 +51,8 @@ public class ModelLoad {
   public Object load(final Reader in) {
     ModelFactory _modelFactory = new ModelFactory();
     this.modelFactory = _modelFactory;
-    ArrayList<CrossRefData> _newArrayList = CollectionLiterals.<CrossRefData>newArrayList();
-    this.crossRefs = _newArrayList;
-    HashMap<String, ModelElement> _newHashMap = CollectionLiterals.<String, ModelElement>newHashMap();
-    this.idMap = _newHashMap;
+    this.crossRefs = CollectionLiterals.<CrossRefData>newArrayList();
+    this.idMap = CollectionLiterals.<String, ModelElement>newHashMap();
     final JsonReader reader = Json.createReader(in);
     final JsonObject jsonObject = reader.readObject();
     final Object rootNode = this.readNode(jsonObject, "");
@@ -65,18 +60,14 @@ public class ModelLoad {
       this.resolveCrossReference(it);
     };
     this.crossRefs.forEach(_function);
-    ModelRepairer _modelRepairer = new ModelRepairer();
-    _modelRepairer.repair(rootNode);
-    Collection<ModelElement> _values = this.idMap.values();
+    new ModelRepairer().repair(rootNode);
     final Function1<ModelElement, Object> _function_1 = (ModelElement it) -> {
       return it.getNode();
     };
-    Iterable<Object> _map = IterableExtensions.<ModelElement, Object>map(_values, _function_1);
-    Iterable<XModelProvider> _filter = Iterables.<XModelProvider>filter(_map, XModelProvider.class);
     final Consumer<XModelProvider> _function_2 = (XModelProvider it) -> {
       it.postLoad();
     };
-    _filter.forEach(_function_2);
+    Iterables.<XModelProvider>filter(IterableExtensions.<ModelElement, Object>map(this.idMap.values(), _function_1), XModelProvider.class).forEach(_function_2);
     return rootNode;
   }
   
@@ -86,18 +77,14 @@ public class ModelLoad {
       final String className = jsonObject.getString("__class");
       final ModelElement model = this.modelFactory.createElement(className);
       this.idMap.put(currentID, model);
-      List<? extends Property<?>> _properties = model.getProperties();
       final Consumer<Property<?>> _function = (Property<?> it) -> {
-        Class<?> _type = model.getType(it);
-        this.readProperty(jsonObject, it, _type, currentID);
+        this.readProperty(jsonObject, it, model.getType(it), currentID);
       };
-      _properties.forEach(_function);
-      List<? extends ListProperty<?>> _listProperties = model.getListProperties();
+      model.getProperties().forEach(_function);
       final Consumer<ListProperty<?>> _function_1 = (ListProperty<?> it) -> {
-        Class<?> _type = model.getType(it);
-        this.readListProperty(jsonObject, it, _type, currentID);
+        this.readListProperty(jsonObject, it, model.getType(it), currentID);
       };
-      _listProperties.forEach(_function_1);
+      model.getListProperties().forEach(_function_1);
       _xblockexpression = model.getNode();
     }
     return _xblockexpression;
@@ -106,75 +93,55 @@ public class ModelLoad {
   protected Boolean readProperty(final JsonObject it, final Property<?> property, final Class<?> propertyType, final String currentID) {
     try {
       boolean _xifexpression = false;
-      String _name = property.getName();
-      boolean _containsKey = it.containsKey(_name);
+      boolean _containsKey = it.containsKey(property.getName());
       if (_containsKey) {
         boolean _switchResult = false;
         boolean _matched = false;
         if (Objects.equal(propertyType, String.class)) {
           _matched=true;
-          String _name_1 = property.getName();
-          String _string = it.getString(_name_1);
-          ((StringProperty) property).setValue(_string);
+          ((StringProperty) property).setValue(it.getString(property.getName()));
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Double.class)) {
             _matched=true;
-            String _name_2 = property.getName();
-            JsonNumber _jsonNumber = it.getJsonNumber(_name_2);
-            double _doubleValue = _jsonNumber.doubleValue();
-            ((DoubleProperty) property).setValue(Double.valueOf(_doubleValue));
+            ((DoubleProperty) property).setValue(Double.valueOf(it.getJsonNumber(property.getName()).doubleValue()));
           }
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Float.class)) {
             _matched=true;
-            String _name_3 = property.getName();
-            JsonNumber _jsonNumber_1 = it.getJsonNumber(_name_3);
-            double _doubleValue_1 = _jsonNumber_1.doubleValue();
-            ((FloatProperty) property).setValue(Double.valueOf(_doubleValue_1));
+            ((FloatProperty) property).setValue(Double.valueOf(it.getJsonNumber(property.getName()).doubleValue()));
           }
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Long.class)) {
             _matched=true;
-            String _name_4 = property.getName();
-            JsonNumber _jsonNumber_2 = it.getJsonNumber(_name_4);
-            long _longValue = _jsonNumber_2.longValue();
-            ((LongProperty) property).setValue(Long.valueOf(_longValue));
+            ((LongProperty) property).setValue(Long.valueOf(it.getJsonNumber(property.getName()).longValue()));
           }
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Integer.class)) {
             _matched=true;
-            String _name_5 = property.getName();
-            int _int = it.getInt(_name_5);
-            ((IntegerProperty) property).setValue(Integer.valueOf(_int));
+            ((IntegerProperty) property).setValue(Integer.valueOf(it.getInt(property.getName())));
           }
         }
         if (!_matched) {
           if (Objects.equal(propertyType, Boolean.class)) {
             _matched=true;
-            String _name_6 = property.getName();
-            boolean _boolean = it.getBoolean(_name_6);
-            ((BooleanProperty) property).setValue(Boolean.valueOf(_boolean));
+            ((BooleanProperty) property).setValue(Boolean.valueOf(it.getBoolean(property.getName())));
           }
         }
         if (!_matched) {
           boolean _isAssignableFrom = Enum.class.isAssignableFrom(propertyType);
           if (_isAssignableFrom) {
             _matched=true;
-            String _name_7 = property.getName();
-            String _string_1 = it.getString(_name_7);
-            Enum _valueOf = Enum.<Enum>valueOf(((Class<Enum>) propertyType), _string_1);
-            ((Property<Object>) property).setValue(_valueOf);
+            ((Property<Object>) property).setValue(Enum.<Enum>valueOf(((Class<Enum>) propertyType), it.getString(property.getName())));
           }
         }
         if (!_matched) {
           boolean _xblockexpression = false;
           {
-            String _name_8 = property.getName();
-            final JsonValue value = it.get(_name_8);
+            final JsonValue value = it.get(property.getName());
             boolean _switchResult_1 = false;
             JsonValue.ValueType _valueType = value.getValueType();
             if (_valueType != null) {
@@ -182,18 +149,16 @@ public class ModelLoad {
                 case STRING:
                   boolean _xblockexpression_1 = false;
                   {
-                    String _name_9 = property.getName();
-                    String _string_2 = it.getString(_name_9);
-                    final CrossRefData crossRefData = new CrossRefData(_string_2, property, (-1));
+                    String _string = it.getString(property.getName());
+                    final CrossRefData crossRefData = new CrossRefData(_string, property, (-1));
                     _xblockexpression_1 = this.crossRefs.add(crossRefData);
                   }
                   _switchResult_1 = _xblockexpression_1;
                   break;
                 case OBJECT:
-                  String _name_9 = property.getName();
-                  String _plus = ((currentID + "/") + _name_9);
-                  Object _readNode = this.readNode(((JsonObject) value), _plus);
-                  ((Property<Object>) property).setValue(_readNode);
+                  String _name = property.getName();
+                  String _plus = ((currentID + "/") + _name);
+                  ((Property<Object>) property).setValue(this.readNode(((JsonObject) value), _plus));
                   break;
                 default:
                   throw new ParseException(("Expected object but got " + value));
@@ -215,11 +180,9 @@ public class ModelLoad {
   
   protected void readListProperty(final JsonObject it, final ListProperty<?> property, final Class<?> componentType, final String currentID) {
     try {
-      String _name = property.getName();
-      boolean _containsKey = it.containsKey(_name);
+      boolean _containsKey = it.containsKey(property.getName());
       if (_containsKey) {
-        String _name_1 = property.getName();
-        final JsonArray jsonValues = it.getJsonArray(_name_1);
+        final JsonArray jsonValues = it.getJsonArray(property.getName());
         int _size = jsonValues.size();
         ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
         for (final Integer i : _doubleDotLessThan) {
@@ -270,8 +233,7 @@ public class ModelLoad {
               boolean _isAssignableFrom = Enum.class.isAssignableFrom(componentType);
               if (_isAssignableFrom) {
                 _matched=true;
-                String _string_1 = ((JsonString) jsonValue).toString();
-                Enum _valueOf = Enum.<Enum>valueOf(((Class<Enum>) componentType), _string_1);
+                Enum _valueOf = Enum.<Enum>valueOf(((Class<Enum>) componentType), ((JsonString) jsonValue).toString());
                 ((ListProperty<Object>) property).add(_valueOf);
               }
             }
@@ -280,13 +242,13 @@ public class ModelLoad {
               if (_valueType != null) {
                 switch (_valueType) {
                   case STRING:
-                    String _string_2 = ((JsonString) jsonValue).getString();
-                    final CrossRefData crossRefData = new CrossRefData(_string_2, property, (i).intValue());
+                    String _string_1 = ((JsonString) jsonValue).getString();
+                    final CrossRefData crossRefData = new CrossRefData(_string_1, property, (i).intValue());
                     this.crossRefs.add(crossRefData);
                     break;
                   case OBJECT:
-                    String _name_2 = property.getName();
-                    String _plus = ((currentID + "/") + _name_2);
+                    String _name = property.getName();
+                    String _plus = ((currentID + "/") + _name);
                     String _plus_1 = (_plus + ".");
                     String _plus_2 = (_plus_1 + i);
                     Object _readNode = this.readNode(((JsonObject) jsonValue), _plus_2);
@@ -309,8 +271,7 @@ public class ModelLoad {
   
   protected void resolveCrossReference(final CrossRefData crossRef) {
     try {
-      String _href = crossRef.getHref();
-      ModelElement _get = this.idMap.get(_href);
+      ModelElement _get = this.idMap.get(crossRef.getHref());
       Object _node = null;
       if (_get!=null) {
         _node=_get.getNode();
@@ -318,8 +279,8 @@ public class ModelLoad {
       final Object crossRefTarget = _node;
       boolean _equals = Objects.equal(crossRefTarget, null);
       if (_equals) {
-        String _href_1 = crossRef.getHref();
-        String _plus = ("Cannot resolve href \'" + _href_1);
+        String _href = crossRef.getHref();
+        String _plus = ("Cannot resolve href \'" + _href);
         String _plus_1 = (_plus + "\'");
         throw new ParseException(_plus_1);
       } else {
@@ -330,8 +291,7 @@ public class ModelLoad {
           ((Property<Object>) _property).setValue(crossRefTarget);
         } else {
           Property<?> _property_1 = crossRef.getProperty();
-          int _index_1 = crossRef.getIndex();
-          ((ListProperty<Object>) _property_1).add(_index_1, crossRefTarget);
+          ((ListProperty<Object>) _property_1).add(crossRef.getIndex(), crossRefTarget);
         }
       }
     } catch (Throwable _e) {

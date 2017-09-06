@@ -5,8 +5,6 @@ import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
@@ -19,8 +17,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @SuppressWarnings("all")
 public class ToString {
   public static String toString(final XModelProvider modelProvider) {
-    HashMap<XModelProvider, Integer> _newHashMap = CollectionLiterals.<XModelProvider, Integer>newHashMap();
-    return ToString.toString(modelProvider, _newHashMap);
+    return ToString.toString(modelProvider, CollectionLiterals.<XModelProvider, Integer>newHashMap());
   }
   
   protected static String _toString(final XModelProvider modelProvider, final Map<XModelProvider, Integer> seen) {
@@ -38,25 +35,23 @@ public class ToString {
           modelProvider.populate(modelElement);
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("#");
-          _builder.append(newNumber, "");
+          _builder.append(newNumber);
           _builder.append(" ");
-          Class<? extends XModelProvider> _class = modelProvider.getClass();
-          String _simpleName = _class.getSimpleName();
-          _builder.append(_simpleName, "");
+          String _simpleName = modelProvider.getClass().getSimpleName();
+          _builder.append(_simpleName);
           _builder.append(" ");
           String _propertiesToString = ToString.getPropertiesToString(modelElement, seen);
-          _builder.append(_propertiesToString, "");
+          _builder.append(_propertiesToString);
           _builder.newLineIfNotEmpty();
           _xblockexpression_1 = _builder.toString();
         }
         _xifexpression = _xblockexpression_1;
       } else {
         StringConcatenation _builder = new StringConcatenation();
-        Class<? extends XModelProvider> _class = modelProvider.getClass();
-        String _simpleName = _class.getSimpleName();
-        _builder.append(_simpleName, "");
+        String _simpleName = modelProvider.getClass().getSimpleName();
+        _builder.append(_simpleName);
         _builder.append(" #");
-        _builder.append(number, "");
+        _builder.append(number);
         _builder.newLineIfNotEmpty();
         _xifexpression = _builder.toString();
       }
@@ -77,12 +72,11 @@ public class ToString {
       _builder.append("[");
       _builder.newLine();
       {
-        List<? extends ListProperty<?>> _listProperties = it.getListProperties();
         final Function1<ListProperty<?>, Boolean> _function = (ListProperty<?> it_1) -> {
           boolean _isEmpty = it_1.isEmpty();
           return Boolean.valueOf((!_isEmpty));
         };
-        Iterable<? extends ListProperty<?>> _filter = IterableExtensions.filter(_listProperties, _function);
+        Iterable<? extends ListProperty<?>> _filter = IterableExtensions.filter(it.getListProperties(), _function);
         for(final ListProperty<?> lp : _filter) {
           _builder.append("\t");
           String _name = lp.getName();
@@ -105,19 +99,17 @@ public class ToString {
         }
       }
       {
-        List<? extends Property<?>> _properties = it.getProperties();
         final Function1<Property<?>, Boolean> _function_1 = (Property<?> it_1) -> {
           Object _value_1 = it_1.getValue();
           return Boolean.valueOf((!Objects.equal(_value_1, null)));
         };
-        Iterable<? extends Property<?>> _filter_1 = IterableExtensions.filter(_properties, _function_1);
+        Iterable<? extends Property<?>> _filter_1 = IterableExtensions.filter(it.getProperties(), _function_1);
         for(final Property<?> p : _filter_1) {
           _builder.append("\t");
           String _name_1 = p.getName();
           _builder.append(_name_1, "\t");
           _builder.append(": ");
-          Object _value_1 = p.getValue();
-          String _string_1 = ToString.toString(_value_1, seen);
+          String _string_1 = ToString.toString(p.getValue(), seen);
           _builder.append(_string_1, "\t");
           _builder.newLineIfNotEmpty();
         }

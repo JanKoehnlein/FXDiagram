@@ -39,8 +39,7 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> implements 
   
   @Override
   public int hashCode() {
-    T _domainObject = this.getDomainObject();
-    return _domainObject.hashCode();
+    return this.getDomainObject().hashCode();
   }
   
   public T getDomainObject() {
@@ -50,8 +49,7 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> implements 
     } else {
       T _xblockexpression = null;
       {
-        T _resolveDomainObject = this.resolveDomainObject();
-        this.cachedDomainObject = _resolveDomainObject;
+        this.cachedDomainObject = this.resolveDomainObject();
         boolean _equals = Objects.equal(this.cachedDomainObject, null);
         if (_equals) {
           String _id = this.getId();

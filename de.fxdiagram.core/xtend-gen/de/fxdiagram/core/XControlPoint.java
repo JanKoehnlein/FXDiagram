@@ -15,7 +15,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Side;
@@ -24,7 +23,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -94,14 +92,10 @@ public class XControlPoint extends XShape implements XModelProvider {
   @Override
   protected void doActivate() {
     final ChangeListener<XControlPoint.Type> _function = (ObservableValue<? extends XControlPoint.Type> p, XControlPoint.Type o, XControlPoint.Type n) -> {
-      ObservableList<Node> _children = this.getChildren();
-      Node _node = this.getNode();
-      _children.remove(_node);
-      ObjectProperty<Node> _nodeProperty = this.nodeProperty();
-      _nodeProperty.set(null);
+      this.getChildren().remove(this.getNode());
+      this.nodeProperty().set(null);
       this.getNode();
-      boolean _selected = this.getSelected();
-      this.selectionFeedback(_selected);
+      this.selectionFeedback(this.getSelected());
     };
     this.typeProperty.addListener(_function);
     XControlPoint.Type _type = this.getType();
@@ -182,32 +176,22 @@ public class XControlPoint extends XShape implements XModelProvider {
             double _layoutY = successor.getLayoutY();
             double _layoutY_1 = predecessor.getLayoutY();
             final double dy = (_layoutY - _layoutY_1);
-            double _atan2 = Math.atan2(dy, dx);
-            double angle = Math.toDegrees(_atan2);
-            double _layoutX_2 = this.getLayoutX();
-            double _layoutY_2 = this.getLayoutY();
-            double _layoutX_3 = successor.getLayoutX();
-            double _layoutY_3 = successor.getLayoutY();
-            double _layoutX_4 = predecessor.getLayoutX();
-            double _layoutY_4 = predecessor.getLayoutY();
-            boolean _isClockwise = Point2DExtensions.isClockwise(_layoutX_2, _layoutY_2, _layoutX_3, _layoutY_3, _layoutX_4, _layoutY_4);
+            double angle = Math.toDegrees(Math.atan2(dy, dx));
+            boolean _isClockwise = Point2DExtensions.isClockwise(this.getLayoutX(), this.getLayoutY(), 
+              successor.getLayoutX(), successor.getLayoutY(), 
+              predecessor.getLayoutX(), predecessor.getLayoutY());
             if (_isClockwise) {
               angle = (angle + 180);
             }
             final Affine trafo = new Affine();
-            Node _node = this.getNode();
-            Bounds _layoutBounds = _node.getLayoutBounds();
-            double _width = _layoutBounds.getWidth();
+            double _width = this.getNode().getLayoutBounds().getWidth();
             double _multiply = ((-0.5) * _width);
-            Node _node_1 = this.getNode();
-            Bounds _layoutBounds_1 = _node_1.getLayoutBounds();
-            double _height = _layoutBounds_1.getHeight();
+            double _height = this.getNode().getLayoutBounds().getHeight();
             double _minus = (-_height);
             double _minus_1 = (_minus - 5);
             TransformExtensions.translate(trafo, _multiply, _minus_1);
             TransformExtensions.rotate(trafo, angle);
-            ObservableList<Transform> _transforms = this.getTransforms();
-            _xblockexpression_1 = _transforms.setAll(trafo);
+            _xblockexpression_1 = this.getTransforms().setAll(trafo);
           }
           _xifexpression_1 = _xblockexpression_1;
         }
@@ -215,8 +199,7 @@ public class XControlPoint extends XShape implements XModelProvider {
       }
       _xifexpression = _xblockexpression;
     } else {
-      ObservableList<Transform> _transforms = this.getTransforms();
-      _transforms.clear();
+      this.getTransforms().clear();
     }
     return Boolean.valueOf(_xifexpression);
   }

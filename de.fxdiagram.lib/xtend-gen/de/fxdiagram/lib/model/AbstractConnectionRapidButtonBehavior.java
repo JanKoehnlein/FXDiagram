@@ -2,7 +2,6 @@ package de.fxdiagram.lib.model;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.Behavior;
@@ -46,11 +45,10 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   @Override
   protected void doActivate() {
     super.doActivate();
-    Iterable<MODEL> _initialModelChoices = this.getInitialModelChoices();
     final Function1<MODEL, KEY> _function = (MODEL it) -> {
       return this.getChoiceKey(it);
     };
-    Iterable<KEY> _map = IterableExtensions.<MODEL, KEY>map(_initialModelChoices, _function);
+    Iterable<KEY> _map = IterableExtensions.<MODEL, KEY>map(this.getInitialModelChoices(), _function);
     Iterables.<KEY>addAll(this.availableChoiceKeys, _map);
     boolean _isEmpty = this.availableChoiceKeys.isEmpty();
     boolean _not = (!_isEmpty);
@@ -59,8 +57,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
         @Override
         public void perform(final RapidButton button) {
           final ConnectedNodeChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
-          HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host);
+          XRoot _root = CoreExtensions.getRoot(AbstractConnectionRapidButtonBehavior.this.getHost());
           _root.setCurrentTool(chooser);
         }
         
@@ -70,31 +67,26 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
           return (!_isEmpty);
         }
       };
-      Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);
       final Consumer<RapidButton> _function_1 = (RapidButton it) -> {
         this.add(it);
       };
-      _createButtons.forEach(_function_1);
-      HOST _host = this.getHost();
-      XDiagram _diagram = CoreExtensions.getDiagram(_host);
-      ObservableList<XConnection> _connections = _diagram.getConnections();
+      this.createButtons(addConnectionAction).forEach(_function_1);
+      ObservableList<XConnection> _connections = CoreExtensions.getDiagram(this.getHost()).getConnections();
       InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
       final Procedure1<InitializingListListener<XConnection>> _function_2 = (InitializingListListener<XConnection> it) -> {
         final Procedure1<XConnection> _function_3 = (XConnection it_1) -> {
-          DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
-          boolean _remove = this.availableChoiceKeys.remove(_domainObjectDescriptor);
+          boolean _remove = this.availableChoiceKeys.remove(it_1.getDomainObjectDescriptor());
           if (_remove) {
-            DomainObjectDescriptor _domainObjectDescriptor_1 = it_1.getDomainObjectDescriptor();
-            this.unavailableChoiceKeys.add(((KEY) _domainObjectDescriptor_1));
+            DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+            this.unavailableChoiceKeys.add(((KEY) _domainObjectDescriptor));
           }
         };
         it.setAdd(_function_3);
         final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
-          DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
-          boolean _remove = this.unavailableChoiceKeys.remove(_domainObjectDescriptor);
+          boolean _remove = this.unavailableChoiceKeys.remove(it_1.getDomainObjectDescriptor());
           if (_remove) {
-            DomainObjectDescriptor _domainObjectDescriptor_1 = it_1.getDomainObjectDescriptor();
-            this.availableChoiceKeys.add(((KEY) _domainObjectDescriptor_1));
+            DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+            this.availableChoiceKeys.add(((KEY) _domainObjectDescriptor));
           }
         };
         it.setRemove(_function_4);

@@ -1,10 +1,8 @@
 package de.fxdiagram.examples.ecore;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.DiamondArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
@@ -27,7 +25,6 @@ import java.util.function.Consumer;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -41,30 +38,22 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
   
   @Override
   protected Iterable<EReference> getInitialModelChoices() {
-    EClassNode _host = this.getHost();
-    EClass _eClass = _host.getEClass();
-    return _eClass.getEReferences();
+    return this.getHost().getEClass().getEReferences();
   }
   
   @Override
   protected EReferenceDescriptor getChoiceKey(final EReference model) {
-    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    return _domainObjectProvider.createEReferenceDescriptor(model);
+    return this.getDomainObjectProvider().createEReferenceDescriptor(model);
   }
   
   @Override
   protected XNode createNode(final EReferenceDescriptor handle) {
-    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    EReference _domainObject = handle.getDomainObject();
-    EClass _eReferenceType = _domainObject.getEReferenceType();
-    EClassDescriptor _createEClassDescriptor = _domainObjectProvider.createEClassDescriptor(_eReferenceType);
+    EClassDescriptor _createEClassDescriptor = this.getDomainObjectProvider().createEClassDescriptor(handle.getDomainObject().getEReferenceType());
     return new EClassNode(_createEClassDescriptor);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {
-    EClassNode _host = this.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host);
-    return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
+    return CoreExtensions.getRoot(this.getHost()).<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
   @Override
@@ -76,8 +65,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
       CarusselChoice _carusselChoice = new CarusselChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
       final Consumer<EReferenceDescriptor> _function = (EReferenceDescriptor it) -> {
-        XNode _createNode = this.createNode(it);
-        chooser.addChoice(_createNode, it);
+        chooser.addChoice(this.createNode(it), it);
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor descriptor) -> {
@@ -100,7 +88,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
               _xifexpression_1 = new DiamondArrowHead(it, true);
             } else {
               LineArrowHead _xifexpression_2 = null;
-              if (((!reference.isContainer()) && (!Objects.equal(reference.getEOpposite(), null)))) {
+              if (((!reference.isContainer()) && (reference.getEOpposite() != null))) {
                 _xifexpression_2 = new LineArrowHead(it, true);
               }
               _xifexpression_1 = _xifexpression_2;
@@ -109,20 +97,17 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
             XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
             final Procedure1<XConnectionLabel> _function_3 = (XConnectionLabel it_1) -> {
               Text _text = it_1.getText();
-              String _name = reference.getName();
-              _text.setText(_name);
+              _text.setText(reference.getName());
               it_1.setPosition(0.8);
             };
             ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_3);
             EReference _eOpposite = reference.getEOpposite();
-            boolean _notEquals = (!Objects.equal(_eOpposite, null));
-            if (_notEquals) {
+            boolean _tripleNotEquals = (_eOpposite != null);
+            if (_tripleNotEquals) {
               XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function_4 = (XConnectionLabel it_1) -> {
                 Text _text = it_1.getText();
-                EReference _eOpposite_1 = reference.getEOpposite();
-                String _name = _eOpposite_1.getName();
-                _text.setText(_name);
+                _text.setText(reference.getEOpposite().getName());
                 it_1.setPosition(0.2);
               };
               ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel_1, _function_4);

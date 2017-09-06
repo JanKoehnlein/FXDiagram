@@ -11,11 +11,9 @@ import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
 import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
-import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
-import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
@@ -27,10 +25,8 @@ import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
@@ -38,7 +34,6 @@ import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
-import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
@@ -91,24 +86,21 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function_5 = (JvmDeclaredType it) -> {
         return JvmClassDiagramConfig.this._jvmDomainUtil.getReferences(it);
       };
-      MultiConnectionMappingCall<JvmField, JvmDeclaredType> _outConnectionForEach = this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function_5);
       final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add reference");
       };
-      _outConnectionForEach.asButton(_function_6);
+      this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function_5).asButton(_function_6);
       final Function1<JvmDeclaredType, Iterable<? extends JvmTypeReference>> _function_7 = (JvmDeclaredType it) -> {
-        EList<JvmTypeReference> _superTypes = it.getSuperTypes();
         final Function1<JvmTypeReference, Boolean> _function_8 = (JvmTypeReference it_1) -> {
           JvmType _type = it_1.getType();
           return Boolean.valueOf((_type instanceof JvmDeclaredType));
         };
-        return IterableExtensions.<JvmTypeReference>filter(_superTypes, _function_8);
+        return IterableExtensions.<JvmTypeReference>filter(it.getSuperTypes(), _function_8);
       };
-      MultiConnectionMappingCall<JvmTypeReference, JvmDeclaredType> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_7);
       final Function1<Side, Node> _function_8 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add supertype");
       };
-      _outConnectionForEach_1.asButton(_function_8);
+      this.<JvmTypeReference>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_7).asButton(_function_8);
     }
   };
   
@@ -129,9 +121,7 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   private final NodeLabelMapping<JvmDeclaredType> fileName = new NodeLabelMapping<JvmDeclaredType>(this, BaseClassNode.FILE_NAME) {
     @Override
     public String getText(final JvmDeclaredType it) {
-      Resource _eResource = it.eResource();
-      URI _uRI = _eResource.getURI();
-      return _uRI.lastSegment();
+      return it.eResource().getURI().lastSegment();
     }
   };
   
@@ -140,8 +130,7 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
     public String getText(final JvmField it) {
       String _simpleName = it.getSimpleName();
       String _plus = (_simpleName + ": ");
-      JvmTypeReference _type = it.getType();
-      String _simpleName_1 = _type.getSimpleName();
+      String _simpleName_1 = it.getType().getSimpleName();
       return (_plus + _simpleName_1);
     }
   };
@@ -151,8 +140,7 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
     public String getText(final JvmOperation it) {
       String _simpleName = it.getSimpleName();
       String _plus = (_simpleName + "(): ");
-      JvmTypeReference _returnType = it.getReturnType();
-      String _simpleName_1 = _returnType.getSimpleName();
+      String _simpleName_1 = it.getReturnType().getSimpleName();
       return (_plus + _simpleName_1);
     }
   };
@@ -175,10 +163,8 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
       };
       this.<JvmField>labelFor(JvmClassDiagramConfig.this.referenceName, _function);
       final Function1<JvmField, JvmDeclaredType> _function_1 = (JvmField it) -> {
-        JvmTypeReference _type = it.getType();
-        JvmTypeReference _componentType = JvmClassDiagramConfig.this._jvmDomainUtil.getComponentType(_type);
-        JvmType _type_1 = _componentType.getType();
-        return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type_1));
+        JvmType _type = JvmClassDiagramConfig.this._jvmDomainUtil.getComponentType(it.getType()).getType();
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type));
       };
       this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function_1);
     }
@@ -216,18 +202,14 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
     @Override
     public void calls() {
       final Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>> _function = (PackageDeclaration it) -> {
-        EList<AbstractElement> _elements = it.getElements();
-        Iterable<Entity> _filter = Iterables.<Entity>filter(_elements, Entity.class);
         final Function1<Entity, EObject> _function_1 = (Entity it_1) -> {
           return JvmClassDiagramConfig.this.getPrimaryJvmElement(it_1);
         };
-        Iterable<EObject> _map = IterableExtensions.<Entity, EObject>map(_filter, _function_1);
-        return Iterables.<JvmDeclaredType>filter(_map, JvmDeclaredType.class);
+        return Iterables.<JvmDeclaredType>filter(IterableExtensions.<Entity, EObject>map(Iterables.<Entity>filter(it.getElements(), Entity.class), _function_1), JvmDeclaredType.class);
       };
       this.<JvmDeclaredType>nodeForEach(JvmClassDiagramConfig.this.typeNode, _function);
       final Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>> _function_1 = (PackageDeclaration it) -> {
-        EList<AbstractElement> _elements = it.getElements();
-        return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
+        return Iterables.<PackageDeclaration>filter(it.getElements(), PackageDeclaration.class);
       };
       this.<PackageDeclaration>nodeForEach(JvmClassDiagramConfig.this.packageNode, _function_1);
       this.eagerly(JvmClassDiagramConfig.this.superTypeConnection, JvmClassDiagramConfig.this.referenceConnection);
@@ -249,24 +231,19 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<PackageDeclaration, PackageDeclaration> _function_1 = (PackageDeclaration it) -> {
         return it;
       };
-      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function_1);
-      _nestedDiagramFor.onOpen();
+      this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function_1).onOpen();
     }
   };
   
   private final NodeHeadingMapping<PackageDeclaration> packageNodeName = new NodeHeadingMapping<PackageDeclaration>(this, BaseDiagramNode.NODE_HEADING) {
     @Override
     public String getText(final PackageDeclaration element) {
-      String _name = element.getName();
-      String[] _split = _name.split("\\.");
-      return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
+      return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(element.getName().split("\\."))));
     }
   };
   
   protected EObject getPrimaryJvmElement(final EObject element) {
-    Resource _eResource = element.eResource();
-    URI _uRI = _eResource.getURI();
-    IResourceServiceProvider _resourceServiceProvider = this._registry.getResourceServiceProvider(_uRI);
+    IResourceServiceProvider _resourceServiceProvider = this._registry.getResourceServiceProvider(element.eResource().getURI());
     IJvmModelAssociations _get = null;
     if (_resourceServiceProvider!=null) {
       _get=_resourceServiceProvider.<IJvmModelAssociations>get(IJvmModelAssociations.class);
@@ -305,10 +282,8 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   public JvmDeclaredType getJvmType(final IType type) {
     JvmDeclaredType _xblockexpression = null;
     {
-      URI _createURI = URI.createURI("dummy.___xbase");
-      final IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
-      JvmDomainUtil _get = resourceServiceProvider.<JvmDomainUtil>get(JvmDomainUtil.class);
-      JvmIdentifiableElement _jvmElement = _get.getJvmElement(type);
+      final IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI("dummy.___xbase"));
+      JvmIdentifiableElement _jvmElement = resourceServiceProvider.<JvmDomainUtil>get(JvmDomainUtil.class).getJvmElement(type);
       _xblockexpression = ((JvmDeclaredType) _jvmElement);
     }
     return _xblockexpression;

@@ -39,9 +39,7 @@ public class AuxiliaryLineMap<T extends Object> {
       };
       ((List<XShape>)Conversions.doWrapArray(_relatedShapes)).forEach(_function);
     }
-    double _position = line.getPosition();
-    long _key = this.getKey(_position);
-    this.store.put(Long.valueOf(_key), line);
+    this.store.put(Long.valueOf(this.getKey(line.getPosition())), line);
     XShape[] _relatedShapes_1 = line.getRelatedShapes();
     if (((List<XShape>)Conversions.doWrapArray(_relatedShapes_1))!=null) {
       final Consumer<XShape> _function_1 = (XShape it) -> {
@@ -60,8 +58,7 @@ public class AuxiliaryLineMap<T extends Object> {
       if (_notEquals) {
         AuxiliaryLine _xblockexpression_1 = null;
         {
-          double _position = line.getPosition();
-          final long key = this.getKey(_position);
+          final long key = this.getKey(line.getPosition());
           this.store.remove(Long.valueOf(key), line);
           _xblockexpression_1 = this.shape2entry.remove(shape);
         }
@@ -73,8 +70,7 @@ public class AuxiliaryLineMap<T extends Object> {
   }
   
   public Collection<AuxiliaryLine> getByPosition(final double position) {
-    long _key = this.getKey(position);
-    return this.store.get(Long.valueOf(_key));
+    return this.store.get(Long.valueOf(this.getKey(position)));
   }
   
   public double getNearestLineDelta(final double position, final double maxDistance, final Set<XShape> excluded) {
@@ -104,12 +100,11 @@ public class AuxiliaryLineMap<T extends Object> {
   
   protected boolean containsUnskipped(final Iterable<AuxiliaryLine> lines, final Set<XShape> excluded) {
     final Function1<AuxiliaryLine, Boolean> _function = (AuxiliaryLine it) -> {
-      XShape[] _relatedShapes = it.getRelatedShapes();
       final Function1<XShape, Boolean> _function_1 = (XShape it_1) -> {
         boolean _contains = excluded.contains(it_1);
         return Boolean.valueOf((!_contains));
       };
-      return Boolean.valueOf(IterableExtensions.<XShape>exists(((Iterable<XShape>)Conversions.doWrapArray(_relatedShapes)), _function_1));
+      return Boolean.valueOf(IterableExtensions.<XShape>exists(((Iterable<XShape>)Conversions.doWrapArray(it.getRelatedShapes())), _function_1));
     };
     return IterableExtensions.<AuxiliaryLine>exists(lines, _function);
   }
@@ -119,8 +114,7 @@ public class AuxiliaryLineMap<T extends Object> {
   }
   
   public boolean containsKey(final double position) {
-    long _key = this.getKey(position);
-    return this.store.containsKey(Long.valueOf(_key));
+    return this.store.containsKey(Long.valueOf(this.getKey(position)));
   }
   
   protected long getKey(final double position) {

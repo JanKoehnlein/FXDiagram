@@ -18,8 +18,7 @@ public class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDe
   
   @Override
   protected IResourceServiceProvider getResourceServiceProvider() {
-    URI _createURI = URI.createURI("dummy.___xbase");
-    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
+    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI("dummy.___xbase"));
   }
   
   @Override
@@ -36,9 +35,7 @@ public class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDe
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    XtextEObjectID _elementID = this.getElementID();
-    URI _uRI = _elementID.getURI();
-    int _hashCode_1 = _uRI.hashCode();
+    int _hashCode_1 = this.getElementID().getURI().hashCode();
     int _multiply = (137 * _hashCode_1);
     return (_hashCode + _multiply);
   }

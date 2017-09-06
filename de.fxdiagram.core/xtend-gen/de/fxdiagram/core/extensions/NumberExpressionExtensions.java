@@ -44,38 +44,32 @@ public class NumberExpressionExtensions {
   
   @Pure
   public static BooleanBinding operator_lessThan(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.lessThan(b);
+    return new DoubleConstant(a).lessThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessEqualsThan(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.lessThanOrEqualTo(b);
+    return new DoubleConstant(a).lessThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterThan(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.greaterThan(b);
+    return new DoubleConstant(a).greaterThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterEqualsThan(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.greaterThanOrEqualTo(b);
+    return new DoubleConstant(a).greaterThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_equals(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.isEqualTo(b);
+    return new DoubleConstant(a).isEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_notEquals(final double a, final NumberExpressionBase b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.isNotEqualTo(b);
+    return new DoubleConstant(a).isNotEqualTo(b);
   }
   
   @Pure

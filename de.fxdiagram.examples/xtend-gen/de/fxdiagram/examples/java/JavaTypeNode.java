@@ -1,12 +1,8 @@
 package de.fxdiagram.examples.java;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.command.AbstractAnimationCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -67,17 +63,12 @@ public class JavaTypeNode extends XNode {
         ObservableList<Node> _children_1 = it_1.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_2 = (Text it_2) -> {
-          Class<?> _javaType = this.getJavaType();
-          String _simpleName = _javaType.getSimpleName();
-          it_2.setText(_simpleName);
+          it_2.setText(this.getJavaType().getSimpleName());
           it_2.setTextOrigin(VPos.TOP);
-          Font _font = it_2.getFont();
-          String _family = _font.getFamily();
-          Font _font_1 = it_2.getFont();
-          double _size = _font_1.getSize();
+          String _family = it_2.getFont().getFamily();
+          double _size = it_2.getFont().getSize();
           double _multiply = (_size * 1.1);
-          Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
-          it_2.setFont(_font_2);
+          it_2.setFont(Font.font(_family, FontWeight.BOLD, _multiply));
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
         _children_1.add(_doubleArrow);
@@ -97,8 +88,7 @@ public class JavaTypeNode extends XNode {
   public JavaTypeModel getJavaTypeModel() {
     JavaTypeModel _xblockexpression = null;
     {
-      boolean _equals = Objects.equal(this.model, null);
-      if (_equals) {
+      if ((this.model == null)) {
         Class<?> _javaType = this.getJavaType();
         JavaTypeModel _javaTypeModel = new JavaTypeModel(_javaType);
         this.model = _javaTypeModel;
@@ -114,79 +104,64 @@ public class JavaTypeNode extends XNode {
   }
   
   public void populateCompartments() {
-    JavaTypeModel _javaTypeModel = this.getJavaTypeModel();
-    List<JavaProperty> _properties = _javaTypeModel.getProperties();
-    List<JavaProperty> _limit = this.<JavaProperty>limit(_properties);
     final Consumer<JavaProperty> _function = (JavaProperty property) -> {
       ObservableList<Node> _children = this.propertyCompartment.getChildren();
       Text _text = new Text();
       final Procedure1<Text> _function_1 = (Text it) -> {
         StringConcatenation _builder = new StringConcatenation();
         String _name = property.getName();
-        _builder.append(_name, "");
+        _builder.append(_name);
         _builder.append(": ");
-        Class<?> _type = property.getType();
-        String _simpleName = _type.getSimpleName();
-        _builder.append(_simpleName, "");
+        String _simpleName = property.getType().getSimpleName();
+        _builder.append(_simpleName);
         it.setText(_builder.toString());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
       _children.add(_doubleArrow);
     };
-    _limit.forEach(_function);
-    JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
-    List<Constructor<?>> _constructors = _javaTypeModel_1.getConstructors();
+    this.<JavaProperty>limit(this.getJavaTypeModel().getProperties()).forEach(_function);
     final Consumer<Constructor<?>> _function_1 = (Constructor<?> constructor) -> {
       ObservableList<Node> _children = this.operationCompartment.getChildren();
       Text _text = new Text();
       final Procedure1<Text> _function_2 = (Text it) -> {
         StringConcatenation _builder = new StringConcatenation();
-        Class<?> _javaType = this.getJavaType();
-        String _simpleName = _javaType.getSimpleName();
-        _builder.append(_simpleName, "");
+        String _simpleName = this.getJavaType().getSimpleName();
+        _builder.append(_simpleName);
         _builder.append("(");
-        Class<?>[] _parameterTypes = constructor.getParameterTypes();
         final Function1<Class<?>, String> _function_3 = (Class<?> it_1) -> {
           return it_1.getSimpleName();
         };
-        List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function_3);
-        String _join = IterableExtensions.join(_map, ", ");
-        _builder.append(_join, "");
+        String _join = IterableExtensions.join(ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(constructor.getParameterTypes())), _function_3), ", ");
+        _builder.append(_join);
         _builder.append(")");
         it.setText(_builder.toString());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
       _children.add(_doubleArrow);
     };
-    _constructors.forEach(_function_1);
-    JavaTypeModel _javaTypeModel_2 = this.getJavaTypeModel();
-    List<Method> _operations = _javaTypeModel_2.getOperations();
-    List<Method> _limit_1 = this.<Method>limit(_operations);
+    this.getJavaTypeModel().getConstructors().forEach(_function_1);
     final Consumer<Method> _function_2 = (Method method) -> {
       ObservableList<Node> _children = this.operationCompartment.getChildren();
       Text _text = new Text();
       final Procedure1<Text> _function_3 = (Text it) -> {
         StringConcatenation _builder = new StringConcatenation();
         String _name = method.getName();
-        _builder.append(_name, "");
+        _builder.append(_name);
         _builder.append("(");
-        Class<?>[] _parameterTypes = method.getParameterTypes();
         final Function1<Class<?>, String> _function_4 = (Class<?> it_1) -> {
           return it_1.getSimpleName();
         };
-        List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function_4);
-        String _join = IterableExtensions.join(_map, ", ");
-        _builder.append(_join, "");
+        String _join = IterableExtensions.join(ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(method.getParameterTypes())), _function_4), ", ");
+        _builder.append(_join);
         _builder.append("): ");
-        Class<?> _returnType = method.getReturnType();
-        String _simpleName = _returnType.getSimpleName();
-        _builder.append(_simpleName, "");
+        String _simpleName = method.getReturnType().getSimpleName();
+        _builder.append(_simpleName);
         it.setText(_builder.toString());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
       _children.add(_doubleArrow);
     };
-    _limit_1.forEach(_function_2);
+    this.<Method>limit(this.getJavaTypeModel().getOperations()).forEach(_function_2);
   }
   
   protected <T extends Object> List<T> limit(final List<T> list) {
@@ -200,9 +175,7 @@ public class JavaTypeNode extends XNode {
       if (_isActive) {
         _xifexpression_1 = list;
       } else {
-        int _size = list.size();
-        int _min = Math.min(_size, 4);
-        _xifexpression_1 = list.subList(0, _min);
+        _xifexpression_1 = list.subList(0, Math.min(list.size(), 4));
       }
       _xifexpression = _xifexpression_1;
     }
@@ -224,16 +197,12 @@ public class JavaTypeNode extends XNode {
     this.addBehavior(_addSuperTypeRapidButtonBehavior);
     AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
     this.addBehavior(_addReferenceRapidButtonBehavior);
-    XRoot _root = CoreExtensions.getRoot(this);
-    CommandStack _commandStack = _root.getCommandStack();
-    AbstractAnimationCommand _inflateCommand = inflator.getInflateCommand();
-    _commandStack.execute(_inflateCommand);
+    CoreExtensions.getRoot(this).getCommandStack().execute(inflator.getInflateCommand());
   }
   
   @Override
   public String toString() {
-    Class<?> _javaType = this.getJavaType();
-    return _javaType.getSimpleName();
+    return this.getJavaType().getSimpleName();
   }
   
   /**

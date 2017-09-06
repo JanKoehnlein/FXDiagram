@@ -2,18 +2,14 @@ package de.fxdiagram.pde;
 
 import com.google.common.collect.Iterators;
 import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import java.util.Iterator;
-import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -23,12 +19,8 @@ import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 public class BundleSelectionExtractor implements ISelectionExtractor {
   @Override
   public boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
-    IWorkbenchPartSite _site = activePart.getSite();
-    ISelectionProvider _selectionProvider = _site.getSelectionProvider();
-    final ISelection selection = _selectionProvider.getSelection();
+    final ISelection selection = activePart.getSite().getSelectionProvider().getSelection();
     if ((selection instanceof IStructuredSelection)) {
-      Iterator _iterator = ((IStructuredSelection)selection).iterator();
-      Iterator<IAdaptable> _filter = Iterators.<IAdaptable>filter(_iterator, IAdaptable.class);
       final Function1<IAdaptable, BundleDescription> _function = (IAdaptable it) -> {
         IProject _adapter = it.<IProject>getAdapter(IProject.class);
         IPluginModelBase _findModel = null;
@@ -42,13 +34,10 @@ public class BundleSelectionExtractor implements ISelectionExtractor {
         }
         return _bundleDescription;
       };
-      Iterator<BundleDescription> _map = IteratorExtensions.<IAdaptable, BundleDescription>map(_filter, _function);
-      Iterator<BundleDescription> _filterNull = IteratorExtensions.<BundleDescription>filterNull(_map);
-      Set<BundleDescription> _set = IteratorExtensions.<BundleDescription>toSet(_filterNull);
       final Function1<BundleDescription, Boolean> _function_1 = (BundleDescription it) -> {
         return Boolean.valueOf(acceptor.accept(it));
       };
-      final Iterable<Boolean> booleans = IterableExtensions.<BundleDescription, Boolean>map(_set, _function_1);
+      final Iterable<Boolean> booleans = IterableExtensions.<BundleDescription, Boolean>map(IteratorExtensions.<BundleDescription>toSet(IteratorExtensions.<BundleDescription>filterNull(IteratorExtensions.<IAdaptable, BundleDescription>map(Iterators.<IAdaptable>filter(((IStructuredSelection)selection).iterator(), IAdaptable.class), _function))), _function_1);
       final Function2<Boolean, Boolean, Boolean> _function_2 = (Boolean $0, Boolean $1) -> {
         return Boolean.valueOf((($0).booleanValue() || ($1).booleanValue()));
       };

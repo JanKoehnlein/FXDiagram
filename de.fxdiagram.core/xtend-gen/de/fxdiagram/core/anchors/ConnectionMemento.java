@@ -9,16 +9,12 @@ import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.EmptyTransition;
 import de.fxdiagram.core.extensions.TransitionExtensions;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.geometry.Side;
-import javafx.util.Duration;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -53,14 +49,13 @@ public class ConnectionMemento {
       EmptyTransition _emptyTransition = new EmptyTransition();
       final Procedure1<EmptyTransition> _function = (EmptyTransition it) -> {
         final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
-          ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
           final Consumer<XControlPoint> _function_2 = (XControlPoint it_2) -> {
             MoveBehavior _behavior = it_2.<MoveBehavior>getBehavior(MoveBehavior.class);
             if (_behavior!=null) {
               _behavior.reset();
             }
           };
-          _controlPoints.forEach(_function_2);
+          this.connection.getControlPoints().forEach(_function_2);
         };
         it.setOnFinished(_function_1);
       };
@@ -69,14 +64,12 @@ public class ConnectionMemento {
     
     @Override
     public Animation createUndoAnimation(final CommandContext context) {
-      Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-      return TransitionExtensions.createMorphTransition(this.connection, this.to, this.from, _defaultUndoDuration);
+      return TransitionExtensions.createMorphTransition(this.connection, this.to, this.from, context.getDefaultUndoDuration());
     }
     
     @Override
     public Animation createRedoAnimation(final CommandContext context) {
-      Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-      return TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, _defaultUndoDuration);
+      return TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, context.getDefaultUndoDuration());
     }
   }
   
@@ -88,28 +81,20 @@ public class ConnectionMemento {
   
   public ConnectionMemento(final XConnection connection) {
     this.connection = connection;
-    XConnection.Kind _kind = connection.getKind();
-    this.kind = _kind;
-    ArrayList<XControlPoint> _newArrayList = CollectionLiterals.<XControlPoint>newArrayList();
-    this.controlPoints = _newArrayList;
-    ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
+    this.kind = connection.getKind();
+    this.controlPoints = CollectionLiterals.<XControlPoint>newArrayList();
     final Function1<XControlPoint, XControlPoint> _function = (XControlPoint orig) -> {
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function_1 = (XControlPoint it) -> {
-        XControlPoint.Type _type = orig.getType();
-        it.setType(_type);
-        double _layoutX = orig.getLayoutX();
-        it.setLayoutX(_layoutX);
-        double _layoutY = orig.getLayoutY();
-        it.setLayoutY(_layoutY);
-        Side _side = orig.getSide();
-        it.setSide(_side);
-        boolean _manuallyPlaced = orig.getManuallyPlaced();
-        it.setManuallyPlaced(_manuallyPlaced);
+        it.setType(orig.getType());
+        it.setLayoutX(orig.getLayoutX());
+        it.setLayoutY(orig.getLayoutY());
+        it.setSide(orig.getSide());
+        it.setManuallyPlaced(orig.getManuallyPlaced());
       };
       return ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function_1);
     };
-    List<XControlPoint> _map = ListExtensions.<XControlPoint, XControlPoint>map(_controlPoints, _function);
+    List<XControlPoint> _map = ListExtensions.<XControlPoint, XControlPoint>map(connection.getControlPoints(), _function);
     Iterables.<XControlPoint>addAll(this.controlPoints, _map);
   }
   
@@ -120,8 +105,7 @@ public class ConnectionMemento {
       return true;
     }
     int _size = this.controlPoints.size();
-    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
-    int _size_1 = _controlPoints.size();
+    int _size_1 = this.connection.getControlPoints().size();
     boolean _notEquals_1 = (_size != _size_1);
     if (_notEquals_1) {
       return true;
@@ -129,8 +113,7 @@ public class ConnectionMemento {
     for (int i = 0; (i < this.controlPoints.size()); i++) {
       {
         final XControlPoint thisCP = this.controlPoints.get(i);
-        ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
-        final XControlPoint thatCP = _controlPoints_1.get(i);
+        final XControlPoint thatCP = this.connection.getControlPoints().get(i);
         if (((((!Objects.equal(thisCP.getType(), thatCP.getType())) || (thisCP.getLayoutX() != thatCP.getLayoutX())) || (thisCP.getLayoutY() != thatCP.getLayoutY())) || (!Objects.equal(thisCP.getSide(), thatCP.getSide())))) {
           return true;
         }
@@ -145,8 +128,7 @@ public class ConnectionMemento {
       double _layoutY = it.getLayoutY();
       return new Point2D(_layoutX, _layoutY);
     };
-    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(this.controlPoints, _function);
-    return IterableExtensions.<Point2D>toList(_map);
+    return IterableExtensions.<Point2D>toList(ListExtensions.<XControlPoint, Point2D>map(this.controlPoints, _function));
   }
   
   public ConnectionMemento.MorphCommand createChangeCommand() {

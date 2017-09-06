@@ -1,12 +1,10 @@
 package de.fxdiagram.core.viewport;
 
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.viewport.ViewportMemento;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import javafx.animation.Transition;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -21,9 +19,7 @@ public class ViewportTransition extends Transition {
   
   public ViewportTransition(final XRoot root, final ViewportMemento toMemento, final Duration maxDuration) {
     this.root = root;
-    ViewportTransform _viewportTransform = root.getViewportTransform();
-    ViewportMemento _createMemento = _viewportTransform.createMemento();
-    this.from = _createMemento;
+    this.from = root.getViewportTransform().createMemento();
     this.to = toMemento;
     this.setMaxDuration(maxDuration);
   }
@@ -34,13 +30,9 @@ public class ViewportTransition extends Transition {
   
   public ViewportTransition(final XRoot root, final Point2D targetCenterInDiagram, final double targetScale, final double targetAngle) {
     this.root = root;
-    ViewportTransform _viewportTransform = root.getViewportTransform();
-    ViewportMemento _createMemento = _viewportTransform.createMemento();
-    this.from = _createMemento;
-    ViewportMemento _calculateTargetMemento = this.calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle);
-    this.to = _calculateTargetMemento;
-    Duration _defaultDuration = this.getDefaultDuration();
-    this.setCycleDuration(_defaultDuration);
+    this.from = root.getViewportTransform().createMemento();
+    this.to = this.calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle);
+    this.setCycleDuration(this.getDefaultDuration());
   }
   
   public Duration getDefaultDuration() {
@@ -52,10 +44,7 @@ public class ViewportTransition extends Transition {
   }
   
   public void setMaxDuration(final Duration maxDuration) {
-    double _millis = maxDuration.toMillis();
-    Duration _defaultDuration = this.getDefaultDuration();
-    double _millis_1 = _defaultDuration.toMillis();
-    double _min = Math.min(_millis, _millis_1);
+    double _min = Math.min(maxDuration.toMillis(), this.getDefaultDuration().toMillis());
     Duration _duration = new Duration(_min);
     this.setCycleDuration(_duration);
   }
@@ -110,27 +99,21 @@ public class ViewportTransition extends Transition {
       it.setRotate(targetAngle);
     };
     ObjectExtensions.<ViewportTransform>operator_doubleArrow(_viewportTransform, _function);
-    XDiagram _diagram = this.root.getDiagram();
-    final Point2D centerInScene = _diagram.localToScene(targetCenterInDiagram);
-    Scene _scene = this.root.getScene();
-    double _width = _scene.getWidth();
+    final Point2D centerInScene = this.root.getDiagram().localToScene(targetCenterInDiagram);
+    double _width = this.root.getScene().getWidth();
     double _multiply = (0.5 * _width);
     double _x = centerInScene.getX();
     double _minus = (_multiply - _x);
-    ViewportTransform _viewportTransform_1 = this.root.getViewportTransform();
-    double _translateX = _viewportTransform_1.getTranslateX();
+    double _translateX = this.root.getViewportTransform().getTranslateX();
     double _plus = (_minus + _translateX);
-    Scene _scene_1 = this.root.getScene();
-    double _height = _scene_1.getHeight();
+    double _height = this.root.getScene().getHeight();
     double _multiply_1 = (0.5 * _height);
     double _y = centerInScene.getY();
     double _minus_1 = (_multiply_1 - _y);
-    ViewportTransform _viewportTransform_2 = this.root.getViewportTransform();
-    double _translateY = _viewportTransform_2.getTranslateY();
+    double _translateY = this.root.getViewportTransform().getTranslateY();
     double _plus_1 = (_minus_1 + _translateY);
     final Point2D toTranslation = new Point2D(_plus, _plus_1);
-    ViewportTransform _viewportTransform_3 = this.root.getViewportTransform();
-    _viewportTransform_3.applyMemento(this.from);
+    this.root.getViewportTransform().applyMemento(this.from);
     double _x_1 = toTranslation.getX();
     double _y_1 = toTranslation.getY();
     return new ViewportMemento(_x_1, _y_1, toScale, targetAngle);

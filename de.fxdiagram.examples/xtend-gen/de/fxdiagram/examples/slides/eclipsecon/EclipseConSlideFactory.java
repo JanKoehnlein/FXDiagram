@@ -51,8 +51,7 @@ public class EclipseConSlideFactory {
   }
   
   public static Image getBackgroundImage() {
-    ImageCache _get = ImageCache.get();
-    return _get.getImage(EclipseConSlideFactory.class, "images/jungle.jpg");
+    return ImageCache.get().getImage(EclipseConSlideFactory.class, "images/jungle.jpg");
   }
   
   public static Text createText(final String text, final int fontSize) {
@@ -66,13 +65,11 @@ public class EclipseConSlideFactory {
   public static Text createText(final String text, final String fontName, final int fontSize) {
     Text _text = new Text();
     final Procedure1<Text> _function = (Text it) -> {
-      String _trim = text.trim();
-      it.setText(_trim);
+      it.setText(text.trim());
       it.setTextAlignment(TextAlignment.CENTER);
       Font _font = new Font(fontName, fontSize);
       it.setFont(_font);
-      Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
-      it.setFill(_jungleGreen);
+      it.setFill(EclipseConSlideFactory.jungleGreen());
     };
     return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }

@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import java.util.Map;
 import java.util.function.Consumer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -26,14 +25,12 @@ public class HeadsUpDisplay extends Group {
   
   public HeadsUpDisplay() {
     final ChangeListener<Number> _function = (ObservableValue<? extends Number> property, Number oldVlaue, Number newValue) -> {
-      ObservableList<Node> _children = this.getChildren();
       final Consumer<Node> _function_1 = (Node it) -> {
         this.place(it);
       };
-      _children.forEach(_function_1);
+      this.getChildren().forEach(_function_1);
     };
     this.sceneListener = _function;
-    ReadOnlyObjectProperty<Scene> _sceneProperty = this.sceneProperty();
     final ChangeListener<Scene> _function_1 = (ObservableValue<? extends Scene> property, Scene oldVal, Scene newVal) -> {
       ReadOnlyDoubleProperty _widthProperty = null;
       if (oldVal!=null) {
@@ -64,19 +61,17 @@ public class HeadsUpDisplay extends Group {
         _heightProperty_1.addListener(this.sceneListener);
       }
     };
-    _sceneProperty.addListener(_function_1);
+    this.sceneProperty().addListener(_function_1);
   }
   
   public void add(final Node child, final Pos pos) {
-    ObservableList<Node> _children = this.getChildren();
-    boolean _contains = _children.contains(child);
+    boolean _contains = this.getChildren().contains(child);
     boolean _not = (!_contains);
     if (_not) {
-      ObservableList<Node> _children_1 = this.getChildren();
-      _children_1.add(child);
+      ObservableList<Node> _children = this.getChildren();
+      _children.add(child);
       this.alignments.put(child, pos);
       this.place(child);
-      ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = child.boundsInParentProperty();
       final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
         @Override
         public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
@@ -89,7 +84,7 @@ public class HeadsUpDisplay extends Group {
           }
         }
       };
-      _boundsInParentProperty.addListener(_function);
+      child.boundsInParentProperty().addListener(_function);
     }
   }
   
@@ -111,22 +106,19 @@ public class HeadsUpDisplay extends Group {
           _switchResult = 0;
           break;
         case RIGHT:
-          Scene _scene = child.getScene();
-          double _width = _scene.getWidth();
+          double _width = child.getScene().getWidth();
           double _width_1 = bounds.getWidth();
           _switchResult = (_width - _width_1);
           break;
         default:
-          Scene _scene_1 = child.getScene();
-          double _width_2 = _scene_1.getWidth();
+          double _width_2 = child.getScene().getWidth();
           double _width_3 = bounds.getWidth();
           double _minus = (_width_2 - _width_3);
           _switchResult = (0.5 * _minus);
           break;
       }
     } else {
-      Scene _scene_1 = child.getScene();
-      double _width_2 = _scene_1.getWidth();
+      double _width_2 = child.getScene().getWidth();
       double _width_3 = bounds.getWidth();
       double _minus = (_width_2 - _width_3);
       _switchResult = (0.5 * _minus);
@@ -140,22 +132,19 @@ public class HeadsUpDisplay extends Group {
           _switchResult_1 = 0;
           break;
         case BOTTOM:
-          Scene _scene_2 = child.getScene();
-          double _height = _scene_2.getHeight();
+          double _height = child.getScene().getHeight();
           double _height_1 = bounds.getHeight();
           _switchResult_1 = (_height - _height_1);
           break;
         default:
-          Scene _scene_3 = child.getScene();
-          double _height_2 = _scene_3.getHeight();
+          double _height_2 = child.getScene().getHeight();
           double _height_3 = bounds.getHeight();
           double _minus_1 = (_height_2 - _height_3);
           _switchResult_1 = (0.5 * _minus_1);
           break;
       }
     } else {
-      Scene _scene_3 = child.getScene();
-      double _height_2 = _scene_3.getHeight();
+      double _height_2 = child.getScene().getHeight();
       double _height_3 = bounds.getHeight();
       double _minus_1 = (_height_2 - _height_3);
       _switchResult_1 = (0.5 * _minus_1);

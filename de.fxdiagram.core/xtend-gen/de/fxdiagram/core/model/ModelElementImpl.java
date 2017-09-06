@@ -2,7 +2,6 @@ package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.model.ModelElement;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +31,10 @@ public class ModelElementImpl implements ModelElement {
       {
         boolean _equals = Objects.equal(this.properties, null);
         if (_equals) {
-          ArrayList<Property<?>> _newArrayList = CollectionLiterals.<Property<?>>newArrayList();
-          this.properties = _newArrayList;
+          this.properties = CollectionLiterals.<Property<?>>newArrayList();
         }
         this.properties.add(property);
-        String _name = property.getName();
-        _xblockexpression = this.propertyTypes.put(_name, propertyType);
+        _xblockexpression = this.propertyTypes.put(property.getName(), propertyType);
       }
       _xifexpression = _xblockexpression;
     }
@@ -49,12 +46,10 @@ public class ModelElementImpl implements ModelElement {
     {
       boolean _equals = Objects.equal(this.listProperties, null);
       if (_equals) {
-        ArrayList<ListProperty<?>> _newArrayList = CollectionLiterals.<ListProperty<?>>newArrayList();
-        this.listProperties = _newArrayList;
+        this.listProperties = CollectionLiterals.<ListProperty<?>>newArrayList();
       }
       this.listProperties.add(listProperty);
-      String _name = listProperty.getName();
-      _xblockexpression = this.propertyTypes.put(_name, componentType);
+      _xblockexpression = this.propertyTypes.put(listProperty.getName(), componentType);
     }
     return _xblockexpression;
   }
@@ -85,8 +80,7 @@ public class ModelElementImpl implements ModelElement {
   
   @Override
   public Class<?> getType(final Property<?> property) {
-    String _name = property.getName();
-    return this.propertyTypes.get(_name);
+    return this.propertyTypes.get(property.getName());
   }
   
   @Override

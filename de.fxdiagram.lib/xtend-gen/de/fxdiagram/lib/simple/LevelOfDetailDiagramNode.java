@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.simple;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
@@ -12,13 +11,11 @@ import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
-import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,7 +26,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -64,8 +60,7 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
       Text _text = new Text();
       final Procedure1<Text> _function_1 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        String _name = this.getName();
-        it_1.setText(_name);
+        it_1.setText(this.getName());
         Insets _insets = new Insets(10, 20, 10, 20);
         StackPane.setMargin(it_1, _insets);
       };
@@ -96,15 +91,14 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   public void doActivate() {
     super.doActivate();
     final Procedure1<Text> _function = (Text it) -> {
-      String _name = this.getName();
-      it.setText(_name);
+      it.setText(this.getName());
       TooltipExtensions.setTooltip(it, "Zoom to reveal content");
     };
     ObjectExtensions.<Text>operator_doubleArrow(
       this.label, _function);
     XDiagram _innerDiagram = this.getInnerDiagram();
-    boolean _equals = Objects.equal(_innerDiagram, null);
-    if (_equals) {
+    boolean _tripleEquals = (_innerDiagram == null);
+    if (_tripleEquals) {
       String _name = this.getName();
       String _plus = ("No inner diagram set on node " + _name);
       String _plus_1 = (_plus + ". LOD behavior deactivated");
@@ -113,9 +107,7 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
       ObservableList<Node> _children = this.pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function_1 = (Group it) -> {
-        ObservableList<Node> _children_1 = it.getChildren();
-        XDiagram _innerDiagram_1 = this.getInnerDiagram();
-        _children_1.setAll(_innerDiagram_1);
+        it.getChildren().setAll(this.getInnerDiagram());
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
       Group _innerDiagramGroup = (this.innerDiagramGroup = _doubleArrow);
@@ -123,12 +115,8 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
       XDiagram _innerDiagram_1 = this.getInnerDiagram();
       DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram_1);
       this.diagramScaler = _diagramScaler;
-      XDiagram _diagram = CoreExtensions.getDiagram(this);
-      ViewportTransform _viewportTransform = _diagram.getViewportTransform();
-      ReadOnlyDoubleProperty _scaleProperty = _viewportTransform.scaleProperty();
       final ChangeListener<Number> _function_2 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
-        Bounds _boundsInLocal = this.getBoundsInLocal();
-        final Bounds bounds = this.localToScene(_boundsInLocal);
+        final Bounds bounds = this.localToScene(this.getBoundsInLocal());
         double _width = bounds.getWidth();
         double _height = bounds.getHeight();
         final double area = (_width * _height);
@@ -139,27 +127,22 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
         } else {
           this.label.setVisible(false);
           this.innerDiagramGroup.setVisible(true);
-          XDiagram _innerDiagram_2 = this.getInnerDiagram();
-          _innerDiagram_2.activate();
+          this.getInnerDiagram().activate();
           final Procedure1<DiagramScaler> _function_3 = (DiagramScaler it) -> {
-            Bounds _layoutBounds = this.label.getLayoutBounds();
-            double _width_1 = _layoutBounds.getWidth();
+            double _width_1 = this.label.getLayoutBounds().getWidth();
             double _plus_2 = (_width_1 + 40);
             it.setWidth(_plus_2);
-            Bounds _layoutBounds_1 = this.label.getLayoutBounds();
-            double _height_1 = _layoutBounds_1.getHeight();
+            double _height_1 = this.label.getLayoutBounds().getHeight();
             double _plus_3 = (_height_1 + 20);
             it.setHeight(_plus_3);
             it.activate();
           };
           ObjectExtensions.<DiagramScaler>operator_doubleArrow(
             this.diagramScaler, _function_3);
-          XDiagram _innerDiagram_3 = this.getInnerDiagram();
-          Paint _backgroundPaint = _innerDiagram_3.getBackgroundPaint();
-          this.pane.setBackgroundPaint(_backgroundPaint);
+          this.pane.setBackgroundPaint(this.getInnerDiagram().getBackgroundPaint());
         }
       };
-      _scaleProperty.addListener(_function_2);
+      CoreExtensions.getDiagram(this).getViewportTransform().scaleProperty().addListener(_function_2);
     }
   }
   

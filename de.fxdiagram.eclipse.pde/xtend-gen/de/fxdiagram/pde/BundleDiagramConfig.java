@@ -12,7 +12,6 @@ import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
-import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
@@ -24,7 +23,6 @@ import de.fxdiagram.pde.BundleDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleNode;
 import de.fxdiagram.pde.BundleUtil;
-import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
@@ -32,8 +30,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.osgi.service.resolver.VersionRange;
-import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -41,7 +37,6 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.osgi.framework.Version;
 
 @SuppressWarnings("all")
 public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
@@ -81,20 +76,17 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       final Function1<BundleDescription, Iterable<? extends BundleDependency>> _function_5 = (BundleDescription it) -> {
         return BundleUtil.getBundleDependencies(it);
       };
-      MultiConnectionMappingCall<BundleDependency, BundleDescription> _outConnectionForEach = this.<BundleDependency>outConnectionForEach(BundleDiagramConfig.this.dependencyConnection, _function_5);
       final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add dependency");
       };
-      _outConnectionForEach.asButton(_function_6);
+      this.<BundleDependency>outConnectionForEach(BundleDiagramConfig.this.dependencyConnection, _function_5).asButton(_function_6);
       final Function1<BundleDescription, Iterable<? extends BundleDependency>> _function_7 = (BundleDescription it) -> {
         return BundleUtil.getInverseBundleDependencies(it);
       };
-      MultiConnectionMappingCall<BundleDependency, BundleDescription> _inConnectionForEach = this.<BundleDependency>inConnectionForEach(BundleDiagramConfig.this.inverseDependencyConnection, _function_7);
       final Function1<Side, Node> _function_8 = (Side it) -> {
-        Side _invert = ButtonExtensions.invert(it);
-        return ButtonExtensions.getArrowButton(_invert, "Add inverse dependency");
+        return ButtonExtensions.getArrowButton(ButtonExtensions.invert(it), "Add inverse dependency");
       };
-      _inConnectionForEach.asButton(_function_8);
+      this.<BundleDependency>inConnectionForEach(BundleDiagramConfig.this.inverseDependencyConnection, _function_7).asButton(_function_8);
     }
   };
   
@@ -105,25 +97,18 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       final Procedure1<BaseNodeHeadingLabel<BundleDescription>> _function = (BaseNodeHeadingLabel<BundleDescription> it) -> {
         Text _text = it.getText();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
-          String _symbolicName = bundle.getSymbolicName();
-          it_1.setText(_symbolicName);
+          it_1.setText(bundle.getSymbolicName());
           boolean _isSingleton = bundle.isSingleton();
           if (_isSingleton) {
-            Font _font = it_1.getFont();
-            String _family = _font.getFamily();
-            Font _font_1 = it_1.getFont();
-            double _size = _font_1.getSize();
+            String _family = it_1.getFont().getFamily();
+            double _size = it_1.getFont().getSize();
             double _multiply = (_size * 1.1);
-            Font _font_2 = Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply);
-            it_1.setFont(_font_2);
+            it_1.setFont(Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply));
           } else {
-            Font _font_3 = it_1.getFont();
-            String _family_1 = _font_3.getFamily();
-            Font _font_4 = it_1.getFont();
-            double _size_1 = _font_4.getSize();
+            String _family_1 = it_1.getFont().getFamily();
+            double _size_1 = it_1.getFont().getSize();
             double _multiply_1 = (_size_1 * 1.1);
-            Font _font_5 = Font.font(_family_1, FontWeight.BOLD, _multiply_1);
-            it_1.setFont(_font_5);
+            it_1.setFont(Font.font(_family_1, FontWeight.BOLD, _multiply_1));
           }
         };
         ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
@@ -139,16 +124,11 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
         Text _text = it.getText();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
-          Version _version = bundle.getVersion();
-          String _string = _version.toString();
-          it_1.setText(_string);
-          Font _font = it_1.getFont();
-          String _family = _font.getFamily();
-          Font _font_1 = it_1.getFont();
-          double _size = _font_1.getSize();
+          it_1.setText(bundle.getVersion().toString());
+          String _family = it_1.getFont().getFamily();
+          double _size = it_1.getFont().getSize();
           double _multiply = (_size * 0.8);
-          Font _font_2 = Font.font(_family, _multiply);
-          it_1.setFont(_font_2);
+          it_1.setFont(Font.font(_family, _multiply));
         };
         ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
       };
@@ -163,13 +143,9 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it_1) -> {
         Text _text = it_1.getText();
         final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_2) -> {
-          IPluginBase _pluginBase = it_2.getPluginBase();
-          IPluginBase _pluginBase_1 = it_2.getPluginBase();
-          String _name = _pluginBase_1.getName();
-          return _pluginBase.getResourceString(_name);
+          return it_2.getPluginBase().getResourceString(it_2.getPluginBase().getName());
         };
-        String _withPlugin = ((BundleDescriptor) descriptor).<String>withPlugin(_function_1);
-        _text.setText(_withPlugin);
+        _text.setText(((BundleDescriptor) descriptor).<String>withPlugin(_function_1));
       };
       return ObjectExtensions.<BaseNodeLabel<BundleDescription>>operator_doubleArrow(_baseNodeLabel, _function);
     }
@@ -182,13 +158,9 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it_1) -> {
         Text _text = it_1.getText();
         final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_2) -> {
-          IPluginBase _pluginBase = it_2.getPluginBase();
-          IPluginBase _pluginBase_1 = it_2.getPluginBase();
-          String _providerName = _pluginBase_1.getProviderName();
-          return _pluginBase.getResourceString(_providerName);
+          return it_2.getPluginBase().getResourceString(it_2.getPluginBase().getProviderName());
         };
-        String _withPlugin = ((BundleDescriptor) descriptor).<String>withPlugin(_function_1);
-        _text.setText(_withPlugin);
+        _text.setText(((BundleDescriptor) descriptor).<String>withPlugin(_function_1));
       };
       return ObjectExtensions.<BaseNodeLabel<BundleDescription>>operator_doubleArrow(_baseNodeLabel, _function);
     }
@@ -197,8 +169,7 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   private final NodeLabelMapping<BundleDescription> pluginExecutionEnvironment = new NodeLabelMapping<BundleDescription>(this, BundleNode.BUNDLE_EXECUTION_ENVIRONMENT) {
     @Override
     public String getText(final BundleDescription bundle) {
-      String[] _executionEnvironments = bundle.getExecutionEnvironments();
-      return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
+      return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(bundle.getExecutionEnvironments())), ", ");
     }
   };
   
@@ -256,13 +227,11 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
     @Override
     public String getText(final BundleDependency element) {
       String _xifexpression = null;
-      VersionRange _versionRange = element.getVersionRange();
-      boolean _isEmpty = _versionRange.isEmpty();
+      boolean _isEmpty = element.getVersionRange().isEmpty();
       if (_isEmpty) {
         _xifexpression = "";
       } else {
-        VersionRange _versionRange_1 = element.getVersionRange();
-        _xifexpression = _versionRange_1.toString();
+        _xifexpression = element.getVersionRange().toString();
       }
       return _xifexpression;
     }
@@ -276,8 +245,7 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
         {
           boolean _isOptional = it.isOptional();
           if (_isOptional) {
-            ObservableList<Double> _strokeDashArray = connection.getStrokeDashArray();
-            _strokeDashArray.setAll(Double.valueOf(5.0), Double.valueOf(5.0));
+            connection.getStrokeDashArray().setAll(Double.valueOf(5.0), Double.valueOf(5.0));
           }
           boolean _isReexport = it.isReexport();
           boolean _not = (!_isReexport);

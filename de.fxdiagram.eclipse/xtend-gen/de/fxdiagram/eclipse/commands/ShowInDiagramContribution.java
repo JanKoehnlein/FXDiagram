@@ -20,7 +20,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.CompoundContributionItem;
@@ -64,12 +63,10 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
           return Iterables.<ContributionItem>addAll(contributionItems, _addMenuItemsForEntryCalls);
         }
       };
-      ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();
-      Iterable<ISelectionExtractor> _selectionExtractors = _instance.getSelectionExtractors();
       final Consumer<ISelectionExtractor> _function = (ISelectionExtractor it) -> {
         it.addSelectedElement(activePart, acceptor);
       };
-      _selectionExtractors.forEach(_function);
+      ISelectionExtractor.Registry.getInstance().getSelectionExtractors().forEach(_function);
       _xblockexpression = contributionItems;
     }
     return ((IContributionItem[])Conversions.unwrapArray(_xblockexpression, IContributionItem.class));
@@ -78,13 +75,10 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
   public Iterable<? extends ContributionItem> addMenuItemsForEntryCalls(final Object selectedElement, final IWorkbenchPart activePart) {
     boolean _notEquals = (!Objects.equal(selectedElement, null));
     if (_notEquals) {
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
       final Function1<XDiagramConfig, Iterable<? extends EntryCall<Object>>> _function = (XDiagramConfig it) -> {
         return it.<Object>getEntryCalls(selectedElement);
       };
-      Iterable<Iterable<? extends EntryCall<Object>>> _map = IterableExtensions.map(_configurations, _function);
-      final Iterable<EntryCall<Object>> entryCalls = Iterables.<EntryCall<Object>>concat(_map);
+      final Iterable<EntryCall<Object>> entryCalls = Iterables.<EntryCall<Object>>concat(IterableExtensions.map(XDiagramConfig.Registry.getInstance().getConfigurations(), _function));
       boolean _isEmpty = IterableExtensions.isEmpty(entryCalls);
       boolean _not = (!_isEmpty);
       if (_not) {
@@ -94,8 +88,7 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
             public void fill(final Menu menu, final int index) {
               MenuItem _menuItem = new MenuItem(menu, SWT.CHECK, index);
               final Procedure1<MenuItem> _function = (MenuItem it) -> {
-                String _text = call.getText();
-                it.setText(_text);
+                it.setText(call.getText());
                 it.addSelectionListener(new SelectionListener() {
                   @Override
                   public void widgetDefaultSelected(final SelectionEvent e) {
@@ -104,9 +97,7 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
                   @Override
                   public void widgetSelected(final SelectionEvent e) {
                     try {
-                      IWorkbenchPartSite _site = activePart.getSite();
-                      IWorkbenchPage _page = _site.getPage();
-                      final IViewPart view = _page.showView("de.fxdiagram.eclipse.FXDiagramView");
+                      final IViewPart view = activePart.getSite().getPage().showView("de.fxdiagram.eclipse.FXDiagramView");
                       if ((view instanceof FXDiagramView)) {
                         IEditorPart _xifexpression = null;
                         if ((activePart instanceof IEditorPart)) {

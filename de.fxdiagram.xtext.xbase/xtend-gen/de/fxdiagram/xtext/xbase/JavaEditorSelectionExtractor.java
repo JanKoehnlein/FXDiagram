@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.xtext.util.PolymorphicDispatcher;
 
@@ -24,12 +23,9 @@ public class JavaEditorSelectionExtractor implements ISelectionExtractor, IChang
   @Override
   public boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
     if ((activePart instanceof JavaEditor)) {
-      ISelectionProvider _selectionProvider = ((JavaEditor)activePart).getSelectionProvider();
-      ISelection _selection = _selectionProvider.getSelection();
+      ISelection _selection = ((JavaEditor)activePart).getSelectionProvider().getSelection();
       final ITextSelection selection = ((ITextSelection) _selection);
-      PolymorphicDispatcher<IJavaElement> _createForSingleTarget = PolymorphicDispatcher.<IJavaElement>createForSingleTarget("getElementAt", 1, 1, activePart);
-      int _offset = selection.getOffset();
-      final IJavaElement javaElement = _createForSingleTarget.invoke(Integer.valueOf(_offset));
+      final IJavaElement javaElement = PolymorphicDispatcher.<IJavaElement>createForSingleTarget("getElementAt", 1, 1, activePart).invoke(Integer.valueOf(selection.getOffset()));
       int _xifexpression = (int) 0;
       if ((javaElement instanceof PackageDeclaration)) {
         _xifexpression = IJavaElement.PACKAGE_FRAGMENT;

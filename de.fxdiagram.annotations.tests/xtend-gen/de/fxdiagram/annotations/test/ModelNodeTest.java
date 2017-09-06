@@ -1050,8 +1050,7 @@ public class ModelNodeTest {
   }
   
   protected void assertCompilesTo(final CharSequence source, final CharSequence target) {
-    Class<? extends ModelNodeTest> _class = this.getClass();
-    final XtendCompilerTester compilerTester = XtendCompilerTester.newXtendCompilerTester(_class);
+    final XtendCompilerTester compilerTester = XtendCompilerTester.newXtendCompilerTester(this.getClass());
     compilerTester.assertCompilesTo(source, target);
   }
   
@@ -1072,8 +1071,6 @@ public class ModelNodeTest {
     final Object loadModel = load.load(in);
     Assert.assertTrue((loadModel instanceof Modeltest4));
     final Modeltest4 loadModel2 = ((Modeltest4) loadModel);
-    ObservableList<String> _fqn = saveModel.getFqn();
-    ObservableList<String> _fqn_1 = loadModel2.getFqn();
-    Assert.assertEquals(_fqn, _fqn_1);
+    Assert.assertEquals(saveModel.getFqn(), loadModel2.getFqn());
   }
 }

@@ -89,8 +89,7 @@ public class TransformExtensionsTest {
         {
           final Affine affine = new Affine();
           TransformExtensions.leftMultiply(affine, r);
-          int _indexOf = matrices.indexOf(l);
-          Procedure1<? super Affine> _get = operations.get(_indexOf);
+          Procedure1<? super Affine> _get = operations.get(matrices.indexOf(l));
           ObjectExtensions.<Affine>operator_doubleArrow(affine, _get);
           for (final Point3D v : vectors) {
             {

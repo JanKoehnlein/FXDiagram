@@ -24,13 +24,11 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
   }
   
   public String toURI(final String resourcePath) {
-    ClassLoaderProvider _provider = this.getProvider();
-    return _provider.toURI(resourcePath, this);
+    return this.getProvider().toURI(resourcePath, this);
   }
   
   public Class<?> loadClass(final String className) {
-    ClassLoaderProvider _provider = this.getProvider();
-    return _provider.loadClass(className, this);
+    return this.getProvider().loadClass(className, this);
   }
   
   /**

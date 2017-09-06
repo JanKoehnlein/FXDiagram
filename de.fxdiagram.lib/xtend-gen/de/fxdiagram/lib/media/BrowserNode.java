@@ -17,7 +17,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -39,8 +38,7 @@ public class BrowserNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
-          String _name = this.getName();
-          it_1.setText(_name);
+          it_1.setText(this.getName());
           it_1.setTextOrigin(VPos.TOP);
           Insets _insets = new Insets(10, 20, 10, 20);
           StackPane.setMargin(it_1, _insets);
@@ -52,9 +50,7 @@ public class BrowserNode extends FlipNode {
       this.setFront(_doubleArrow);
       WebView _webView = new WebView();
       final Procedure1<WebView> _function_1 = (WebView it) -> {
-        WebEngine _engine = it.getEngine();
-        String _pageUrl = this.getPageUrl();
-        _engine.load(_pageUrl);
+        it.getEngine().load(this.getPageUrl());
       };
       WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
       this.setBack(_doubleArrow_1);
@@ -73,8 +69,7 @@ public class BrowserNode extends FlipNode {
   }
   
   public void setPageUrl(final URL pageUrl) {
-    String _string = pageUrl.toString();
-    this.setPageUrl(_string);
+    this.setPageUrl(pageUrl.toString());
   }
   
   @Override

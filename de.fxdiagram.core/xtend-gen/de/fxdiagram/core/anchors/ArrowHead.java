@@ -24,7 +24,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 
 /**
  * Arrow head for the start or end of an {@link XConnection}.
@@ -67,25 +66,21 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
       Paint _stroke = this.getStroke();
       boolean _equals = Objects.equal(_stroke, null);
       if (_equals) {
-        XConnection _connection = this.getConnection();
-        ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
-        this.strokeProperty.bind(_strokeProperty);
+        this.strokeProperty.bind(this.getConnection().strokeProperty());
       }
       boolean _equals_1 = Objects.equal(this.node, null);
       if (_equals_1) {
-        Node _createNode = this.createNode();
-        this.node = _createNode;
+        this.node = this.createNode();
         ObservableList<Node> _children = this.getChildren();
         _children.add(this.node);
+        this.setIsSource(this.getIsSource());
         boolean _isSource = this.getIsSource();
-        this.setIsSource(_isSource);
-        boolean _isSource_1 = this.getIsSource();
-        if (_isSource_1) {
-          XConnection _connection_1 = this.getConnection();
-          _connection_1.setSourceArrowHead(this);
+        if (_isSource) {
+          XConnection _connection = this.getConnection();
+          _connection.setSourceArrowHead(this);
         } else {
-          XConnection _connection_2 = this.getConnection();
-          _connection_2.setTargetArrowHead(this);
+          XConnection _connection_1 = this.getConnection();
+          _connection_1.setTargetArrowHead(this);
         }
       }
       _xblockexpression = this.node;
@@ -96,8 +91,7 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
   public abstract Node createNode();
   
   public double getLineCut() {
-    XConnection _connection = this.getConnection();
-    return _connection.getStrokeWidth();
+    return this.getConnection().getStrokeWidth();
   }
   
   public Point2D correctAnchor(final double x, final double y, final Point2D anchorOnOutline) {
@@ -146,12 +140,8 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
     double _minY = headBounds.getMinY();
     double _minus_2 = (_multiply - _minY);
     TransformExtensions.translate(trafo, _plus, _minus_2);
-    XConnection _connection = this.getConnection();
-    final Point2D derivative = _connection.derivativeAt(t);
-    double _y = derivative.getY();
-    double _x = derivative.getX();
-    double _atan2 = Math.atan2(_y, _x);
-    double _degrees = Math.toDegrees(_atan2);
+    final Point2D derivative = this.getConnection().derivativeAt(t);
+    double _degrees = Math.toDegrees(Math.atan2(derivative.getY(), derivative.getX()));
     int _xifexpression_1 = (int) 0;
     boolean _isSource_1 = this.getIsSource();
     if (_isSource_1) {
@@ -161,13 +151,9 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
     }
     final double angle = (_degrees + _xifexpression_1);
     TransformExtensions.rotate(trafo, angle);
-    XConnection _connection_1 = this.getConnection();
-    final Point2D pos = _connection_1.at(t);
-    double _x_1 = pos.getX();
-    double _y_1 = pos.getY();
-    TransformExtensions.translate(trafo, _x_1, _y_1);
-    ObservableList<Transform> _transforms = this.getTransforms();
-    _transforms.setAll(trafo);
+    final Point2D pos = this.getConnection().at(t);
+    TransformExtensions.translate(trafo, pos.getX(), pos.getY());
+    this.getTransforms().setAll(trafo);
   }
   
   /**

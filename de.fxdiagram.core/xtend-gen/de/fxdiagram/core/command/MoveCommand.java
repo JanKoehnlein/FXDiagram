@@ -31,12 +31,9 @@ public class MoveCommand extends AbstractAnimationCommand {
   
   public MoveCommand(final XShape shape, final double toX, final double toY, final boolean toManuallyPlaced) {
     this.shape = shape;
-    double _layoutX = shape.getLayoutX();
-    this.fromX = _layoutX;
-    double _layoutY = shape.getLayoutY();
-    this.fromY = _layoutY;
-    boolean _manuallyPlaced = shape.getManuallyPlaced();
-    this.fromManuallyPlaced = _manuallyPlaced;
+    this.fromX = shape.getLayoutX();
+    this.fromY = shape.getLayoutY();
+    this.fromManuallyPlaced = shape.getManuallyPlaced();
     this.toX = toX;
     this.toY = toY;
     this.toManuallyPlaced = toManuallyPlaced;
@@ -57,37 +54,32 @@ public class MoveCommand extends AbstractAnimationCommand {
     {
       if ((this.shape instanceof XNode)) {
         double _fromX = this.fromX;
-        Group _placementGroup = ((XNode)this.shape).getPlacementGroup();
-        double _layoutX = _placementGroup.getLayoutX();
+        double _layoutX = ((XNode)this.shape).getPlacementGroup().getLayoutX();
         this.fromX = (_fromX - _layoutX);
         double _fromY = this.fromY;
-        Group _placementGroup_1 = ((XNode)this.shape).getPlacementGroup();
-        double _layoutY = _placementGroup_1.getLayoutY();
+        double _layoutY = ((XNode)this.shape).getPlacementGroup().getLayoutY();
         this.fromY = (_fromY - _layoutY);
-        Group _placementGroup_2 = ((XNode)this.shape).getPlacementGroup();
+        Group _placementGroup = ((XNode)this.shape).getPlacementGroup();
         final Procedure1<Group> _function = (Group it) -> {
           it.setLayoutX(0);
           it.setLayoutY(0);
         };
-        ObjectExtensions.<Group>operator_doubleArrow(_placementGroup_2, _function);
+        ObjectExtensions.<Group>operator_doubleArrow(_placementGroup, _function);
         ((XNode)this.shape).setPlacementHint(null);
       }
-      Duration _executeDuration = this.getExecuteDuration(context);
-      _xblockexpression = this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, _executeDuration);
+      _xblockexpression = this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, this.getExecuteDuration(context));
     }
     return _xblockexpression;
   }
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, this.fromManuallyPlaced, _defaultUndoDuration);
+    return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, this.fromManuallyPlaced, context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, _defaultUndoDuration);
+    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, this.toManuallyPlaced, context.getDefaultUndoDuration());
   }
   
   protected Transition createMoveTransition(final double fromX, final double fromY, final double toX, final double toY, final boolean toManuallyPlaced, final Duration duration) {

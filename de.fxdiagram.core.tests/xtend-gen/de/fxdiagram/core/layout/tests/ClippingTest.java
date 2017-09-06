@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout.tests;
 
-import javafx.geometry.Bounds;
 import javafx.scene.shape.Rectangle;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -30,17 +29,9 @@ public class ClippingTest {
       it.setClip(_doubleArrow);
     };
     final Rectangle rect = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-    Bounds _boundsInLocal = rect.getBoundsInLocal();
-    double _minX = _boundsInLocal.getMinX();
-    Assert.assertEquals(2, _minX, ClippingTest.EPS);
-    Bounds _boundsInLocal_1 = rect.getBoundsInLocal();
-    double _minY = _boundsInLocal_1.getMinY();
-    Assert.assertEquals(3, _minY, ClippingTest.EPS);
-    Bounds _boundsInLocal_2 = rect.getBoundsInLocal();
-    double _width = _boundsInLocal_2.getWidth();
-    Assert.assertEquals(1, _width, ClippingTest.EPS);
-    Bounds _boundsInLocal_3 = rect.getBoundsInLocal();
-    double _height = _boundsInLocal_3.getHeight();
-    Assert.assertEquals(1, _height, ClippingTest.EPS);
+    Assert.assertEquals(2, rect.getBoundsInLocal().getMinX(), ClippingTest.EPS);
+    Assert.assertEquals(3, rect.getBoundsInLocal().getMinY(), ClippingTest.EPS);
+    Assert.assertEquals(1, rect.getBoundsInLocal().getWidth(), ClippingTest.EPS);
+    Assert.assertEquals(1, rect.getBoundsInLocal().getHeight(), ClippingTest.EPS);
   }
 }

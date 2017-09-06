@@ -4,20 +4,16 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.BoundsExtensions;
-import java.util.List;
 import java.util.function.Consumer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -55,29 +51,21 @@ public class DiagramScaler implements XActivatable {
         {
           boolean _wasAdded = change.wasAdded();
           if (_wasAdded) {
-            List<? extends XNode> _addedSubList = change.getAddedSubList();
             final Consumer<XNode> _function_3 = (XNode it) -> {
-              ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-              _boundsInLocalProperty.addListener(this.boundsInLocalListener);
-              DoubleProperty _layoutXProperty = it.layoutXProperty();
-              _layoutXProperty.addListener(this.layoutListener);
-              DoubleProperty _layoutYProperty = it.layoutYProperty();
-              _layoutYProperty.addListener(this.layoutListener);
+              it.boundsInLocalProperty().addListener(this.boundsInLocalListener);
+              it.layoutXProperty().addListener(this.layoutListener);
+              it.layoutYProperty().addListener(this.layoutListener);
             };
-            _addedSubList.forEach(_function_3);
+            change.getAddedSubList().forEach(_function_3);
           }
           boolean _wasRemoved = change.wasRemoved();
           if (_wasRemoved) {
-            List<? extends XNode> _removed = change.getRemoved();
             final Consumer<XNode> _function_4 = (XNode it) -> {
-              ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-              _boundsInLocalProperty.removeListener(this.boundsInLocalListener);
-              DoubleProperty _layoutXProperty = it.layoutXProperty();
-              _layoutXProperty.removeListener(this.layoutListener);
-              DoubleProperty _layoutYProperty = it.layoutYProperty();
-              _layoutYProperty.removeListener(this.layoutListener);
+              it.boundsInLocalProperty().removeListener(this.boundsInLocalListener);
+              it.layoutXProperty().removeListener(this.layoutListener);
+              it.layoutYProperty().removeListener(this.layoutListener);
             };
-            _removed.forEach(_function_4);
+            change.getRemoved().forEach(_function_4);
           }
         }
       }
@@ -86,26 +74,19 @@ public class DiagramScaler implements XActivatable {
   }
   
   public void scaleToFit() {
-    ObservableList<XNode> _nodes = this.diagram.getNodes();
-    boolean _isEmpty = _nodes.isEmpty();
+    boolean _isEmpty = this.diagram.getNodes().isEmpty();
     if (_isEmpty) {
       this.diagram.setScaleX(1);
       this.diagram.setScaleY(1);
       this.diagram.setClip(null);
     } else {
-      Group _nodeLayer = this.diagram.getNodeLayer();
-      ObservableList<Node> _children = _nodeLayer.getChildren();
       final Function1<Node, BoundingBox> _function = (Node it) -> {
-        Bounds _layoutBounds = it.getLayoutBounds();
-        double _layoutX = it.getLayoutX();
-        double _layoutY = it.getLayoutY();
-        return BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
+        return BoundsExtensions.translate(it.getLayoutBounds(), it.getLayoutX(), it.getLayoutY());
       };
-      List<BoundingBox> _map = ListExtensions.<Node, BoundingBox>map(_children, _function);
       final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = (BoundingBox b0, BoundingBox b1) -> {
         return BoundsExtensions.operator_plus(b0, b1);
       };
-      final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
+      final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(ListExtensions.<Node, BoundingBox>map(this.diagram.getNodeLayer().getChildren(), _function), _function_1);
       double _xifexpression = (double) 0;
       double _width = myBounds.getWidth();
       boolean _notEquals = (_width != 0);
@@ -145,36 +126,32 @@ public class DiagramScaler implements XActivatable {
   protected void fit(final Rectangle it, final double newScale, final double newScaleX, final double newScaleY, final Bounds allNodesBounds) {
     it.setArcWidth((22 / newScale));
     it.setArcHeight((22 / newScale));
-    double _minX = allNodesBounds.getMinX();
-    it.setX(_minX);
-    double _width = allNodesBounds.getWidth();
-    it.setWidth(_width);
+    it.setX(allNodesBounds.getMinX());
+    it.setWidth(allNodesBounds.getWidth());
     if ((newScaleX > newScaleY)) {
-      double _width_1 = this.getWidth();
-      double _divide = (_width_1 / newScale);
-      double _width_2 = allNodesBounds.getWidth();
-      final double delta = (_divide - _width_2);
+      double _width = this.getWidth();
+      double _divide = (_width / newScale);
+      double _width_1 = allNodesBounds.getWidth();
+      final double delta = (_divide - _width_1);
       double _x = it.getX();
       double _minus = (_x - (0.5 * delta));
       it.setX(_minus);
-      double _width_3 = it.getWidth();
-      double _plus = (_width_3 + delta);
+      double _width_2 = it.getWidth();
+      double _plus = (_width_2 + delta);
       it.setWidth(_plus);
     }
-    double _minY = allNodesBounds.getMinY();
-    it.setY(_minY);
-    double _height = allNodesBounds.getHeight();
-    it.setHeight(_height);
+    it.setY(allNodesBounds.getMinY());
+    it.setHeight(allNodesBounds.getHeight());
     if ((newScaleY > newScaleX)) {
-      double _height_1 = this.getHeight();
-      double _divide_1 = (_height_1 / newScale);
-      double _height_2 = allNodesBounds.getHeight();
-      final double delta_1 = (_divide_1 - _height_2);
+      double _height = this.getHeight();
+      double _divide_1 = (_height / newScale);
+      double _height_1 = allNodesBounds.getHeight();
+      final double delta_1 = (_divide_1 - _height_1);
       double _y = it.getY();
       double _minus_1 = (_y - (0.5 * delta_1));
       it.setY(_minus_1);
-      double _height_3 = it.getHeight();
-      double _plus_1 = (_height_3 + delta_1);
+      double _height_2 = it.getHeight();
+      double _plus_1 = (_height_2 + delta_1);
       it.setHeight(_plus_1);
     }
   }
@@ -186,21 +163,14 @@ public class DiagramScaler implements XActivatable {
     if (_not) {
       this.widthProperty.addListener(this.layoutListener);
       this.heightProperty.addListener(this.layoutListener);
-      ObservableList<XNode> _nodes = this.diagram.getNodes();
       final Consumer<XNode> _function = (XNode it) -> {
-        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-        _boundsInLocalProperty.addListener(this.boundsInLocalListener);
-        DoubleProperty _layoutXProperty = it.layoutXProperty();
-        _layoutXProperty.addListener(this.layoutListener);
-        DoubleProperty _layoutYProperty = it.layoutYProperty();
-        _layoutYProperty.addListener(this.layoutListener);
+        it.boundsInLocalProperty().addListener(this.boundsInLocalListener);
+        it.layoutXProperty().addListener(this.layoutListener);
+        it.layoutYProperty().addListener(this.layoutListener);
       };
-      _nodes.forEach(_function);
-      ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-      _nodes_1.addListener(this.listChangeListener);
-      Group _buttonLayer = this.diagram.getButtonLayer();
-      ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = _buttonLayer.layoutBoundsProperty();
-      _layoutBoundsProperty.addListener(this.boundsInLocalListener);
+      this.diagram.getNodes().forEach(_function);
+      this.diagram.getNodes().addListener(this.listChangeListener);
+      this.diagram.getButtonLayer().layoutBoundsProperty().addListener(this.boundsInLocalListener);
       this.scaleToFit();
       this.isActiveProperty.set(true);
     }
@@ -214,21 +184,14 @@ public class DiagramScaler implements XActivatable {
       this.diagram.setClip(null);
       this.diagram.setScaleX(1);
       this.diagram.setScaleY(1);
-      Group _buttonLayer = this.diagram.getButtonLayer();
-      ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = _buttonLayer.layoutBoundsProperty();
-      _layoutBoundsProperty.removeListener(this.boundsInLocalListener);
-      ObservableList<XNode> _nodes = this.diagram.getNodes();
-      _nodes.removeListener(this.listChangeListener);
-      ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+      this.diagram.getButtonLayer().layoutBoundsProperty().removeListener(this.boundsInLocalListener);
+      this.diagram.getNodes().removeListener(this.listChangeListener);
       final Consumer<XNode> _function = (XNode it) -> {
-        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-        _boundsInLocalProperty.removeListener(this.boundsInLocalListener);
-        DoubleProperty _layoutXProperty = it.layoutXProperty();
-        _layoutXProperty.removeListener(this.layoutListener);
-        DoubleProperty _layoutYProperty = it.layoutYProperty();
-        _layoutYProperty.removeListener(this.layoutListener);
+        it.boundsInLocalProperty().removeListener(this.boundsInLocalListener);
+        it.layoutXProperty().removeListener(this.layoutListener);
+        it.layoutYProperty().removeListener(this.layoutListener);
       };
-      _nodes_1.forEach(_function);
+      this.diagram.getNodes().forEach(_function);
       this.isActiveProperty.set(false);
     }
   }

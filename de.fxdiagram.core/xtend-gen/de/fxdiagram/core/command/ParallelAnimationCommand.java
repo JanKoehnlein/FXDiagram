@@ -42,8 +42,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
       return it.getExecuteAnimation(context);
     };
-    List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
-    return this.getParallelTransition(_map);
+    return this.getParallelTransition(ListExtensions.<AnimationCommand, Animation>map(this.commands, _function));
   }
   
   @Override
@@ -51,8 +50,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
       return it.getUndoAnimation(context);
     };
-    List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
-    return this.getParallelTransition(_map);
+    return this.getParallelTransition(ListExtensions.<AnimationCommand, Animation>map(this.commands, _function));
   }
   
   @Override
@@ -60,8 +58,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
       return it.getRedoAnimation(context);
     };
-    List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
-    return this.getParallelTransition(_map);
+    return this.getParallelTransition(ListExtensions.<AnimationCommand, Animation>map(this.commands, _function));
   }
   
   protected ParallelTransition getParallelTransition(final List<Animation> animations) {

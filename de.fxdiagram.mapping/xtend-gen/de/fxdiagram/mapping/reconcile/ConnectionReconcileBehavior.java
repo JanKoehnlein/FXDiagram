@@ -3,7 +3,6 @@ package de.fxdiagram.mapping.reconcile;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.DirtyState;
@@ -17,14 +16,11 @@ import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
 import de.fxdiagram.mapping.reconcile.ConnectionLabelMorphCommand;
 import de.fxdiagram.mapping.reconcile.ReconnectMorphCommand;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -37,41 +33,29 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
   
   @Override
   public DirtyState getDirtyState() {
-    XConnection _host = this.getHost();
-    DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getHost().getDomainObjectDescriptor();
     if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
       try {
-        XConnection _host_1 = this.getHost();
-        DomainObjectDescriptor _domainObjectDescriptor_1 = _host_1.getDomainObjectDescriptor();
+        DomainObjectDescriptor _domainObjectDescriptor_1 = this.getHost().getDomainObjectDescriptor();
         final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
         final Function1<T, DirtyState> _function = (T domainObject) -> {
           AbstractMapping<T> _mapping = descriptor.getMapping();
           final ConnectionMapping<T> connectionMapping = ((ConnectionMapping<T>) _mapping);
-          XConnection _host_2 = this.getHost();
-          XNode _source = _host_2.getSource();
-          DomainObjectDescriptor _domainObjectDescriptor_2 = _source.getDomainObjectDescriptor();
-          final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, true);
+          final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, this.getHost().getSource().getDomainObjectDescriptor(), true);
           boolean _equals = Objects.equal(resolvedSourceDescriptor, null);
           if (_equals) {
             return DirtyState.DANGLING;
           } else {
-            XConnection _host_3 = this.getHost();
-            XNode _source_1 = _host_3.getSource();
-            DomainObjectDescriptor _domainObjectDescriptor_3 = _source_1.getDomainObjectDescriptor();
-            boolean _equals_1 = Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_3);
+            DomainObjectDescriptor _domainObjectDescriptor_2 = this.getHost().getSource().getDomainObjectDescriptor();
+            boolean _equals_1 = Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_2);
             if (_equals_1) {
-              XConnection _host_4 = this.getHost();
-              XNode _target = _host_4.getTarget();
-              DomainObjectDescriptor _domainObjectDescriptor_4 = _target.getDomainObjectDescriptor();
-              final DomainObjectDescriptor resolvedTargetDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_4, false);
+              final DomainObjectDescriptor resolvedTargetDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, this.getHost().getTarget().getDomainObjectDescriptor(), false);
               boolean _equals_2 = Objects.equal(resolvedTargetDescriptor, null);
               if (_equals_2) {
                 return DirtyState.DANGLING;
               } else {
-                XConnection _host_5 = this.getHost();
-                XNode _target_1 = _host_5.getTarget();
-                DomainObjectDescriptor _domainObjectDescriptor_5 = _target_1.getDomainObjectDescriptor();
-                boolean _equals_3 = Objects.equal(resolvedTargetDescriptor, _domainObjectDescriptor_5);
+                DomainObjectDescriptor _domainObjectDescriptor_3 = this.getHost().getTarget().getDomainObjectDescriptor();
+                boolean _equals_3 = Objects.equal(resolvedTargetDescriptor, _domainObjectDescriptor_3);
                 if (_equals_3) {
                   return DirtyState.CLEAN;
                 }
@@ -104,17 +88,13 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
     final NodeMappingCall<U, T> nodeMappingCall = ((NodeMappingCall<U, T>) _xifexpression);
     boolean _notEquals = (!Objects.equal(nodeMappingCall, null));
     if (_notEquals) {
-      XDiagramConfigInterpreter _interpreter = this.getInterpreter();
-      Iterable<U> _select = _interpreter.<U, T>select(nodeMappingCall, domainObject);
-      U _head = IterableExtensions.<U>head(_select);
+      U _head = IterableExtensions.<U>head(this.getInterpreter().<U, T>select(nodeMappingCall, domainObject));
       final U nodeObject = ((U) _head);
       boolean _equals = Objects.equal(nodeObject, null);
       if (_equals) {
         return null;
       }
-      XDiagramConfigInterpreter _interpreter_1 = this.getInterpreter();
-      AbstractMapping<U> _mapping = nodeMappingCall.getMapping();
-      final IMappedElementDescriptor<U> resolvedNodeDescriptor = _interpreter_1.<U>getDescriptor(nodeObject, _mapping);
+      final IMappedElementDescriptor<U> resolvedNodeDescriptor = this.getInterpreter().<U>getDescriptor(nodeObject, nodeMappingCall.getMapping());
       boolean _notEquals_1 = (!Objects.equal(resolvedNodeDescriptor, nodeDescriptor));
       if (_notEquals_1) {
         return resolvedNodeDescriptor;
@@ -123,51 +103,40 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
       }
     } else {
       if ((nodeDescriptor instanceof IMappedElementDescriptor<?>)) {
-        AbstractMapping<?> _mapping_1 = ((IMappedElementDescriptor<?>)nodeDescriptor).getMapping();
-        if ((_mapping_1 instanceof NodeMapping<?>)) {
-          AbstractMapping<?> _mapping_2 = ((IMappedElementDescriptor<?>)nodeDescriptor).getMapping();
-          final NodeMapping<U> nodeMappingCasted = ((NodeMapping<U>) _mapping_2);
+        AbstractMapping<?> _mapping = ((IMappedElementDescriptor<?>)nodeDescriptor).getMapping();
+        if ((_mapping instanceof NodeMapping<?>)) {
+          AbstractMapping<?> _mapping_1 = ((IMappedElementDescriptor<?>)nodeDescriptor).getMapping();
+          final NodeMapping<U> nodeMappingCasted = ((NodeMapping<U>) _mapping_1);
           Iterable<AbstractConnectionMappingCall<T, U>> _xifexpression_1 = null;
           if (isSource) {
-            List<AbstractConnectionMappingCall<?, U>> _outgoing = nodeMappingCasted.getOutgoing();
             final Function1<AbstractConnectionMappingCall<?, U>, Boolean> _function = (AbstractConnectionMappingCall<?, U> it) -> {
-              AbstractMapping<?> _mapping_3 = it.getMapping();
-              return Boolean.valueOf(Objects.equal(_mapping_3, connectionMapping));
+              AbstractMapping<?> _mapping_2 = it.getMapping();
+              return Boolean.valueOf(Objects.equal(_mapping_2, connectionMapping));
             };
-            Iterable<AbstractConnectionMappingCall<?, U>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, U>>filter(_outgoing, _function);
             final Function1<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>> _function_1 = (AbstractConnectionMappingCall<?, U> it) -> {
               return ((AbstractConnectionMappingCall<T, U>) it);
             };
-            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter, _function_1);
+            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(IterableExtensions.<AbstractConnectionMappingCall<?, U>>filter(nodeMappingCasted.getOutgoing(), _function), _function_1);
           } else {
-            List<AbstractConnectionMappingCall<?, U>> _incoming = nodeMappingCasted.getIncoming();
             final Function1<AbstractConnectionMappingCall<?, U>, Boolean> _function_2 = (AbstractConnectionMappingCall<?, U> it) -> {
-              AbstractMapping<?> _mapping_3 = it.getMapping();
-              return Boolean.valueOf(Objects.equal(_mapping_3, connectionMapping));
+              AbstractMapping<?> _mapping_2 = it.getMapping();
+              return Boolean.valueOf(Objects.equal(_mapping_2, connectionMapping));
             };
-            Iterable<AbstractConnectionMappingCall<?, U>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>>filter(_incoming, _function_2);
             final Function1<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>> _function_3 = (AbstractConnectionMappingCall<?, U> it) -> {
               return ((AbstractConnectionMappingCall<T, U>) it);
             };
-            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter_1, _function_3);
+            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(IterableExtensions.<AbstractConnectionMappingCall<?, U>>filter(nodeMappingCasted.getIncoming(), _function_2), _function_3);
           }
           final Iterable<AbstractConnectionMappingCall<T, U>> siblingMappingCalls = _xifexpression_1;
           final Function1<Object, IMappedElementDescriptor<?>> _function_4 = (Object nodeDomainObject) -> {
             final U nodeObjectCasted = ((U) nodeDomainObject);
             for (final AbstractConnectionMappingCall<T, U> siblingMappingCall : siblingMappingCalls) {
               {
-                XDiagramConfigInterpreter _interpreter_2 = this.getInterpreter();
-                Iterable<T> _select_1 = _interpreter_2.<T, U>select(siblingMappingCall, nodeObjectCasted);
                 final Function1<T, IMappedElementDescriptor<T>> _function_5 = (T it) -> {
-                  XDiagramConfigInterpreter _interpreter_3 = this.getInterpreter();
-                  AbstractMapping<T> _mapping_3 = siblingMappingCall.getMapping();
-                  return _interpreter_3.<T>getDescriptor(it, _mapping_3);
+                  return this.getInterpreter().<T>getDescriptor(it, siblingMappingCall.getMapping());
                 };
-                Iterable<IMappedElementDescriptor<T>> _map = IterableExtensions.<T, IMappedElementDescriptor<T>>map(_select_1, _function_5);
-                final Set<IMappedElementDescriptor<T>> siblingDescriptors = IterableExtensions.<IMappedElementDescriptor<T>>toSet(_map);
-                XConnection _host = this.getHost();
-                DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
-                boolean _contains = siblingDescriptors.contains(_domainObjectDescriptor);
+                final Set<IMappedElementDescriptor<T>> siblingDescriptors = IterableExtensions.<IMappedElementDescriptor<T>>toSet(IterableExtensions.<T, IMappedElementDescriptor<T>>map(this.getInterpreter().<T, U>select(siblingMappingCall, nodeObjectCasted), _function_5));
+                boolean _contains = siblingDescriptors.contains(this.getHost().getDomainObjectDescriptor());
                 if (_contains) {
                   return ((IMappedElementDescriptor<?>)nodeDescriptor);
                 }
@@ -185,57 +154,39 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
   @Override
   protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final ReconcileBehavior.UpdateAcceptor acceptor) {
     final ConnectionMapping<T> connectionMapping = ((ConnectionMapping<T>) mapping);
-    XConnection _host = this.getHost();
-    XNode _source = _host.getSource();
-    DomainObjectDescriptor _domainObjectDescriptor = _source.getDomainObjectDescriptor();
-    final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(domainObject, connectionMapping, _domainObjectDescriptor, true);
-    XConnection _host_1 = this.getHost();
-    XNode _source_1 = _host_1.getSource();
-    DomainObjectDescriptor _domainObjectDescriptor_1 = _source_1.getDomainObjectDescriptor();
-    boolean _notEquals = (!Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_1));
+    final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(domainObject, connectionMapping, this.getHost().getSource().getDomainObjectDescriptor(), true);
+    DomainObjectDescriptor _domainObjectDescriptor = this.getHost().getSource().getDomainObjectDescriptor();
+    boolean _notEquals = (!Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor));
     if (_notEquals) {
       final XNode newSource = this.findNode(resolvedSourceDescriptor);
       boolean _notEquals_1 = (!Objects.equal(newSource, null));
       if (_notEquals_1) {
-        XConnection _host_2 = this.getHost();
-        XConnection _host_3 = this.getHost();
-        XNode _source_2 = _host_3.getSource();
-        ReconnectMorphCommand _reconnectMorphCommand = new ReconnectMorphCommand(_host_2, _source_2, newSource, true);
+        XConnection _host = this.getHost();
+        XNode _source = this.getHost().getSource();
+        ReconnectMorphCommand _reconnectMorphCommand = new ReconnectMorphCommand(_host, _source, newSource, true);
         acceptor.morph(_reconnectMorphCommand);
       } else {
-        XConnection _host_4 = this.getHost();
-        XConnection _host_5 = this.getHost();
-        XDiagram _diagram = CoreExtensions.getDiagram(_host_5);
-        acceptor.delete(_host_4, _diagram);
+        acceptor.delete(this.getHost(), CoreExtensions.getDiagram(this.getHost()));
       }
     } else {
-      XConnection _host_6 = this.getHost();
-      XNode _target = _host_6.getTarget();
-      DomainObjectDescriptor _domainObjectDescriptor_2 = _target.getDomainObjectDescriptor();
-      final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(domainObject, connectionMapping, _domainObjectDescriptor_2, false);
-      XConnection _host_7 = this.getHost();
-      XNode _target_1 = _host_7.getTarget();
-      DomainObjectDescriptor _domainObjectDescriptor_3 = _target_1.getDomainObjectDescriptor();
-      boolean _notEquals_2 = (!Objects.equal(resolvedTarget, _domainObjectDescriptor_3));
+      final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(domainObject, connectionMapping, this.getHost().getTarget().getDomainObjectDescriptor(), false);
+      DomainObjectDescriptor _domainObjectDescriptor_1 = this.getHost().getTarget().getDomainObjectDescriptor();
+      boolean _notEquals_2 = (!Objects.equal(resolvedTarget, _domainObjectDescriptor_1));
       if (_notEquals_2) {
         final XNode newTarget = this.findNode(resolvedTarget);
         boolean _notEquals_3 = (!Objects.equal(newTarget, null));
         if (_notEquals_3) {
-          XConnection _host_8 = this.getHost();
-          XConnection _host_9 = this.getHost();
-          XNode _target_2 = _host_9.getTarget();
-          ReconnectMorphCommand _reconnectMorphCommand_1 = new ReconnectMorphCommand(_host_8, _target_2, newTarget, false);
+          XConnection _host_1 = this.getHost();
+          XNode _target = this.getHost().getTarget();
+          ReconnectMorphCommand _reconnectMorphCommand_1 = new ReconnectMorphCommand(_host_1, _target, newTarget, false);
           acceptor.morph(_reconnectMorphCommand_1);
         } else {
-          XConnection _host_10 = this.getHost();
-          XConnection _host_11 = this.getHost();
-          XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_11);
-          acceptor.delete(_host_10, _diagram_1);
+          acceptor.delete(this.getHost(), CoreExtensions.getDiagram(this.getHost()));
         }
       }
     }
-    XConnection _host_12 = this.getHost();
-    final ConnectionLabelMorphCommand labelMorphCommand = new ConnectionLabelMorphCommand(_host_12);
+    XConnection _host_2 = this.getHost();
+    final ConnectionLabelMorphCommand labelMorphCommand = new ConnectionLabelMorphCommand(_host_2);
     this.compareLabels(connectionMapping, domainObject, labelMorphCommand);
     boolean _isEmpty = labelMorphCommand.isEmpty();
     boolean _not = (!_isEmpty);
@@ -245,21 +196,16 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
   }
   
   protected XNode findNode(final DomainObjectDescriptor descriptor) {
-    XConnection _host = this.getHost();
-    XDiagram _diagram = CoreExtensions.getDiagram(_host);
-    Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(_diagram);
-    Iterable<XNode> _filter = Iterables.<XNode>filter(_allChildren, XNode.class);
     final Function1<XNode, Boolean> _function = (XNode it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    return IterableExtensions.<XNode>findFirst(_filter, _function);
+    return IterableExtensions.<XNode>findFirst(Iterables.<XNode>filter(CoreExtensions.getAllChildren(CoreExtensions.getDiagram(this.getHost())), XNode.class), _function);
   }
   
   @Override
   protected Iterable<? extends XLabel> getExistingLabels() {
-    XConnection _host = this.getHost();
-    return _host.getLabels();
+    return this.getHost().getLabels();
   }
   
   @Override

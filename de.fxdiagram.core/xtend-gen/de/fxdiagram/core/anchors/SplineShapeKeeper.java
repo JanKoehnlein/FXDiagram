@@ -9,9 +9,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -46,20 +44,15 @@ public class SplineShapeKeeper {
     }))))) {
       Point2D _xblockexpression = null;
       {
-        XNode _source = this.connection.getSource();
-        final Point2D newSourceCenter = this.midPoint(_source);
-        XNode _target = this.connection.getTarget();
-        final Point2D newTargetCenter = this.midPoint(_target);
+        final Point2D newSourceCenter = this.midPoint(this.connection.getSource());
+        final Point2D newTargetCenter = this.midPoint(this.connection.getTarget());
         Point2D oldFixedPoint = this.lastTargetCenter;
         Point2D newFixedPoint = newTargetCenter;
-        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-        int _size = _controlPoints.size();
+        int _size = this.getControlPoints().size();
         int _minus = (_size - 1);
         ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
         for (final Integer i : _doubleDotLessThan) {
-          ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-          XControlPoint _get = _controlPoints_1.get((i).intValue());
-          this.adjust(_get, oldFixedPoint, this.lastSourceCenter, newFixedPoint, newSourceCenter);
+          this.adjust(this.getControlPoints().get((i).intValue()), oldFixedPoint, this.lastSourceCenter, newFixedPoint, newSourceCenter);
         }
         this.lastSourceCenter = newSourceCenter;
         _xblockexpression = this.lastTargetCenter = newTargetCenter;
@@ -68,12 +61,8 @@ public class SplineShapeKeeper {
     } else {
       Point2D _xblockexpression_1 = null;
       {
-        XNode _source = this.connection.getSource();
-        Point2D _midPoint = this.midPoint(_source);
-        this.lastSourceCenter = _midPoint;
-        XNode _target = this.connection.getTarget();
-        Point2D _midPoint_1 = this.midPoint(_target);
-        _xblockexpression_1 = this.lastTargetCenter = _midPoint_1;
+        this.lastSourceCenter = this.midPoint(this.connection.getSource());
+        _xblockexpression_1 = this.lastTargetCenter = this.midPoint(this.connection.getTarget());
       }
       _xifexpression = _xblockexpression_1;
     }
@@ -118,32 +107,27 @@ public class SplineShapeKeeper {
     double _norm = Point2DExtensions.norm(newDelta);
     boolean _lessThan = (_norm < NumberExpressionExtensions.EPSILON);
     if (_lessThan) {
-      double _x_6 = newPointOnLine.getX();
-      cp.setLayoutX(_x_6);
-      double _y_6 = newPointOnLine.getY();
-      cp.setLayoutY(_y_6);
+      cp.setLayoutX(newPointOnLine.getX());
+      cp.setLayoutY(newPointOnLine.getY());
     } else {
-      double _y_7 = newDelta.getY();
-      double _x_7 = newDelta.getX();
-      double _minus_1 = (-_x_7);
-      Point2D _point2D = new Point2D(_y_7, _minus_1);
+      double _y_6 = newDelta.getY();
+      double _x_6 = newDelta.getX();
+      double _minus_1 = (-_x_6);
+      Point2D _point2D = new Point2D(_y_6, _minus_1);
       final Point2D orthoNewDelta = Point2DExtensions.operator_multiply(theta, _point2D);
-      double _x_8 = newPointOnLine.getX();
-      double _x_9 = orthoNewDelta.getX();
-      double _plus_1 = (_x_8 + _x_9);
+      double _x_7 = newPointOnLine.getX();
+      double _x_8 = orthoNewDelta.getX();
+      double _plus_1 = (_x_7 + _x_8);
       cp.setLayoutX(_plus_1);
-      double _y_8 = newPointOnLine.getY();
-      double _y_9 = orthoNewDelta.getY();
-      double _plus_2 = (_y_8 + _y_9);
+      double _y_7 = newPointOnLine.getY();
+      double _y_8 = orthoNewDelta.getY();
+      double _plus_2 = (_y_7 + _y_8);
       cp.setLayoutY(_plus_2);
     }
   }
   
   protected Point2D midPoint(final XNode node) {
-    Node _node = node.getNode();
-    Bounds _boundsInLocal = _node.getBoundsInLocal();
-    Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    return CoreExtensions.localToRootDiagram(node, _center);
+    return CoreExtensions.localToRootDiagram(node, BoundsExtensions.center(node.getNode().getBoundsInLocal()));
   }
   
   public SplineShapeKeeper(final XConnection connection) {

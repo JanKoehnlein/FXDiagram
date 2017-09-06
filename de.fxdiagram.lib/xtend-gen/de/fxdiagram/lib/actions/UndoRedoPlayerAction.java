@@ -1,10 +1,8 @@
 package de.fxdiagram.lib.actions;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AnimationQueue;
-import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
@@ -23,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -58,10 +55,8 @@ public class UndoRedoPlayerAction implements DiagramAction {
   @Override
   public void perform(final XRoot root) {
     this.root = root;
-    StackPane _createControlPanel = this.createControlPanel();
-    this.controlPanel = _createControlPanel;
-    HeadsUpDisplay _headsUpDisplay = root.getHeadsUpDisplay();
-    _headsUpDisplay.add(this.controlPanel, Pos.BOTTOM_CENTER);
+    this.controlPanel = this.createControlPanel();
+    root.getHeadsUpDisplay().add(this.controlPanel, Pos.BOTTOM_CENTER);
   }
   
   protected StackPane createControlPanel() {
@@ -100,8 +95,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
           it_2.setText("undo");
           final EventHandler<ActionEvent> _function_5 = (ActionEvent it_3) -> {
             this.stopFastMode();
-            CommandStack _commandStack = this.root.getCommandStack();
-            _commandStack.undo();
+            this.root.getCommandStack().undo();
           };
           it_2.setOnAction(_function_5);
         };
@@ -126,8 +120,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
           it_2.setText("redo");
           final EventHandler<ActionEvent> _function_7 = (ActionEvent it_3) -> {
             this.stopFastMode();
-            CommandStack _commandStack = this.root.getCommandStack();
-            _commandStack.redo();
+            this.root.getCommandStack().redo();
           };
           it_2.setOnAction(_function_7);
         };
@@ -164,8 +157,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
   }
   
   protected void show() {
-    boolean _notEquals = (!Objects.equal(this.fadeTransition, null));
-    if (_notEquals) {
+    if ((this.fadeTransition != null)) {
       this.fadeTransition.stop();
     }
     this.controlPanel.setOpacity(1);
@@ -178,13 +170,11 @@ public class UndoRedoPlayerAction implements DiagramAction {
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
         it.setNode(this.controlPanel);
-        Duration _seconds = DurationExtensions.seconds(1);
-        it.setDuration(_seconds);
+        it.setDuration(DurationExtensions.seconds(1));
         it.setFromValue(1);
         it.setToValue(0);
         final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
-          HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
-          ObservableList<Node> _children = _headsUpDisplay.getChildren();
+          ObservableList<Node> _children = this.root.getHeadsUpDisplay().getChildren();
           _children.remove(this.controlPanel);
         };
         it.setOnFinished(_function_1);
@@ -197,12 +187,8 @@ public class UndoRedoPlayerAction implements DiagramAction {
   }
   
   protected void stopFastMode() {
-    boolean _notEquals = (!Objects.equal(this.animationQueueListener, null));
-    if (_notEquals) {
-      CommandStack _commandStack = this.root.getCommandStack();
-      CommandContext _context = _commandStack.getContext();
-      AnimationQueue _animationQueue = _context.getAnimationQueue();
-      _animationQueue.removeListener(this.animationQueueListener);
+    if ((this.animationQueueListener != null)) {
+      this.root.getCommandStack().getContext().getAnimationQueue().removeListener(this.animationQueueListener);
     }
   }
   
@@ -221,10 +207,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
       }
     };
     this.animationQueueListener = _function;
-    CommandStack _commandStack = this.root.getCommandStack();
-    CommandContext _context = _commandStack.getContext();
-    AnimationQueue _animationQueue = _context.getAnimationQueue();
-    _animationQueue.addListener(this.animationQueueListener);
+    this.root.getCommandStack().getContext().getAnimationQueue().addListener(this.animationQueueListener);
     if (isUndo) {
       commandStack.undo();
     } else {

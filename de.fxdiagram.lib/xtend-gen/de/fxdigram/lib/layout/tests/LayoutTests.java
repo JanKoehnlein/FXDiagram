@@ -54,9 +54,7 @@ public class LayoutTests extends Application {
     };
     XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
     this.nestedDiagram = _doubleArrow;
-    XRoot _xRoot = new XRoot();
-    XDiagram _diagram = _xRoot.getDiagram();
-    this.diagram = _diagram;
+    this.diagram = new XRoot().getDiagram();
     Scene _scene = new Scene(this.diagram, 1024, 768);
     stage.setScene(_scene);
     final StackPane rectangleBorderPane = new StackPane();
@@ -73,18 +71,16 @@ public class LayoutTests extends Application {
     ObjectExtensions.<XDiagram>operator_doubleArrow(
       this.diagram, _function_1);
     stage.show();
-    ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();
     final Consumer<XNode> _function_2 = (XNode it) -> {
       this.printLayoutGeometry(it);
     };
-    _nodes.forEach(_function_2);
+    this.nestedDiagram.getNodes().forEach(_function_2);
     this.printLayoutGeometry(this.nestedDiagram);
     this.printLayoutGeometry(rectangleBorderPane);
-    ObservableList<XNode> _nodes_1 = this.nestedDiagram.getNodes();
     final Consumer<XNode> _function_3 = (XNode it) -> {
       this.printSizes(it);
     };
-    _nodes_1.forEach(_function_3);
+    this.nestedDiagram.getNodes().forEach(_function_3);
     this.printSizes(this.nestedDiagram);
     this.printSizes(rectangleBorderPane);
     this.nestedDiagram.getNodeLayer();

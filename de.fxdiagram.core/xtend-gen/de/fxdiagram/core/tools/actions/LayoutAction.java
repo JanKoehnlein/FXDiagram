@@ -1,9 +1,7 @@
 package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
@@ -38,11 +36,7 @@ public class LayoutAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    Layouter _layouter = new Layouter();
-    XDiagram _diagram = root.getDiagram();
-    Duration _millis = Duration.millis(1000);
-    final LazyCommand layoutCommand = _layouter.createLayoutCommand(_diagram, _millis);
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.execute(layoutCommand);
+    final LazyCommand layoutCommand = new Layouter().createLayoutCommand(root.getDiagram(), Duration.millis(1000));
+    root.getCommandStack().execute(layoutCommand);
   }
 }

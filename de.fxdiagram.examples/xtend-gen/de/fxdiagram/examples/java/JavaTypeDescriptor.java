@@ -17,8 +17,7 @@ public class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
   @Override
   public Class<?> resolveDomainObject() {
     try {
-      String _id = this.getId();
-      return Class.forName(_id);
+      return Class.forName(this.getId());
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

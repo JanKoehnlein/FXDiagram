@@ -4,11 +4,9 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AnimationCommand;
-import de.fxdiagram.core.command.AnimationQueue;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.LinkedList;
 import javafx.animation.Animation;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -36,15 +34,12 @@ public class CommandStack implements XActivatable {
   
   @Override
   public void activate() {
-    XRoot _root = this.context.getRoot();
-    BooleanProperty _needsSaveProperty = _root.needsSaveProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
       if (((n).booleanValue() == false)) {
-        AnimationCommand _peek = this.undoStack.peek();
-        this.lastBeforeSave = _peek;
+        this.lastBeforeSave = this.undoStack.peek();
       }
     };
-    _needsSaveProperty.addListener(_function);
+    this.context.getRoot().needsSaveProperty().addListener(_function);
   }
   
   public void clear() {
@@ -66,11 +61,10 @@ public class CommandStack implements XActivatable {
     boolean _canUndo = this.canUndo();
     if (_canUndo) {
       final AnimationCommand command = this.undoStack.pop();
-      AnimationQueue _animationQueue = this.context.getAnimationQueue();
       final Function0<Animation> _function = () -> {
         return command.getUndoAnimation(this.context);
       };
-      _animationQueue.enqueue(_function);
+      this.context.getAnimationQueue().enqueue(_function);
       this.redoStack.push(command);
       XRoot _root = this.context.getRoot();
       AnimationCommand _peek = this.undoStack.peek();
@@ -83,11 +77,10 @@ public class CommandStack implements XActivatable {
     boolean _canRedo = this.canRedo();
     if (_canRedo) {
       final AnimationCommand command = this.redoStack.pop();
-      AnimationQueue _animationQueue = this.context.getAnimationQueue();
       final Function0<Animation> _function = () -> {
         return command.getRedoAnimation(this.context);
       };
-      _animationQueue.enqueue(_function);
+      this.context.getAnimationQueue().enqueue(_function);
       this.undoStack.push(command);
       XRoot _root = this.context.getRoot();
       AnimationCommand _peek = this.undoStack.peek();
@@ -97,11 +90,10 @@ public class CommandStack implements XActivatable {
   }
   
   public void execute(final AnimationCommand command) {
-    AnimationQueue _animationQueue = this.context.getAnimationQueue();
     final Function0<Animation> _function = () -> {
       return command.getExecuteAnimation(this.context);
     };
-    _animationQueue.enqueue(_function);
+    this.context.getAnimationQueue().enqueue(_function);
     this.undoStack.push(command);
     XRoot _root = this.context.getRoot();
     AnimationCommand _peek = this.undoStack.peek();

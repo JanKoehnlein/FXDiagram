@@ -1,8 +1,6 @@
 package de.fxdiagram.lib.chooser;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.lib.chooser.AbstractBaseChooser;
-import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
@@ -33,17 +31,14 @@ public class ChooserTransition extends Transition {
   }
   
   public void setTargetPositionDelta(final int targetPositionDelta) {
-    double _currentPosition = this.tool.getCurrentPosition();
-    this.startPosition = _currentPosition;
+    this.startPosition = this.tool.getCurrentPosition();
     this.endPosition = ((int) (this.startPosition + targetPositionDelta));
     while ((this.endPosition < 0)) {
       {
-        ArrayList<XNode> _nodes = this.tool.getNodes();
-        int _size = _nodes.size();
+        int _size = this.tool.getNodes().size();
         double _plus = (this.startPosition + _size);
         this.startPosition = _plus;
-        ArrayList<XNode> _nodes_1 = this.tool.getNodes();
-        int _size_1 = _nodes_1.size();
+        int _size_1 = this.tool.getNodes().size();
         double _plus_1 = (this.endPosition + _size_1);
         this.endPosition = _plus_1;
       }
@@ -53,27 +48,22 @@ public class ChooserTransition extends Transition {
   }
   
   public void setTargetPosition(final double targetPosition) {
-    ArrayList<XNode> _nodes = this.tool.getNodes();
-    int _size = _nodes.size();
+    int _size = this.tool.getNodes().size();
     boolean _lessThan = (targetPosition < _size);
     if (_lessThan) {
-      double _currentPosition = this.tool.getCurrentPosition();
-      this.startPosition = _currentPosition;
+      this.startPosition = this.tool.getCurrentPosition();
       this.endPosition = ((int) targetPosition);
       double _abs = Math.abs((targetPosition - this.startPosition));
-      ArrayList<XNode> _nodes_1 = this.tool.getNodes();
-      int _size_1 = _nodes_1.size();
+      int _size_1 = this.tool.getNodes().size();
       int _divide = (_size_1 / 2);
       boolean _greaterThan = (_abs > _divide);
       if (_greaterThan) {
         if ((targetPosition > this.startPosition)) {
-          ArrayList<XNode> _nodes_2 = this.tool.getNodes();
-          int _size_2 = _nodes_2.size();
+          int _size_2 = this.tool.getNodes().size();
           double _plus = (this.startPosition + _size_2);
           this.startPosition = _plus;
         } else {
-          ArrayList<XNode> _nodes_3 = this.tool.getNodes();
-          int _size_3 = _nodes_3.size();
+          int _size_3 = this.tool.getNodes().size();
           double _plus_1 = (this.endPosition + _size_3);
           this.endPosition = _plus_1;
         }
@@ -88,20 +78,16 @@ public class ChooserTransition extends Transition {
   }
   
   protected void setDuration(final double max) {
-    ArrayList<XNode> _nodes = this.tool.getNodes();
-    int _size = _nodes.size();
+    int _size = this.tool.getNodes().size();
     double _modulo = ((this.endPosition - this.startPosition) % _size);
     double _abs = Math.abs(_modulo);
     double _multiply = (_abs * 200);
     final double duration = Math.min(max, _multiply);
-    Duration _millis = Duration.millis(duration);
-    this.setCycleDuration(_millis);
+    this.setCycleDuration(Duration.millis(duration));
   }
   
   @Override
   protected void interpolate(final double alpha) {
-    Interpolator _interpolator = this.getInterpolator();
-    double _interpolate = _interpolator.interpolate(this.startPosition, this.endPosition, alpha);
-    this.tool.setCurrentPosition(_interpolate);
+    this.tool.setCurrentPosition(this.getInterpolator().interpolate(this.startPosition, this.endPosition, alpha));
   }
 }

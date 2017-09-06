@@ -21,9 +21,7 @@ public class ReconcileDiagramHandler extends AbstractHandler {
         final XRoot root = ((FXDiagramView)view).getCurrentRoot();
         boolean _notEquals = (!Objects.equal(root, null));
         if (_notEquals) {
-          ReconcileAction _reconcileAction = new ReconcileAction();
-          XRoot _currentRoot = ((FXDiagramView)view).getCurrentRoot();
-          _reconcileAction.perform(_currentRoot);
+          new ReconcileAction().perform(((FXDiagramView)view).getCurrentRoot());
         }
       }
       _xblockexpression = null;

@@ -13,9 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -35,8 +33,7 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
       ObservableList<Slide> _slides = it.getSlides();
       Slide _createSlide = DemoCampSlideFactory.createSlide("Conclusion");
       final Procedure1<Slide> _function_1 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         Text _createText = DemoCampSlideFactory.createText("Conclusion", 100);
         _children.add(_createText);
       };
@@ -87,8 +84,7 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
       ObservableList<Slide> _slides_5 = it.getSlides();
       Slide _createSlide_1 = DemoCampSlideFactory.createSlide("Credits");
       final Procedure1<Slide> _function_2 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_3 = (VBox it_2) -> {
           it_2.setAlignment(Pos.CENTER);
@@ -138,9 +134,7 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
       ObservableList<Node> _children = it.getChildren();
       Text _createText = DemoCampSlideFactory.createText(jungleText, 40);
       final Procedure1<Text> _function_1 = (Text it_1) -> {
-        Color _textColor = DemoCampSlideFactory.getTextColor();
-        Color _darkTextColor = DemoCampSlideFactory.getDarkTextColor();
-        Animations.flicker(it_1, _textColor, _darkTextColor);
+        Animations.flicker(it_1, DemoCampSlideFactory.getTextColor(), DemoCampSlideFactory.getDarkTextColor());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_1);
       _children.add(_doubleArrow);

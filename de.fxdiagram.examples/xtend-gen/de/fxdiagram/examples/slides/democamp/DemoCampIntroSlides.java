@@ -17,16 +17,13 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -97,8 +94,7 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
                 ObservableList<Node> _children_3 = it_4.getChildren();
                 Text _createText = DemoCampSlideFactory.createText("GMF", 50);
                 final Procedure1<Text> _function_7 = (Text it_5) -> {
-                  Duration _seconds = DurationExtensions.seconds(10);
-                  Animations.orbit(it_5, 110, 100, _seconds, 0);
+                  Animations.orbit(it_5, 110, 100, DurationExtensions.seconds(10), 0);
                 };
                 Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_7);
                 _children_3.add(_doubleArrow_1);
@@ -117,8 +113,7 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
               ObservableList<Node> _children_3 = it_3.getChildren();
               Text _createText = DemoCampSlideFactory.createText("Graphiti", 50);
               final Procedure1<Text> _function_7 = (Text it_4) -> {
-                Duration _seconds = DurationExtensions.seconds(30);
-                Animations.orbit(it_4, 400, 250, _seconds, 0);
+                Animations.orbit(it_4, 400, 250, DurationExtensions.seconds(30), 0);
               };
               Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_7);
               _children_3.add(_doubleArrow_2);
@@ -134,8 +129,7 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
               ObservableList<Node> _children_4 = it_3.getChildren();
               Text _createText = DemoCampSlideFactory.createText("Sirius", 50);
               final Procedure1<Text> _function_8 = (Text it_4) -> {
-                Duration _seconds = DurationExtensions.seconds(20);
-                Animations.orbit(it_4, 300, 200, _seconds, 0);
+                Animations.orbit(it_4, 300, 200, DurationExtensions.seconds(20), 0);
               };
               Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_8);
               _children_4.add(_doubleArrow_3);
@@ -203,13 +197,10 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
       ObservableList<Slide> _slides_5 = it.getSlides();
       Slide _createSlide_2 = DemoCampSlideFactory.createSlide("JavaFX");
       final Procedure1<Slide> _function_4 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_5 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/javafx.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/javafx.png"));
           it_2.setFitWidth(587);
           it_2.setPreserveRatio(true);
         };
@@ -221,13 +212,10 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
       ObservableList<Slide> _slides_6 = it.getSlides();
       Slide _createSlide_3 = DemoCampSlideFactory.createSlide("Xtend");
       final Procedure1<Slide> _function_5 = (Slide it_1) -> {
-        StackPane _stackPane = it_1.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
+        ObservableList<Node> _children = it_1.getStackPane().getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function_6 = (ImageView it_2) -> {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(this, "images/xtend.png");
-          it_2.setImage(_image);
+          it_2.setImage(ImageCache.get().getImage(this, "images/xtend.png"));
         };
         ImageView _doubleArrow_4 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_6);
         _children.add(_doubleArrow_4);
@@ -249,8 +237,7 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
         it_1.setLayoutY(y);
         it_1.setTextAlignment(TextAlignment.LEFT);
         it_1.setTextOrigin(VPos.TOP);
-        Color _darkTextColor = DemoCampSlideFactory.getDarkTextColor();
-        it_1.setFill(_darkTextColor);
+        it_1.setFill(DemoCampSlideFactory.getDarkTextColor());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_1);
       _children.add(_doubleArrow);

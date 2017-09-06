@@ -14,12 +14,8 @@ public class Point2DExtensions {
   
   @Pure
   public static Point2D linear(final Point2D from, final Point2D to, final double lambda) {
-    double _x = from.getX();
-    double _x_1 = to.getX();
-    double _linear = Point2DExtensions.linear(_x, _x_1, lambda);
-    double _y = from.getY();
-    double _y_1 = to.getY();
-    double _linear_1 = Point2DExtensions.linear(_y, _y_1, lambda);
+    double _linear = Point2DExtensions.linear(from.getX(), to.getX(), lambda);
+    double _linear_1 = Point2DExtensions.linear(from.getY(), to.getY(), lambda);
     return new Point2D(_linear, _linear_1);
   }
   
@@ -118,13 +114,7 @@ public class Point2DExtensions {
   
   @Pure
   public static boolean isClockwise(final Point2D one, final Point2D two, final Point2D three) {
-    double _x = one.getX();
-    double _y = one.getY();
-    double _x_1 = two.getX();
-    double _y_1 = two.getY();
-    double _x_2 = three.getX();
-    double _y_2 = three.getY();
-    return Point2DExtensions.isClockwise(_x, _y, _x_1, _y_1, _x_2, _y_2);
+    return Point2DExtensions.isClockwise(one.getX(), one.getY(), two.getX(), two.getY(), three.getX(), three.getY());
   }
   
   @Pure
@@ -138,13 +128,7 @@ public class Point2DExtensions {
   
   @Pure
   public static boolean areOnSameLine(final Point2D x0, final Point2D x1, final Point2D x2) {
-    double _x = x0.getX();
-    double _y = x0.getY();
-    double _x_1 = x1.getX();
-    double _y_1 = x1.getY();
-    double _x_2 = x2.getX();
-    double _y_2 = x2.getY();
-    return Point2DExtensions.areOnSameLine(_x, _y, _x_1, _y_1, _x_2, _y_2);
+    return Point2DExtensions.areOnSameLine(x0.getX(), x0.getY(), x1.getX(), x1.getY(), x2.getX(), x2.getY());
   }
   
   @Pure

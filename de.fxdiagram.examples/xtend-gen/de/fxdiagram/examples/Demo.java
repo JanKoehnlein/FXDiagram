@@ -57,7 +57,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.geometry.Bounds;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -91,8 +90,7 @@ public class Demo extends Application {
   @Override
   public void start(final Stage it) {
     it.setTitle("FXDiagram Demo");
-    Scene _createScene = this.createScene();
-    it.setScene(_createScene);
+    it.setScene(this.createScene());
     it.show();
   }
   
@@ -113,9 +111,7 @@ public class Demo extends Application {
       this.root.setRootDiagram(diagram);
       ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
       final Procedure1<ClassLoaderProvider> _function = (ClassLoaderProvider it) -> {
-        Class<? extends Demo> _class = this.getClass();
-        ClassLoader _classLoader = _class.getClassLoader();
-        it.setRootClassLoader(_classLoader);
+        it.setRootClassLoader(this.getClass().getClassLoader());
       };
       ClassLoaderProvider _doubleArrow = ObjectExtensions.<ClassLoaderProvider>operator_doubleArrow(_classLoaderProvider, _function);
       this.classLoaderProvider = _doubleArrow;
@@ -187,16 +183,13 @@ public class Demo extends Application {
         OpenableDiagramNode _doubleArrow_2 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_3);
         _nodes_2.add(_doubleArrow_2);
         ObservableList<XNode> _nodes_3 = it.getNodes();
-        NeonSignNode _newNeonSignNode = this.newNeonSignNode();
-        OpenableDiagramNode _openableDiagram = this.openableDiagram("Xtend", _newNeonSignNode);
+        OpenableDiagramNode _openableDiagram = this.openableDiagram("Xtend", this.newNeonSignNode());
         _nodes_3.add(_openableDiagram);
         ObservableList<XNode> _nodes_4 = it.getNodes();
-        JavaTypeNode _newJavaTypeNode = this.newJavaTypeNode();
-        OpenableDiagramNode _openableDiagram_1 = this.openableDiagram("JavaFX Explorer", _newJavaTypeNode);
+        OpenableDiagramNode _openableDiagram_1 = this.openableDiagram("JavaFX Explorer", this.newJavaTypeNode());
         _nodes_4.add(_openableDiagram_1);
         ObservableList<XNode> _nodes_5 = it.getNodes();
-        EClassNode _newEClassNode = this.newEClassNode();
-        OpenableDiagramNode _openableDiagram_2 = this.openableDiagram("Ecore Explorer", _newEClassNode);
+        OpenableDiagramNode _openableDiagram_2 = this.openableDiagram("Ecore Explorer", this.newEClassNode());
         _nodes_5.add(_openableDiagram_2);
         ObservableList<XNode> _nodes_6 = it.getNodes();
         SimpleNode _simpleNode = new SimpleNode("Xtext Views");
@@ -216,13 +209,11 @@ public class Demo extends Application {
       int _plus_1 = (_size_1 + 2);
       final double deltaY = (_height / _plus_1);
       final Procedure2<XNode, Integer> _function_2 = (XNode node, Integer i) -> {
-        Bounds _layoutBounds = node.getLayoutBounds();
-        double _width_1 = _layoutBounds.getWidth();
+        double _width_1 = node.getLayoutBounds().getWidth();
         double _divide = (_width_1 / 2);
         double _minus = (((i).intValue() * deltaX) - _divide);
         node.setLayoutX(_minus);
-        Bounds _layoutBounds_1 = node.getLayoutBounds();
-        double _height_1 = _layoutBounds_1.getHeight();
+        double _height_1 = node.getLayoutBounds().getHeight();
         double _divide_1 = (_height_1 / 2);
         double _minus_1 = (((i).intValue() * deltaY) - _divide_1);
         node.setLayoutY(_minus_1);
@@ -439,7 +430,6 @@ public class Demo extends Application {
   }
   
   protected ResourceDescriptor newResource(final String name, final String relativePath) {
-    Class<? extends Demo> _class = this.getClass();
-    return this.classLoaderProvider.createResourceDescriptor(name, _class, relativePath);
+    return this.classLoaderProvider.createResourceDescriptor(name, this.getClass(), relativePath);
   }
 }

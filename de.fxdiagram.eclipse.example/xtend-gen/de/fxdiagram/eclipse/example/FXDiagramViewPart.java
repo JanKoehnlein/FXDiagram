@@ -20,8 +20,7 @@ public class FXDiagramViewPart extends ViewPart {
     this.canvas = _fXCanvas;
     SwtToFXGestureConverter _swtToFXGestureConverter = new SwtToFXGestureConverter(this.canvas);
     this.gestureConverter = _swtToFXGestureConverter;
-    Scene _createFxScene = this.createFxScene();
-    this.canvas.setScene(_createFxScene);
+    this.canvas.setScene(this.createFxScene());
   }
   
   @Override
@@ -31,8 +30,7 @@ public class FXDiagramViewPart extends ViewPart {
   }
   
   protected Scene createFxScene() {
-    Demo _demo = new Demo();
-    return _demo.createScene();
+    return new Demo().createScene();
   }
   
   @Override

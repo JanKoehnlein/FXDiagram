@@ -9,7 +9,6 @@ import de.fxdiagram.core.extensions.TransitionExtensions;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
-import javafx.util.Duration;
 
 @SuppressWarnings("all")
 public class ConnectionRelayoutCommand extends AbstractAnimationCommand {
@@ -31,21 +30,18 @@ public class ConnectionRelayoutCommand extends AbstractAnimationCommand {
     {
       ConnectionMemento _connectionMemento = new ConnectionMemento(this.connection);
       this.from = _connectionMemento;
-      Duration _executeDuration = this.getExecuteDuration(context);
-      _xblockexpression = TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, _executeDuration);
+      _xblockexpression = TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, this.getExecuteDuration(context));
     }
     return _xblockexpression;
   }
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return TransitionExtensions.createMorphTransition(this.connection, this.to, this.from, _defaultUndoDuration);
+    return TransitionExtensions.createMorphTransition(this.connection, this.to, this.from, context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, _defaultUndoDuration);
+    return TransitionExtensions.createMorphTransition(this.connection, this.from, this.to, context.getDefaultUndoDuration());
   }
 }

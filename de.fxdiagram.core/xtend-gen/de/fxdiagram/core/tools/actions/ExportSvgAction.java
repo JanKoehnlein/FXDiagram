@@ -3,18 +3,15 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.io.Files;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.File;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
@@ -41,15 +38,10 @@ public class ExportSvgAction implements DiagramAction {
       ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
       FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.svg");
       _extensionFilters.add(_extensionFilter);
-      Scene _scene = root.getScene();
-      Window _window = _scene.getWindow();
-      final File file = fileChooser.showSaveDialog(_window);
+      final File file = fileChooser.showSaveDialog(root.getScene().getWindow());
       boolean _notEquals = (!Objects.equal(file, null));
       if (_notEquals) {
-        SvgExporter _svgExporter = new SvgExporter();
-        XDiagram _diagram = root.getDiagram();
-        File _parentFile = file.getParentFile();
-        final CharSequence svgCode = _svgExporter.toSvg(_diagram, _parentFile);
+        final CharSequence svgCode = new SvgExporter().toSvg(root.getDiagram(), file.getParentFile());
         Files.write(svgCode, file, Charsets.UTF_8);
       }
     } catch (Throwable _e) {

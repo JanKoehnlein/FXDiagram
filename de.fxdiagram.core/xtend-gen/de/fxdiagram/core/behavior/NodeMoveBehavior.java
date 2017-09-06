@@ -7,7 +7,6 @@ import de.fxdiagram.core.anchors.ConnectionMemento;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
@@ -28,17 +27,13 @@ public class NodeMoveBehavior extends MoveBehavior<XNode> {
   
   @Override
   public void startDrag(final double screenX, final double screenY) {
-    ArrayList<ConnectionMemento> _newArrayList = CollectionLiterals.<ConnectionMemento>newArrayList();
-    this.connectionMementi = _newArrayList;
-    XNode _host = this.getHost();
-    ObservableList<XConnection> _outgoingConnections = _host.getOutgoingConnections();
-    XNode _host_1 = this.getHost();
-    ObservableList<XConnection> _incomingConnections = _host_1.getIncomingConnections();
-    Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+    this.connectionMementi = CollectionLiterals.<ConnectionMemento>newArrayList();
+    ObservableList<XConnection> _outgoingConnections = this.getHost().getOutgoingConnections();
+    ObservableList<XConnection> _incomingConnections = this.getHost().getIncomingConnections();
     final Function1<XConnection, ConnectionMemento> _function = (XConnection it) -> {
       return new ConnectionMemento(it);
     };
-    Iterable<ConnectionMemento> _map = IterableExtensions.<XConnection, ConnectionMemento>map(_plus, _function);
+    Iterable<ConnectionMemento> _map = IterableExtensions.<XConnection, ConnectionMemento>map(Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections), _function);
     Iterables.<ConnectionMemento>addAll(this.connectionMementi, _map);
     super.startDrag(screenX, screenY);
   }
@@ -48,9 +43,7 @@ public class NodeMoveBehavior extends MoveBehavior<XNode> {
     final Function1<ConnectionMemento, ConnectionMemento.MorphCommand> _function = (ConnectionMemento it) -> {
       return it.createChangeCommand();
     };
-    List<ConnectionMemento.MorphCommand> _map = ListExtensions.<ConnectionMemento, ConnectionMemento.MorphCommand>map(this.connectionMementi, _function);
-    Iterable<ConnectionMemento.MorphCommand> _filterNull = IterableExtensions.<ConnectionMemento.MorphCommand>filterNull(_map);
-    final List<ConnectionMemento.MorphCommand> connectionCommands = IterableExtensions.<ConnectionMemento.MorphCommand>toList(_filterNull);
+    final List<ConnectionMemento.MorphCommand> connectionCommands = IterableExtensions.<ConnectionMemento.MorphCommand>toList(IterableExtensions.<ConnectionMemento.MorphCommand>filterNull(ListExtensions.<ConnectionMemento, ConnectionMemento.MorphCommand>map(this.connectionMementi, _function)));
     final AnimationCommand moveCommand = super.createMoveCommand();
     boolean _isEmpty = connectionCommands.isEmpty();
     if (_isEmpty) {

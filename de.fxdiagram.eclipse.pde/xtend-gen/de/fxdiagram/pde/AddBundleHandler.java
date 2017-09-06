@@ -6,14 +6,12 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.lib.chooser.NodeChooser;
-import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import de.fxdiagram.pde.HandlerHelper;
-import java.util.List;
 import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -36,27 +34,21 @@ public class AddBundleHandler extends AbstractHandler {
     if (_equals) {
       final IViewPart view = this.getDiagramView();
       if ((view instanceof FXDiagramView)) {
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
+        XDiagramConfig _configByID = XDiagramConfig.Registry.getInstance().getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
         final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
         final XRoot root = ((FXDiagramView)view).getCurrentRoot();
+        final Point2D center = root.getDiagram().sceneToLocal(it.getSceneX(), it.getSceneY());
         XDiagram _diagram = root.getDiagram();
-        double _sceneX = it.getSceneX();
-        double _sceneY = it.getSceneY();
-        final Point2D center = _diagram.sceneToLocal(_sceneX, _sceneY);
-        XDiagram _diagram_1 = root.getDiagram();
         CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
-        final NodeChooser nodeChooser = new NodeChooser(_diagram_1, center, _coverFlowChoice, false);
+        final NodeChooser nodeChooser = new NodeChooser(_diagram, center, _coverFlowChoice, false);
         final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
-        XDiagram _diagram_2 = root.getDiagram();
-        final InterpreterContext context = new InterpreterContext(_diagram_2);
-        List<BundleDescription> _allBundles = BundleUtil.allBundles();
+        XDiagram _diagram_1 = root.getDiagram();
+        final InterpreterContext context = new InterpreterContext(_diagram_1);
         final Consumer<BundleDescription> _function = (BundleDescription it_1) -> {
-          NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-          final XNode choice = interpreter.<BundleDescription>createNode(it_1, _pluginNode, context);
+          final XNode choice = interpreter.<BundleDescription>createNode(it_1, config.getPluginNode(), context);
           nodeChooser.addChoice(choice);
         };
-        _allBundles.forEach(_function);
+        BundleUtil.allBundles().forEach(_function);
         root.setCurrentTool(nodeChooser);
       }
     }

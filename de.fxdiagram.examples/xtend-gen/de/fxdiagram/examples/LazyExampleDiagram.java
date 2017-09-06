@@ -30,46 +30,41 @@ public class LazyExampleDiagram extends XDiagram {
   
   @Override
   public void doActivate() {
-    ObservableList<XNode> _nodes = this.getNodes();
-    boolean _isEmpty = _nodes.isEmpty();
+    boolean _isEmpty = this.getNodes().isEmpty();
     if (_isEmpty) {
       final Procedure1<XDiagram> _function = (XDiagram it) -> {
-        String _nameSuffix = this.getNameSuffix();
-        final SimpleNode simple = this.newSimpleNode(_nameSuffix);
-        String _nameSuffix_1 = this.getNameSuffix();
-        final OpenableDiagramNode openable = this.newOpenableDiagramNode(_nameSuffix_1);
-        String _nameSuffix_2 = this.getNameSuffix();
-        final LevelOfDetailDiagramNode levelOfDetail = this.newEmbeddedDiagramNode(_nameSuffix_2);
-        String _nameSuffix_3 = this.getNameSuffix();
-        final SimpleNode other = this.newSimpleNode(_nameSuffix_3);
-        ObservableList<XNode> _nodes_1 = it.getNodes();
+        final SimpleNode simple = this.newSimpleNode(this.getNameSuffix());
+        final OpenableDiagramNode openable = this.newOpenableDiagramNode(this.getNameSuffix());
+        final LevelOfDetailDiagramNode levelOfDetail = this.newEmbeddedDiagramNode(this.getNameSuffix());
+        final SimpleNode other = this.newSimpleNode(this.getNameSuffix());
+        ObservableList<XNode> _nodes = it.getNodes();
         final Procedure1<SimpleNode> _function_1 = (SimpleNode it_1) -> {
           it_1.setLayoutX((-150));
           it_1.setLayoutY((-150));
         };
         SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(simple, _function_1);
-        _nodes_1.add(_doubleArrow);
-        ObservableList<XNode> _nodes_2 = it.getNodes();
+        _nodes.add(_doubleArrow);
+        ObservableList<XNode> _nodes_1 = it.getNodes();
         final Procedure1<OpenableDiagramNode> _function_2 = (OpenableDiagramNode it_1) -> {
           it_1.setLayoutX(150);
           it_1.setLayoutY((-150));
         };
         OpenableDiagramNode _doubleArrow_1 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(openable, _function_2);
-        _nodes_2.add(_doubleArrow_1);
-        ObservableList<XNode> _nodes_3 = it.getNodes();
+        _nodes_1.add(_doubleArrow_1);
+        ObservableList<XNode> _nodes_2 = it.getNodes();
         final Procedure1<SimpleNode> _function_3 = (SimpleNode it_1) -> {
           it_1.setLayoutX((-150));
           it_1.setLayoutY(150);
         };
         SimpleNode _doubleArrow_2 = ObjectExtensions.<SimpleNode>operator_doubleArrow(other, _function_3);
-        _nodes_3.add(_doubleArrow_2);
-        ObservableList<XNode> _nodes_4 = it.getNodes();
+        _nodes_2.add(_doubleArrow_2);
+        ObservableList<XNode> _nodes_3 = it.getNodes();
         final Procedure1<LevelOfDetailDiagramNode> _function_4 = (LevelOfDetailDiagramNode it_1) -> {
           it_1.setLayoutX(150);
           it_1.setLayoutY(150);
         };
         LevelOfDetailDiagramNode _doubleArrow_3 = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(levelOfDetail, _function_4);
-        _nodes_4.add(_doubleArrow_3);
+        _nodes_3.add(_doubleArrow_3);
         ObservableList<XConnection> _connections = it.getConnections();
         XConnection _xConnection = new XConnection(simple, openable);
         final Procedure1<XConnection> _function_5 = (XConnection it_1) -> {
@@ -124,14 +119,12 @@ public class LazyExampleDiagram extends XDiagram {
       };
       this.setContentsInitializer(_function);
     } else {
-      ObservableList<XNode> _nodes_1 = this.getNodes();
       final Consumer<XNode> _function_1 = (XNode it) -> {
         if (((!this.getNameSuffix().isEmpty()) || (!(it.getNode() instanceof SimpleNode)))) {
-          String _nameSuffix = this.getNameSuffix();
-          this.addRapidButtons(it, _nameSuffix);
+          this.addRapidButtons(it, this.getNameSuffix());
         }
       };
-      _nodes_1.forEach(_function_1);
+      this.getNodes().forEach(_function_1);
     }
     super.doActivate();
   }
@@ -142,22 +135,16 @@ public class LazyExampleDiagram extends XDiagram {
       final Procedure1<ConnectedNodeChooser> _function_1 = (ConnectedNodeChooser it_1) -> {
         IntegerRange _upTo = new IntegerRange(5, 20);
         for (final Integer i : _upTo) {
-          SimpleNode _newSimpleNode = this.newSimpleNode((" " + i));
-          it_1.addChoice(_newSimpleNode);
+          it_1.addChoice(this.newSimpleNode((" " + i)));
         }
-        SimpleNode _newSimpleNode_1 = this.newSimpleNode(nameSuffix);
-        it_1.addChoice(_newSimpleNode_1);
-        OpenableDiagramNode _newOpenableDiagramNode = this.newOpenableDiagramNode(nameSuffix);
-        it_1.addChoice(_newOpenableDiagramNode);
-        LevelOfDetailDiagramNode _newEmbeddedDiagramNode = this.newEmbeddedDiagramNode(nameSuffix);
-        it_1.addChoice(_newEmbeddedDiagramNode);
+        it_1.addChoice(this.newSimpleNode(nameSuffix));
+        it_1.addChoice(this.newOpenableDiagramNode(nameSuffix));
+        it_1.addChoice(this.newEmbeddedDiagramNode(nameSuffix));
         IntegerRange _upTo_1 = new IntegerRange(1, 4);
         for (final Integer i_1 : _upTo_1) {
-          SimpleNode _newSimpleNode_2 = this.newSimpleNode((" " + i_1));
-          it_1.addChoice(_newSimpleNode_2);
+          it_1.addChoice(this.newSimpleNode((" " + i_1)));
         }
-        SimpleNode _newSimpleNode_3 = this.newSimpleNode(nameSuffix);
-        it_1.addChoice(_newSimpleNode_3);
+        it_1.addChoice(this.newSimpleNode(nameSuffix));
       };
       it.setChoiceInitializer(_function_1);
     };

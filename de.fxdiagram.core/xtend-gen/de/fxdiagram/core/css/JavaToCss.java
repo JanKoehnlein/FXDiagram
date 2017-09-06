@@ -19,15 +19,15 @@ public class JavaToCss {
       _builder.append("rgb(");
       double _red = ((Color)paint).getRed();
       double _multiply = (255 * _red);
-      _builder.append(((int) _multiply), "");
+      _builder.append(((int) _multiply));
       _builder.append(", ");
       double _green = ((Color)paint).getGreen();
       double _multiply_1 = (255 * _green);
-      _builder.append(((int) _multiply_1), "");
+      _builder.append(((int) _multiply_1));
       _builder.append(", ");
       double _blue = ((Color)paint).getBlue();
       double _multiply_2 = (255 * _blue);
-      _builder.append(((int) _multiply_2), "");
+      _builder.append(((int) _multiply_2));
       _builder.append(")");
       _switchResult = _builder;
     }
@@ -69,8 +69,7 @@ public class JavaToCss {
               _builder.appendImmediate(", ", "\t");
             }
             _builder.append("\t");
-            Color _color = stop.getColor();
-            CharSequence _css = JavaToCss.toCss(_color);
+            CharSequence _css = JavaToCss.toCss(stop.getColor());
             _builder.append(_css, "\t");
             _builder.append(" ");
             double _offset = stop.getOffset();
@@ -94,16 +93,16 @@ public class JavaToCss {
   public static CharSequence toCss(final Insets it) {
     StringConcatenation _builder = new StringConcatenation();
     double _top = it.getTop();
-    _builder.append(_top, "");
+    _builder.append(_top);
     _builder.append(" ");
     double _right = it.getRight();
-    _builder.append(_right, "");
+    _builder.append(_right);
     _builder.append(" ");
     double _bottom = it.getBottom();
-    _builder.append(_bottom, "");
+    _builder.append(_bottom);
     _builder.append(" ");
     double _left = it.getLeft();
-    _builder.append(_left, "");
+    _builder.append(_left);
     return _builder;
   }
 }

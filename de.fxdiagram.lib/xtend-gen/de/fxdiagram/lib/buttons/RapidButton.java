@@ -48,8 +48,7 @@ public class RapidButton extends Parent implements XButton {
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          RapidButton.LOG.severe(_message);
+          RapidButton.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);

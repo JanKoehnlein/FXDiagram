@@ -7,10 +7,8 @@ import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import java.util.Collections;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
@@ -41,32 +39,20 @@ public class TriangleArrowHead extends ArrowHead {
       Paint _fill = this.getFill();
       boolean _equals = Objects.equal(_fill, null);
       if (_equals) {
-        XConnection _connection = this.getConnection();
-        ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
-        this.fillProperty.bind(_strokeProperty);
+        this.fillProperty.bind(this.getConnection().strokeProperty());
       }
       Polygon _polygon = new Polygon();
       final Procedure1<Polygon> _function = (Polygon it) -> {
-        ObservableList<Double> _points = it.getPoints();
         double _height = this.getHeight();
         double _multiply = ((-0.5) * _height);
         double _width = this.getWidth();
         double _height_1 = this.getHeight();
         double _multiply_1 = (0.5 * _height_1);
-        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
-        ObjectProperty<Paint> _fillProperty = it.fillProperty();
-        _fillProperty.bind(this.fillProperty);
-        ObjectProperty<Paint> _strokeProperty_1 = it.strokeProperty();
-        ObjectProperty<Paint> _strokeProperty_2 = this.strokeProperty();
-        _strokeProperty_1.bind(_strokeProperty_2);
-        DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-        XConnection _connection_1 = this.getConnection();
-        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
-        _strokeWidthProperty.bind(_strokeWidthProperty_1);
-        DoubleProperty _opacityProperty = it.opacityProperty();
-        XConnection _connection_2 = this.getConnection();
-        DoubleProperty _opacityProperty_1 = _connection_2.opacityProperty();
-        _opacityProperty.bind(_opacityProperty_1);
+        it.getPoints().setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+        it.fillProperty().bind(this.fillProperty);
+        it.strokeProperty().bind(this.strokeProperty());
+        it.strokeWidthProperty().bind(this.getConnection().strokeWidthProperty());
+        it.opacityProperty().bind(this.getConnection().opacityProperty());
         it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);
@@ -77,8 +63,7 @@ public class TriangleArrowHead extends ArrowHead {
   @Override
   public double getLineCut() {
     double _width = this.getWidth();
-    XConnection _connection = this.getConnection();
-    double _strokeWidth = _connection.getStrokeWidth();
+    double _strokeWidth = this.getConnection().getStrokeWidth();
     return (_width + _strokeWidth);
   }
   

@@ -17,9 +17,7 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
   }
   
   public void injectMembers(final Object object) {
-    IResourceServiceProvider _resourceServiceProvider = this.getResourceServiceProvider();
-    Injector _get = _resourceServiceProvider.<Injector>get(Injector.class);
-    _get.injectMembers(object);
+    this.getResourceServiceProvider().<Injector>get(Injector.class).injectMembers(object);
   }
   
   protected abstract IResourceServiceProvider getResourceServiceProvider();

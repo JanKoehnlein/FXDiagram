@@ -27,7 +27,6 @@ public class ModelPersistenceTest {
     StringReader _stringReader = new StringReader(_builder.toString());
     final Object object = _modelLoad.load(_stringReader);
     Assert.assertTrue((object instanceof TestBean));
-    TestEnum _testEnum = ((TestBean) object).getTestEnum();
-    Assert.assertEquals(TestEnum.BAR, _testEnum);
+    Assert.assertEquals(TestEnum.BAR, ((TestBean) object).getTestEnum());
   }
 }

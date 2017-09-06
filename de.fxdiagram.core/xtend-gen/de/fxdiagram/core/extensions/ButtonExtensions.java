@@ -6,7 +6,6 @@ import de.fxdiagram.core.extensions.TooltipExtensions;
 import javafx.event.EventTarget;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
@@ -136,8 +135,7 @@ public class ButtonExtensions {
       }
     }
     if (!_matched) {
-      Parent _parent = it.getParent();
-      _switchResult = ButtonExtensions.getContainerButton(_parent);
+      _switchResult = ButtonExtensions.getContainerButton(it.getParent());
     }
     return _switchResult;
   }

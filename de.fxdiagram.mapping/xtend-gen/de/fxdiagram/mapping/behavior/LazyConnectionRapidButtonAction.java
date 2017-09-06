@@ -18,13 +18,10 @@ import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
-import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -60,28 +57,23 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     if (_equals) {
       return false;
     }
-    ObservableList<XConnection> _connections = diagram.getConnections();
     final Function1<XConnection, DomainObjectDescriptor> _function = (XConnection it) -> {
       return it.getDomainObjectDescriptor();
     };
-    List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
-    final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
+    final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(ListExtensions.<XConnection, DomainObjectDescriptor>map(diagram.getConnections(), _function));
     try {
       final Function1<ARG, Boolean> _function_1 = (ARG domainArgument) -> {
         final Iterable<MODEL> connectionDomainObjects = this.configInterpreter.<MODEL, ARG>select(this.mappingCall, domainArgument);
         for (final MODEL connectionDomainObject : connectionDomainObjects) {
           {
-            ConnectionMapping<MODEL> _connectionMapping = this.mappingCall.getConnectionMapping();
-            final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+            final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, this.mappingCall.getConnectionMapping());
             boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
             if (_add) {
               NodeMappingCall<?, MODEL> _xifexpression = null;
               if (this.hostIsSource) {
-                ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
-                _xifexpression = _connectionMapping_1.getTarget();
+                _xifexpression = this.mappingCall.getConnectionMapping().getTarget();
               } else {
-                ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
-                _xifexpression = _connectionMapping_2.getSource();
+                _xifexpression = this.mappingCall.getConnectionMapping().getSource();
               }
               final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
               final Iterable<?> nodeDomainObjects = this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
@@ -108,10 +100,8 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   @Override
   public void perform(final RapidButton button) {
     final ConnectedNodeChooser chooser = this.createChooser(button);
-    XNode _host = button.getHost();
-    this.populateChooser(chooser, _host);
-    XNode _host_1 = button.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host_1);
+    this.populateChooser(chooser, button.getHost());
+    XRoot _root = CoreExtensions.getRoot(button.getHost());
     _root.setCurrentTool(chooser);
   }
   
@@ -141,36 +131,28 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     {
       DomainObjectDescriptor _domainObjectDescriptor = host.getDomainObjectDescriptor();
       final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObjectDescriptor);
-      XDiagram _diagram = CoreExtensions.getDiagram(host);
-      ObservableList<XConnection> _connections = _diagram.getConnections();
       final Function1<XConnection, DomainObjectDescriptor> _function = (XConnection it) -> {
         return it.getDomainObjectDescriptor();
       };
-      List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
-      final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
+      final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(ListExtensions.<XConnection, DomainObjectDescriptor>map(CoreExtensions.getDiagram(host).getConnections(), _function));
       final Function1<ARG, Object> _function_1 = (ARG domainArgument) -> {
         Object _xblockexpression_1 = null;
         {
           final Iterable<MODEL> connectionDomainObjects = this.configInterpreter.<MODEL, ARG>select(this.mappingCall, domainArgument);
           final Consumer<MODEL> _function_2 = (MODEL connectionDomainObject) -> {
-            ConnectionMapping<MODEL> _connectionMapping = this.mappingCall.getConnectionMapping();
-            final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+            final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, this.mappingCall.getConnectionMapping());
             boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
             if (_add) {
               NodeMappingCall<?, MODEL> _xifexpression = null;
               if (this.hostIsSource) {
-                ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
-                _xifexpression = _connectionMapping_1.getTarget();
+                _xifexpression = this.mappingCall.getConnectionMapping().getTarget();
               } else {
-                ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
-                _xifexpression = _connectionMapping_2.getSource();
+                _xifexpression = this.mappingCall.getConnectionMapping().getSource();
               }
               final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
               final Iterable<?> nodeDomainObjects = this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
               final Consumer<Object> _function_3 = (Object it) -> {
-                NodeMapping<?> _nodeMapping = nodeMappingCall.getNodeMapping();
-                XNode _createNode = this.<Object>createNode(it, _nodeMapping);
-                chooser.addChoice(_createNode, connectionDescriptor);
+                chooser.addChoice(this.<Object>createNode(it, nodeMappingCall.getNodeMapping()), connectionDescriptor);
               };
               nodeDomainObjects.forEach(_function_3);
             }
@@ -180,8 +162,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
             XConnection _xblockexpression_2 = null;
             {
               final IMappedElementDescriptor<MODEL> descriptor = ((IMappedElementDescriptor<MODEL>) connectionDesc);
-              ConnectionMapping<MODEL> _connectionMapping = this.mappingCall.getConnectionMapping();
-              XConnection _createConnection = _connectionMapping.createConnection(descriptor);
+              XConnection _createConnection = this.mappingCall.getConnectionMapping().createConnection(descriptor);
               final Procedure1<XConnection> _function_4 = (XConnection it) -> {
                 if (this.hostIsSource) {
                   it.setSource(thisNode);
@@ -190,21 +171,16 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   it.setSource(thatNode);
                   it.setTarget(thisNode);
                 }
-                ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
-                List<AbstractLabelMappingCall<?, MODEL>> _labels = _connectionMapping_1.getLabels();
                 final Consumer<AbstractLabelMappingCall<?, MODEL>> _function_5 = (AbstractLabelMappingCall<?, MODEL> labelMappingCall) -> {
-                  ObservableList<XConnectionLabel> _labels_1 = it.getLabels();
+                  ObservableList<XConnectionLabel> _labels = it.getLabels();
                   final Function1<MODEL, Iterable<? extends XLabel>> _function_6 = (MODEL it_1) -> {
                     return this.configInterpreter.execute(labelMappingCall, it_1);
                   };
-                  Iterable<? extends XLabel> _withDomainObject = descriptor.<Iterable<? extends XLabel>>withDomainObject(_function_6);
-                  Iterable<XConnectionLabel> _filter = Iterables.<XConnectionLabel>filter(_withDomainObject, XConnectionLabel.class);
-                  Iterables.<XConnectionLabel>addAll(_labels_1, _filter);
+                  Iterable<XConnectionLabel> _filter = Iterables.<XConnectionLabel>filter(descriptor.<Iterable<? extends XLabel>>withDomainObject(_function_6), XConnectionLabel.class);
+                  Iterables.<XConnectionLabel>addAll(_labels, _filter);
                 };
-                _labels.forEach(_function_5);
-                ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
-                XDiagramConfig _config = _connectionMapping_2.getConfig();
-                _config.initialize(it);
+                this.mappingCall.getConnectionMapping().getLabels().forEach(_function_5);
+                this.mappingCall.getConnectionMapping().getConfig().initialize(it);
               };
               _xblockexpression_2 = ObjectExtensions.<XConnection>operator_doubleArrow(_createConnection, _function_4);
             }
@@ -229,15 +205,13 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         final NodeMapping<NODE> nodeMappingCasted = ((NodeMapping<NODE>) nodeMapping);
         final IMappedElementDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
         final XNode node = nodeMappingCasted.createNode(descriptor);
-        List<AbstractLabelMappingCall<?, NODE>> _labels = nodeMappingCasted.getLabels();
         final Consumer<AbstractLabelMappingCall<?, NODE>> _function = (AbstractLabelMappingCall<?, NODE> it) -> {
-          ObservableList<XLabel> _labels_1 = node.getLabels();
+          ObservableList<XLabel> _labels = node.getLabels();
           Iterable<? extends XLabel> _execute = this.configInterpreter.execute(it, ((NODE) nodeDomainObject));
-          Iterables.<XLabel>addAll(_labels_1, _execute);
+          Iterables.<XLabel>addAll(_labels, _execute);
         };
-        _labels.forEach(_function);
-        XDiagramConfig _config = nodeMappingCasted.getConfig();
-        _config.initialize(node);
+        nodeMappingCasted.getLabels().forEach(_function);
+        nodeMappingCasted.getConfig().initialize(node);
         _xblockexpression = node;
       }
       _xifexpression = _xblockexpression;

@@ -2,17 +2,14 @@ package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.CloseAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
 import eu.hansolo.enzo.radialmenu.SymbolType;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -21,7 +18,6 @@ import javafx.event.EventTarget;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -52,12 +48,9 @@ public class DiagramActionTool implements XDiagramTool {
   public DiagramActionTool(final XRoot root) {
     this.root = root;
     final EventHandler<KeyEvent> _function = (KeyEvent event) -> {
-      DiagramActionRegistry _diagramActionRegistry = root.getDiagramActionRegistry();
-      ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
       final Function1<DiagramAction, Boolean> _function_1 = (DiagramAction it) -> {
         return Boolean.valueOf(it.matches(event));
       };
-      Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
       final Consumer<DiagramAction> _function_2 = (DiagramAction it) -> {
         boolean _isConsumed = event.isConsumed();
         boolean _not = (!_isConsumed);
@@ -65,7 +58,7 @@ public class DiagramActionTool implements XDiagramTool {
           it.perform(root);
         }
       };
-      _filter.forEach(_function_2);
+      IterableExtensions.<DiagramAction>filter(root.getDiagramActionRegistry().getActions(), _function_1).forEach(_function_2);
       KeyCode _code = event.getCode();
       boolean _equals = Objects.equal(_code, KeyCode.ESCAPE);
       if (_equals) {
@@ -133,38 +126,30 @@ public class DiagramActionTool implements XDiagramTool {
         it.setButtonAlpha(1.0);
       };
       Options _doubleArrow = ObjectExtensions.<Options>operator_doubleArrow(_options, _function);
-      DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
-      ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
       final Function1<DiagramAction, Boolean> _function_1 = (DiagramAction it) -> {
         SymbolType _symbol = it.getSymbol();
         return Boolean.valueOf((!Objects.equal(_symbol, null)));
       };
-      Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
       final Function1<DiagramAction, MenuItem> _function_2 = (DiagramAction action) -> {
         MenuItem _menuItem = new MenuItem();
         final Procedure1<MenuItem> _function_3 = (MenuItem it) -> {
-          SymbolType _symbol = action.getSymbol();
-          it.setSymbol(_symbol);
-          String _tooltip = action.getTooltip();
-          it.setTooltip(_tooltip);
+          it.setSymbol(action.getSymbol());
+          it.setTooltip(action.getTooltip());
           it.setSize(64);
         };
         return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function_3);
       };
-      Iterable<MenuItem> _map = IterableExtensions.<DiagramAction, MenuItem>map(_filter, _function_2);
+      Iterable<MenuItem> _map = IterableExtensions.<DiagramAction, MenuItem>map(IterableExtensions.<DiagramAction>filter(this.root.getDiagramActionRegistry().getActions(), _function_1), _function_2);
       RadialMenu _radialMenu = new RadialMenu(_doubleArrow, ((MenuItem[])Conversions.unwrapArray(_map, MenuItem.class)));
       this.menu = _radialMenu;
-      HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
-      ObservableList<Node> _children = _headsUpDisplay.getChildren();
+      ObservableList<Node> _children = this.root.getHeadsUpDisplay().getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function_3 = (Group it) -> {
         BorderPane.setAlignment(it, Pos.CENTER);
-        Scene _scene = this.root.getScene();
-        double _width = _scene.getWidth();
+        double _width = this.root.getScene().getWidth();
         double _multiply = (0.5 * _width);
         it.setTranslateX(_multiply);
-        Scene _scene_1 = this.root.getScene();
-        double _height = _scene_1.getHeight();
+        double _height = this.root.getScene().getHeight();
         double _multiply_1 = (0.5 * _height);
         it.setTranslateY(_multiply_1);
         ObservableList<Node> _children_1 = it.getChildren();
@@ -172,17 +157,14 @@ public class DiagramActionTool implements XDiagramTool {
           it_1.show();
           it_1.open();
           final EventHandler<RadialMenu.ItemEvent> _function_5 = (RadialMenu.ItemEvent it_2) -> {
-            MenuItem _item = it_2.getItem();
-            this.selection = _item;
+            this.selection = it_2.getItem();
           };
           it_1.setOnItemSelected(_function_5);
           final EventHandler<RadialMenu.MenuEvent> _function_6 = (RadialMenu.MenuEvent it_2) -> {
             this.closeMenu();
             boolean _notEquals = (!Objects.equal(this.selection, null));
             if (_notEquals) {
-              DiagramActionRegistry _diagramActionRegistry_1 = this.root.getDiagramActionRegistry();
-              SymbolType _symbol = this.selection.getSymbol();
-              final DiagramAction action = _diagramActionRegistry_1.getBySymbol(_symbol);
+              final DiagramAction action = this.root.getDiagramActionRegistry().getBySymbol(this.selection.getSymbol());
               boolean _equals = Objects.equal(action, null);
               if (_equals) {
                 DiagramActionTool.LOG.warning(("Unhandled menu item " + this.selection));
@@ -211,8 +193,7 @@ public class DiagramActionTool implements XDiagramTool {
       this.menu.hide();
       boolean _xifexpression = false;
       if (((!Objects.equal(this.menuGroup, null)) && (!Objects.equal(this.menuGroup.getParent(), null)))) {
-        HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
-        ObservableList<Node> _children = _headsUpDisplay.getChildren();
+        ObservableList<Node> _children = this.root.getHeadsUpDisplay().getChildren();
         _xifexpression = _children.remove(this.menuGroup);
       }
       _xblockexpression = _xifexpression;
@@ -224,10 +205,8 @@ public class DiagramActionTool implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.root.getScene();
-      _scene.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      Scene _scene_1 = this.root.getScene();
-      _scene_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
+      this.root.getScene().<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      this.root.getScene().<MouseEvent>addEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
       _xblockexpression = true;
     }
     return _xblockexpression;
@@ -237,10 +216,8 @@ public class DiagramActionTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.root.getScene();
-      _scene.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
-      Scene _scene_1 = this.root.getScene();
-      _scene_1.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      this.root.getScene().<MouseEvent>removeEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
+      this.root.getScene().<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = true;
     }
     return _xblockexpression;

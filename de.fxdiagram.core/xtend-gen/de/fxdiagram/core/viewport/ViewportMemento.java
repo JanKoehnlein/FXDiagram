@@ -19,13 +19,13 @@ public class ViewportMemento {
   public String toString() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("ViewportMemento [translateX=");
-    _builder.append(this.translateX, "");
+    _builder.append(this.translateX);
     _builder.append(", translateY=");
-    _builder.append(this.translateY, "");
+    _builder.append(this.translateY);
     _builder.append(", scale=");
-    _builder.append(this.scale, "");
+    _builder.append(this.scale);
     _builder.append(", rotate=");
-    _builder.append(this.rotate, "");
+    _builder.append(this.rotate);
     _builder.append("]");
     return _builder.toString();
   }

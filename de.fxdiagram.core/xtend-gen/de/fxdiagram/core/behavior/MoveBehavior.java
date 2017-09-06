@@ -3,21 +3,17 @@ package de.fxdiagram.core.behavior;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.command.AnimationCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
@@ -143,12 +139,9 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   
   protected AnimationCommand createMoveCommand() {
     T _host = this.getHost();
-    T _host_1 = this.getHost();
-    boolean _manuallyPlaced = _host_1.getManuallyPlaced();
-    T _host_2 = this.getHost();
-    double _layoutX = _host_2.getLayoutX();
-    T _host_3 = this.getHost();
-    double _layoutY = _host_3.getLayoutY();
+    boolean _manuallyPlaced = this.getHost().getManuallyPlaced();
+    double _layoutX = this.getHost().getLayoutX();
+    double _layoutY = this.getHost().getLayoutY();
     return new MoveCommand(_host, 
       this.dragContext.initialX, this.dragContext.initialY, _manuallyPlaced, _layoutX, _layoutY);
   }
@@ -159,37 +152,26 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   }
   
   public void mousePressed(final MouseEvent it) {
-    double _screenX = it.getScreenX();
-    double _screenY = it.getScreenY();
-    this.startDrag(_screenX, _screenY);
+    this.startDrag(it.getScreenX(), it.getScreenY());
   }
   
   public void startDrag(final double screenX, final double screenY) {
-    T _host = this.getHost();
-    Parent _parent = _host.getParent();
-    T _host_1 = this.getHost();
-    double _layoutX = _host_1.getLayoutX();
-    T _host_2 = this.getHost();
-    double _layoutY = _host_2.getLayoutY();
-    final Point2D initialPositionInScene = _parent.localToScene(_layoutX, _layoutY);
-    T _host_3 = this.getHost();
-    double _layoutX_1 = _host_3.getLayoutX();
-    T _host_4 = this.getHost();
-    double _layoutY_1 = _host_4.getLayoutY();
-    MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX_1, _layoutY_1, screenX, screenY, initialPositionInScene);
+    final Point2D initialPositionInScene = this.getHost().getParent().localToScene(this.getHost().getLayoutX(), this.getHost().getLayoutY());
+    double _layoutX = this.getHost().getLayoutX();
+    double _layoutY = this.getHost().getLayoutY();
+    MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX, _layoutY, screenX, screenY, initialPositionInScene);
     this.dragContext = _dragContext;
-    T _host_5 = this.getHost();
-    if ((_host_5 instanceof XNode)) {
-      T _host_6 = this.getHost();
-      final XNode node = ((XNode) _host_6);
+    T _host = this.getHost();
+    if ((_host instanceof XNode)) {
+      T _host_1 = this.getHost();
+      final XNode node = ((XNode) _host_1);
       ObservableList<XConnection> _incomingConnections = node.getIncomingConnections();
       ObservableList<XConnection> _outgoingConnections = node.getOutgoingConnections();
-      Iterable<XConnection> _plus = Iterables.<XConnection>concat(_incomingConnections, _outgoingConnections);
       final Consumer<XConnection> _function = (XConnection it) -> {
         ConnectionRouter _connectionRouter = it.getConnectionRouter();
         _connectionRouter.setSplineShapeKeeperEnabled(true);
       };
-      _plus.forEach(_function);
+      Iterables.<XConnection>concat(_incomingConnections, _outgoingConnections).forEach(_function);
     }
   }
   
@@ -203,21 +185,11 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     double _plus_1 = (_y + _screenY);
     double _minus_1 = (_plus_1 - this.dragContext.mouseAnchorY);
     final Point2D newPositionInScene = new Point2D(_minus, _minus_1);
-    T _host = this.getHost();
-    Parent _parent = _host.getParent();
-    final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
-    T _host_1 = this.getHost();
-    XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
-    boolean _gridEnabled = _diagram.getGridEnabled();
+    final Point2D newPositionInDiagram = this.getHost().getParent().sceneToLocal(newPositionInScene);
+    final boolean useGrid = (CoreExtensions.getDiagram(this.getHost()).getGridEnabled() ^ it.isShortcutDown());
     boolean _isShortcutDown = it.isShortcutDown();
-    final boolean useGrid = (_gridEnabled ^ _isShortcutDown);
-    boolean _isShortcutDown_1 = it.isShortcutDown();
-    final boolean useAuxlines = (!_isShortcutDown_1);
-    T _host_2 = this.getHost();
-    XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_2);
-    T _host_3 = this.getHost();
-    Point2D _snappedPosition = _diagram_1.getSnappedPosition(newPositionInDiagram, _host_3, useGrid, useAuxlines);
-    this.dragTo(_snappedPosition);
+    final boolean useAuxlines = (!_isShortcutDown);
+    this.dragTo(CoreExtensions.getDiagram(this.getHost()).getSnappedPosition(newPositionInDiagram, this.getHost(), useGrid, useAuxlines));
   }
   
   public void mouseReleased(final MouseEvent it) {
@@ -226,10 +198,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       final AnimationCommand moveCommand = this.createMoveCommand();
       boolean _notEquals = (!Objects.equal(moveCommand, null));
       if (_notEquals) {
-        T _host = this.getHost();
-        XRoot _root = CoreExtensions.getRoot(_host);
-        CommandStack _commandStack = _root.getCommandStack();
-        _commandStack.execute(moveCommand);
+        CoreExtensions.getRoot(this.getHost()).getCommandStack().execute(moveCommand);
         this.reset();
       }
     }
@@ -239,11 +208,9 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     boolean _notEquals = (!Objects.equal(newPositionInDiagram, null));
     if (_notEquals) {
       T _host = this.getHost();
-      double _x = newPositionInDiagram.getX();
-      _host.setLayoutX(_x);
+      _host.setLayoutX(newPositionInDiagram.getX());
       T _host_1 = this.getHost();
-      double _y = newPositionInDiagram.getY();
-      _host_1.setLayoutY(_y);
+      _host_1.setLayoutY(newPositionInDiagram.getY());
     }
   }
 }

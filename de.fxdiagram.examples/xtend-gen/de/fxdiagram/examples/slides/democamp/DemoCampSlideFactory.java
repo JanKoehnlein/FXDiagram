@@ -7,9 +7,7 @@ import de.fxdiagram.examples.slides.Slide;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -26,10 +24,8 @@ public class DemoCampSlideFactory {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
     Slide _slide = new Slide(slideName, _backgroundImage);
     final Procedure1<Slide> _function = (Slide it) -> {
-      StackPane _stackPane = it.getStackPane();
-      ObservableList<Node> _children = _stackPane.getChildren();
-      String _trim = text.trim();
-      Text _createText = DemoCampSlideFactory.createText(_trim, fontSize);
+      ObservableList<Node> _children = it.getStackPane().getChildren();
+      Text _createText = DemoCampSlideFactory.createText(text.trim(), fontSize);
       final Procedure1<Text> _function_1 = (Text it_1) -> {
         it_1.setTextAlignment(TextAlignment.CENTER);
       };
@@ -52,10 +48,8 @@ public class DemoCampSlideFactory {
     Text _text = new Text();
     final Procedure1<Text> _function = (Text it) -> {
       it.setText(text);
-      Font _lcarsFont = LcarsExtensions.lcarsFont(size);
-      it.setFont(_lcarsFont);
-      Color _textColor = DemoCampSlideFactory.getTextColor();
-      it.setFill(_textColor);
+      it.setFont(LcarsExtensions.lcarsFont(size));
+      it.setFill(DemoCampSlideFactory.getTextColor());
     };
     return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }
@@ -69,7 +63,6 @@ public class DemoCampSlideFactory {
   }
   
   public static Image getBackgroundImage() {
-    ImageCache _get = ImageCache.get();
-    return _get.getImage(DemoCampSlideFactory.class, "images/planet.jpg");
+    return ImageCache.get().getImage(DemoCampSlideFactory.class, "images/planet.jpg");
   }
 }

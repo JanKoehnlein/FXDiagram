@@ -18,8 +18,7 @@ public class ResourceDescriptor extends ClassLoaderDescriptor {
   }
   
   public String toURI() {
-    String _absolutePath = this.getAbsolutePath();
-    return super.toURI(_absolutePath);
+    return super.toURI(this.getAbsolutePath());
   }
   
   /**

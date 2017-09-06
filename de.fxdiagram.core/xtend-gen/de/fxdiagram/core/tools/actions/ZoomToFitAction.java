@@ -3,13 +3,11 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -20,7 +18,6 @@ import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -52,37 +49,30 @@ public class ZoomToFitAction implements DiagramAction {
         ViewportTransition _xblockexpression = null;
         {
           Iterable<? extends XShape> _xifexpression = null;
-          Iterable<XShape> _currentSelection = root.getCurrentSelection();
-          boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
+          boolean _isEmpty = IterableExtensions.isEmpty(root.getCurrentSelection());
           if (_isEmpty) {
-            XDiagram _diagram = root.getDiagram();
-            ObservableList<XNode> _nodes = _diagram.getNodes();
-            XDiagram _diagram_1 = root.getDiagram();
-            ObservableList<XConnection> _connections = _diagram_1.getConnections();
+            ObservableList<XNode> _nodes = root.getDiagram().getNodes();
+            ObservableList<XConnection> _connections = root.getDiagram().getConnections();
             _xifexpression = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
           } else {
             _xifexpression = root.getCurrentSelection();
           }
           final Iterable<? extends XShape> elements = _xifexpression;
           final Function1<XShape, Bounds> _function = (XShape it_1) -> {
-            Bounds _snapBounds = it_1.getSnapBounds();
-            return CoreExtensions.localToRootDiagram(it_1, _snapBounds);
+            return CoreExtensions.localToRootDiagram(it_1, it_1.getSnapBounds());
           };
-          Iterable<Bounds> _map = IterableExtensions.map(elements, _function);
           final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds a, Bounds b) -> {
             return BoundsExtensions.operator_plus(a, b);
           };
-          final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
+          final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(IterableExtensions.map(elements, _function), _function_1);
           ViewportTransition _xifexpression_1 = null;
           if ((((!Objects.equal(selectionBounds, null)) && (selectionBounds.getWidth() > NumberExpressionExtensions.EPSILON)) && (selectionBounds.getHeight() > NumberExpressionExtensions.EPSILON))) {
             ViewportTransition _xblockexpression_1 = null;
             {
-              Scene _scene = root.getScene();
-              double _width = _scene.getWidth();
+              double _width = root.getScene().getWidth();
               double _width_1 = selectionBounds.getWidth();
               double _divide = (_width / _width_1);
-              Scene _scene_1 = root.getScene();
-              double _height = _scene_1.getHeight();
+              double _height = root.getScene().getHeight();
               double _height_1 = selectionBounds.getHeight();
               double _divide_1 = (_height / _height_1);
               final double targetScale = Math.min(_divide, _divide_1);
@@ -99,7 +89,6 @@ public class ZoomToFitAction implements DiagramAction {
       }
     };
     final ViewportCommand command = _function;
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.execute(command);
+    root.getCommandStack().execute(command);
   }
 }

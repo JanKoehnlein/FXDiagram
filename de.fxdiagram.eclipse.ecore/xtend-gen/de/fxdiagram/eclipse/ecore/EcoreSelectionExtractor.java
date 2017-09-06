@@ -8,9 +8,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -65,8 +63,7 @@ public class EcoreSelectionExtractor implements ISelectionExtractor, IChangeSour
         final ISelection selection = _selection;
         boolean _xifexpression_1 = false;
         if ((selection instanceof IStructuredSelection)) {
-          Object _firstElement = ((IStructuredSelection)selection).getFirstElement();
-          _xifexpression_1 = acceptor.accept(_firstElement);
+          _xifexpression_1 = acceptor.accept(((IStructuredSelection)selection).getFirstElement());
         }
         _xblockexpression = _xifexpression_1;
       }
@@ -78,9 +75,7 @@ public class EcoreSelectionExtractor implements ISelectionExtractor, IChangeSour
   @Override
   public void addChangeListener(final IWorkbenchPart part, final ModelChangeBroker broker) {
     if ((part instanceof IEditingDomainProvider)) {
-      EditingDomain _editingDomain = ((IEditingDomainProvider)part).getEditingDomain();
-      ResourceSet _resourceSet = _editingDomain.getResourceSet();
-      EList<Adapter> _eAdapters = _resourceSet.eAdapters();
+      EList<Adapter> _eAdapters = ((IEditingDomainProvider)part).getEditingDomain().getResourceSet().eAdapters();
       EcoreSelectionExtractor.FXDiagramAdapter _fXDiagramAdapter = new EcoreSelectionExtractor.FXDiagramAdapter(part, broker);
       _eAdapters.add(_fXDiagramAdapter);
     }
@@ -89,9 +84,7 @@ public class EcoreSelectionExtractor implements ISelectionExtractor, IChangeSour
   @Override
   public void removeChangeListener(final IWorkbenchPart part, final ModelChangeBroker broker) {
     if ((part instanceof IEditingDomainProvider)) {
-      EditingDomain _editingDomain = ((IEditingDomainProvider)part).getEditingDomain();
-      ResourceSet _resourceSet = _editingDomain.getResourceSet();
-      final EList<Adapter> adapters = _resourceSet.eAdapters();
+      final EList<Adapter> adapters = ((IEditingDomainProvider)part).getEditingDomain().getResourceSet().eAdapters();
       final Adapter adapter = EcoreUtil.getAdapter(adapters, EcoreSelectionExtractor.FXDiagramAdapter.class);
       adapters.remove(adapter);
     }

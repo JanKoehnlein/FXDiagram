@@ -14,8 +14,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class ChainedAnimationUtil {
   public static <T extends Object> Animation createChainedAnimation(final Iterable<T> iterable, final Function1<? super T, ? extends Animation> animationFactory) {
-    Iterator<T> _iterator = iterable.iterator();
-    return ChainedAnimationUtil.<T>createChainedAnimation(_iterator, animationFactory);
+    return ChainedAnimationUtil.<T>createChainedAnimation(iterable.iterator(), animationFactory);
   }
   
   protected static <T extends Object> Animation createChainedAnimation(final Iterator<T> iterator, final Function1<? super T, ? extends Animation> animationFactory) {
@@ -24,8 +23,7 @@ public class ChainedAnimationUtil {
     if (_not) {
       return null;
     }
-    T _next = iterator.next();
-    final Animation nextAnimation = animationFactory.apply(_next);
+    final Animation nextAnimation = animationFactory.apply(iterator.next());
     boolean _equals = Objects.equal(nextAnimation, null);
     if (_equals) {
       return ChainedAnimationUtil.<T>createChainedAnimation(iterator, animationFactory);

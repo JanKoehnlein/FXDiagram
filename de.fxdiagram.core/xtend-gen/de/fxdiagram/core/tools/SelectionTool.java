@@ -25,11 +25,9 @@ import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -53,8 +51,7 @@ public class SelectionTool implements XDiagramTool {
   public SelectionTool(final XRoot root) {
     this.root = root;
     final EventHandler<MouseEvent> _function = (MouseEvent event) -> {
-      Iterable<XShape> _currentSelection = root.getCurrentSelection();
-      final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
+      final Set<XShape> selection = IterableExtensions.<XShape>toSet(root.getCurrentSelection());
       this.hasDragged = false;
       EventTarget _target = event.getTarget();
       Pane _diagramCanvas = root.getDiagramCanvas();
@@ -101,26 +98,19 @@ public class SelectionTool implements XDiagramTool {
             final Consumer<XShape> _function_3 = (XShape it) -> {
               MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
               if (_behavior!=null) {
-                double _screenX = event.getScreenX();
-                double _screenY = event.getScreenY();
-                _behavior.startDrag(_screenX, _screenY);
+                _behavior.startDrag(event.getScreenX(), event.getScreenY());
               }
             };
             selection.forEach(_function_3);
             MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
             if (_behavior!=null) {
-              double _screenX = event.getScreenX();
-              double _screenY = event.getScreenY();
-              _behavior.startDrag(_screenX, _screenY);
+              _behavior.startDrag(event.getScreenX(), event.getScreenY());
             }
-            double _sceneX = event.getSceneX();
-            double _sceneY = event.getSceneY();
-            this.updatePositionTooltip(selection, _sceneX, _sceneY);
+            this.updatePositionTooltip(selection, event.getSceneX(), event.getSceneY());
             final Runnable _function_4 = () -> {
               this.showPositionTooltip();
             };
-            Duration _millis = DurationExtensions.millis(200);
-            TimerExtensions.defer(_function_4, _millis);
+            TimerExtensions.defer(_function_4, DurationExtensions.millis(200));
             event.consume();
           }
         }
@@ -140,14 +130,11 @@ public class SelectionTool implements XDiagramTool {
             _behavior.mouseDragged(it);
           }
         }
-        XDiagram _diagram = root.getDiagram();
-        AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
+        AuxiliaryLinesSupport _auxiliaryLinesSupport = root.getDiagram().getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.show(selection);
         }
-        double _sceneX = it.getSceneX();
-        double _sceneY = it.getSceneY();
-        this.updatePositionTooltip(selection, _sceneX, _sceneY);
+        this.updatePositionTooltip(selection, it.getSceneX(), it.getSceneY());
         this.showPositionTooltip();
         it.consume();
       }
@@ -172,8 +159,7 @@ public class SelectionTool implements XDiagramTool {
         };
         selection.forEach(_function_3);
       }
-      XDiagram _diagram = root.getDiagram();
-      AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
+      AuxiliaryLinesSupport _auxiliaryLinesSupport = root.getDiagram().getAuxiliaryLinesSupport();
       if (_auxiliaryLinesSupport!=null) {
         _auxiliaryLinesSupport.hide();
       }
@@ -186,21 +172,16 @@ public class SelectionTool implements XDiagramTool {
     final Function1<XShape, Boolean> _function = (XShape it) -> {
       return Boolean.valueOf((!(it instanceof XConnection)));
     };
-    Iterable<? extends XShape> _filter = IterableExtensions.filter(selection, _function);
     final Function1<XShape, Bounds> _function_1 = (XShape it) -> {
-      Bounds _snapBounds = it.getSnapBounds();
-      return CoreExtensions.localToRootDiagram(it, _snapBounds);
+      return CoreExtensions.localToRootDiagram(it, it.getSnapBounds());
     };
-    Iterable<Bounds> _map = IterableExtensions.map(_filter, _function_1);
     final Function2<Bounds, Bounds, Bounds> _function_2 = (Bounds a, Bounds b) -> {
       return BoundsExtensions.operator_plus(a, b);
     };
-    Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_2);
+    Bounds selectionBounds = IterableExtensions.<Bounds>reduce(IterableExtensions.map(IterableExtensions.filter(selection, _function), _function_1), _function_2);
     boolean _notEquals = (!Objects.equal(selectionBounds, null));
     if (_notEquals) {
-      double _minX = selectionBounds.getMinX();
-      double _minY = selectionBounds.getMinY();
-      final String positionString = String.format("(%.3f : %.3f)", Double.valueOf(_minX), Double.valueOf(_minY));
+      final String positionString = String.format("(%.3f : %.3f)", Double.valueOf(selectionBounds.getMinX()), Double.valueOf(selectionBounds.getMinY()));
       SoftTooltip _elvis = null;
       if (this.positionTip != null) {
         _elvis = this.positionTip;
@@ -314,8 +295,7 @@ public class SelectionTool implements XDiagramTool {
       }
     }
     if (!_matched) {
-      Parent _parent = it.getParent();
-      _switchResult = this.getTargetShape(_parent);
+      _switchResult = this.getTargetShape(it.getParent());
     }
     return _switchResult;
   }

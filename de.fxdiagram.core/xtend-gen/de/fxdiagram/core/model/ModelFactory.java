@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
-import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -75,8 +74,7 @@ public class ModelFactory {
     ModelElementImpl _xblockexpression = null;
     {
       final ModelElementImpl element = new ModelElementImpl(text);
-      StringProperty _textProperty = text.textProperty();
-      element.addProperty(_textProperty, String.class);
+      element.addProperty(text.textProperty(), String.class);
       _xblockexpression = element;
     }
     return _xblockexpression;

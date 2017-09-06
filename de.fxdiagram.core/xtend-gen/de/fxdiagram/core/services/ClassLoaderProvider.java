@@ -36,10 +36,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     if (!_matched) {
       if (domainObject instanceof ResourceHandle) {
         _matched=true;
-        String _name = ((ResourceHandle)domainObject).getName();
-        Class<?> _context = ((ResourceHandle)domainObject).getContext();
-        String _relativePath = ((ResourceHandle)domainObject).getRelativePath();
-        return this.createResourceDescriptor(_name, _context, _relativePath);
+        return this.createResourceDescriptor(((ResourceHandle)domainObject).getName(), ((ResourceHandle)domainObject).getContext(), ((ResourceHandle)domainObject).getRelativePath());
       }
     }
     return null;
@@ -48,9 +45,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   public ResourceDescriptor createResourceDescriptor(final String name, final Class<?> context, final String relativePath) {
     ResourceDescriptor _xblockexpression = null;
     {
-      Package _package = context.getPackage();
-      String _name = _package.getName();
-      String _replace = _name.replace(".", "/");
+      String _replace = context.getPackage().getName().replace(".", "/");
       String _plus = (_replace + "/");
       final String absoulutePath = (_plus + relativePath);
       String _classLoaderID = this.getClassLoaderID(context);
@@ -63,8 +58,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     if ((ClassLoaderExtensions.isEquinox() && (!Objects.equal(this.rootClassLoader, null)))) {
       final ClassLoader classLoader = clazz.getClassLoader();
       if ((classLoader instanceof BundleReference)) {
-        Bundle _bundle = ((BundleReference)classLoader).getBundle();
-        return _bundle.getSymbolicName();
+        return ((BundleReference)classLoader).getBundle().getSymbolicName();
       }
     }
     return "root";
@@ -76,8 +70,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
       if ((Objects.equal(descriptor.getClassLoaderID(), "root") || (!ClassLoaderExtensions.isEquinox()))) {
         _xifexpression = this.rootClassLoader.loadClass(className);
       } else {
-        String _classLoaderID = descriptor.getClassLoaderID();
-        Bundle _bundle = Platform.getBundle(_classLoaderID);
+        Bundle _bundle = Platform.getBundle(descriptor.getClassLoaderID());
         Class<?> _loadClass = null;
         if (_bundle!=null) {
           _loadClass=_bundle.loadClass(className);
@@ -96,8 +89,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
       if ((Objects.equal(descriptor.getClassLoaderID(), "root") || (!ClassLoaderExtensions.isEquinox()))) {
         _xifexpression = this.rootClassLoader.getResource(resourcePath);
       } else {
-        String _classLoaderID = descriptor.getClassLoaderID();
-        Bundle _bundle = Platform.getBundle(_classLoaderID);
+        Bundle _bundle = Platform.getBundle(descriptor.getClassLoaderID());
         URL _resource = null;
         if (_bundle!=null) {
           _resource=_bundle.getResource(resourcePath);

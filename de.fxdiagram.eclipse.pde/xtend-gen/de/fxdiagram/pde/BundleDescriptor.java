@@ -17,7 +17,6 @@ import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.osgi.framework.Version;
 
 @ModelNode({ "symbolicName", "version" })
 @SuppressWarnings("all")
@@ -34,13 +33,10 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   public <U extends Object> U withDomainObject(final Function1<? super BundleDescription, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      String _symbolicName = this.getSymbolicName();
-      String _version = this.getVersion();
-      final BundleDescription bundle = BundleUtil.findBundle(_symbolicName, _version);
-      boolean _equals = Objects.equal(bundle, null);
-      if (_equals) {
-        String _symbolicName_1 = this.getSymbolicName();
-        String _plus = ("Bundle " + _symbolicName_1);
+      final BundleDescription bundle = BundleUtil.findBundle(this.getSymbolicName(), this.getVersion());
+      if ((bundle == null)) {
+        String _symbolicName = this.getSymbolicName();
+        String _plus = ("Bundle " + _symbolicName);
         String _plus_1 = (_plus + " not found");
         throw new NoSuchElementException(_plus_1);
       }
@@ -57,12 +53,9 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   public <U extends Object> U withPlugin(final Function1<? super IPluginModelBase, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      String _symbolicName = this.getSymbolicName();
-      String _version = this.getVersion();
-      final IPluginModelBase plugin = PluginRegistry.findModel(_symbolicName, _version, IMatchRules.PERFECT, null);
+      final IPluginModelBase plugin = PluginRegistry.findModel(this.getSymbolicName(), this.getVersion(), IMatchRules.PERFECT, null);
       U _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(plugin, null));
-      if (_notEquals) {
+      if ((plugin != null)) {
         _xifexpression = lambda.apply(plugin);
       } else {
         Object _xblockexpression_1 = null;
@@ -82,10 +75,7 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     final Function1<BundleDescription, IEditorPart> _function = (BundleDescription it) -> {
       IEditorPart _xblockexpression = null;
       {
-        String _symbolicName = it.getSymbolicName();
-        Version _version = it.getVersion();
-        String _string = _version.toString();
-        final IPluginModelBase plugin = PluginRegistry.findModel(_symbolicName, _string, IMatchRules.PERFECT, null);
+        final IPluginModelBase plugin = PluginRegistry.findModel(it.getSymbolicName(), it.getVersion().toString(), IMatchRules.PERFECT, null);
         _xblockexpression = ManifestEditor.openPluginEditor(plugin);
       }
       return _xblockexpression;
@@ -105,12 +95,10 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    String _symbolicName = this.getSymbolicName();
-    int _hashCode_1 = _symbolicName.hashCode();
+    int _hashCode_1 = this.getSymbolicName().hashCode();
     int _multiply = (57 * _hashCode_1);
     int _plus = (_hashCode + _multiply);
-    String _version = this.getVersion();
-    int _hashCode_2 = _version.hashCode();
+    int _hashCode_2 = this.getVersion().hashCode();
     int _multiply_1 = (67 * _hashCode_2);
     return (_plus + _multiply_1);
   }

@@ -24,8 +24,7 @@ public class BundleDependencyPath {
   }
   
   public BundleDependencyPath append(final BundleDependency element) {
-    Iterable<BundleDependency> _plus = Iterables.<BundleDependency>concat(this.elements, Collections.<BundleDependency>unmodifiableList(CollectionLiterals.<BundleDependency>newArrayList(element)));
-    List<BundleDependency> _list = IterableExtensions.<BundleDependency>toList(_plus);
+    List<BundleDependency> _list = IterableExtensions.<BundleDependency>toList(Iterables.<BundleDependency>concat(this.elements, Collections.<BundleDependency>unmodifiableList(CollectionLiterals.<BundleDependency>newArrayList(element))));
     return new BundleDependencyPath(_list);
   }
   

@@ -28,8 +28,7 @@ public class DiagramActionRegistry {
     SymbolType _symbol = diagramAction.getSymbol();
     boolean _notEquals = (!Objects.equal(_symbol, null));
     if (_notEquals) {
-      SymbolType _symbol_1 = diagramAction.getSymbol();
-      this.symbol2action.put(_symbol_1, diagramAction);
+      this.symbol2action.put(diagramAction.getSymbol(), diagramAction);
     }
   }
   
@@ -38,8 +37,7 @@ public class DiagramActionRegistry {
     SymbolType _symbol = diagramAction.getSymbol();
     boolean _notEquals = (!Objects.equal(_symbol, null));
     if (_notEquals) {
-      SymbolType _symbol_1 = diagramAction.getSymbol();
-      this.symbol2action.remove(_symbol_1);
+      this.symbol2action.remove(diagramAction.getSymbol());
     }
   }
   

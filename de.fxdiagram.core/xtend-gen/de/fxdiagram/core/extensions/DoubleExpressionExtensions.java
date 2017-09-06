@@ -35,26 +35,22 @@ public class DoubleExpressionExtensions {
   
   @Pure
   public static DoubleBinding operator_plus(final double a, final DoubleExpression b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.add(b);
+    return new DoubleConstant(a).add(b);
   }
   
   @Pure
   public static DoubleBinding operator_minus(final double a, final DoubleExpression b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.subtract(b);
+    return new DoubleConstant(a).subtract(b);
   }
   
   @Pure
   public static DoubleBinding operator_multiply(final double a, final DoubleExpression b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.multiply(b);
+    return new DoubleConstant(a).multiply(b);
   }
   
   @Pure
   public static DoubleBinding operator_divide(final double a, final DoubleExpression b) {
-    DoubleConstant _doubleConstant = new DoubleConstant(a);
-    return _doubleConstant.divide(b);
+    return new DoubleConstant(a).divide(b);
   }
   
   @Pure

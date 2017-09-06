@@ -1,9 +1,7 @@
 package de.fxdiagram.examples.java;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -12,7 +10,6 @@ import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaSuperTypeDescriptor;
 import de.fxdiagram.examples.java.JavaSuperTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeDescriptor;
-import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
@@ -38,33 +35,25 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
   
   @Override
   protected Iterable<Class<?>> getInitialModelChoices() {
-    JavaTypeNode _host = this.getHost();
-    JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
-    return _javaTypeModel.getSuperTypes();
+    return this.getHost().getJavaTypeModel().getSuperTypes();
   }
   
   @Override
   protected JavaSuperTypeDescriptor getChoiceKey(final Class<?> superType) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    JavaTypeNode _host = this.getHost();
-    Class<?> _javaType = _host.getJavaType();
+    Class<?> _javaType = this.getHost().getJavaType();
     JavaSuperTypeHandle _javaSuperTypeHandle = new JavaSuperTypeHandle(_javaType, superType);
     return _domainObjectProvider.createJavaSuperClassDescriptor(_javaSuperTypeHandle);
   }
   
   @Override
   protected XNode createNode(final JavaSuperTypeDescriptor key) {
-    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    JavaSuperTypeHandle _domainObject = key.getDomainObject();
-    Class<?> _superType = _domainObject.getSuperType();
-    JavaTypeDescriptor _createJavaTypeDescriptor = _domainObjectProvider.createJavaTypeDescriptor(_superType);
+    JavaTypeDescriptor _createJavaTypeDescriptor = this.getDomainObjectProvider().createJavaTypeDescriptor(key.getDomainObject().getSuperType());
     return new JavaTypeNode(_createJavaTypeDescriptor);
   }
   
   protected JavaModelProvider getDomainObjectProvider() {
-    JavaTypeNode _host = this.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host);
-    return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
+    return CoreExtensions.getRoot(this.getHost()).<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
   @Override
@@ -76,15 +65,13 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<JavaSuperTypeDescriptor> _function = (JavaSuperTypeDescriptor it) -> {
-        XNode _createNode = this.createNode(it);
-        chooser.addChoice(_createNode, it);
+        chooser.addChoice(this.createNode(it), it);
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor key) -> {
         XConnection _xConnection = new XConnection(host, choice, key);
         final Procedure1<XConnection> _function_2 = (XConnection it) -> {
-          XDiagram _diagram = CoreExtensions.getDiagram(host);
-          Paint _backgroundPaint = _diagram.getBackgroundPaint();
+          Paint _backgroundPaint = CoreExtensions.getDiagram(host).getBackgroundPaint();
           TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
             null, _backgroundPaint, false);
           it.setTargetArrowHead(_triangleArrowHead);

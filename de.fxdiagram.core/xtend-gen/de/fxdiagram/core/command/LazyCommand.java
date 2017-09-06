@@ -33,8 +33,7 @@ public abstract class LazyCommand implements AnimationCommand {
   public Animation getExecuteAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {
-      AnimationCommand _createDelegate = this.createDelegate();
-      this.delegate = _createDelegate;
+      this.delegate = this.createDelegate();
       _xblockexpression = this.delegate.getExecuteAnimation(context);
     }
     return _xblockexpression;

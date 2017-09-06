@@ -10,8 +10,6 @@ import java.util.Map;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Side;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
@@ -26,10 +24,7 @@ public class CachedAnchors {
   
   public CachedAnchors(final XNode host) {
     this.host = host;
-    Node _node = host.getNode();
-    Bounds _boundsInLocal = _node.getBoundsInLocal();
-    Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(host, _boundsInLocal);
-    this.bounds = _localToRootDiagram;
+    this.bounds = CoreExtensions.localToRootDiagram(host, host.getNode().getBoundsInLocal());
     Anchors _anchors = null;
     if (host!=null) {
       _anchors=host.getAnchors();
@@ -53,9 +48,7 @@ public class CachedAnchors {
       double _y_1 = center.getY();
       Point2D _point2D_3 = new Point2D(_maxX, _y_1);
       this.side2point.put(Side.RIGHT, _point2D_3);
-      Parent _parent = host.getParent();
-      Bounds _snapBounds = host.getSnapBounds();
-      final Bounds snapBounds = CoreExtensions.localToRootDiagram(_parent, _snapBounds);
+      final Bounds snapBounds = CoreExtensions.localToRootDiagram(host.getParent(), host.getSnapBounds());
       final Point2D snapCenter = BoundsExtensions.center(snapBounds);
       double _x_2 = snapCenter.getX();
       double _minY_1 = snapBounds.getMinY();
@@ -82,9 +75,7 @@ public class CachedAnchors {
       final Anchors anchors = this.host.getAnchors();
       Point2D _xifexpression = null;
       if ((anchors instanceof ManhattanAnchors)) {
-        double _layoutX = referencePoint.getLayoutX();
-        double _layoutY = referencePoint.getLayoutY();
-        _xifexpression = ((ManhattanAnchors)anchors).getManhattanAnchor(_layoutX, _layoutY, side);
+        _xifexpression = ((ManhattanAnchors)anchors).getManhattanAnchor(referencePoint.getLayoutX(), referencePoint.getLayoutY(), side);
       } else {
         _xifexpression = this.get(side);
       }

@@ -1,9 +1,7 @@
 package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -38,33 +36,25 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
   
   @Override
   protected Iterable<EClass> getInitialModelChoices() {
-    EClassNode _host = this.getHost();
-    EClass _eClass = _host.getEClass();
-    return _eClass.getESuperTypes();
+    return this.getHost().getEClass().getESuperTypes();
   }
   
   @Override
   protected ESuperTypeDescriptor getChoiceKey(final EClass superType) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    EClassNode _host = this.getHost();
-    EClass _eClass = _host.getEClass();
+    EClass _eClass = this.getHost().getEClass();
     ESuperTypeHandle _eSuperTypeHandle = new ESuperTypeHandle(_eClass, superType);
     return _domainObjectProvider.createESuperClassDescriptor(_eSuperTypeHandle);
   }
   
   @Override
   protected XNode createNode(final ESuperTypeDescriptor key) {
-    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    ESuperTypeHandle _domainObject = key.getDomainObject();
-    EClass _superType = _domainObject.getSuperType();
-    EClassDescriptor _createEClassDescriptor = _domainObjectProvider.createEClassDescriptor(_superType);
+    EClassDescriptor _createEClassDescriptor = this.getDomainObjectProvider().createEClassDescriptor(key.getDomainObject().getSuperType());
     return new EClassNode(_createEClassDescriptor);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {
-    EClassNode _host = this.getHost();
-    XRoot _root = CoreExtensions.getRoot(_host);
-    return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
+    return CoreExtensions.getRoot(this.getHost()).<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
   @Override
@@ -76,15 +66,13 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<ESuperTypeDescriptor> _function = (ESuperTypeDescriptor it) -> {
-        XNode _createNode = this.createNode(it);
-        chooser.addChoice(_createNode, it);
+        chooser.addChoice(this.createNode(it), it);
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor descriptor) -> {
         XConnection _xConnection = new XConnection(host, choice, descriptor);
         final Procedure1<XConnection> _function_2 = (XConnection it) -> {
-          XDiagram _diagram = CoreExtensions.getDiagram(host);
-          Paint _backgroundPaint = _diagram.getBackgroundPaint();
+          Paint _backgroundPaint = CoreExtensions.getDiagram(host).getBackgroundPaint();
           TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
             null, _backgroundPaint, false);
           it.setTargetArrowHead(_triangleArrowHead);

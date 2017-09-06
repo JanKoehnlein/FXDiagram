@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -25,8 +24,6 @@ public interface ISelectionExtractor {
     private List<ISelectionExtractor> extractors = CollectionLiterals.<ISelectionExtractor>newArrayList();
     
     private Registry() {
-      IExtensionRegistry _extensionRegistry = Platform.getExtensionRegistry();
-      IConfigurationElement[] _configurationElementsFor = _extensionRegistry.getConfigurationElementsFor("de.fxdiagram.eclipse.selectionExtractor");
       final Consumer<IConfigurationElement> _function = (IConfigurationElement it) -> {
         try {
           Object _createExecutableExtension = it.createExecutableExtension("class");
@@ -41,7 +38,7 @@ public interface ISelectionExtractor {
           }
         }
       };
-      ((List<IConfigurationElement>)Conversions.doWrapArray(_configurationElementsFor)).forEach(_function);
+      ((List<IConfigurationElement>)Conversions.doWrapArray(Platform.getExtensionRegistry().getConfigurationElementsFor("de.fxdiagram.eclipse.selectionExtractor"))).forEach(_function);
     }
     
     public static ISelectionExtractor.Registry getInstance() {

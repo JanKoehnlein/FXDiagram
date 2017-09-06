@@ -19,7 +19,7 @@ class DiamondAnchors extends AbstractAnchors {
 	
 	override getAnchor(double x, double y) {
 		val bounds = boundsInRoot
-		if(bounds == null)
+		if(bounds === null)
 			return null
 		val center = bounds.center
 		if (abs(center.x - x) < CORNER_DELTA) {
@@ -57,7 +57,7 @@ class DiamondAnchors extends AbstractAnchors {
 	
 	override getManhattanAnchor(double x, double y, Side side) {
 		val bounds = boundsInRoot
-		if(bounds == null)
+		if(bounds === null)
 			return null
 		val center = bounds.center
 		switch side {

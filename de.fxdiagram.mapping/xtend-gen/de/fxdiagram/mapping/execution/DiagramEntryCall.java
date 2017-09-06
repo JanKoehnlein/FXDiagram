@@ -1,6 +1,5 @@
 package de.fxdiagram.mapping.execution;
 
-import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
@@ -24,18 +23,14 @@ public class DiagramEntryCall<RESULT extends Object, ARG extends Object> impleme
   
   @Override
   public XDiagramConfig getConfig() {
-    AbstractMapping<RESULT> _mapping = this.mappingCall.getMapping();
-    return _mapping.getConfig();
+    return this.mappingCall.getMapping().getConfig();
   }
   
   @Override
   public String getText() {
-    AbstractMapping<RESULT> _mapping = this.mappingCall.getMapping();
-    String _displayName = _mapping.getDisplayName();
+    String _displayName = this.mappingCall.getMapping().getDisplayName();
     String _plus = (_displayName + " (");
-    AbstractMapping<RESULT> _mapping_1 = this.mappingCall.getMapping();
-    XDiagramConfig _config = _mapping_1.getConfig();
-    String _label = _config.getLabel();
+    String _label = this.mappingCall.getMapping().getConfig().getLabel();
     String _plus_1 = (_plus + _label);
     return (_plus_1 + ")");
   }

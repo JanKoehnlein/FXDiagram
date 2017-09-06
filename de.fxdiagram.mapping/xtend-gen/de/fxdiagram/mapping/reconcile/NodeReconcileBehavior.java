@@ -17,8 +17,7 @@ public class NodeReconcileBehavior<T extends Object> extends AbstractLabelOwnerR
   
   @Override
   protected Iterable<? extends XLabel> getExistingLabels() {
-    XNode _host = this.getHost();
-    return _host.getLabels();
+    return this.getHost().getLabels();
   }
   
   @Override

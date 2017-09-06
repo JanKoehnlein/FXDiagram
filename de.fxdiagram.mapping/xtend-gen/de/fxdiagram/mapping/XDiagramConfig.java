@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -60,28 +59,24 @@ public interface XDiagramConfig {
     protected void addStaticConfigurations() {
       boolean _isEquinox = ClassLoaderExtensions.isEquinox();
       if (_isEquinox) {
-        IExtensionRegistry _extensionRegistry = Platform.getExtensionRegistry();
-        IConfigurationElement[] _configurationElementsFor = _extensionRegistry.getConfigurationElementsFor("de.fxdiagram.mapping.fxDiagramConfig");
         final Consumer<IConfigurationElement> _function = (IConfigurationElement it) -> {
           try {
             Object _createExecutableExtension = it.createExecutableExtension("class");
             final AbstractDiagramConfig config = ((AbstractDiagramConfig) _createExecutableExtension);
             final String id = it.getAttribute("id");
             config.setID(id);
-            String _attribute = it.getAttribute("label");
-            config.setLabel(_attribute);
+            config.setLabel(it.getAttribute("label"));
             this.addConfig(config);
           } catch (final Throwable _t) {
             if (_t instanceof Exception) {
               final Exception exc = (Exception)_t;
-              String _message = exc.getMessage();
-              XDiagramConfig.Registry.LOG.severe(_message);
+              XDiagramConfig.Registry.LOG.severe(exc.getMessage());
             } else {
               throw Exceptions.sneakyThrow(_t);
             }
           }
         };
-        ((List<IConfigurationElement>)Conversions.doWrapArray(_configurationElementsFor)).forEach(_function);
+        ((List<IConfigurationElement>)Conversions.doWrapArray(Platform.getExtensionRegistry().getConfigurationElementsFor("de.fxdiagram.mapping.fxDiagramConfig"))).forEach(_function);
       }
     }
     

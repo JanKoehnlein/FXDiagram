@@ -1,7 +1,6 @@
 package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
-import java.util.List;
 import java.util.function.Consumer;
 import javafx.collections.ListChangeListener;
 import org.eclipse.xtend.lib.annotations.Accessors;
@@ -27,19 +26,17 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     }
     while (c.next()) {
       if (((!Objects.equal(this.remove, null)) && c.wasRemoved())) {
-        List<? extends T> _removed = c.getRemoved();
         final Consumer<T> _function = (T it) -> {
           this.remove.apply(it);
         };
-        _removed.forEach(_function);
+        c.getRemoved().forEach(_function);
       }
     }
     if (((!Objects.equal(this.add, null)) && c.wasAdded())) {
-      List<? extends T> _addedSubList = c.getAddedSubList();
       final Consumer<T> _function = (T it) -> {
         this.add.apply(it);
       };
-      _addedSubList.forEach(_function);
+      c.getAddedSubList().forEach(_function);
     }
   }
   

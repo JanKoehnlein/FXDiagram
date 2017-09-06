@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.anchors;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -57,8 +56,7 @@ public class DiscreteAnchors implements Anchors {
       }
       final Bounds bounds = _boundsInLocal;
       ArrayList<Point2D> _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(bounds, null));
-      if (_notEquals) {
+      if ((bounds != null)) {
         ArrayList<Point2D> _xblockexpression_1 = null;
         {
           double _maxX = bounds.getMaxX();
@@ -88,14 +86,12 @@ public class DiscreteAnchors implements Anchors {
               Node _referenceNode_3 = this.getReferenceNode();
               double _minX_2 = bounds.getMinX();
               double _plus_2 = (_minX_2 + ((i).intValue() * deltaX));
-              double _minY_3 = bounds.getMinY();
-              Point2D _localToRootDiagram_2 = CoreExtensions.localToRootDiagram(_referenceNode_3, _plus_2, _minY_3);
+              Point2D _localToRootDiagram_2 = CoreExtensions.localToRootDiagram(_referenceNode_3, _plus_2, bounds.getMinY());
               anchors.add(_localToRootDiagram_2);
               Node _referenceNode_4 = this.getReferenceNode();
               double _minX_3 = bounds.getMinX();
               double _plus_3 = (_minX_3 + ((i).intValue() * deltaX));
-              double _maxY_1 = bounds.getMaxY();
-              Point2D _localToRootDiagram_3 = CoreExtensions.localToRootDiagram(_referenceNode_4, _plus_3, _maxY_1);
+              Point2D _localToRootDiagram_3 = CoreExtensions.localToRootDiagram(_referenceNode_4, _plus_3, bounds.getMaxY());
               anchors.add(_localToRootDiagram_3);
             }
           }

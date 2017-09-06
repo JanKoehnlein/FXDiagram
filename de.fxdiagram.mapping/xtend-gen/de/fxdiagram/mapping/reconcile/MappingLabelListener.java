@@ -4,7 +4,6 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,7 @@ public class MappingLabelListener<T extends XLabel> extends InitializingListList
   
   protected MappingLabelListener(final Pair<String, Pane>... labelMappings) {
     final Consumer<Pair<String, Pane>> _function = (Pair<String, Pane> it) -> {
-      String _key = it.getKey();
-      Pane _value = it.getValue();
-      this.map.put(_key, _value);
+      this.map.put(it.getKey(), it.getValue());
     };
     ((List<Pair<String, Pane>>)Conversions.doWrapArray(labelMappings)).forEach(_function);
     final Procedure1<T> _function_1 = (T it) -> {
@@ -56,9 +53,7 @@ public class MappingLabelListener<T extends XLabel> extends InitializingListList
   protected Pane getPane(final XLabel label) {
     final DomainObjectDescriptor descriptor = label.getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
-      AbstractMapping<?> _mapping = ((IMappedElementDescriptor<?>)descriptor).getMapping();
-      String _iD = _mapping.getID();
-      return this.map.get(_iD);
+      return this.map.get(((IMappedElementDescriptor<?>)descriptor).getMapping().getID());
     } else {
       return null;
     }

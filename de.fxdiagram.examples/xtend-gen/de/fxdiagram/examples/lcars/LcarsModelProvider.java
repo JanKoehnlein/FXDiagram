@@ -30,10 +30,8 @@ public class LcarsModelProvider implements DomainObjectProvider {
   public LcarsModelProvider() {
     try {
       final Mongo mongo = new Mongo();
-      DB _dB = mongo.getDB("startrek");
-      this.db = _dB;
-      DBCollection _collection = this.db.getCollection("lcars");
-      this.lcars = _collection;
+      this.db = mongo.getDB("startrek");
+      this.lcars = this.db.getCollection("lcars");
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -90,10 +88,8 @@ public class LcarsModelProvider implements DomainObjectProvider {
   }
   
   public LcarsEntryDescriptor createLcarsEntryDescriptor(final DBObject it) {
-    Object _get = it.get("_id");
-    String _string = _get.toString();
-    Object _get_1 = it.get("name");
-    String _string_1 = _get_1.toString();
+    String _string = it.get("_id").toString();
+    String _string_1 = it.get("name").toString();
     return new LcarsEntryDescriptor(_string, _string_1, this);
   }
   

@@ -4,13 +4,10 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.command.AddRemoveCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -42,7 +39,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -62,9 +58,7 @@ public class LcarsField extends Parent {
   
   public LcarsField(final LcarsNode node, final String name, final String value) {
     this.node = node;
-    XRoot _root = CoreExtensions.getRoot(node);
-    LcarsModelProvider _domainObjectProvider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
-    final LcarsConnectionDescriptor connectionDescriptor = _domainObjectProvider.createLcarsConnectionDescriptor(name);
+    final LcarsConnectionDescriptor connectionDescriptor = CoreExtensions.getRoot(node).<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class).createLcarsConnectionDescriptor(name);
     final ChooserConnectionProvider _function = (XNode host, XNode choice, DomainObjectDescriptor choiceInfo) -> {
       XConnection _xConnection = new XConnection(host, choice, connectionDescriptor);
       final Procedure1<XConnection> _function_1 = (XConnection it) -> {
@@ -73,8 +67,7 @@ public class LcarsField extends Parent {
         XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
         final Procedure1<XConnectionLabel> _function_2 = (XConnectionLabel it_1) -> {
           Text _text = it_1.getText();
-          String _replace = name.replace("_", " ");
-          _text.setText(_replace);
+          _text.setText(name.replace("_", " "));
         };
         ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_2);
       };
@@ -91,8 +84,7 @@ public class LcarsField extends Parent {
         String _replace = name.replace("_", " ");
         String _plus = (_replace + ": ");
         it_1.setText(_plus);
-        Font _lcarsFont = LcarsExtensions.lcarsFont(12);
-        it_1.setFont(_lcarsFont);
+        it_1.setFont(LcarsExtensions.lcarsFont(12));
         it_1.setFill(LcarsExtensions.FLESH);
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
@@ -107,8 +99,7 @@ public class LcarsField extends Parent {
             ObservableList<Node> _children_2 = it.getChildren();
             Text _text_1 = new Text(currentWord);
             final Procedure1<Text> _function_3 = (Text it_1) -> {
-              Font _lcarsFont = LcarsExtensions.lcarsFont(12);
-              it_1.setFont(_lcarsFont);
+              it_1.setFont(LcarsExtensions.lcarsFont(12));
               it_1.setFill(LcarsExtensions.ORANGE);
             };
             Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_3);
@@ -123,23 +114,19 @@ public class LcarsField extends Parent {
         ObservableList<Node> _children_2 = it.getChildren();
         Text _text_1 = new Text(currentWord);
         final Procedure1<Text> _function_3 = (Text it_1) -> {
-          Font _lcarsFont = LcarsExtensions.lcarsFont(12);
-          it_1.setFont(_lcarsFont);
+          it_1.setFont(LcarsExtensions.lcarsFont(12));
           it_1.setFill(LcarsExtensions.ORANGE);
         };
         Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_3);
         _children_2.add(_doubleArrow_1);
       }
       final EventHandler<MouseEvent> _function_4 = (MouseEvent event) -> {
-        Iterable<Text> _allTextNodes = this.getAllTextNodes();
         final Consumer<Text> _function_5 = (Text it_1) -> {
           it_1.setFill(LcarsExtensions.RED);
         };
-        _allTextNodes.forEach(_function_5);
-        RectangleBorderPane _createQueryProgress = this.createQueryProgress();
-        this.queryProgress = _createQueryProgress;
-        LcarsNode _lcarsNode = this.getLcarsNode();
-        Node _node = _lcarsNode.getNode();
+        this.getAllTextNodes().forEach(_function_5);
+        this.queryProgress = this.createQueryProgress();
+        Node _node = this.getLcarsNode().getNode();
         ObservableList<Node> _children_3 = ((Pane) _node).getChildren();
         _children_3.add(this.queryProgress);
         MouseButton _button = event.getButton();
@@ -160,9 +147,6 @@ public class LcarsField extends Parent {
         MouseButton _button = it_1.getButton();
         boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
         if (_equals) {
-          XDiagram _diagram = CoreExtensions.getDiagram(this);
-          ObservableList<XNode> _nodes = _diagram.getNodes();
-          Iterable<LcarsNode> _filter = Iterables.<LcarsNode>filter(_nodes, LcarsNode.class);
           final Function1<LcarsNode, Boolean> _function_6 = (LcarsNode it_2) -> {
             return Boolean.valueOf(((((!Objects.equal(it_2, node)) && Objects.equal(it_2.getData().get(name), value)) && (!IterableExtensions.<XConnection>exists(it_2.getOutgoingConnections(), ((Function1<XConnection, Boolean>) (XConnection it_3) -> {
               return Boolean.valueOf((Objects.equal(it_3.getTarget(), node) && Objects.equal(it_3.getDomainObjectDescriptor(), connectionDescriptor)));
@@ -170,23 +154,15 @@ public class LcarsField extends Parent {
               return Boolean.valueOf((Objects.equal(it_3.getSource(), node) && Objects.equal(it_3.getDomainObjectDescriptor(), connectionDescriptor)));
             })))));
           };
-          Iterable<LcarsNode> _filter_1 = IterableExtensions.<LcarsNode>filter(_filter, _function_6);
           final Function1<LcarsNode, XConnection> _function_7 = (LcarsNode it_2) -> {
             return connectionProvider.getConnection(node, it_2, null);
           };
-          Iterable<XConnection> _map = IterableExtensions.<LcarsNode, XConnection>map(_filter_1, _function_7);
-          final List<XConnection> newConnections = IterableExtensions.<XConnection>toList(_map);
-          XRoot _root_1 = CoreExtensions.getRoot(this);
-          CommandStack _commandStack = _root_1.getCommandStack();
-          XDiagram _diagram_1 = CoreExtensions.getDiagram(this);
-          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_1, ((XShape[])Conversions.unwrapArray(newConnections, XShape.class)));
-          _commandStack.execute(_newAddCommand);
+          final List<XConnection> newConnections = IterableExtensions.<XConnection>toList(IterableExtensions.<LcarsNode, XConnection>map(IterableExtensions.<LcarsNode>filter(Iterables.<LcarsNode>filter(CoreExtensions.getDiagram(this).getNodes(), LcarsNode.class), _function_6), _function_7));
+          CoreExtensions.getRoot(this).getCommandStack().execute(AddRemoveCommand.newAddCommand(CoreExtensions.getDiagram(this), ((XShape[])Conversions.unwrapArray(newConnections, XShape.class))));
           boolean _isEmpty_1 = newConnections.isEmpty();
           boolean _not_1 = (!_isEmpty_1);
           if (_not_1) {
-            LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-            XRoot _root_2 = CoreExtensions.getRoot(this);
-            _layoutAction.perform(_root_2);
+            new LayoutAction(LayoutType.DOT).perform(CoreExtensions.getRoot(this));
           }
           this.resetVisuals();
         }
@@ -203,8 +179,7 @@ public class LcarsField extends Parent {
   }
   
   protected Iterable<Text> getAllTextNodes() {
-    ObservableList<Node> _children = this.flowPane.getChildren();
-    return Iterables.<Text>filter(_children, Text.class);
+    return Iterables.<Text>filter(this.flowPane.getChildren(), Text.class);
   }
   
   protected boolean isSplitHere(final char c) {
@@ -218,17 +193,13 @@ public class LcarsField extends Parent {
         Iterable<Text> _allTextNodes = this.getAllTextNodes();
         for (final Text textNode : _allTextNodes) {
           {
-            String _text = textNode.getText();
-            int _length = _text.length();
+            int _length = textNode.getText().length();
             ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _length, true);
             for (final Integer index : _doubleDotLessThan) {
               ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-              Duration _cycleDuration = it.getCycleDuration();
-              Duration _millis = Duration.millis(15);
-              Duration _add = _cycleDuration.add(_millis);
+              Duration _add = it.getCycleDuration().add(Duration.millis(15));
               StringProperty _textProperty = textNode.textProperty();
-              String _text_1 = textNode.getText();
-              String _substring = _text_1.substring(0, ((index).intValue() + 1));
+              String _substring = textNode.getText().substring(0, ((index).intValue() + 1));
               KeyValue _keyValue = new <String>KeyValue(_textProperty, _substring);
               KeyFrame _keyFrame = new KeyFrame(_add, _keyValue);
               _keyFrames.add(_keyFrame);
@@ -244,23 +215,18 @@ public class LcarsField extends Parent {
   }
   
   public void resetVisuals() {
-    boolean _notEquals = (!Objects.equal(this.queryProgress, null));
-    if (_notEquals) {
-      LcarsNode _lcarsNode = this.getLcarsNode();
-      Node _node = _lcarsNode.getNode();
+    if ((this.queryProgress != null)) {
+      Node _node = this.getLcarsNode().getNode();
       ObservableList<Node> _children = ((Pane) _node).getChildren();
       _children.remove(this.queryProgress);
       this.queryProgress = null;
     }
-    Iterable<Text> _allTextNodes = this.getAllTextNodes();
-    Text _head = IterableExtensions.<Text>head(_allTextNodes);
+    Text _head = IterableExtensions.<Text>head(this.getAllTextNodes());
     _head.setFill(LcarsExtensions.FLESH);
-    Iterable<Text> _allTextNodes_1 = this.getAllTextNodes();
-    Iterable<Text> _tail = IterableExtensions.<Text>tail(_allTextNodes_1);
     final Consumer<Text> _function = (Text it) -> {
       it.setFill(LcarsExtensions.ORANGE);
     };
-    _tail.forEach(_function);
+    IterableExtensions.<Text>tail(this.getAllTextNodes()).forEach(_function);
   }
   
   public RectangleBorderPane createQueryProgress() {
@@ -272,8 +238,7 @@ public class LcarsField extends Parent {
         ObservableList<Node> _children = it.getChildren();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
           it_1.setText("querying...");
-          Font _lcarsFont = LcarsExtensions.lcarsFont(42);
-          it_1.setFont(_lcarsFont);
+          it_1.setFont(LcarsExtensions.lcarsFont(42));
           it_1.setFill(LcarsExtensions.ORANGE);
           Insets _insets = new Insets(5, 5, 5, 5);
           StackPane.setMargin(it_1, _insets);

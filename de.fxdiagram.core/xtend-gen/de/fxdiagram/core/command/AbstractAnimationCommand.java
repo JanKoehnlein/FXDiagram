@@ -5,7 +5,6 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.viewport.ViewportMemento;
-import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.core.viewport.ViewportTransition;
 import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;
@@ -39,10 +38,7 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   @Override
   public Animation getExecuteAnimation(final CommandContext context) {
     if (this.isRestoreViewport) {
-      XRoot _root = context.getRoot();
-      ViewportTransform _viewportTransform = _root.getViewportTransform();
-      ViewportMemento _createMemento = _viewportTransform.createMemento();
-      this.fromMemento = _createMemento;
+      this.fromMemento = context.getRoot().getViewportTransform().createMemento();
     }
     final Animation animation = this.createExecuteAnimation(context);
     boolean _notEquals = (!Objects.equal(animation, null));
@@ -53,10 +49,7 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
         _children.add(animation);
         final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
           if (this.isRestoreViewport) {
-            XRoot _root_1 = context.getRoot();
-            ViewportTransform _viewportTransform_1 = _root_1.getViewportTransform();
-            ViewportMemento _createMemento_1 = _viewportTransform_1.createMemento();
-            this.toMemento = _createMemento_1;
+            this.toMemento = context.getRoot().getViewportTransform().createMemento();
           }
         };
         it.setOnFinished(_function_1);

@@ -26,13 +26,10 @@ public class ModelChangeBroker {
       final IWorkbenchPart part = partRef.getPart(false);
       boolean _notEquals = (!Objects.equal(part, null));
       if (_notEquals) {
-        ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();
-        Iterable<ISelectionExtractor> _selectionExtractors = _instance.getSelectionExtractors();
-        Iterable<IChangeSource> _filter = Iterables.<IChangeSource>filter(_selectionExtractors, IChangeSource.class);
         final Consumer<IChangeSource> _function = (IChangeSource it) -> {
           it.addChangeListener(part, ModelChangeBroker.this);
         };
-        _filter.forEach(_function);
+        Iterables.<IChangeSource>filter(ISelectionExtractor.Registry.getInstance().getSelectionExtractors(), IChangeSource.class).forEach(_function);
       }
     }
     
@@ -41,13 +38,10 @@ public class ModelChangeBroker {
       final IWorkbenchPart part = partRef.getPart(false);
       boolean _notEquals = (!Objects.equal(part, null));
       if (_notEquals) {
-        ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();
-        Iterable<ISelectionExtractor> _selectionExtractors = _instance.getSelectionExtractors();
-        Iterable<IChangeSource> _filter = Iterables.<IChangeSource>filter(_selectionExtractors, IChangeSource.class);
         final Consumer<IChangeSource> _function = (IChangeSource it) -> {
           it.removeChangeListener(part, ModelChangeBroker.this);
         };
-        _filter.forEach(_function);
+        Iterables.<IChangeSource>filter(ISelectionExtractor.Registry.getInstance().getSelectionExtractors(), IChangeSource.class).forEach(_function);
       }
     }
     
@@ -103,21 +97,18 @@ public class ModelChangeBroker {
   }
   
   public ModelChangeBroker(final IWorkbench workbench) {
-    IWorkbenchWindow[] _workbenchWindows = workbench.getWorkbenchWindows();
     final Consumer<IWorkbenchWindow> _function = (IWorkbenchWindow it) -> {
-      IWorkbenchPage[] _pages = it.getPages();
       final Consumer<IWorkbenchPage> _function_1 = (IWorkbenchPage it_1) -> {
-        IEditorReference[] _editorReferences = it_1.getEditorReferences();
         final Consumer<IEditorReference> _function_2 = (IEditorReference it_2) -> {
           this.partListener.partOpened(it_2);
         };
-        ((List<IEditorReference>)Conversions.doWrapArray(_editorReferences)).forEach(_function_2);
+        ((List<IEditorReference>)Conversions.doWrapArray(it_1.getEditorReferences())).forEach(_function_2);
         it_1.addPartListener(this.partListener);
       };
-      ((List<IWorkbenchPage>)Conversions.doWrapArray(_pages)).forEach(_function_1);
+      ((List<IWorkbenchPage>)Conversions.doWrapArray(it.getPages())).forEach(_function_1);
       it.addPageListener(this.pageListener);
     };
-    ((List<IWorkbenchWindow>)Conversions.doWrapArray(_workbenchWindows)).forEach(_function);
+    ((List<IWorkbenchWindow>)Conversions.doWrapArray(workbench.getWorkbenchWindows())).forEach(_function);
   }
   
   public void partChanged(final IWorkbenchPart part) {

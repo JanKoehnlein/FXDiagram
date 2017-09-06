@@ -15,7 +15,6 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Bounds;
 import javafx.geometry.Dimension2D;
@@ -62,8 +61,7 @@ public abstract class XShape extends Parent implements XActivatable {
   }
   
   protected boolean addNodeAsChild(final Node newNode) {
-    ObservableList<Node> _children = this.getChildren();
-    return _children.add(newNode);
+    return this.getChildren().add(newNode);
   }
   
   public ObjectProperty<Node> nodeProperty() {
@@ -127,8 +125,7 @@ public abstract class XShape extends Parent implements XActivatable {
       } catch (final Throwable _t) {
         if (_t instanceof Exception) {
           final Exception exc = (Exception)_t;
-          String _message = exc.getMessage();
-          XShape.LOG.severe(_message);
+          XShape.LOG.severe(exc.getMessage());
           exc.printStackTrace();
         } else {
           throw Exceptions.sneakyThrow(_t);
@@ -148,8 +145,7 @@ public abstract class XShape extends Parent implements XActivatable {
   }
   
   public void addBehavior(final Behavior behavior) {
-    Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
-    this.behaviors.put(_behaviorKey, behavior);
+    this.behaviors.put(behavior.getBehaviorKey(), behavior);
     boolean _isActive = this.getIsActive();
     if (_isActive) {
       behavior.activate();
@@ -179,10 +175,8 @@ public abstract class XShape extends Parent implements XActivatable {
   }
   
   public Dimension2D getAutoLayoutDimension() {
-    Bounds _snapBounds = this.getSnapBounds();
-    double _width = _snapBounds.getWidth();
-    Bounds _snapBounds_1 = this.getSnapBounds();
-    double _height = _snapBounds_1.getHeight();
+    double _width = this.getSnapBounds().getWidth();
+    double _height = this.getSnapBounds().getHeight();
     return new Dimension2D(_width, _height);
   }
   

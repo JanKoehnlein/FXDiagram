@@ -26,7 +26,6 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XDomainObj
   
   @Override
   protected void doActivate() {
-    XDomainObjectShape _host = this.getHost();
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       int _clickCount = it.getClickCount();
       boolean _equals = (_clickCount == 2);
@@ -35,13 +34,12 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XDomainObj
         it.consume();
       }
     };
-    _host.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);
+    this.getHost().<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);
   }
   
   @Override
   public void open() {
-    XDomainObjectShape _host = this.getHost();
-    final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
+    final DomainObjectDescriptor descriptor = this.getHost().getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
       ((IMappedElementDescriptor<?>)descriptor).openInEditor(true);
     }

@@ -2,7 +2,6 @@ package de.fxdiagram.examples.slides;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
@@ -61,11 +60,8 @@ public class Slide extends XNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    Image _backgroundImage = this.getBackgroundImage();
-    this.imageView.setImage(_backgroundImage);
-    ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
-    XRoot _root = CoreExtensions.getRoot(this);
-    _zoomToFitAction.perform(_root);
+    this.imageView.setImage(this.getBackgroundImage());
+    new ZoomToFitAction().perform(CoreExtensions.getRoot(this));
     if (this.onActivate!=null) {
       this.onActivate.apply();
     }

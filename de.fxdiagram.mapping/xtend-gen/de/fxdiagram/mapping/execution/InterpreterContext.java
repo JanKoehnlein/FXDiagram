@@ -70,12 +70,11 @@ public class InterpreterContext {
       _xifexpression = this.addedNodes.add(node);
     } else {
       boolean _xifexpression_1 = false;
-      ObservableList<XNode> _nodes = this.diagram.getNodes();
-      boolean _contains = _nodes.contains(node);
+      boolean _contains = this.diagram.getNodes().contains(node);
       boolean _not = (!_contains);
       if (_not) {
-        ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-        _xifexpression_1 = _nodes_1.add(node);
+        ObservableList<XNode> _nodes = this.diagram.getNodes();
+        _xifexpression_1 = _nodes.add(node);
       }
       _xifexpression = _xifexpression_1;
     }
@@ -88,12 +87,11 @@ public class InterpreterContext {
       _xifexpression = this.addedConnections.add(connection);
     } else {
       boolean _xifexpression_1 = false;
-      ObservableList<XConnection> _connections = this.diagram.getConnections();
-      boolean _contains = _connections.contains(connection);
+      boolean _contains = this.diagram.getConnections().contains(connection);
       boolean _not = (!_contains);
       if (_not) {
-        ObservableList<XConnection> _connections_1 = this.diagram.getConnections();
-        _xifexpression_1 = _connections_1.add(connection);
+        ObservableList<XConnection> _connections = this.diagram.getConnections();
+        _xifexpression_1 = _connections.add(connection);
       }
       _xifexpression = _xifexpression_1;
     }
@@ -114,21 +112,18 @@ public class InterpreterContext {
   protected XConnection doGetConnection(final DomainObjectDescriptor descriptor) {
     XConnection _elvis = null;
     ObservableList<XConnection> _connections = this.diagram.getConnections();
-    Iterable<XConnection> _plus = Iterables.<XConnection>concat(this.addedConnections, _connections);
     final Function1<XConnection, Boolean> _function = (XConnection it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    XConnection _findFirst = IterableExtensions.<XConnection>findFirst(_plus, _function);
+    XConnection _findFirst = IterableExtensions.<XConnection>findFirst(Iterables.<XConnection>concat(this.addedConnections, _connections), _function);
     if (_findFirst != null) {
       _elvis = _findFirst;
     } else {
       final Function1<InterpreterContext, XConnection> _function_1 = (InterpreterContext it) -> {
         return it.doGetConnection(descriptor);
       };
-      List<XConnection> _map = ListExtensions.<InterpreterContext, XConnection>map(this.subContexts, _function_1);
-      Iterable<XConnection> _filterNull = IterableExtensions.<XConnection>filterNull(_map);
-      XConnection _head = IterableExtensions.<XConnection>head(_filterNull);
+      XConnection _head = IterableExtensions.<XConnection>head(IterableExtensions.<XConnection>filterNull(ListExtensions.<InterpreterContext, XConnection>map(this.subContexts, _function_1)));
       _elvis = _head;
     }
     return _elvis;
@@ -148,21 +143,18 @@ public class InterpreterContext {
   protected XNode doGetNode(final DomainObjectDescriptor descriptor) {
     XNode _elvis = null;
     ObservableList<XNode> _nodes = this.diagram.getNodes();
-    Iterable<XNode> _plus = Iterables.<XNode>concat(this.addedNodes, _nodes);
     final Function1<XNode, Boolean> _function = (XNode it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    XNode _findFirst = IterableExtensions.<XNode>findFirst(_plus, _function);
+    XNode _findFirst = IterableExtensions.<XNode>findFirst(Iterables.<XNode>concat(this.addedNodes, _nodes), _function);
     if (_findFirst != null) {
       _elvis = _findFirst;
     } else {
       final Function1<InterpreterContext, XNode> _function_1 = (InterpreterContext it) -> {
         return it.doGetNode(descriptor);
       };
-      List<XNode> _map = ListExtensions.<InterpreterContext, XNode>map(this.subContexts, _function_1);
-      Iterable<XNode> _filterNull = IterableExtensions.<XNode>filterNull(_map);
-      XNode _head = IterableExtensions.<XNode>head(_filterNull);
+      XNode _head = IterableExtensions.<XNode>head(IterableExtensions.<XNode>filterNull(ListExtensions.<InterpreterContext, XNode>map(this.subContexts, _function_1)));
       _elvis = _head;
     }
     return _elvis;
@@ -178,8 +170,7 @@ public class InterpreterContext {
   public void directlyApplyChanges() {
     if (((this.isReplaceRootDiagram() && (!this.subContexts.isEmpty())) && Objects.equal(this.superContext, null))) {
       XRoot _root = CoreExtensions.getRoot(this.diagram);
-      InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);
-      _root.setDiagram(_head.diagram);
+      _root.setDiagram(IterableExtensions.<InterpreterContext>head(this.subContexts).diagram);
     }
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterables.<XNode>addAll(_nodes, this.addedNodes);
@@ -196,20 +187,17 @@ public class InterpreterContext {
     final Function1<InterpreterContext, Iterable<XDomainObjectShape>> _function = (InterpreterContext it) -> {
       return it.getAddedShapes();
     };
-    List<Iterable<XDomainObjectShape>> _map = ListExtensions.<InterpreterContext, Iterable<XDomainObjectShape>>map(this.subContexts, _function);
-    Iterable<XDomainObjectShape> _flatten = Iterables.<XDomainObjectShape>concat(_map);
+    Iterable<XDomainObjectShape> _flatten = Iterables.<XDomainObjectShape>concat(ListExtensions.<InterpreterContext, Iterable<XDomainObjectShape>>map(this.subContexts, _function));
     return Iterables.<XDomainObjectShape>concat(_plus, _flatten);
   }
   
   public void executeCommands(final CommandStack commandStack) {
     if (((this.isReplaceRootDiagram() && (!this.subContexts.isEmpty())) && Objects.equal(this.superContext, null))) {
-      InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);
-      ChangeDiagramCommand _changeDiagramCommand = new ChangeDiagramCommand(_head.diagram);
+      ChangeDiagramCommand _changeDiagramCommand = new ChangeDiagramCommand(IterableExtensions.<InterpreterContext>head(this.subContexts).diagram);
       commandStack.execute(_changeDiagramCommand);
     }
     Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(this.addedNodes, this.addedConnections);
-    AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class)));
-    commandStack.execute(_newAddCommand);
+    commandStack.execute(AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class))));
     final Consumer<InterpreterContext> _function = (InterpreterContext it) -> {
       it.executeCommands(commandStack);
     };

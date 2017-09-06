@@ -17,9 +17,7 @@ public class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject>
   
   @Override
   public String getName() {
-    DBObject _domainObject = this.getDomainObject();
-    Object _get = _domainObject.get("name");
-    return _get.toString();
+    return this.getDomainObject().get("name").toString();
   }
   
   @Override

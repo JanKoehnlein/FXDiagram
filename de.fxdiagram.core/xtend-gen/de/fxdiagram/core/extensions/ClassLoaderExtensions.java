@@ -37,8 +37,7 @@ public class ClassLoaderExtensions {
       String _xifexpression = null;
       boolean _isEquinox = ClassLoaderExtensions.isEquinox();
       if (_isEquinox) {
-        URL _fileURL = FileLocator.toFileURL(resource);
-        _xifexpression = _fileURL.toExternalForm();
+        _xifexpression = FileLocator.toFileURL(resource).toExternalForm();
       } else {
         _xifexpression = resource.toExternalForm();
       }
@@ -63,8 +62,7 @@ public class ClassLoaderExtensions {
     if (_isEquinox) {
       final ClassLoader classLoader = clazz.getClassLoader();
       if ((classLoader instanceof BundleReference)) {
-        Bundle _bundle = ((BundleReference)classLoader).getBundle();
-        String _symbolicName = _bundle.getSymbolicName();
+        String _symbolicName = ((BundleReference)classLoader).getBundle().getSymbolicName();
         String _plus = (_symbolicName + ":");
         String _canonicalName = clazz.getCanonicalName();
         return (_plus + _canonicalName);
@@ -101,8 +99,7 @@ public class ClassLoaderExtensions {
           return bundle.loadClass(className);
         }
       } else {
-        ClassLoader _classLoader = ClassLoaderExtensions.class.getClassLoader();
-        return _classLoader.loadClass(className);
+        return ClassLoaderExtensions.class.getClassLoader().loadClass(className);
       }
       return null;
     } catch (Throwable _e) {

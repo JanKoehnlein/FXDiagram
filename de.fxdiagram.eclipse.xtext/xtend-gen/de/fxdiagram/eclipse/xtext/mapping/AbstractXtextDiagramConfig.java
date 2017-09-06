@@ -13,10 +13,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.ui.resource.IStorage2UriMapper;
 import org.eclipse.xtext.util.Pair;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -55,14 +52,8 @@ public abstract class AbstractXtextDiagramConfig extends AbstractEclipseDiagramC
   }
   
   public String getFilePath(final EObject element) {
-    Resource _eResource = element.eResource();
-    URI _uRI = _eResource.getURI();
-    Iterable<Pair<IStorage, IProject>> _storages = this._iStorage2UriMapper.getStorages(_uRI);
-    Pair<IStorage, IProject> _head = IterableExtensions.<Pair<IStorage, IProject>>head(_storages);
-    IStorage _first = _head.getFirst();
-    IPath _fullPath = ((IFile) _first).getFullPath();
-    IPath _removeFileExtension = _fullPath.removeFileExtension();
-    String _string = _removeFileExtension.toString();
+    IStorage _first = IterableExtensions.<Pair<IStorage, IProject>>head(this._iStorage2UriMapper.getStorages(element.eResource().getURI())).getFirst();
+    String _string = ((IFile) _first).getFullPath().removeFileExtension().toString();
     return (_string + ".fxd");
   }
 }

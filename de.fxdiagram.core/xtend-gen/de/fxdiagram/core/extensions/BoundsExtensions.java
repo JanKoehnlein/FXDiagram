@@ -10,24 +10,12 @@ public class BoundsExtensions {
   public static BoundingBox operator_plus(final Bounds left, final Bounds right) {
     BoundingBox _xblockexpression = null;
     {
-      double _minX = left.getMinX();
-      double _minX_1 = right.getMinX();
-      final double minX = Math.min(_minX, _minX_1);
-      double _minY = left.getMinY();
-      double _minY_1 = right.getMinY();
-      final double minY = Math.min(_minY, _minY_1);
-      double _minZ = left.getMinZ();
-      double _minZ_1 = right.getMinZ();
-      final double minZ = Math.min(_minZ, _minZ_1);
-      double _maxX = left.getMaxX();
-      double _maxX_1 = right.getMaxX();
-      final double maxX = Math.max(_maxX, _maxX_1);
-      double _maxY = left.getMaxY();
-      double _maxY_1 = right.getMaxY();
-      final double maxY = Math.max(_maxY, _maxY_1);
-      double _maxZ = left.getMaxZ();
-      double _maxZ_1 = right.getMaxZ();
-      final double maxZ = Math.max(_maxZ, _maxZ_1);
+      final double minX = Math.min(left.getMinX(), right.getMinX());
+      final double minY = Math.min(left.getMinY(), right.getMinY());
+      final double minZ = Math.min(left.getMinZ(), right.getMinZ());
+      final double maxX = Math.max(left.getMaxX(), right.getMaxX());
+      final double maxY = Math.max(left.getMaxY(), right.getMaxY());
+      final double maxZ = Math.max(left.getMaxZ(), right.getMaxZ());
       _xblockexpression = new BoundingBox(minX, minY, minZ, (maxX - minX), (maxY - minY), (maxZ - minZ));
     }
     return _xblockexpression;

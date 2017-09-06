@@ -22,13 +22,11 @@ public class SlideNavigation extends AbstractHostBehavior<SlideDiagram> implemen
   
   @Override
   public boolean next() {
-    SlideDiagram _host = this.getHost();
-    return _host.next();
+    return this.getHost().next();
   }
   
   @Override
   public boolean previous() {
-    SlideDiagram _host = this.getHost();
-    return _host.previous();
+    return this.getHost().previous();
   }
 }

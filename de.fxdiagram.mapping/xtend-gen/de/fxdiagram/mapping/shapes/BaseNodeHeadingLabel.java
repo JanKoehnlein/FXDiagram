@@ -28,15 +28,10 @@ public class BaseNodeHeadingLabel<T extends Object> extends BaseNodeLabel<T> {
       Insets _insets = new Insets(10, 20, 10, 20);
       StackPane.setMargin(this, _insets);
       Text _text = this.getText();
-      Text _text_1 = this.getText();
-      Font _font = _text_1.getFont();
-      String _family = _font.getFamily();
-      Text _text_2 = this.getText();
-      Font _font_1 = _text_2.getFont();
-      double _size = _font_1.getSize();
+      String _family = this.getText().getFont().getFamily();
+      double _size = this.getText().getFont().getSize();
       double _multiply = (_size * 1.1);
-      Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
-      _text.setFont(_font_2);
+      _text.setFont(Font.font(_family, FontWeight.BOLD, _multiply));
     };
     return ObjectExtensions.<Node>operator_doubleArrow(_createNode, _function);
   }

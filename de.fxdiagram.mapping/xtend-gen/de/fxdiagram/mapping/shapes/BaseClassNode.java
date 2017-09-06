@@ -28,7 +28,6 @@ import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
 import java.util.List;
-import javafx.animation.Transition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -50,7 +49,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
@@ -92,12 +90,10 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
         public void morph(final AnimationCommand command) {
           SequentialAnimationCommand _sequentialAnimationCommand = new SequentialAnimationCommand();
           final Procedure1<SequentialAnimationCommand> _function = (SequentialAnimationCommand it) -> {
-            BaseClassNode<T> _host = ReconcileBehavior.this.getHost();
-            AbstractAnimationCommand _deflateCommand = _host.inflator.getDeflateCommand();
+            AbstractAnimationCommand _deflateCommand = ReconcileBehavior.this.getHost().inflator.getDeflateCommand();
             it.operator_add(_deflateCommand);
             it.operator_add(command);
-            BaseClassNode<T> _host_1 = ReconcileBehavior.this.getHost();
-            AbstractAnimationCommand _inflateCommand = _host_1.inflator.getInflateCommand();
+            AbstractAnimationCommand _inflateCommand = ReconcileBehavior.this.getHost().inflator.getInflateCommand();
             it.operator_add(_inflateCommand);
           };
           SequentialAnimationCommand _doubleArrow = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function);
@@ -168,13 +164,11 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
     Node _xblockexpression = null;
     {
       final Node pane = super.createNode();
-      Color _defaultBgPaint = this.getDefaultBgPaint();
-      this.setBgColor(_defaultBgPaint);
+      this.setBgColor(this.getDefaultBgPaint());
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
         TooltipExtensions.setTooltip(it, "Right-click to configure");
-        ObjectProperty<Paint> _backgroundPaintProperty = it.backgroundPaintProperty();
-        _backgroundPaintProperty.bind(this.bgColorProperty);
+        it.backgroundPaintProperty().bind(this.bgColorProperty);
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_1 = (VBox it_1) -> {
@@ -198,8 +192,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function_1 = (RectangleBorderPane it) -> {
         TooltipExtensions.setTooltip(it, "Right-click to show node");
-        ObjectProperty<Paint> _backgroundPaintProperty = it.backgroundPaintProperty();
-        _backgroundPaintProperty.bind(this.bgColorProperty);
+        it.backgroundPaintProperty().bind(this.bgColorProperty);
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function_2 = (VBox it_1) -> {
@@ -225,8 +218,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
           ObservableList<Node> _children_5 = it_1.getChildren();
           ColorPicker _colorPicker = new ColorPicker();
           final Procedure1<ColorPicker> _function_3 = (ColorPicker it_2) -> {
-            ObjectProperty<Color> _valueProperty = it_2.valueProperty();
-            _valueProperty.bindBidirectional(this.bgColorProperty);
+            it_2.valueProperty().bindBidirectional(this.bgColorProperty);
           };
           ColorPicker _doubleArrow_1 = ObjectExtensions.<ColorPicker>operator_doubleArrow(_colorPicker, _function_3);
           _children_5.add(_doubleArrow_1);
@@ -249,9 +241,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       final Procedure1<VBox> _function_3 = (VBox c) -> {
         Insets _insets = new Insets(10, 0, 0, 0);
         c.setPadding(_insets);
-        ObservableList<Node> _children = this.contentArea.getChildren();
-        int _size = _children.size();
-        this.addInflatable(c, this.showAttributesProperty, this.attributesBox, _size, this.inflator);
+        this.addInflatable(c, this.showAttributesProperty, this.attributesBox, this.contentArea.getChildren().size(), this.inflator);
       };
       VBox _doubleArrow_3 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_3);
       this.attributeCompartment = _doubleArrow_3;
@@ -259,9 +249,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       final Procedure1<VBox> _function_4 = (VBox c) -> {
         Insets _insets = new Insets(10, 0, 0, 0);
         c.setPadding(_insets);
-        ObservableList<Node> _children = this.contentArea.getChildren();
-        int _size = _children.size();
-        this.addInflatable(c, this.showMethodsProperty, this.methodsBox, _size, this.inflator);
+        this.addInflatable(c, this.showMethodsProperty, this.methodsBox, this.contentArea.getChildren().size(), this.inflator);
       };
       VBox _doubleArrow_4 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_4);
       this.methodCompartment = _doubleArrow_4;
@@ -303,14 +291,11 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
     };
     this.bindCheckbox(this.showAttributesProperty, this.attributesBox, this.attributeCompartment, _function_1, this.inflator);
     final Function0<Integer> _function_2 = () -> {
-      ObservableList<Node> _children = this.contentArea.getChildren();
-      return Integer.valueOf(_children.size());
+      return Integer.valueOf(this.contentArea.getChildren().size());
     };
     this.bindCheckbox(this.showMethodsProperty, this.methodsBox, this.methodCompartment, _function_2, this.inflator);
-    Transition _inflateAnimation = this.inflator.getInflateAnimation();
-    _inflateAnimation.play();
-    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
+    this.inflator.getInflateAnimation().play();
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, this.getDomainObjectDescriptor());
   }
   
   @Override
@@ -328,19 +313,16 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
   }
   
   protected void bindCheckbox(final BooleanProperty property, final CheckBox box, final VBox compartment, final Function0<? extends Integer> index, final Inflator inflator) {
-    BooleanProperty _selectedProperty = box.selectedProperty();
-    _selectedProperty.bindBidirectional(property);
+    box.selectedProperty().bindBidirectional(property);
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean show) -> {
-      ObservableList<Node> _children = this.contentArea.getChildren();
-      boolean _contains = _children.contains(compartment);
+      boolean _contains = this.contentArea.getChildren().contains(compartment);
       if (_contains) {
         if ((!(show).booleanValue())) {
           inflator.removeInflatable(compartment);
         }
       } else {
         if ((show).booleanValue()) {
-          Integer _apply = index.apply();
-          inflator.addInflatable(compartment, (_apply).intValue());
+          inflator.addInflatable(compartment, (index.apply()).intValue());
         }
       }
     };
@@ -360,8 +342,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
       if (_equals) {
         if (((!Objects.equal(this.getFront(), null)) && (!Objects.equal(this.getBack(), null)))) {
-          boolean _isHorizontal = this.isHorizontal(it);
-          this.flip(_isHorizontal);
+          this.flip(this.isHorizontal(it));
           it.consume();
         }
       }

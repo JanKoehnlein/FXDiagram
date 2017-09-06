@@ -1,12 +1,10 @@
 package de.fxdiagram.lib.simple;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.command.AddRemoveCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.buttons.RapidButton;
@@ -51,42 +49,36 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
         final SimpleNode target = new SimpleNode("New Node");
         final XNode source = button.getHost();
         final XConnection connection = new XConnection(source, target);
-        double _layoutX = source.getLayoutX();
-        target.setLayoutX(_layoutX);
-        double _layoutY = source.getLayoutY();
-        target.setLayoutY(_layoutY);
+        target.setLayoutX(source.getLayoutX());
+        target.setLayoutY(source.getLayoutY());
         Side _position = button.getPosition();
         if (_position != null) {
           switch (_position) {
             case TOP:
-              double _layoutY_1 = target.getLayoutY();
-              double _minus = (_layoutY_1 - 150);
+              double _layoutY = target.getLayoutY();
+              double _minus = (_layoutY - 150);
               target.setLayoutY(_minus);
               break;
             case BOTTOM:
-              double _layoutY_2 = target.getLayoutY();
-              double _plus = (_layoutY_2 + 150);
+              double _layoutY_1 = target.getLayoutY();
+              double _plus = (_layoutY_1 + 150);
               target.setLayoutY(_plus);
               break;
             case LEFT:
-              double _layoutX_1 = target.getLayoutX();
-              double _minus_1 = (_layoutX_1 - 200);
+              double _layoutX = target.getLayoutX();
+              double _minus_1 = (_layoutX - 200);
               target.setLayoutX(_minus_1);
               break;
             case RIGHT:
-              double _layoutX_2 = target.getLayoutX();
-              double _plus_1 = (_layoutX_2 + 200);
+              double _layoutX_1 = target.getLayoutX();
+              double _plus_1 = (_layoutX_1 + 200);
               target.setLayoutX(_plus_1);
               break;
             default:
               break;
           }
         }
-        XRoot _root = CoreExtensions.getRoot(host);
-        CommandStack _commandStack = _root.getCommandStack();
-        XDiagram _diagram = CoreExtensions.getDiagram(host);
-        AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram, target, connection);
-        _commandStack.execute(_newAddCommand);
+        CoreExtensions.getRoot(host).getCommandStack().execute(AddRemoveCommand.newAddCommand(CoreExtensions.getDiagram(host), target, connection));
       }
     };
     final RapidButtonAction addAction = _function;

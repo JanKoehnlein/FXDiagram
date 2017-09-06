@@ -10,7 +10,6 @@ import org.eclipse.core.commands.ExecutionException;
 public class ConsiderFragmentDependeniesHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    boolean _isWidgetChecked = HandlerHelper.isWidgetChecked(event);
-    return Boolean.valueOf(BundleUtil.setConsiderFragments(_isWidgetChecked));
+    return Boolean.valueOf(BundleUtil.setConsiderFragments(HandlerHelper.isWidgetChecked(event)));
   }
 }

@@ -35,15 +35,13 @@ public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescr
   
   @Override
   public <U extends Object> U withDomainObject(final Function1<? super EReferenceWithOpposite, ? extends U> lambda) {
-    EcoreDomainObjectProvider _provider = this.getProvider();
-    String _uri = this.getUri();
-    final EObject element = _provider.resolveEObject(_uri);
+    final EObject element = this.getProvider().resolveEObject(this.getUri());
     if ((element instanceof EReference)) {
       EReferenceWithOpposite _eReferenceWithOpposite = new EReferenceWithOpposite(((EReference)element));
       return lambda.apply(_eReferenceWithOpposite);
     } else {
-      String _uri_1 = this.getUri();
-      String _plus = ("Cannot resolve EReference " + _uri_1);
+      String _uri = this.getUri();
+      String _plus = ("Cannot resolve EReference " + _uri);
       throw new NoSuchElementException(_plus);
     }
   }
@@ -52,10 +50,8 @@ public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescr
   public Object openInEditor(final boolean select) {
     IEditingDomainProvider _xblockexpression = null;
     {
-      String _uri = this.getUri();
-      final URI theURI = URI.createURI(_uri);
-      EcoreDomainObjectProvider _provider = this.getProvider();
-      _xblockexpression = _provider.openEditor(theURI, select);
+      final URI theURI = URI.createURI(this.getUri());
+      _xblockexpression = this.getProvider().openEditor(theURI, select);
     }
     return _xblockexpression;
   }
@@ -72,8 +68,7 @@ public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescr
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    String _uri = this.getUri();
-    int _hashCode_1 = _uri.hashCode();
+    int _hashCode_1 = this.getUri().hashCode();
     String _oppositeUri = this.getOppositeUri();
     int _hashCode_2 = 0;
     if (_oppositeUri!=null) {

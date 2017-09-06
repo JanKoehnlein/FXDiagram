@@ -35,12 +35,8 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
   
   @Override
   public <U extends Object> U withDomainObject(final Function1<? super ESuperType, ? extends U> lambda) {
-    EcoreDomainObjectProvider _provider = this.getProvider();
-    String _subTypeUri = this.getSubTypeUri();
-    final EObject subType = _provider.resolveEObject(_subTypeUri);
-    EcoreDomainObjectProvider _provider_1 = this.getProvider();
-    String _superTypeUri = this.getSuperTypeUri();
-    final EObject superType = _provider_1.resolveEObject(_superTypeUri);
+    final EObject subType = this.getProvider().resolveEObject(this.getSubTypeUri());
+    final EObject superType = this.getProvider().resolveEObject(this.getSuperTypeUri());
     if ((subType instanceof EClass)) {
       if ((superType instanceof EClass)) {
         boolean _isSuperTypeOf = ((EClass)superType).isSuperTypeOf(((EClass)subType));
@@ -50,11 +46,11 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
         }
       }
     }
-    String _subTypeUri_1 = this.getSubTypeUri();
-    String _plus = ("Cannot resolve ESupertType " + _subTypeUri_1);
+    String _subTypeUri = this.getSubTypeUri();
+    String _plus = ("Cannot resolve ESupertType " + _subTypeUri);
     String _plus_1 = (_plus + "->");
-    String _superTypeUri_1 = this.getSuperTypeUri();
-    String _plus_2 = (_plus_1 + _superTypeUri_1);
+    String _superTypeUri = this.getSuperTypeUri();
+    String _plus_2 = (_plus_1 + _superTypeUri);
     throw new NoSuchElementException(_plus_2);
   }
   
@@ -62,10 +58,8 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
   public Object openInEditor(final boolean select) {
     IEditingDomainProvider _xblockexpression = null;
     {
-      String _subTypeUri = this.getSubTypeUri();
-      final URI theURI = URI.createURI(_subTypeUri);
-      EcoreDomainObjectProvider _provider = this.getProvider();
-      _xblockexpression = _provider.openEditor(theURI, select);
+      final URI theURI = URI.createURI(this.getSubTypeUri());
+      _xblockexpression = this.getProvider().openEditor(theURI, select);
     }
     return _xblockexpression;
   }
@@ -82,12 +76,10 @@ public class ESuperTypeDescriptor extends AbstractMappedElementDescriptor<ESuper
   @Override
   public int hashCode() {
     int _hashCode = super.hashCode();
-    String _subTypeUri = this.getSubTypeUri();
-    int _hashCode_1 = _subTypeUri.hashCode();
+    int _hashCode_1 = this.getSubTypeUri().hashCode();
     int _multiply = (563 * _hashCode_1);
     int _plus = (_hashCode + _multiply);
-    String _superTypeUri = this.getSuperTypeUri();
-    int _hashCode_2 = _superTypeUri.hashCode();
+    int _hashCode_2 = this.getSuperTypeUri().hashCode();
     int _multiply_1 = (547 * _hashCode_2);
     return (_plus + _multiply_1);
   }

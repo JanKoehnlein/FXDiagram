@@ -20,12 +20,8 @@ public class LocalCoodinateTest {
   @Test
   public void paneWidthIsLocal() {
     final TestPane pane = new TestPane();
-    Bounds _boundsInLocal = pane.getBoundsInLocal();
-    double _width = _boundsInLocal.getWidth();
-    Assert.assertEquals(100.0, _width, this.EPSILON);
-    Bounds _layoutBounds = pane.getLayoutBounds();
-    double _width_1 = _layoutBounds.getWidth();
-    Assert.assertEquals(100.0, _width_1, this.EPSILON);
+    Assert.assertEquals(100.0, pane.getBoundsInLocal().getWidth(), this.EPSILON);
+    Assert.assertEquals(100.0, pane.getLayoutBounds().getWidth(), this.EPSILON);
   }
   
   @Test
@@ -38,21 +34,15 @@ public class LocalCoodinateTest {
     };
     ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     pane.setScaleX(0.5);
-    Bounds _boundsInLocal = pane.getBoundsInLocal();
-    double _width = _boundsInLocal.getWidth();
-    Assert.assertEquals(100.0, _width, this.EPSILON);
-    Bounds _boundsInParent = pane.getBoundsInParent();
-    double _width_1 = _boundsInParent.getWidth();
-    Assert.assertEquals(50.0, _width_1, this.EPSILON);
+    Assert.assertEquals(100.0, pane.getBoundsInLocal().getWidth(), this.EPSILON);
+    Assert.assertEquals(50.0, pane.getBoundsInParent().getWidth(), this.EPSILON);
   }
   
   @Test
   public void layoutXIsInNotLayoutBounds() {
     final TestPane pane = new TestPane();
     pane.setLayoutX(100);
-    Bounds _boundsInLocal = pane.getBoundsInLocal();
-    double _minX = _boundsInLocal.getMinX();
-    Assert.assertEquals(0.0, _minX, this.EPSILON);
+    Assert.assertEquals(0.0, pane.getBoundsInLocal().getMinX(), this.EPSILON);
   }
   
   @Test
@@ -69,18 +59,12 @@ public class LocalCoodinateTest {
       it.setHeight(5);
     };
     final Rectangle r1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
-    Bounds _layoutBounds = r0.getLayoutBounds();
-    InputOutput.<Bounds>println(_layoutBounds);
-    double _layoutX = r0.getLayoutX();
-    InputOutput.<Double>println(Double.valueOf(_layoutX));
-    double _layoutY = r0.getLayoutY();
-    InputOutput.<Double>println(Double.valueOf(_layoutY));
-    Bounds _layoutBounds_1 = r1.getLayoutBounds();
-    InputOutput.<Bounds>println(_layoutBounds_1);
-    double _layoutX_1 = r1.getLayoutX();
-    InputOutput.<Double>println(Double.valueOf(_layoutX_1));
-    double _layoutY_1 = r1.getLayoutY();
-    InputOutput.<Double>println(Double.valueOf(_layoutY_1));
+    InputOutput.<Bounds>println(r0.getLayoutBounds());
+    InputOutput.<Double>println(Double.valueOf(r0.getLayoutX()));
+    InputOutput.<Double>println(Double.valueOf(r0.getLayoutY()));
+    InputOutput.<Bounds>println(r1.getLayoutBounds());
+    InputOutput.<Double>println(Double.valueOf(r1.getLayoutX()));
+    InputOutput.<Double>println(Double.valueOf(r1.getLayoutY()));
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function_2 = (StackPane it) -> {
       ObservableList<Node> _children = it.getChildren();
@@ -90,26 +74,16 @@ public class LocalCoodinateTest {
       it.layout();
     };
     final StackPane pane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function_2);
-    Bounds _layoutBounds_2 = r0.getLayoutBounds();
-    InputOutput.<Bounds>println(_layoutBounds_2);
-    double _layoutX_2 = r0.getLayoutX();
-    InputOutput.<Double>println(Double.valueOf(_layoutX_2));
-    double _layoutY_2 = r0.getLayoutY();
-    InputOutput.<Double>println(Double.valueOf(_layoutY_2));
-    Bounds _layoutBounds_3 = r1.getLayoutBounds();
-    InputOutput.<Bounds>println(_layoutBounds_3);
-    double _layoutX_3 = r1.getLayoutX();
-    InputOutput.<Double>println(Double.valueOf(_layoutX_3));
-    double _layoutY_3 = r1.getLayoutY();
-    InputOutput.<Double>println(Double.valueOf(_layoutY_3));
-    Bounds _layoutBounds_4 = pane.getLayoutBounds();
-    InputOutput.<Bounds>println(_layoutBounds_4);
-    double _layoutX_4 = pane.getLayoutX();
-    InputOutput.<Double>println(Double.valueOf(_layoutX_4));
-    double _layoutY_4 = pane.getLayoutY();
-    InputOutput.<Double>println(Double.valueOf(_layoutY_4));
-    Bounds _boundsInLocal = pane.getBoundsInLocal();
-    InputOutput.<Bounds>println(_boundsInLocal);
+    InputOutput.<Bounds>println(r0.getLayoutBounds());
+    InputOutput.<Double>println(Double.valueOf(r0.getLayoutX()));
+    InputOutput.<Double>println(Double.valueOf(r0.getLayoutY()));
+    InputOutput.<Bounds>println(r1.getLayoutBounds());
+    InputOutput.<Double>println(Double.valueOf(r1.getLayoutX()));
+    InputOutput.<Double>println(Double.valueOf(r1.getLayoutY()));
+    InputOutput.<Bounds>println(pane.getLayoutBounds());
+    InputOutput.<Double>println(Double.valueOf(pane.getLayoutX()));
+    InputOutput.<Double>println(Double.valueOf(pane.getLayoutY()));
+    InputOutput.<Bounds>println(pane.getBoundsInLocal());
   }
   
   @Test
@@ -136,22 +110,10 @@ public class LocalCoodinateTest {
       _children.add(_doubleArrow);
     };
     ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-    Bounds _boundsInLocal = rect.getBoundsInLocal();
-    InputOutput.<Bounds>println(_boundsInLocal);
-    Bounds _boundsInLocal_1 = rect.getBoundsInLocal();
-    Bounds _localToParent = rect.localToParent(_boundsInLocal_1);
-    InputOutput.<Bounds>println(_localToParent);
-    Bounds _boundsInLocal_2 = rect.getBoundsInLocal();
-    Bounds _localToParent_1 = rect.localToParent(_boundsInLocal_2);
-    InputOutput.<Bounds>println(_localToParent_1);
-    Bounds _boundsInLocal_3 = rect.getBoundsInLocal();
-    Bounds _localToParent_2 = rect.localToParent(_boundsInLocal_3);
-    Bounds _localToParent_3 = group.localToParent(_localToParent_2);
-    InputOutput.<Bounds>println(_localToParent_3);
-    Bounds _boundsInLocal_4 = rect.getBoundsInLocal();
-    Bounds _localToParent_4 = rect.localToParent(_boundsInLocal_4);
-    Bounds _localToParent_5 = group.localToParent(_localToParent_4);
-    Bounds _localToParent_6 = pane.localToParent(_localToParent_5);
-    InputOutput.<Bounds>println(_localToParent_6);
+    InputOutput.<Bounds>println(rect.getBoundsInLocal());
+    InputOutput.<Bounds>println(rect.localToParent(rect.getBoundsInLocal()));
+    InputOutput.<Bounds>println(rect.localToParent(rect.getBoundsInLocal()));
+    InputOutput.<Bounds>println(group.localToParent(rect.localToParent(rect.getBoundsInLocal())));
+    InputOutput.<Bounds>println(pane.localToParent(group.localToParent(rect.localToParent(rect.getBoundsInLocal()))));
   }
 }

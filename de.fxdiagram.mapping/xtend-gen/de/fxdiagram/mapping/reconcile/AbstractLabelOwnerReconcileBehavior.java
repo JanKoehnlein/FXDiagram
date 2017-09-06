@@ -2,7 +2,6 @@ package de.fxdiagram.mapping.reconcile;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
@@ -17,9 +16,7 @@ import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.function.Consumer;
-import javafx.scene.text.Text;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
@@ -52,9 +49,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
       if (_domainObjectDescriptor!=null) {
         _hashCode=_domainObjectDescriptor.hashCode();
       }
-      Text _text = this.label.getText();
-      String _text_1 = _text.getText();
-      int _hashCode_1 = _text_1.hashCode();
+      int _hashCode_1 = this.label.getText().getText().hashCode();
       int _multiply = (37 * _hashCode_1);
       return (_hashCode + _multiply);
     }
@@ -82,16 +77,13 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   
   @Override
   public DirtyState getDirtyState() {
-    SHAPE _host = this.getHost();
-    DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getHost().getDomainObjectDescriptor();
     if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
       try {
-        SHAPE _host_1 = this.getHost();
-        DomainObjectDescriptor _domainObjectDescriptor_1 = _host_1.getDomainObjectDescriptor();
+        DomainObjectDescriptor _domainObjectDescriptor_1 = this.getHost().getDomainObjectDescriptor();
         final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
         final Function1<T, DirtyState> _function = (T it) -> {
-          AbstractMapping<T> _mapping = descriptor.getMapping();
-          return this.getLabelsDirtyState(_mapping, it);
+          return this.getLabelsDirtyState(descriptor.getMapping(), it);
         };
         return descriptor.<DirtyState>withDomainObject(_function);
       } catch (final Throwable _t) {
@@ -134,14 +126,11 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   @Override
   public void showDirtyState(final DirtyState dirtyState) {
     super.showDirtyState(dirtyState);
-    Iterable<? extends XLabel> _existingLabels = this.getExistingLabels();
     final Consumer<XLabel> _function = (XLabel it) -> {
-      SHAPE _host = this.getHost();
-      DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+      DomainObjectDescriptor _domainObjectDescriptor = this.getHost().getDomainObjectDescriptor();
       if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
         try {
-          SHAPE _host_1 = this.getHost();
-          DomainObjectDescriptor _domainObjectDescriptor_1 = _host_1.getDomainObjectDescriptor();
+          DomainObjectDescriptor _domainObjectDescriptor_1 = this.getHost().getDomainObjectDescriptor();
           final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
           final Function1<T, Object> _function_1 = (T domainObject) -> {
             Object _xblockexpression = null;
@@ -196,36 +185,32 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
         }
       }
     };
-    _existingLabels.forEach(_function);
+    this.getExistingLabels().forEach(_function);
   }
   
   @Override
   public void hideDirtyState() {
     super.hideDirtyState();
-    Iterable<? extends XLabel> _existingLabels = this.getExistingLabels();
     final Consumer<XLabel> _function = (XLabel it) -> {
       ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
       if (_behavior!=null) {
         _behavior.hideDirtyState();
       }
     };
-    _existingLabels.forEach(_function);
+    this.getExistingLabels().forEach(_function);
   }
   
   @Override
   public void reconcile(final ReconcileBehavior.UpdateAcceptor acceptor) {
-    SHAPE _host = this.getHost();
-    DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getHost().getDomainObjectDescriptor();
     if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
       try {
-        SHAPE _host_1 = this.getHost();
-        DomainObjectDescriptor _domainObjectDescriptor_1 = _host_1.getDomainObjectDescriptor();
+        DomainObjectDescriptor _domainObjectDescriptor_1 = this.getHost().getDomainObjectDescriptor();
         final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
         final Function1<T, Object> _function = (T domainObject) -> {
           Object _xblockexpression = null;
           {
-            AbstractMapping<T> _mapping = descriptor.getMapping();
-            this.reconcile(_mapping, domainObject, acceptor);
+            this.reconcile(descriptor.getMapping(), domainObject, acceptor);
             _xblockexpression = null;
           }
           return _xblockexpression;
@@ -234,10 +219,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
       } catch (final Throwable _t) {
         if (_t instanceof NoSuchElementException) {
           final NoSuchElementException exc = (NoSuchElementException)_t;
-          SHAPE _host_2 = this.getHost();
-          SHAPE _host_3 = this.getHost();
-          XDiagram _diagram = CoreExtensions.getDiagram(_host_3);
-          acceptor.delete(_host_2, _diagram);
+          acceptor.delete(this.getHost(), CoreExtensions.getDiagram(this.getHost()));
         } else {
           throw Exceptions.sneakyThrow(_t);
         }
@@ -246,27 +228,20 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   }
   
   protected void compareLabels(final AbstractMapping<T> mapping, final T domainObject, final AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor acceptor) {
-    Iterable<? extends XLabel> _existingLabels = this.getExistingLabels();
     final Function1<XLabel, AbstractLabelOwnerReconcileBehavior.LabelEntry> _function = (XLabel it) -> {
       return this.createLabelEntry(it);
     };
-    Iterable<AbstractLabelOwnerReconcileBehavior.LabelEntry> _map = IterableExtensions.map(_existingLabels, _function);
-    Iterable<AbstractLabelOwnerReconcileBehavior.LabelEntry> _filterNull = IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry>filterNull(_map);
     final Function1<AbstractLabelOwnerReconcileBehavior.LabelEntry, AbstractLabelOwnerReconcileBehavior.LabelEntry> _function_1 = (AbstractLabelOwnerReconcileBehavior.LabelEntry it) -> {
       return it;
     };
-    final Map<AbstractLabelOwnerReconcileBehavior.LabelEntry, AbstractLabelOwnerReconcileBehavior.LabelEntry> existingLabels = IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry, AbstractLabelOwnerReconcileBehavior.LabelEntry>toMap(_filterNull, _function_1);
-    Iterable<? extends AbstractLabelMappingCall<?, T>> _labelMappingCalls = this.getLabelMappingCalls(mapping);
+    final Map<AbstractLabelOwnerReconcileBehavior.LabelEntry, AbstractLabelOwnerReconcileBehavior.LabelEntry> existingLabels = IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry, AbstractLabelOwnerReconcileBehavior.LabelEntry>toMap(IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry>filterNull(IterableExtensions.map(this.getExistingLabels(), _function)), _function_1);
     final Function1<AbstractLabelMappingCall<?, T>, Iterable<? extends XLabel>> _function_2 = (AbstractLabelMappingCall<?, T> it) -> {
       return this.interpreter.execute(((AbstractLabelMappingCall<?, T>) it), domainObject);
     };
-    Iterable<Iterable<? extends XLabel>> _map_1 = IterableExtensions.map(_labelMappingCalls, _function_2);
-    Iterable<XLabel> _flatten = Iterables.<XLabel>concat(_map_1);
     final Function1<XLabel, AbstractLabelOwnerReconcileBehavior.LabelEntry> _function_3 = (XLabel it) -> {
       return this.createLabelEntry(it);
     };
-    Iterable<AbstractLabelOwnerReconcileBehavior.LabelEntry> _map_2 = IterableExtensions.<XLabel, AbstractLabelOwnerReconcileBehavior.LabelEntry>map(_flatten, _function_3);
-    final Iterable<AbstractLabelOwnerReconcileBehavior.LabelEntry> resolvedLabels = IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry>filterNull(_map_2);
+    final Iterable<AbstractLabelOwnerReconcileBehavior.LabelEntry> resolvedLabels = IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry>filterNull(IterableExtensions.<XLabel, AbstractLabelOwnerReconcileBehavior.LabelEntry>map(Iterables.<XLabel>concat(IterableExtensions.map(this.getLabelMappingCalls(mapping), _function_2)), _function_3));
     final Procedure2<AbstractLabelOwnerReconcileBehavior.LabelEntry, Integer> _function_4 = (AbstractLabelOwnerReconcileBehavior.LabelEntry resolved, Integer i) -> {
       final AbstractLabelOwnerReconcileBehavior.LabelEntry existing = existingLabels.get(resolved);
       boolean _equals = Objects.equal(existing, null);
@@ -278,11 +253,10 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
       }
     };
     IterableExtensions.<AbstractLabelOwnerReconcileBehavior.LabelEntry>forEach(resolvedLabels, _function_4);
-    Set<AbstractLabelOwnerReconcileBehavior.LabelEntry> _keySet = existingLabels.keySet();
     final Consumer<AbstractLabelOwnerReconcileBehavior.LabelEntry> _function_5 = (AbstractLabelOwnerReconcileBehavior.LabelEntry it) -> {
       acceptor.remove(it.label);
     };
-    _keySet.forEach(_function_5);
+    existingLabels.keySet().forEach(_function_5);
   }
   
   protected AbstractLabelOwnerReconcileBehavior.LabelEntry createLabelEntry(final XLabel label) {

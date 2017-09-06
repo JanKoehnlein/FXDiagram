@@ -6,7 +6,6 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ControlPointCorrector;
 import de.fxdiagram.core.anchors.ManhattanRouter;
@@ -18,18 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -98,42 +93,33 @@ public class ConnectionRouter implements XActivatable {
   
   @Override
   public void activate() {
-    ObjectProperty<XNode> _sourceProperty = this.connection.sourceProperty();
-    CoreExtensions.<XNode>addInitializingListener(_sourceProperty, this.connectionEndListener);
-    ObjectProperty<XNode> _targetProperty = this.connection.targetProperty();
-    CoreExtensions.<XNode>addInitializingListener(_targetProperty, this.connectionEndListener);
+    CoreExtensions.<XNode>addInitializingListener(this.connection.sourceProperty(), this.connectionEndListener);
+    CoreExtensions.<XNode>addInitializingListener(this.connection.targetProperty(), this.connectionEndListener);
     this.isActiveProperty.set(true);
-    ObjectProperty<XConnection.Kind> _kindProperty = this.connection.kindProperty();
     final ChangeListener<XConnection.Kind> _function = (ObservableValue<? extends XConnection.Kind> p, XConnection.Kind o, XConnection.Kind n) -> {
       this.manhattanRouter = null;
     };
-    _kindProperty.addListener(_function);
+    this.connection.kindProperty().addListener(_function);
   }
   
   protected void bindNode(final XNode host) {
     Node current = host.getNode();
-    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = current.layoutBoundsProperty();
-    _layoutBoundsProperty.addListener(this.boundsListener);
+    current.layoutBoundsProperty().addListener(this.boundsListener);
     while (((!Objects.equal(current, null)) && (!CoreExtensions.isRootDiagram(current)))) {
       {
-        ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = current.boundsInParentProperty();
-        _boundsInParentProperty.addListener(this.boundsListener);
-        Parent _parent = current.getParent();
-        current = _parent;
+        current.boundsInParentProperty().addListener(this.boundsListener);
+        current = current.getParent();
       }
     }
   }
   
   protected void unbindNode(final XNode host) {
     Node current = host.getNode();
-    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = current.layoutBoundsProperty();
-    _layoutBoundsProperty.removeListener(this.boundsListener);
+    current.layoutBoundsProperty().removeListener(this.boundsListener);
     while (((!Objects.equal(current, null)) && (!CoreExtensions.isRootDiagram(current)))) {
       {
-        ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = current.boundsInParentProperty();
-        _boundsInParentProperty.removeListener(this.boundsListener);
-        Parent _parent = current.getParent();
-        current = _parent;
+        current.boundsInParentProperty().removeListener(this.boundsListener);
+        current = current.getParent();
       }
     }
   }
@@ -148,25 +134,21 @@ public class ConnectionRouter implements XActivatable {
   }
   
   public void growToSize(final int newSize) {
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    int _size = _controlPoints.size();
+    int _size = this.getControlPoints().size();
     boolean _lessThan = (_size < 2);
     if (_lessThan) {
       this.calculatePoints();
     }
-    ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-    int _size_1 = _controlPoints_1.size();
+    int _size_1 = this.getControlPoints().size();
     final int nodeDiff = (newSize - _size_1);
     if ((nodeDiff > 0)) {
       final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
       final double delta = (1.0 / (nodeDiff + 1));
-      ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-      ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-      int _size_2 = _controlPoints_3.size();
+      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+      int _size_2 = this.getControlPoints().size();
       int _minus = (_size_2 - 2);
-      final XControlPoint first = _controlPoints_2.get(_minus);
-      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-      final XControlPoint last = IterableExtensions.<XControlPoint>last(_controlPoints_4);
+      final XControlPoint first = _controlPoints.get(_minus);
+      final XControlPoint last = IterableExtensions.<XControlPoint>last(this.getControlPoints());
       IntegerRange _upTo = new IntegerRange(1, nodeDiff);
       for (final Integer i : _upTo) {
         {
@@ -187,80 +169,64 @@ public class ConnectionRouter implements XActivatable {
             it.setLayoutY(_plus_1);
           };
           final XControlPoint newControlPoint = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-          DoubleProperty _layoutXProperty = newControlPoint.layoutXProperty();
-          _layoutXProperty.addListener(this.scalarListener);
-          DoubleProperty _layoutYProperty = newControlPoint.layoutYProperty();
-          _layoutYProperty.addListener(this.scalarListener);
+          newControlPoint.layoutXProperty().addListener(this.scalarListener);
+          newControlPoint.layoutYProperty().addListener(this.scalarListener);
           newControlPoints.add(newControlPoint);
         }
       }
-      ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-      int _size_3 = _controlPoints_6.size();
+      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+      int _size_3 = this.getControlPoints().size();
       int _minus_1 = (_size_3 - 1);
-      _controlPoints_5.addAll(_minus_1, newControlPoints);
+      _controlPoints_1.addAll(_minus_1, newControlPoints);
     }
     this.resetPointTypes();
   }
   
   public void shrinkToSize(final int newSize) {
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    int _size = _controlPoints.size();
+    int _size = this.getControlPoints().size();
     boolean _lessThan = (_size < 2);
     if (_lessThan) {
       this.calculatePoints();
     }
-    ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-    int _size_1 = _controlPoints_1.size();
+    int _size_1 = this.getControlPoints().size();
     final int nodeDiff = (newSize - _size_1);
     if ((nodeDiff < 0)) {
       final ArrayList<XControlPoint> toBeRemoved = CollectionLiterals.<XControlPoint>newArrayList();
-      ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-      int _size_2 = _controlPoints_2.size();
+      int _size_2 = this.getControlPoints().size();
       int _minus = (_size_2 - 1);
-      ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-      int _size_3 = _controlPoints_3.size();
+      int _size_3 = this.getControlPoints().size();
       int _plus = (_size_3 + nodeDiff);
       int _minus_1 = (_plus - 1);
       ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_minus, _minus_1, false);
       for (final Integer i : _greaterThanDoubleDot) {
         {
-          ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-          final XControlPoint removeMe = _controlPoints_4.get((i).intValue());
-          DoubleProperty _layoutXProperty = removeMe.layoutXProperty();
-          _layoutXProperty.removeListener(this.scalarListener);
-          DoubleProperty _layoutYProperty = removeMe.layoutYProperty();
-          _layoutYProperty.removeListener(this.scalarListener);
+          final XControlPoint removeMe = this.getControlPoints().get((i).intValue());
+          removeMe.layoutXProperty().removeListener(this.scalarListener);
+          removeMe.layoutYProperty().removeListener(this.scalarListener);
           toBeRemoved.add(removeMe);
         }
       }
-      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-      _controlPoints_4.removeAll(toBeRemoved);
+      this.getControlPoints().removeAll(toBeRemoved);
     }
     this.resetPointTypes();
   }
   
   protected void resetPointTypes() {
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    int _size = _controlPoints.size();
+    int _size = this.getControlPoints().size();
     boolean _lessThan = (_size < 2);
     if (_lessThan) {
       return;
     }
-    ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-    XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_1);
+    XControlPoint _head = IterableExtensions.<XControlPoint>head(this.getControlPoints());
     _head.setType(XControlPoint.Type.ANCHOR);
-    ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-    XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_2);
+    XControlPoint _last = IterableExtensions.<XControlPoint>last(this.getControlPoints());
     _last.setType(XControlPoint.Type.ANCHOR);
-    ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-    int _size_1 = _controlPoints_3.size();
+    int _size_1 = this.getControlPoints().size();
     int _minus = (_size_1 - 1);
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-        final XControlPoint currentPoint = _controlPoints_4.get((i).intValue());
+        final XControlPoint currentPoint = this.getControlPoints().get((i).intValue());
         XControlPoint.Type _switchResult = null;
         XConnection.Kind _kind = this.connection.getKind();
         if (_kind != null) {
@@ -313,10 +279,8 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       for (final XControlPoint controlPoint : _controlPoints) {
         {
-          DoubleProperty _layoutXProperty = controlPoint.layoutXProperty();
-          _layoutXProperty.removeListener(this.scalarListener);
-          DoubleProperty _layoutYProperty = controlPoint.layoutYProperty();
-          _layoutYProperty.removeListener(this.scalarListener);
+          controlPoint.layoutXProperty().removeListener(this.scalarListener);
+          controlPoint.layoutYProperty().removeListener(this.scalarListener);
         }
       }
       XNode _source = this.connection.getSource();
@@ -329,42 +293,33 @@ public class ConnectionRouter implements XActivatable {
     XConnection.Kind _kind = this.connection.getKind();
     boolean _equals_1 = Objects.equal(_kind, XConnection.Kind.RECTILINEAR);
     if (_equals_1) {
-      ManhattanRouter _manhattanRouter = this.getManhattanRouter();
-      _manhattanRouter.calculatePoints();
+      this.getManhattanRouter().calculatePoints();
       return;
     }
     if (((this.splineShapeKeeperEnabled && (!Objects.equal(this.connection.getKind(), XConnection.Kind.POLYLINE))) && (!Objects.equal(this.connection.getKind(), XConnection.Kind.RECTILINEAR)))) {
       this.shapeKeeper.adjustControlPointsToNodeMove();
     }
-    XNode _source_1 = this.connection.getSource();
-    final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
-    XNode _target_1 = this.connection.getTarget();
-    final Point2D targetPoint = this.findClosestTargetAnchor(_target_1, true);
+    final Point2D sourcePoint = this.findClosestSourceAnchor(this.connection.getSource(), true);
+    final Point2D targetPoint = this.findClosestTargetAnchor(this.connection.getTarget(), true);
     if (((!Objects.equal(sourcePoint, null)) && (!Objects.equal(targetPoint, null)))) {
-      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-      int _size = _controlPoints_1.size();
+      int _size = this.getControlPoints().size();
       boolean _lessThan = (_size < 2);
       if (_lessThan) {
-        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
         XControlPoint _xControlPoint = new XControlPoint();
         final Procedure1<XControlPoint> _function = (XControlPoint it) -> {
-          double _x = sourcePoint.getX();
-          it.setLayoutX(_x);
-          double _y = sourcePoint.getY();
-          it.setLayoutY(_y);
+          it.setLayoutX(sourcePoint.getX());
+          it.setLayoutY(sourcePoint.getY());
           it.setType(XControlPoint.Type.ANCHOR);
         };
         XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
         XControlPoint _xControlPoint_1 = new XControlPoint();
         final Procedure1<XControlPoint> _function_1 = (XControlPoint it) -> {
-          double _x = targetPoint.getX();
-          it.setLayoutX(_x);
-          double _y = targetPoint.getY();
-          it.setLayoutY(_y);
+          it.setLayoutX(targetPoint.getX());
+          it.setLayoutY(targetPoint.getY());
           it.setType(XControlPoint.Type.ANCHOR);
         };
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
-        _controlPoints_2.setAll(
+        this.getControlPoints().setAll(
           Collections.<XControlPoint>unmodifiableList(CollectionLiterals.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
         XConnection.Kind _kind_1 = this.connection.getKind();
         if (_kind_1 != null) {
@@ -379,45 +334,31 @@ public class ConnectionRouter implements XActivatable {
               break;
           }
         }
-        ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-        for (final XControlPoint controlPoint_1 : _controlPoints_3) {
+        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+        for (final XControlPoint controlPoint_1 : _controlPoints_1) {
           {
-            DoubleProperty _layoutXProperty = controlPoint_1.layoutXProperty();
-            _layoutXProperty.addListener(this.scalarListener);
-            DoubleProperty _layoutYProperty = controlPoint_1.layoutYProperty();
-            _layoutYProperty.addListener(this.scalarListener);
+            controlPoint_1.layoutXProperty().addListener(this.scalarListener);
+            controlPoint_1.layoutYProperty().addListener(this.scalarListener);
           }
         }
       } else {
-        ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-        XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_4);
+        XControlPoint _head = IterableExtensions.<XControlPoint>head(this.getControlPoints());
         final Procedure1<XControlPoint> _function_2 = (XControlPoint it) -> {
-          DoubleProperty _layoutXProperty = it.layoutXProperty();
-          double _x = sourcePoint.getX();
-          CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_x));
-          DoubleProperty _layoutYProperty = it.layoutYProperty();
-          double _y = sourcePoint.getY();
-          CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_y));
+          CoreExtensions.<Number>setSafely(it.layoutXProperty(), Double.valueOf(sourcePoint.getX()));
+          CoreExtensions.<Number>setSafely(it.layoutYProperty(), Double.valueOf(sourcePoint.getY()));
         };
         ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
-        ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-        XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_5);
+        XControlPoint _last = IterableExtensions.<XControlPoint>last(this.getControlPoints());
         final Procedure1<XControlPoint> _function_3 = (XControlPoint it) -> {
-          DoubleProperty _layoutXProperty = it.layoutXProperty();
-          double _x = targetPoint.getX();
-          CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_x));
-          DoubleProperty _layoutYProperty = it.layoutYProperty();
-          double _y = targetPoint.getY();
-          CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_y));
+          CoreExtensions.<Number>setSafely(it.layoutXProperty(), Double.valueOf(targetPoint.getX()));
+          CoreExtensions.<Number>setSafely(it.layoutYProperty(), Double.valueOf(targetPoint.getY()));
         };
         ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
       }
-      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
       final Consumer<XControlPoint> _function_4 = (XControlPoint it) -> {
-        ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
-        it.update(_controlPoints_7);
+        it.update(this.getControlPoints());
       };
-      _controlPoints_6.forEach(_function_4);
+      this.getControlPoints().forEach(_function_4);
     }
     this.controlPointCorrector.correctControlPoints(this.connection);
   }
@@ -425,26 +366,23 @@ public class ConnectionRouter implements XActivatable {
   protected boolean calculateSelfEdge() {
     boolean _xblockexpression = false;
     {
-      XNode _source = this.connection.getSource();
-      final Bounds nodeSnapBounds = _source.getSnapBounds();
+      final Bounds nodeSnapBounds = this.connection.getSource().getSnapBounds();
       Bounds _elvis = null;
-      XNode _source_1 = this.connection.getSource();
-      Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(_source_1, nodeSnapBounds);
+      Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(this.connection.getSource(), nodeSnapBounds);
       if (_localToRootDiagram != null) {
         _elvis = _localToRootDiagram;
       } else {
         _elvis = nodeSnapBounds;
       }
       final Bounds boundsInDiagram = _elvis;
+      this.getControlPoints().clear();
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      _controlPoints.clear();
-      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function = (XControlPoint it) -> {
         it.setType(XControlPoint.Type.ANCHOR);
       };
       XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-      _controlPoints_1.add(_doubleArrow);
+      _controlPoints.add(_doubleArrow);
       XConnection.Kind _kind = this.connection.getKind();
       boolean _equals = Objects.equal(_kind, XConnection.Kind.QUAD_CURVE);
       if (_equals) {
@@ -461,7 +399,7 @@ public class ConnectionRouter implements XActivatable {
             double _height = boundsInDiagram.getHeight();
             double _multiply_1 = (0.5 * _height);
             final double deltaY = Math.min(this.selfEdgeDist, _multiply_1);
-            ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+            ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
             XControlPoint _xControlPoint_1 = new XControlPoint();
             final Procedure1<XControlPoint> _function_1 = (XControlPoint it) -> {
               double _minX = boundsInDiagram.getMinX();
@@ -473,8 +411,8 @@ public class ConnectionRouter implements XActivatable {
               it.setType(XControlPoint.Type.INTERPOLATED);
             };
             XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
-            _controlPoints_2.add(_doubleArrow_1);
-            ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+            _controlPoints_1.add(_doubleArrow_1);
+            ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
             XControlPoint _xControlPoint_2 = new XControlPoint();
             final Procedure1<XControlPoint> _function_2 = (XControlPoint it) -> {
               double _minX = boundsInDiagram.getMinX();
@@ -486,8 +424,8 @@ public class ConnectionRouter implements XActivatable {
               it.setType(XControlPoint.Type.INTERPOLATED);
             };
             XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_2, _function_2);
-            _controlPoints_3.add(_doubleArrow_2);
-            ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+            _controlPoints_2.add(_doubleArrow_2);
+            ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
             XControlPoint _xControlPoint_3 = new XControlPoint();
             final Procedure1<XControlPoint> _function_3 = (XControlPoint it) -> {
               double _minX = boundsInDiagram.getMinX();
@@ -499,10 +437,10 @@ public class ConnectionRouter implements XActivatable {
               it.setType(XControlPoint.Type.INTERPOLATED);
             };
             XControlPoint _doubleArrow_3 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_3, _function_3);
-            _controlPoints_4.add(_doubleArrow_3);
+            _controlPoints_3.add(_doubleArrow_3);
             break;
           case CUBIC_CURVE:
-            ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
+            ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
             XControlPoint _xControlPoint_4 = new XControlPoint();
             final Procedure1<XControlPoint> _function_4 = (XControlPoint it) -> {
               double _minX = boundsInDiagram.getMinX();
@@ -514,8 +452,8 @@ public class ConnectionRouter implements XActivatable {
               it.setType(XControlPoint.Type.CONTROL_POINT);
             };
             XControlPoint _doubleArrow_4 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_4, _function_4);
-            _controlPoints_5.add(_doubleArrow_4);
-            ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+            _controlPoints_4.add(_doubleArrow_4);
+            ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
             XControlPoint _xControlPoint_5 = new XControlPoint();
             final Procedure1<XControlPoint> _function_5 = (XControlPoint it) -> {
               double _minX = boundsInDiagram.getMinX();
@@ -527,19 +465,19 @@ public class ConnectionRouter implements XActivatable {
               it.setType(XControlPoint.Type.CONTROL_POINT);
             };
             XControlPoint _doubleArrow_5 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_5, _function_5);
-            _controlPoints_6.add(_doubleArrow_5);
+            _controlPoints_5.add(_doubleArrow_5);
             break;
           default:
             break;
         }
       }
-      ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
+      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
       XControlPoint _xControlPoint_6 = new XControlPoint();
       final Procedure1<XControlPoint> _function_6 = (XControlPoint it) -> {
         it.setType(XControlPoint.Type.ANCHOR);
       };
       XControlPoint _doubleArrow_6 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_6, _function_6);
-      _xblockexpression = _controlPoints_7.add(_doubleArrow_6);
+      _xblockexpression = _controlPoints_6.add(_doubleArrow_6);
     }
     return _xblockexpression;
   }
@@ -555,17 +493,12 @@ public class ConnectionRouter implements XActivatable {
       }
       final ArrowHead arrowHead = _xifexpression;
       Point2D _xifexpression_1 = null;
-      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      int _size = _controlPoints.size();
+      int _size = this.getControlPoints().size();
       boolean _lessEqualsThan = (_size <= 2);
       if (_lessEqualsThan) {
-        XNode _target = this.connection.getTarget();
-        Point2D _midPoint = this.midPoint(_target);
-        _xifexpression_1 = this.getNearestAnchor(source, _midPoint, arrowHead);
+        _xifexpression_1 = this.getNearestAnchor(source, this.midPoint(this.connection.getTarget()), arrowHead);
       } else {
-        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-        XControlPoint _get = _controlPoints_1.get(1);
-        _xifexpression_1 = this.getNearestAnchor(source, _get, arrowHead);
+        _xifexpression_1 = this.getNearestAnchor(source, this.getControlPoints().get(1), arrowHead);
       }
       _xblockexpression = _xifexpression_1;
     }
@@ -583,20 +516,15 @@ public class ConnectionRouter implements XActivatable {
       }
       final ArrowHead arrowHead = _xifexpression;
       Point2D _xifexpression_1 = null;
-      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      int _size = _controlPoints.size();
+      int _size = this.getControlPoints().size();
       boolean _lessEqualsThan = (_size <= 2);
       if (_lessEqualsThan) {
-        XNode _source = this.connection.getSource();
-        Point2D _midPoint = this.midPoint(_source);
-        _xifexpression_1 = this.getNearestAnchor(target, _midPoint, arrowHead);
+        _xifexpression_1 = this.getNearestAnchor(target, this.midPoint(this.connection.getSource()), arrowHead);
       } else {
-        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-        int _size_1 = _controlPoints_2.size();
+        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+        int _size_1 = this.getControlPoints().size();
         int _minus = (_size_1 - 2);
-        XControlPoint _get = _controlPoints_1.get(_minus);
-        _xifexpression_1 = this.getNearestAnchor(target, _get, arrowHead);
+        _xifexpression_1 = this.getNearestAnchor(target, _controlPoints.get(_minus), arrowHead);
       }
       _xblockexpression = _xifexpression_1;
     }
@@ -604,17 +532,11 @@ public class ConnectionRouter implements XActivatable {
   }
   
   protected Point2D midPoint(final XNode node) {
-    Node _node = node.getNode();
-    Node _node_1 = node.getNode();
-    Bounds _boundsInLocal = _node_1.getBoundsInLocal();
-    Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    return CoreExtensions.localToRootDiagram(_node, _center);
+    return CoreExtensions.localToRootDiagram(node.getNode(), BoundsExtensions.center(node.getNode().getBoundsInLocal()));
   }
   
   protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint, final ArrowHead arrowHead) {
-    double _layoutX = controlPoint.getLayoutX();
-    double _layoutY = controlPoint.getLayoutY();
-    return this.getNearestAnchor(node, _layoutX, _layoutY, arrowHead);
+    return this.getNearestAnchor(node, controlPoint.getLayoutX(), controlPoint.getLayoutY(), arrowHead);
   }
   
   public Point2D getNearestAnchor(final XNode node, final Point2D point, final ArrowHead arrowHead) {
@@ -622,13 +544,9 @@ public class ConnectionRouter implements XActivatable {
     {
       boolean _equals = Objects.equal(point, null);
       if (_equals) {
-        Node _node = node.getNode();
-        Bounds _boundsInLocal = _node.getBoundsInLocal();
-        return BoundsExtensions.center(_boundsInLocal);
+        return BoundsExtensions.center(node.getNode().getBoundsInLocal());
       }
-      double _x = point.getX();
-      double _y = point.getY();
-      _xblockexpression = this.getNearestAnchor(node, _x, _y, arrowHead);
+      _xblockexpression = this.getNearestAnchor(node, point.getX(), point.getY(), arrowHead);
     }
     return _xblockexpression;
   }
@@ -636,8 +554,7 @@ public class ConnectionRouter implements XActivatable {
   protected Point2D getNearestAnchor(final XNode node, final double x, final double y, final ArrowHead arrowHead) {
     Point2D _xblockexpression = null;
     {
-      Anchors _anchors = node.getAnchors();
-      final Point2D anchor = _anchors.getAnchor(x, y);
+      final Point2D anchor = node.getAnchors().getAnchor(x, y);
       Point2D _xifexpression = null;
       if (((!Objects.equal(anchor, null)) && (!Objects.equal(arrowHead, null)))) {
         _xifexpression = arrowHead.correctAnchor(x, y, anchor);

@@ -79,19 +79,17 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   
   @Override
   public Node getTextNode() {
-    ObservableList<XLabel> _labels = this.getLabels();
     final Function1<XLabel, Boolean> _function = (XLabel it) -> {
       String _type = it.getType();
       return Boolean.valueOf(Objects.equal(_type, BaseDiagramNode.NODE_HEADING));
     };
-    return IterableExtensions.<XLabel>findFirst(_labels, _function);
+    return IterableExtensions.<XLabel>findFirst(this.getLabels(), _function);
   }
   
   @Override
   public void doActivate() {
     super.doActivate();
-    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, this.getDomainObjectDescriptor());
     NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
     this.addBehavior(_nodeReconcileBehavior);
     XDiagram _innerDiagram = this.getInnerDiagram();

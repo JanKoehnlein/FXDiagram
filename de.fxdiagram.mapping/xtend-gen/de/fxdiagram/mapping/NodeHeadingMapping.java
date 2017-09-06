@@ -28,8 +28,7 @@ public class NodeHeadingMapping<T extends Object> extends NodeLabelMapping<T> {
     BaseNodeHeadingLabel<T> _baseNodeHeadingLabel = new BaseNodeHeadingLabel<T>(descriptor);
     final Procedure1<BaseNodeHeadingLabel<T>> _function = (BaseNodeHeadingLabel<T> it) -> {
       Text _text = it.getText();
-      String _text_1 = this.getText(labelElement);
-      _text.setText(_text_1);
+      _text.setText(this.getText(labelElement));
     };
     return ObjectExtensions.<BaseNodeHeadingLabel<T>>operator_doubleArrow(_baseNodeHeadingLabel, _function);
   }

@@ -15,16 +15,12 @@ public class ClearDiagramCommand extends AbstractCommand {
   
   @Override
   public void execute(final CommandContext context) {
+    this.oldDiagram = context.getRoot().getDiagram();
+    this.oldRootDiagram = context.getRoot().getRootDiagram();
     XRoot _root = context.getRoot();
-    XDiagram _diagram = _root.getDiagram();
-    this.oldDiagram = _diagram;
-    XRoot _root_1 = context.getRoot();
-    XDiagram _rootDiagram = _root_1.getRootDiagram();
-    this.oldRootDiagram = _rootDiagram;
-    XRoot _root_2 = context.getRoot();
     XDiagram _xDiagram = new XDiagram();
     XDiagram _newDiagram = (this.newDiagram = _xDiagram);
-    _root_2.setRootDiagram(_newDiagram);
+    _root.setRootDiagram(_newDiagram);
   }
   
   @Override

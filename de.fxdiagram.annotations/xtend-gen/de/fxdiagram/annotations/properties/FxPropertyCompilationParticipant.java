@@ -63,18 +63,14 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         final AnnotationReference annotation = f.findAnnotation(annotationType);
         Object _value = annotation.getValue("readOnly");
         final boolean isReadOnly = (!Objects.equal(_value, Boolean.FALSE));
-        TypeReference _type = f.getType();
-        Type _type_1 = _type.getType();
-        String _qualifiedName = _type_1.getQualifiedName();
+        String _qualifiedName = f.getType().getType().getQualifiedName();
         final boolean isList = Objects.equal(_qualifiedName, "javafx.collections.ObservableList");
         final String fieldName = f.getSimpleName();
         final TypeReference fieldType = f.getType();
         String _simpleName = f.getSimpleName();
         final String propName = (_simpleName + "Property");
-        TypeReference _type_2 = f.getType();
-        final TypeReference propType = this.toPropertyType(_type_2, isReadOnly, context);
-        TypeReference _type_3 = f.getType();
-        final TypeReference propTypeAPI = this.toPropertyType_API(_type_3, isReadOnly, context);
+        final TypeReference propType = this.toPropertyType(f.getType(), isReadOnly, context);
+        final TypeReference propTypeAPI = this.toPropertyType_API(f.getType(), isReadOnly, context);
         MutableTypeDeclaration _declaringType = f.getDeclaringType();
         final MutableClassDeclaration clazz = ((MutableClassDeclaration) _declaringType);
         this.createField(f, clazz, propName, propType, fieldName, fieldType, isReadOnly, isList, propTypeAPI);
@@ -84,17 +80,17 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
   
   public void createField(final MutableFieldDeclaration f, final MutableClassDeclaration clazz, final String propName, final TypeReference propType, final String fieldName, final TypeReference fieldType, final boolean isReadOnly, final boolean isList, final TypeReference propTypeAPI) {
     Expression _initializer = f.getInitializer();
-    boolean _equals = Objects.equal(_initializer, null);
-    if (_equals) {
+    boolean _tripleEquals = (_initializer == null);
+    if (_tripleEquals) {
       final Procedure1<MutableFieldDeclaration> _function = (MutableFieldDeclaration it) -> {
         it.setType(propType);
         final CompilationStrategy _function_1 = (CompilationStrategy.CompilationContext it_1) -> {
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("new ");
           String _javaCode = it_1.toJavaCode(propType);
-          _builder.append(_javaCode, "");
+          _builder.append(_javaCode);
           _builder.append("(this, \"");
-          _builder.append(fieldName, "");
+          _builder.append(fieldName);
           _builder.append("\")");
           return _builder;
         };
@@ -108,12 +104,12 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("new ");
           String _javaCode = it_1.toJavaCode(propType);
-          _builder.append(_javaCode, "");
+          _builder.append(_javaCode);
           _builder.append("(this, \"");
-          _builder.append(fieldName, "");
+          _builder.append(fieldName);
           _builder.append("\",_init");
           String _firstUpper = StringExtensions.toFirstUpper(fieldName);
-          _builder.append(_firstUpper, "");
+          _builder.append(_firstUpper);
           _builder.append("())");
           return _builder;
         };
@@ -127,8 +123,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         it.setVisibility(Visibility.PRIVATE);
         it.setStatic(true);
         it.setFinal(true);
-        Expression _initializer_1 = f.getInitializer();
-        it.setBody(_initializer_1);
+        it.setBody(f.getInitializer());
       };
       clazz.addMethod(_plus, _function_2);
     }
@@ -139,7 +134,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       final CompilationStrategy _function_4 = (CompilationStrategy.CompilationContext it_1) -> {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("return this.");
-        _builder.append(propName, "");
+        _builder.append(propName);
         _builder.append(".get();");
         _builder.newLineIfNotEmpty();
         return _builder;
@@ -155,9 +150,9 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         final CompilationStrategy _function_5 = (CompilationStrategy.CompilationContext it_1) -> {
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("this.");
-          _builder.append(propName, "");
+          _builder.append(propName);
           _builder.append(".set(");
-          _builder.append(fieldName, "");
+          _builder.append(fieldName);
           _builder.append(");");
           _builder.newLineIfNotEmpty();
           return _builder;
@@ -174,11 +169,11 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         {
           if (isReadOnly) {
             _builder.append("this.");
-            _builder.append(propName, "");
+            _builder.append(propName);
             _builder.append(".getReadOnlyProperty()");
           } else {
             _builder.append("this.");
-            _builder.append(propName, "");
+            _builder.append(propName);
           }
         }
         _builder.append(";");
@@ -194,25 +189,29 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
   public String defaultValue(final TypeReference ref) {
     String _switchResult = null;
     String _string = ref.toString();
-    switch (_string) {
-      case "boolean":
-        _switchResult = "false";
-        break;
-      case "double":
-        _switchResult = "0d";
-        break;
-      case "float":
-        _switchResult = "0f";
-        break;
-      case "long":
-        _switchResult = "0";
-        break;
-      case "int":
-        _switchResult = "0";
-        break;
-      default:
-        _switchResult = "null";
-        break;
+    if (_string != null) {
+      switch (_string) {
+        case "boolean":
+          _switchResult = "false";
+          break;
+        case "double":
+          _switchResult = "0d";
+          break;
+        case "float":
+          _switchResult = "0f";
+          break;
+        case "long":
+          _switchResult = "0";
+          break;
+        case "int":
+          _switchResult = "0";
+          break;
+        default:
+          _switchResult = "null";
+          break;
+      }
+    } else {
+      _switchResult = "null";
     }
     return _switchResult;
   }
@@ -221,68 +220,71 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     TypeReference _xifexpression = null;
     if (isReadOnly) {
       TypeReference _switchResult = null;
-      Type _type = ref.getType();
-      String _qualifiedName = _type.getQualifiedName();
-      switch (_qualifiedName) {
-        case "boolean":
-          _switchResult = context.newTypeReference(ReadOnlyBooleanProperty.class);
-          break;
-        case "double":
-          _switchResult = context.newTypeReference(ReadOnlyDoubleProperty.class);
-          break;
-        case "float":
-          _switchResult = context.newTypeReference(ReadOnlyFloatProperty.class);
-          break;
-        case "long":
-          _switchResult = context.newTypeReference(ReadOnlyLongProperty.class);
-          break;
-        case "java.lang.String":
-          _switchResult = context.newTypeReference(ReadOnlyStringProperty.class);
-          break;
-        case "int":
-          _switchResult = context.newTypeReference(ReadOnlyIntegerProperty.class);
-          break;
-        case "javafx.collections.ObservableList":
-          List<TypeReference> _actualTypeArguments = ref.getActualTypeArguments();
-          TypeReference _head = IterableExtensions.<TypeReference>head(_actualTypeArguments);
-          _switchResult = context.newTypeReference(ReadOnlyListProperty.class, _head);
-          break;
-        default:
-          _switchResult = context.newTypeReference(ReadOnlyObjectProperty.class, ref);
-          break;
+      String _qualifiedName = ref.getType().getQualifiedName();
+      if (_qualifiedName != null) {
+        switch (_qualifiedName) {
+          case "boolean":
+            _switchResult = context.newTypeReference(ReadOnlyBooleanProperty.class);
+            break;
+          case "double":
+            _switchResult = context.newTypeReference(ReadOnlyDoubleProperty.class);
+            break;
+          case "float":
+            _switchResult = context.newTypeReference(ReadOnlyFloatProperty.class);
+            break;
+          case "long":
+            _switchResult = context.newTypeReference(ReadOnlyLongProperty.class);
+            break;
+          case "java.lang.String":
+            _switchResult = context.newTypeReference(ReadOnlyStringProperty.class);
+            break;
+          case "int":
+            _switchResult = context.newTypeReference(ReadOnlyIntegerProperty.class);
+            break;
+          case "javafx.collections.ObservableList":
+            _switchResult = context.newTypeReference(ReadOnlyListProperty.class, 
+              IterableExtensions.<TypeReference>head(ref.getActualTypeArguments()));
+            break;
+          default:
+            _switchResult = context.newTypeReference(ReadOnlyObjectProperty.class, ref);
+            break;
+        }
+      } else {
+        _switchResult = context.newTypeReference(ReadOnlyObjectProperty.class, ref);
       }
       _xifexpression = _switchResult;
     } else {
       TypeReference _switchResult_1 = null;
-      Type _type_1 = ref.getType();
-      String _qualifiedName_1 = _type_1.getQualifiedName();
-      switch (_qualifiedName_1) {
-        case "boolean":
-          _switchResult_1 = context.newTypeReference(BooleanProperty.class);
-          break;
-        case "double":
-          _switchResult_1 = context.newTypeReference(DoubleProperty.class);
-          break;
-        case "float":
-          _switchResult_1 = context.newTypeReference(FloatProperty.class);
-          break;
-        case "long":
-          _switchResult_1 = context.newTypeReference(LongProperty.class);
-          break;
-        case "java.lang.String":
-          _switchResult_1 = context.newTypeReference(StringProperty.class);
-          break;
-        case "int":
-          _switchResult_1 = context.newTypeReference(IntegerProperty.class);
-          break;
-        case "javafx.collections.ObservableList":
-          List<TypeReference> _actualTypeArguments_1 = ref.getActualTypeArguments();
-          TypeReference _head_1 = IterableExtensions.<TypeReference>head(_actualTypeArguments_1);
-          _switchResult_1 = context.newTypeReference(ListProperty.class, _head_1);
-          break;
-        default:
-          _switchResult_1 = context.newTypeReference(ObjectProperty.class, ref);
-          break;
+      String _qualifiedName_1 = ref.getType().getQualifiedName();
+      if (_qualifiedName_1 != null) {
+        switch (_qualifiedName_1) {
+          case "boolean":
+            _switchResult_1 = context.newTypeReference(BooleanProperty.class);
+            break;
+          case "double":
+            _switchResult_1 = context.newTypeReference(DoubleProperty.class);
+            break;
+          case "float":
+            _switchResult_1 = context.newTypeReference(FloatProperty.class);
+            break;
+          case "long":
+            _switchResult_1 = context.newTypeReference(LongProperty.class);
+            break;
+          case "java.lang.String":
+            _switchResult_1 = context.newTypeReference(StringProperty.class);
+            break;
+          case "int":
+            _switchResult_1 = context.newTypeReference(IntegerProperty.class);
+            break;
+          case "javafx.collections.ObservableList":
+            _switchResult_1 = context.newTypeReference(ListProperty.class, IterableExtensions.<TypeReference>head(ref.getActualTypeArguments()));
+            break;
+          default:
+            _switchResult_1 = context.newTypeReference(ObjectProperty.class, ref);
+            break;
+        }
+      } else {
+        _switchResult_1 = context.newTypeReference(ObjectProperty.class, ref);
       }
       _xifexpression = _switchResult_1;
     }
@@ -293,68 +295,72 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     TypeReference _xifexpression = null;
     if (isReadOnly) {
       TypeReference _switchResult = null;
-      Type _type = ref.getType();
-      String _qualifiedName = _type.getQualifiedName();
-      switch (_qualifiedName) {
-        case "boolean":
-          _switchResult = context.newTypeReference(ReadOnlyBooleanWrapper.class);
-          break;
-        case "double":
-          _switchResult = context.newTypeReference(ReadOnlyDoubleWrapper.class);
-          break;
-        case "float":
-          _switchResult = context.newTypeReference(ReadOnlyFloatWrapper.class);
-          break;
-        case "long":
-          _switchResult = context.newTypeReference(ReadOnlyLongWrapper.class);
-          break;
-        case "java.lang.String":
-          _switchResult = context.newTypeReference(ReadOnlyStringWrapper.class);
-          break;
-        case "int":
-          _switchResult = context.newTypeReference(ReadOnlyIntegerWrapper.class);
-          break;
-        case "javafx.collections.ObservableList":
-          List<TypeReference> _actualTypeArguments = ref.getActualTypeArguments();
-          TypeReference _head = IterableExtensions.<TypeReference>head(_actualTypeArguments);
-          _switchResult = context.newTypeReference(ReadOnlyListWrapper.class, _head);
-          break;
-        default:
-          _switchResult = context.newTypeReference(ReadOnlyObjectWrapper.class, ref);
-          break;
+      String _qualifiedName = ref.getType().getQualifiedName();
+      if (_qualifiedName != null) {
+        switch (_qualifiedName) {
+          case "boolean":
+            _switchResult = context.newTypeReference(ReadOnlyBooleanWrapper.class);
+            break;
+          case "double":
+            _switchResult = context.newTypeReference(ReadOnlyDoubleWrapper.class);
+            break;
+          case "float":
+            _switchResult = context.newTypeReference(ReadOnlyFloatWrapper.class);
+            break;
+          case "long":
+            _switchResult = context.newTypeReference(ReadOnlyLongWrapper.class);
+            break;
+          case "java.lang.String":
+            _switchResult = context.newTypeReference(ReadOnlyStringWrapper.class);
+            break;
+          case "int":
+            _switchResult = context.newTypeReference(ReadOnlyIntegerWrapper.class);
+            break;
+          case "javafx.collections.ObservableList":
+            _switchResult = context.newTypeReference(ReadOnlyListWrapper.class, 
+              IterableExtensions.<TypeReference>head(ref.getActualTypeArguments()));
+            break;
+          default:
+            _switchResult = context.newTypeReference(ReadOnlyObjectWrapper.class, ref);
+            break;
+        }
+      } else {
+        _switchResult = context.newTypeReference(ReadOnlyObjectWrapper.class, ref);
       }
       _xifexpression = _switchResult;
     } else {
       TypeReference _switchResult_1 = null;
-      Type _type_1 = ref.getType();
-      String _qualifiedName_1 = _type_1.getQualifiedName();
-      switch (_qualifiedName_1) {
-        case "boolean":
-          _switchResult_1 = context.newTypeReference(SimpleBooleanProperty.class);
-          break;
-        case "double":
-          _switchResult_1 = context.newTypeReference(SimpleDoubleProperty.class);
-          break;
-        case "float":
-          _switchResult_1 = context.newTypeReference(SimpleFloatProperty.class);
-          break;
-        case "long":
-          _switchResult_1 = context.newTypeReference(SimpleLongProperty.class);
-          break;
-        case "java.lang.String":
-          _switchResult_1 = context.newTypeReference(SimpleStringProperty.class);
-          break;
-        case "int":
-          _switchResult_1 = context.newTypeReference(SimpleIntegerProperty.class);
-          break;
-        case "javafx.collections.ObservableList":
-          List<TypeReference> _actualTypeArguments_1 = ref.getActualTypeArguments();
-          TypeReference _head_1 = IterableExtensions.<TypeReference>head(_actualTypeArguments_1);
-          _switchResult_1 = context.newTypeReference(SimpleListProperty.class, _head_1);
-          break;
-        default:
-          _switchResult_1 = context.newTypeReference(SimpleObjectProperty.class, ref);
-          break;
+      String _qualifiedName_1 = ref.getType().getQualifiedName();
+      if (_qualifiedName_1 != null) {
+        switch (_qualifiedName_1) {
+          case "boolean":
+            _switchResult_1 = context.newTypeReference(SimpleBooleanProperty.class);
+            break;
+          case "double":
+            _switchResult_1 = context.newTypeReference(SimpleDoubleProperty.class);
+            break;
+          case "float":
+            _switchResult_1 = context.newTypeReference(SimpleFloatProperty.class);
+            break;
+          case "long":
+            _switchResult_1 = context.newTypeReference(SimpleLongProperty.class);
+            break;
+          case "java.lang.String":
+            _switchResult_1 = context.newTypeReference(SimpleStringProperty.class);
+            break;
+          case "int":
+            _switchResult_1 = context.newTypeReference(SimpleIntegerProperty.class);
+            break;
+          case "javafx.collections.ObservableList":
+            _switchResult_1 = context.newTypeReference(SimpleListProperty.class, 
+              IterableExtensions.<TypeReference>head(ref.getActualTypeArguments()));
+            break;
+          default:
+            _switchResult_1 = context.newTypeReference(SimpleObjectProperty.class, ref);
+            break;
+        }
+      } else {
+        _switchResult_1 = context.newTypeReference(SimpleObjectProperty.class, ref);
       }
       _xifexpression = _switchResult_1;
     }

@@ -21,7 +21,6 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,6 @@ import javafx.animation.Transition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,7 +56,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
@@ -115,14 +112,11 @@ public class LcarsNode extends XNode {
   protected Node createNode() {
     RectangleBorderPane _xblockexpression = null;
     {
-      DBObject _data = this.getData();
-      Object _get = _data.get("images");
+      Object _get = this.getData().get("images");
       final Function1<DBObject, String> _function = (DBObject it) -> {
-        Object _get_1 = it.get("url");
-        return _get_1.toString();
+        return it.get("url").toString();
       };
-      List<String> _map = ListExtensions.<DBObject, String>map(((List<DBObject>) _get), _function);
-      this.imageUrls = _map;
+      this.imageUrls = ListExtensions.<DBObject, String>map(((List<DBObject>) _get), _function);
       VBox _vBox = new VBox();
       this.vbox = _vBox;
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
@@ -151,11 +145,9 @@ public class LcarsNode extends XNode {
             this.nameField = _text;
             ObservableList<Node> _children_3 = it_2.getChildren();
             final Procedure1<Text> _function_5 = (Text it_3) -> {
-              String _name = this.getName();
-              it_3.setText(_name);
+              it_3.setText(this.getName());
               it_3.setFill(LcarsExtensions.FLESH);
-              Font _lcarsFont = LcarsExtensions.lcarsFont(28);
-              it_3.setFont(_lcarsFont);
+              it_3.setFont(LcarsExtensions.lcarsFont(28));
               Insets _insets = new Insets(0, 0, 0, 5);
               HBox.setMargin(it_3, _insets);
             };
@@ -181,9 +173,7 @@ public class LcarsNode extends XNode {
             ReadOnlyDoubleProperty _widthProperty_1 = this.vbox.widthProperty();
             DoubleBinding _plus = DoubleExpressionExtensions.operator_plus(_widthProperty_1, 20);
             _widthProperty.bind(_plus);
-            DoubleProperty _heightProperty = it_2.heightProperty();
-            ReadOnlyDoubleProperty _heightProperty_1 = this.vbox.heightProperty();
-            _heightProperty.bind(_heightProperty_1);
+            it_2.heightProperty().bind(this.vbox.heightProperty());
           };
           Rectangle _doubleArrow_2 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_5);
           it_1.setClip(_doubleArrow_2);
@@ -229,8 +219,7 @@ public class LcarsNode extends XNode {
             ImageView _doubleArrow_2 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_6);
             ImageView _imageView_1 = (this.imageView = _doubleArrow_2);
             _children_4.add(_imageView_1);
-            String _last = IterableExtensions.<String>last(this.imageUrls);
-            this.showImage(_last);
+            this.showImage(IterableExtensions.<String>last(this.imageUrls));
             Insets _insets_1 = new Insets(5, 6, 5, 5);
             StackPane.setMargin(it_2, _insets_1);
           };
@@ -242,9 +231,7 @@ public class LcarsNode extends XNode {
             ReadOnlyDoubleProperty _widthProperty_1 = this.vbox.widthProperty();
             DoubleBinding _minus = DoubleExpressionExtensions.operator_minus(_widthProperty_1, 15);
             _widthProperty.bind(_minus);
-            DoubleProperty _heightProperty = it_2.heightProperty();
-            ReadOnlyDoubleProperty _heightProperty_1 = this.vbox.heightProperty();
-            _heightProperty.bind(_heightProperty_1);
+            it_2.heightProperty().bind(this.vbox.heightProperty());
           };
           Rectangle _doubleArrow_2 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_5);
           it_1.setClip(_doubleArrow_2);
@@ -255,14 +242,11 @@ public class LcarsNode extends XNode {
       final RectangleBorderPane node = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
       final ChangeListener<Bounds> _function_2 = (ObservableValue<? extends Bounds> property, Bounds oldValue, Bounds newValue) -> {
         while ((this.nameField.getBoundsInLocal().getWidth() > newValue.getWidth())) {
-          String _text = this.nameField.getText();
-          String _shortenName = this._nameShortener.shortenName(_text);
-          this.nameField.setText(_shortenName);
+          this.nameField.setText(this._nameShortener.shortenName(this.nameField.getText()));
         }
       };
       this.nameShortener = _function_2;
-      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
-      _boundsInLocalProperty.addListener(this.nameShortener);
+      this.infoBox.boundsInLocalProperty().addListener(this.nameShortener);
       _xblockexpression = node;
     }
     return _xblockexpression;
@@ -284,8 +268,7 @@ public class LcarsNode extends XNode {
   protected Text createButtonText(final String buttonText, final VPos alignment) {
     Text _text = new Text();
     final Procedure1<Text> _function = (Text it) -> {
-      Font _lcarsFont = LcarsExtensions.lcarsFont(4);
-      it.setFont(_lcarsFont);
+      it.setFont(LcarsExtensions.lcarsFont(4));
       it.setText(buttonText);
       it.setFill(Color.BLACK);
       it.setTextOrigin(VPos.TOP);
@@ -321,28 +304,24 @@ public class LcarsNode extends XNode {
       Set<String> _keySet = LcarsNode.PAGE_STRUCTURE.keySet();
       for (final String pageTitle : _keySet) {
         {
-          List<String> _get = LcarsNode.PAGE_STRUCTURE.get(pageTitle);
-          final ArrayList<LcarsField> page = this.createPageText(data, _get);
+          final ArrayList<LcarsField> page = this.createPageText(data, LcarsNode.PAGE_STRUCTURE.get(pageTitle));
           boolean _isEmpty = page.isEmpty();
           boolean _not = (!_isEmpty);
           if (_not) {
             pages.put(pageTitle, page);
           }
-          List<String> _get_1 = LcarsNode.PAGE_STRUCTURE.get(pageTitle);
-          handledKeys.addAll(_get_1);
+          handledKeys.addAll(LcarsNode.PAGE_STRUCTURE.get(pageTitle));
         }
       }
-      Set<String> _keySet_1 = data.keySet();
       final Function1<String, Boolean> _function = (String it) -> {
         boolean _contains = handledKeys.contains(it);
         return Boolean.valueOf((!_contains));
       };
-      final Iterable<String> otherKeys = IterableExtensions.<String>filter(_keySet_1, _function);
+      final Iterable<String> otherKeys = IterableExtensions.<String>filter(data.keySet(), _function);
       boolean _isEmpty = IterableExtensions.isEmpty(otherKeys);
       boolean _not = (!_isEmpty);
       if (_not) {
-        ArrayList<LcarsField> _createPageText = this.createPageText(data, otherKeys);
-        pages.put("other", _createPageText);
+        pages.put("other", this.createPageText(data, otherKeys));
       }
       _xblockexpression = pages;
     }
@@ -356,8 +335,7 @@ public class LcarsNode extends XNode {
       for (final String key : keys) {
         boolean _containsField = data.containsField(key);
         if (_containsField) {
-          Object _get = data.get(key);
-          String _string = _get.toString();
+          String _string = data.get(key).toString();
           LcarsField _lcarsField = new LcarsField(this, key, _string);
           fields.add(_lcarsField);
         }
@@ -370,16 +348,12 @@ public class LcarsNode extends XNode {
   public void showImage(final String imageUrl) {
     final ImageCache imageCache = ImageCache.get();
     final Function0<byte[]> _function = () -> {
-      DBObject _data = this.getData();
-      Object _get = _data.get("images");
+      Object _get = this.getData().get("images");
       final Function1<DBObject, Boolean> _function_1 = (DBObject it) -> {
-        Object _get_1 = it.get("url");
-        String _string = _get_1.toString();
+        String _string = it.get("url").toString();
         return Boolean.valueOf(Objects.equal(_string, imageUrl));
       };
-      Iterable<DBObject> _filter = IterableExtensions.<DBObject>filter(((List<DBObject>) _get), _function_1);
-      DBObject _head = IterableExtensions.<DBObject>head(_filter);
-      Object _get_1 = _head.get("data");
+      Object _get_1 = IterableExtensions.<DBObject>head(IterableExtensions.<DBObject>filter(((List<DBObject>) _get), _function_1)).get("data");
       return ((byte[]) _get_1);
     };
     final Image image = imageCache.getImage(imageUrl, _function);
@@ -424,10 +398,9 @@ public class LcarsNode extends XNode {
   
   public void showPage(final String page) {
     final List<LcarsField> fields = this.pages.get(page);
+    this.infoTextBox.getChildren().clear();
     ObservableList<Node> _children = this.infoTextBox.getChildren();
-    _children.clear();
-    ObservableList<Node> _children_1 = this.infoTextBox.getChildren();
-    Iterables.<Node>addAll(_children_1, fields);
+    Iterables.<Node>addAll(_children, fields);
     final Timeline timeline = new Timeline();
     final Consumer<LcarsField> _function = (LcarsField it) -> {
       it.addAnimation(timeline);
@@ -439,18 +412,13 @@ public class LcarsNode extends XNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
-    _boundsInLocalProperty.removeListener(this.nameShortener);
-    String _name = this.getName();
-    this.nameField.setText(_name);
-    DBObject _data = this.getData();
-    LinkedHashMap<String, List<LcarsField>> _createPages = this.createPages(_data);
-    this.pages = _createPages;
+    this.infoBox.boundsInLocalProperty().removeListener(this.nameShortener);
+    this.nameField.setText(this.getName());
+    this.pages = this.createPages(this.getData());
     final Procedure1<VBox> _function = (VBox it) -> {
+      final Node lastStripe = IterableExtensions.<Node>last(it.getChildren());
       ObservableList<Node> _children = it.getChildren();
-      final Node lastStripe = IterableExtensions.<Node>last(_children);
-      ObservableList<Node> _children_1 = it.getChildren();
-      _children_1.remove(lastStripe);
+      _children.remove(lastStripe);
       final Function1<String, Boolean> _function_1 = (String it_1) -> {
         return Boolean.valueOf(this.pages.containsKey(it_1));
       };
@@ -458,10 +426,10 @@ public class LcarsNode extends XNode {
       for (final String pageTitle : _filter) {
         {
           final RectangleBorderPane box = this.createBox(LcarsExtensions.FLESH);
-          ObservableList<Node> _children_2 = it.getChildren();
+          ObservableList<Node> _children_1 = it.getChildren();
           final Procedure1<RectangleBorderPane> _function_2 = (RectangleBorderPane it_1) -> {
             VBox.setVgrow(it_1, Priority.SOMETIMES);
-            ObservableList<Node> _children_3 = it_1.getChildren();
+            ObservableList<Node> _children_2 = it_1.getChildren();
             VPos _switchResult = null;
             int _indexOf = LcarsNode.pageOrder.indexOf(pageTitle);
             boolean _matched = false;
@@ -470,8 +438,7 @@ public class LcarsNode extends XNode {
               _switchResult = VPos.BOTTOM;
             }
             if (!_matched) {
-              Set<String> _keySet = this.pages.keySet();
-              int _size = _keySet.size();
+              int _size = this.pages.keySet().size();
               int _minus = (_size - 1);
               if (Objects.equal(_indexOf, _minus)) {
                 _matched=true;
@@ -482,7 +449,7 @@ public class LcarsNode extends XNode {
               _switchResult = VPos.CENTER;
             }
             Text _createButtonText = this.createButtonText(pageTitle, _switchResult);
-            _children_3.add(_createButtonText);
+            _children_2.add(_createButtonText);
             final EventHandler<MouseEvent> _function_3 = (MouseEvent it_2) -> {
               this.showPage(pageTitle);
               this.invertColors(box);
@@ -494,26 +461,25 @@ public class LcarsNode extends XNode {
             it_1.setOnMouseReleased(_function_4);
           };
           RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(box, _function_2);
-          _children_2.add(_doubleArrow);
+          _children_1.add(_doubleArrow);
         }
       }
       int _size = this.imageUrls.size();
       boolean _greaterThan = (_size > 1);
       if (_greaterThan) {
         final RectangleBorderPane previous_box = this.createBox(LcarsExtensions.RED);
-        ObservableList<Node> _children_2 = it.getChildren();
+        ObservableList<Node> _children_1 = it.getChildren();
         final Procedure1<RectangleBorderPane> _function_2 = (RectangleBorderPane it_1) -> {
           VBox.setVgrow(it_1, Priority.SOMETIMES);
-          ObservableList<Node> _children_3 = it_1.getChildren();
+          ObservableList<Node> _children_2 = it_1.getChildren();
           Text _createButtonText = this.createButtonText("previous pic", VPos.BOTTOM);
-          _children_3.add(_createButtonText);
+          _children_2.add(_createButtonText);
           final EventHandler<MouseEvent> _function_3 = (MouseEvent it_2) -> {
             int _indexOf = this.imageUrls.indexOf(this.currentImageUrl);
             int _plus = (_indexOf + 1);
             int _size_1 = this.imageUrls.size();
             int _modulo = (_plus % _size_1);
-            String _get = this.imageUrls.get(_modulo);
-            this.showImage(_get);
+            this.showImage(this.imageUrls.get(_modulo));
             this.invertColors(previous_box);
           };
           it_1.setOnMousePressed(_function_3);
@@ -523,14 +489,14 @@ public class LcarsNode extends XNode {
           it_1.setOnMouseReleased(_function_4);
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(previous_box, _function_2);
-        _children_2.add(_doubleArrow);
+        _children_1.add(_doubleArrow);
         final RectangleBorderPane next_box = this.createBox(LcarsExtensions.RED);
-        ObservableList<Node> _children_3 = it.getChildren();
+        ObservableList<Node> _children_2 = it.getChildren();
         final Procedure1<RectangleBorderPane> _function_3 = (RectangleBorderPane it_1) -> {
           VBox.setVgrow(it_1, Priority.SOMETIMES);
-          ObservableList<Node> _children_4 = it_1.getChildren();
+          ObservableList<Node> _children_3 = it_1.getChildren();
           Text _createButtonText = this.createButtonText("next pic", VPos.TOP);
-          _children_4.add(_createButtonText);
+          _children_3.add(_createButtonText);
           final EventHandler<MouseEvent> _function_4 = (MouseEvent it_2) -> {
             int _indexOf = this.imageUrls.indexOf(this.currentImageUrl);
             int _size_1 = this.imageUrls.size();
@@ -538,8 +504,7 @@ public class LcarsNode extends XNode {
             int _minus = (_plus - 1);
             int _size_2 = this.imageUrls.size();
             int _modulo = (_minus % _size_2);
-            String _get = this.imageUrls.get(_modulo);
-            this.showImage(_get);
+            this.showImage(this.imageUrls.get(_modulo));
             this.invertColors(next_box);
           };
           it_1.setOnMousePressed(_function_4);
@@ -549,18 +514,18 @@ public class LcarsNode extends XNode {
           it_1.setOnMouseReleased(_function_5);
         };
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(next_box, _function_3);
-        _children_3.add(_doubleArrow_1);
+        _children_2.add(_doubleArrow_1);
       } else {
-        ObservableList<Node> _children_4 = it.getChildren();
+        ObservableList<Node> _children_3 = it.getChildren();
         RectangleBorderPane _createBox = this.createBox(LcarsExtensions.RED);
         final Procedure1<RectangleBorderPane> _function_4 = (RectangleBorderPane it_1) -> {
           VBox.setVgrow(it_1, Priority.ALWAYS);
         };
         RectangleBorderPane _doubleArrow_2 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function_4);
-        _children_4.add(_doubleArrow_2);
+        _children_3.add(_doubleArrow_2);
       }
-      ObservableList<Node> _children_5 = it.getChildren();
-      _children_5.add(lastStripe);
+      ObservableList<Node> _children_4 = it.getChildren();
+      _children_4.add(lastStripe);
     };
     ObjectExtensions.<VBox>operator_doubleArrow(
       this.vbox, _function);
@@ -588,17 +553,12 @@ public class LcarsNode extends XNode {
         }
       };
       final Procedure1<__LcarsNode_1> _function = (__LcarsNode_1 it) -> {
-        Duration _millis = DurationExtensions.millis(500);
-        it.setDuration(_millis);
+        it.setDuration(DurationExtensions.millis(500));
         final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
           ObservableList<Node> _children_1 = this.infoTextBox.getChildren();
           _children_1.remove(spacer);
-          Set<String> _keySet = this.pages.keySet();
-          Iterator<String> _iterator = _keySet.iterator();
-          String _next = _iterator.next();
-          this.showPage(_next);
-          ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoTextBox.boundsInLocalProperty();
-          _boundsInLocalProperty.addListener(this.nameShortener);
+          this.showPage(this.pages.keySet().iterator().next());
+          this.infoTextBox.boundsInLocalProperty().addListener(this.nameShortener);
         };
         it.setOnFinished(_function_1);
         it.play();
@@ -609,12 +569,10 @@ public class LcarsNode extends XNode {
   }
   
   protected void invertColors(final RectangleBorderPane box) {
-    ObservableList<Node> _children = box.getChildren();
-    Node _head = IterableExtensions.<Node>head(_children);
+    Node _head = IterableExtensions.<Node>head(box.getChildren());
     final Text text = ((Text) _head);
     final Paint textColor = text.getFill();
-    Paint _backgroundPaint = box.getBackgroundPaint();
-    text.setFill(_backgroundPaint);
+    text.setFill(box.getBackgroundPaint());
     box.setBackgroundPaint(textColor);
     box.setBorderPaint(textColor);
   }
@@ -628,11 +586,10 @@ public class LcarsNode extends XNode {
   public void selectionFeedback(final boolean isSelected) {
     ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
     ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
-    Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
     final Consumer<XConnection> _function = (XConnection it) -> {
       it.toFront();
     };
-    _plus.forEach(_function);
+    Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections).forEach(_function);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.examples.lcars.LcarsNode");

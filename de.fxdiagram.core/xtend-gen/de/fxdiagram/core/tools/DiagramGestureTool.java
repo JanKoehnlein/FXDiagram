@@ -4,18 +4,15 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.viewport.ViewportTransform;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -76,10 +73,7 @@ public class DiagramGestureTool implements XDiagramTool {
   public DiagramGestureTool(final XRoot root) {
     this.root = root;
     final EventHandler<ZoomEvent> _function = (ZoomEvent it) -> {
-      XDiagram _diagram = root.getDiagram();
-      double _sceneX = it.getSceneX();
-      double _sceneY = it.getSceneY();
-      Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX, _sceneY);
+      Point2D _sceneToLocal = root.getDiagram().sceneToLocal(it.getSceneX(), it.getSceneY());
       DiagramGestureTool.ZoomContext _zoomContext = new DiagramGestureTool.ZoomContext(_sceneToLocal);
       this.zoomContext = _zoomContext;
     };
@@ -87,58 +81,45 @@ public class DiagramGestureTool implements XDiagramTool {
     final EventHandler<ZoomEvent> _function_1 = (ZoomEvent it) -> {
       double _totalZoomFactor = it.getTotalZoomFactor();
       final double scale = (_totalZoomFactor / this.zoomContext.previousScale);
+      root.getViewportTransform().scaleRelative(scale);
+      final Point2D pivotInScene = root.getDiagram().localToScene(this.zoomContext.pivotInDiagram);
       ViewportTransform _viewportTransform = root.getViewportTransform();
-      _viewportTransform.scaleRelative(scale);
-      XDiagram _diagram = root.getDiagram();
-      final Point2D pivotInScene = _diagram.localToScene(this.zoomContext.pivotInDiagram);
-      ViewportTransform _viewportTransform_1 = root.getViewportTransform();
       double _sceneX = it.getSceneX();
       double _x = pivotInScene.getX();
       double _minus = (_sceneX - _x);
       double _sceneY = it.getSceneY();
       double _y = pivotInScene.getY();
       double _minus_1 = (_sceneY - _y);
-      _viewportTransform_1.translateRelative(_minus, _minus_1);
-      double _totalZoomFactor_1 = it.getTotalZoomFactor();
-      this.zoomContext.previousScale = _totalZoomFactor_1;
+      _viewportTransform.translateRelative(_minus, _minus_1);
+      this.zoomContext.previousScale = it.getTotalZoomFactor();
     };
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = (ScrollEvent it) -> {
       boolean _isShortcutDown = it.isShortcutDown();
       if (_isShortcutDown) {
-        XDiagram _diagram = root.getDiagram();
-        double _sceneX = it.getSceneX();
-        double _sceneY = it.getSceneY();
-        final Point2D pivotInLocal = _diagram.sceneToLocal(_sceneX, _sceneY);
-        ViewportTransform _viewportTransform = root.getViewportTransform();
-        double _scale = _viewportTransform.getScale();
+        final Point2D pivotInLocal = root.getDiagram().sceneToLocal(it.getSceneX(), it.getSceneY());
+        double _scale = root.getViewportTransform().getScale();
         double _deltaY = it.getDeltaY();
         double _divide = (_deltaY / 400);
         double _plus = (1 + _divide);
         final double scale = (_scale * _plus);
+        ViewportTransform _viewportTransform = root.getViewportTransform();
+        _viewportTransform.setScale(scale);
+        final Point2D pivotInScene = root.getDiagram().localToScene(pivotInLocal);
         ViewportTransform _viewportTransform_1 = root.getViewportTransform();
-        _viewportTransform_1.setScale(scale);
-        XDiagram _diagram_1 = root.getDiagram();
-        final Point2D pivotInScene = _diagram_1.localToScene(pivotInLocal);
-        ViewportTransform _viewportTransform_2 = root.getViewportTransform();
-        double _sceneX_1 = it.getSceneX();
+        double _sceneX = it.getSceneX();
         double _x = pivotInScene.getX();
-        double _minus = (_sceneX_1 - _x);
-        double _sceneY_1 = it.getSceneY();
+        double _minus = (_sceneX - _x);
+        double _sceneY = it.getSceneY();
         double _y = pivotInScene.getY();
-        double _minus_1 = (_sceneY_1 - _y);
-        _viewportTransform_2.translateRelative(_minus, _minus_1);
+        double _minus_1 = (_sceneY - _y);
+        _viewportTransform_1.translateRelative(_minus, _minus_1);
       } else {
         boolean _isShiftDown = it.isShiftDown();
         if (_isShiftDown) {
-          ViewportTransform _viewportTransform_3 = root.getViewportTransform();
-          double _deltaY_1 = it.getDeltaY();
-          _viewportTransform_3.translateRelative(_deltaY_1, 0);
+          root.getViewportTransform().translateRelative(it.getDeltaY(), 0);
         } else {
-          ViewportTransform _viewportTransform_4 = root.getViewportTransform();
-          double _deltaX = it.getDeltaX();
-          double _deltaY_2 = it.getDeltaY();
-          _viewportTransform_4.translateRelative(_deltaX, _deltaY_2);
+          root.getViewportTransform().translateRelative(it.getDeltaX(), it.getDeltaY());
         }
       }
     };
@@ -148,56 +129,42 @@ public class DiagramGestureTool implements XDiagramTool {
       Iterable<XShape> _xifexpression = null;
       boolean _isEmpty = IterableExtensions.isEmpty(selection);
       if (_isEmpty) {
-        XDiagram _diagram = root.getDiagram();
-        ObservableList<XNode> _nodes = _diagram.getNodes();
-        XDiagram _diagram_1 = root.getDiagram();
-        ObservableList<XConnection> _connections = _diagram_1.getConnections();
+        ObservableList<XNode> _nodes = root.getDiagram().getNodes();
         final Function1<XConnection, Iterable<XControlPoint>> _function_4 = (XConnection it_1) -> {
           return this.getNonAnchorPoints(it_1);
         };
-        List<Iterable<XControlPoint>> _map = ListExtensions.<XConnection, Iterable<XControlPoint>>map(_connections, _function_4);
-        Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map);
+        Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(ListExtensions.<XConnection, Iterable<XControlPoint>>map(root.getDiagram().getConnections(), _function_4));
         _xifexpression = Iterables.<XShape>concat(_nodes, _flatten);
       } else {
         Iterable<XShape> _xblockexpression = null;
         {
-          Iterable<XNode> _filter = Iterables.<XNode>filter(selection, XNode.class);
-          final Set<XNode> nodes = IterableExtensions.<XNode>toSet(_filter);
-          Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(selection, XConnection.class);
+          final Set<XNode> nodes = IterableExtensions.<XNode>toSet(Iterables.<XNode>filter(selection, XNode.class));
+          Iterable<XConnection> _filter = Iterables.<XConnection>filter(selection, XConnection.class);
           final Function1<XNode, Iterable<XConnection>> _function_5 = (XNode it_1) -> {
-            ObservableList<XConnection> _outgoingConnections = it_1.getOutgoingConnections();
             final Function1<XConnection, Boolean> _function_6 = (XConnection it_2) -> {
-              XNode _target = it_2.getTarget();
-              return Boolean.valueOf(nodes.contains(_target));
+              return Boolean.valueOf(nodes.contains(it_2.getTarget()));
             };
-            Iterable<XConnection> _filter_2 = IterableExtensions.<XConnection>filter(_outgoingConnections, _function_6);
-            ObservableList<XConnection> _incomingConnections = it_1.getIncomingConnections();
+            Iterable<XConnection> _filter_1 = IterableExtensions.<XConnection>filter(it_1.getOutgoingConnections(), _function_6);
             final Function1<XConnection, Boolean> _function_7 = (XConnection it_2) -> {
-              XNode _source = it_2.getSource();
-              return Boolean.valueOf(nodes.contains(_source));
+              return Boolean.valueOf(nodes.contains(it_2.getSource()));
             };
-            Iterable<XConnection> _filter_3 = IterableExtensions.<XConnection>filter(_incomingConnections, _function_7);
-            return Iterables.<XConnection>concat(_filter_2, _filter_3);
+            Iterable<XConnection> _filter_2 = IterableExtensions.<XConnection>filter(it_1.getIncomingConnections(), _function_7);
+            return Iterables.<XConnection>concat(_filter_1, _filter_2);
           };
-          Iterable<Iterable<XConnection>> _map_1 = IterableExtensions.<XNode, Iterable<XConnection>>map(nodes, _function_5);
-          Iterable<XConnection> _flatten_1 = Iterables.<XConnection>concat(_map_1);
-          final Iterable<XConnection> connections = Iterables.<XConnection>concat(_filter_1, _flatten_1);
+          Iterable<XConnection> _flatten_1 = Iterables.<XConnection>concat(IterableExtensions.<XNode, Iterable<XConnection>>map(nodes, _function_5));
+          final Iterable<XConnection> connections = Iterables.<XConnection>concat(_filter, _flatten_1);
           final Function1<XConnection, Iterable<XControlPoint>> _function_6 = (XConnection it_1) -> {
             return this.getNonAnchorPoints(it_1);
           };
-          Iterable<Iterable<XControlPoint>> _map_2 = IterableExtensions.<XConnection, Iterable<XControlPoint>>map(connections, _function_6);
-          Iterable<XControlPoint> _flatten_2 = Iterables.<XControlPoint>concat(_map_2);
+          Iterable<XControlPoint> _flatten_2 = Iterables.<XControlPoint>concat(IterableExtensions.<XConnection, Iterable<XControlPoint>>map(connections, _function_6));
           Iterable<XShape> _plus = Iterables.<XShape>concat(nodes, _flatten_2);
-          Iterable<XControlPoint> _filter_2 = Iterables.<XControlPoint>filter(selection, XControlPoint.class);
-          _xblockexpression = Iterables.<XShape>concat(_plus, _filter_2);
+          Iterable<XControlPoint> _filter_1 = Iterables.<XControlPoint>filter(selection, XControlPoint.class);
+          _xblockexpression = Iterables.<XShape>concat(_plus, _filter_1);
         }
         _xifexpression = _xblockexpression;
       }
       final Set<XShape> rotateSet = IterableExtensions.<XShape>toSet(_xifexpression);
-      XDiagram _diagram_2 = root.getDiagram();
-      double _sceneX = it.getSceneX();
-      double _sceneY = it.getSceneY();
-      final Point2D pivot = _diagram_2.sceneToLocal(_sceneX, _sceneY);
+      final Point2D pivot = root.getDiagram().sceneToLocal(it.getSceneX(), it.getSceneY());
       double _angle = it.getAngle();
       double _x = pivot.getX();
       double _y = pivot.getY();
@@ -226,12 +193,11 @@ public class DiagramGestureTool implements XDiagramTool {
   }
   
   protected Iterable<XControlPoint> getNonAnchorPoints(final XConnection it) {
-    ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
     final Function1<XControlPoint, Boolean> _function = (XControlPoint it_1) -> {
       XControlPoint.Type _type = it_1.getType();
       return Boolean.valueOf((!Objects.equal(_type, XControlPoint.Type.ANCHOR)));
     };
-    return IterableExtensions.<XControlPoint>filter(_controlPoints, _function);
+    return IterableExtensions.<XControlPoint>filter(it.getControlPoints(), _function);
   }
   
   protected Dimension2D getRotateOffset(final XShape it) {
@@ -239,11 +205,9 @@ public class DiagramGestureTool implements XDiagramTool {
     if ((it instanceof XControlPoint)) {
       _xifexpression = new Dimension2D(0, 0);
     } else {
-      Bounds _layoutBounds = it.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
+      double _width = it.getLayoutBounds().getWidth();
       double _multiply = (0.5 * _width);
-      Bounds _layoutBounds_1 = it.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
+      double _height = it.getLayoutBounds().getHeight();
       double _multiply_1 = (0.5 * _height);
       _xifexpression = new Dimension2D(_multiply, _multiply_1);
     }

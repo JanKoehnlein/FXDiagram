@@ -2,7 +2,6 @@ package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.tools.actions.DiagramAction;
@@ -32,18 +31,15 @@ public class SelectAllAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    XDiagram _diagram = root.getDiagram();
-    Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Function1<XShape, Boolean> _function = (XShape it) -> {
       return Boolean.valueOf((!(it instanceof XConnectionLabel)));
     };
-    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_allShapes, _function);
     final Consumer<XShape> _function_1 = (XShape it) -> {
       boolean _isSelectable = it.isSelectable();
       if (_isSelectable) {
         it.setSelected(true);
       }
     };
-    _filter.forEach(_function_1);
+    IterableExtensions.<XShape>filter(root.getDiagram().getAllShapes(), _function).forEach(_function_1);
   }
 }

@@ -4,7 +4,6 @@ import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import javafx.animation.Animation;
-import javafx.util.Duration;
 
 @SuppressWarnings("all")
 public class CloseDiagramCommand implements AnimationCommand {
@@ -16,20 +15,17 @@ public class CloseDiagramCommand implements AnimationCommand {
   
   @Override
   public Animation getExecuteAnimation(final CommandContext context) {
-    Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
-    return this.host.closeDiagram(_defaultExecuteDuration);
+    return this.host.closeDiagram(context.getDefaultExecuteDuration());
   }
   
   @Override
   public Animation getUndoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.host.openDiagram(_defaultUndoDuration);
+    return this.host.openDiagram(context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation getRedoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.host.closeDiagram(_defaultUndoDuration);
+    return this.host.closeDiagram(context.getDefaultUndoDuration());
   }
   
   @Override

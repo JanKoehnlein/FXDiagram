@@ -41,8 +41,7 @@ public class SimpleNode extends XNode {
       Text _text = new Text();
       final Procedure1<Text> _function_1 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        String _name = this.getName();
-        it_1.setText(_name);
+        it_1.setText(this.getName());
       };
       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
       Text _label = (this.label = _doubleArrow);
@@ -56,8 +55,7 @@ public class SimpleNode extends XNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    String _name = this.getName();
-    this.label.setText(_name);
+    this.label.setText(this.getName());
   }
   
   @Override

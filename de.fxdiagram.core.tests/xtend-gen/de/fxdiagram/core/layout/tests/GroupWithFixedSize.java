@@ -13,8 +13,7 @@ public class GroupWithFixedSize extends Group {
   public double minWidth(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;
@@ -24,8 +23,7 @@ public class GroupWithFixedSize extends Group {
   public double minHeight(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;
@@ -35,8 +33,7 @@ public class GroupWithFixedSize extends Group {
   public double prefWidth(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;
@@ -46,8 +43,7 @@ public class GroupWithFixedSize extends Group {
   public double prefHeight(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;
@@ -57,8 +53,7 @@ public class GroupWithFixedSize extends Group {
   public double maxWidth(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;
@@ -68,8 +63,7 @@ public class GroupWithFixedSize extends Group {
   public double maxHeight(final double arg0) {
     int _xblockexpression = (int) 0;
     {
-      Exception _exception = new Exception();
-      _exception.printStackTrace();
+      new Exception().printStackTrace();
       _xblockexpression = 100;
     }
     return _xblockexpression;

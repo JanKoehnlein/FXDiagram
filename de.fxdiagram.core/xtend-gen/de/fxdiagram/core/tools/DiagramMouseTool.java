@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -15,7 +14,6 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.viewport.ViewportTransform;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
@@ -29,11 +27,9 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
@@ -203,24 +199,21 @@ public class DiagramMouseTool implements XDiagramTool {
                 totalZoomFactor = (1 / totalZoomFactor);
               }
               final double scale = (totalZoomFactor / this.dragContext.previousScale);
+              root.getViewportTransform().scaleRelative(scale);
+              final Point2D pivotInScene = root.getDiagram().localToScene(this.dragContext.pivotInDiagram);
               ViewportTransform _viewportTransform_2 = root.getViewportTransform();
-              _viewportTransform_2.scaleRelative(scale);
-              XDiagram _diagram = root.getDiagram();
-              final Point2D pivotInScene = _diagram.localToScene(this.dragContext.pivotInDiagram);
-              ViewportTransform _viewportTransform_3 = root.getViewportTransform();
               double _sceneX_1 = it.getSceneX();
               double _x = pivotInScene.getX();
               double _minus_2 = (_sceneX_1 - _x);
               double _sceneY_1 = it.getSceneY();
               double _y = pivotInScene.getY();
               double _minus_3 = (_sceneY_1 - _y);
-              _viewportTransform_3.translateRelative(_minus_2, _minus_3);
+              _viewportTransform_2.translateRelative(_minus_2, _minus_3);
               this.dragContext.previousScale = totalZoomFactor;
               break;
             case MARQUEE:
             case MARQUEE_XOR:
-              Pane _diagramCanvas = root.getDiagramCanvas();
-              final Point2D position = _diagramCanvas.screenToLocal(this.dragContext.screenX, this.dragContext.screenY);
+              final Point2D position = root.getDiagramCanvas().screenToLocal(this.dragContext.screenX, this.dragContext.screenY);
               double _screenX_1 = it.getScreenX();
               final double newWidth = (_screenX_1 - this.dragContext.screenX);
               if ((newWidth < 0)) {
@@ -229,8 +222,7 @@ public class DiagramMouseTool implements XDiagramTool {
                 this.marquee.setX(_plus_2);
                 this.marquee.setWidth((-newWidth));
               } else {
-                double _x_2 = position.getX();
-                this.marquee.setX(_x_2);
+                this.marquee.setX(position.getX());
                 this.marquee.setWidth(newWidth);
               }
               double _screenY_1 = it.getScreenY();
@@ -241,49 +233,36 @@ public class DiagramMouseTool implements XDiagramTool {
                 this.marquee.setY(_plus_3);
                 this.marquee.setHeight((-newHeight));
               } else {
-                double _y_2 = position.getY();
-                this.marquee.setY(_y_2);
+                this.marquee.setY(position.getY());
                 this.marquee.setHeight(newHeight);
               }
-              XDiagram _diagram_1 = root.getDiagram();
-              Bounds _boundsInLocal = this.marquee.getBoundsInLocal();
-              Bounds _localToScene = this.marquee.localToScene(_boundsInLocal);
-              final Bounds marqueeBounds = _diagram_1.sceneToLocal(_localToScene);
-              XDiagram _diagram_2 = root.getDiagram();
-              ObservableList<XNode> _nodes = _diagram_2.getNodes();
+              final Bounds marqueeBounds = root.getDiagram().sceneToLocal(this.marquee.localToScene(this.marquee.getBoundsInLocal()));
               final Consumer<XNode> _function_2 = (XNode it_1) -> {
-                boolean _isMarqueeSelected = this.isMarqueeSelected(it_1, marqueeBounds);
-                it_1.setSelected(_isMarqueeSelected);
+                it_1.setSelected(this.isMarqueeSelected(it_1, marqueeBounds));
               };
-              _nodes.forEach(_function_2);
-              XDiagram _diagram_3 = root.getDiagram();
-              ObservableList<XConnection> _connections = _diagram_3.getConnections();
+              root.getDiagram().getNodes().forEach(_function_2);
+              ObservableList<XConnection> _connections = root.getDiagram().getConnections();
               for (final XConnection connection : _connections) {
                 boolean _isSelectable = connection.isSelectable();
                 if (_isSelectable) {
-                  ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
                   final Function1<XControlPoint, Boolean> _function_3 = (XControlPoint it_1) -> {
                     return Boolean.valueOf(this.isMarqueeSelected(it_1, marqueeBounds));
                   };
-                  Iterable<XControlPoint> _filter = IterableExtensions.<XControlPoint>filter(_controlPoints, _function_3);
-                  final Set<XControlPoint> selectedControlPoints = IterableExtensions.<XControlPoint>toSet(_filter);
+                  final Set<XControlPoint> selectedControlPoints = IterableExtensions.<XControlPoint>toSet(IterableExtensions.<XControlPoint>filter(connection.getControlPoints(), _function_3));
                   boolean _isEmpty = selectedControlPoints.isEmpty();
                   boolean _not = (!_isEmpty);
                   connection.setSelected(_not);
                   boolean _selected = connection.getSelected();
                   if (_selected) {
-                    ObservableList<XControlPoint> _controlPoints_1 = connection.getControlPoints();
                     final Consumer<XControlPoint> _function_4 = (XControlPoint it_1) -> {
-                      boolean _contains = selectedControlPoints.contains(it_1);
-                      it_1.setSelected(_contains);
+                      it_1.setSelected(selectedControlPoints.contains(it_1));
                     };
-                    _controlPoints_1.forEach(_function_4);
+                    connection.getControlPoints().forEach(_function_4);
                   } else {
-                    ObservableList<XControlPoint> _controlPoints_2 = connection.getControlPoints();
                     final Consumer<XControlPoint> _function_5 = (XControlPoint it_1) -> {
                       it_1.setSelected(false);
                     };
-                    _controlPoints_2.forEach(_function_5);
+                    connection.getControlPoints().forEach(_function_5);
                   }
                 }
               }
@@ -302,9 +281,7 @@ public class DiagramMouseTool implements XDiagramTool {
         this.dragContext = null;
         it.consume();
       }
-      Pane _diagramCanvas = root.getDiagramCanvas();
-      ObservableList<Node> _children = _diagramCanvas.getChildren();
-      CoreExtensions.<Rectangle>safeDelete(_children, this.marquee);
+      CoreExtensions.<Rectangle>safeDelete(root.getDiagramCanvas().getChildren(), this.marquee);
       this.currentState = null;
       Scene _scene = root.getScene();
       _scene.setCursor(Cursor.DEFAULT);
@@ -318,10 +295,7 @@ public class DiagramMouseTool implements XDiagramTool {
     if (_not) {
       return false;
     }
-    Bounds _boundsInLocal = shape.getBoundsInLocal();
-    Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    Point2D _localToDiagram = CoreExtensions.localToDiagram(shape, _center);
-    boolean _contains = marqueeBounds.contains(_localToDiagram);
+    boolean _contains = marqueeBounds.contains(CoreExtensions.localToDiagram(shape, BoundsExtensions.center(shape.getBoundsInLocal())));
     if (_contains) {
       boolean _equals = Objects.equal(this.currentState, DiagramMouseTool.State.MARQUEE_XOR);
       if (_equals) {
@@ -398,13 +372,10 @@ public class DiagramMouseTool implements XDiagramTool {
       }
       _scene.setCursor(_switchResult);
       if ((Objects.equal(newState, DiagramMouseTool.State.MARQUEE) || Objects.equal(newState, DiagramMouseTool.State.MARQUEE_XOR))) {
-        Pane _diagramCanvas = this.root.getDiagramCanvas();
-        final Point2D position = _diagramCanvas.screenToLocal(this.dragContext.screenX, this.dragContext.screenY);
+        final Point2D position = this.root.getDiagramCanvas().screenToLocal(this.dragContext.screenX, this.dragContext.screenY);
         final Procedure1<Rectangle> _function = (Rectangle it) -> {
-          double _x = position.getX();
-          it.setX(_x);
-          double _y = position.getY();
-          it.setY(_y);
+          it.setX(position.getX());
+          it.setY(position.getY());
           it.setWidth(0);
           it.setHeight(0);
           it.setArcWidth(5);
@@ -413,8 +384,7 @@ public class DiagramMouseTool implements XDiagramTool {
           it.setStroke(Color.DARKGRAY);
           it.setStrokeWidth(2);
           it.setStrokeLineCap(StrokeLineCap.ROUND);
-          ObservableList<Double> _strokeDashArray = it.getStrokeDashArray();
-          _strokeDashArray.setAll(Double.valueOf(10.0), Double.valueOf(5.0), Double.valueOf(5.0), Double.valueOf(5.0));
+          it.getStrokeDashArray().setAll(Double.valueOf(10.0), Double.valueOf(5.0), Double.valueOf(5.0), Double.valueOf(5.0));
           Timeline _timeline = new Timeline();
           final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
             ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
@@ -426,11 +396,10 @@ public class DiagramMouseTool implements XDiagramTool {
             ObservableList<KeyFrame> _keyFrames_1 = it_1.getKeyFrames();
             Duration _millis_1 = DurationExtensions.millis(300);
             DoubleProperty _strokeDashOffsetProperty_1 = this.marquee.strokeDashOffsetProperty();
-            ObservableList<Double> _strokeDashArray_1 = this.marquee.getStrokeDashArray();
             final Function2<Double, Double, Double> _function_2 = (Double $0, Double $1) -> {
               return Double.valueOf(DoubleExtensions.operator_plus($0, $1));
             };
-            Double _reduce = IterableExtensions.<Double>reduce(_strokeDashArray_1, _function_2);
+            Double _reduce = IterableExtensions.<Double>reduce(this.marquee.getStrokeDashArray(), _function_2);
             KeyValue _keyValue_1 = new <Number>KeyValue(_strokeDashOffsetProperty_1, ((Double) _reduce));
             KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
             _keyFrames_1.add(_keyFrame_1);
@@ -441,20 +410,15 @@ public class DiagramMouseTool implements XDiagramTool {
         };
         ObjectExtensions.<Rectangle>operator_doubleArrow(
           this.marquee, _function);
-        Pane _diagramCanvas_1 = this.root.getDiagramCanvas();
-        ObservableList<Node> _children = _diagramCanvas_1.getChildren();
-        CoreExtensions.<Rectangle>safeAdd(_children, this.marquee);
-        HashSet<XShape> _newHashSet = CollectionLiterals.<XShape>newHashSet();
-        this.previousSelection = _newHashSet;
+        CoreExtensions.<Rectangle>safeAdd(this.root.getDiagramCanvas().getChildren(), this.marquee);
+        this.previousSelection = CollectionLiterals.<XShape>newHashSet();
         boolean _equals = Objects.equal(newState, DiagramMouseTool.State.MARQUEE_XOR);
         if (_equals) {
           Iterable<XShape> _currentSelection = this.root.getCurrentSelection();
           Iterables.<XShape>addAll(this.previousSelection, _currentSelection);
         }
       } else {
-        Pane _diagramCanvas_2 = this.root.getDiagramCanvas();
-        ObservableList<Node> _children_1 = _diagramCanvas_2.getChildren();
-        CoreExtensions.<Rectangle>safeDelete(_children_1, this.marquee);
+        CoreExtensions.<Rectangle>safeDelete(this.root.getDiagramCanvas().getChildren(), this.marquee);
       }
       return true;
     } else {
@@ -465,25 +429,17 @@ public class DiagramMouseTool implements XDiagramTool {
   protected DiagramMouseTool.DragContext startDragContext(final MouseEvent event) {
     DiagramMouseTool.DragContext _dragContext = new DiagramMouseTool.DragContext();
     final Procedure1<DiagramMouseTool.DragContext> _function = (DiagramMouseTool.DragContext it) -> {
-      ViewportTransform _viewportTransform = this.root.getViewportTransform();
-      double _translateX = _viewportTransform.getTranslateX();
+      double _translateX = this.root.getViewportTransform().getTranslateX();
       double _sceneX = event.getSceneX();
       double _minus = (_translateX - _sceneX);
       it.sceneX = _minus;
-      ViewportTransform _viewportTransform_1 = this.root.getViewportTransform();
-      double _translateY = _viewportTransform_1.getTranslateY();
+      double _translateY = this.root.getViewportTransform().getTranslateY();
       double _sceneY = event.getSceneY();
       double _minus_1 = (_translateY - _sceneY);
       it.sceneY = _minus_1;
-      double _screenX = event.getScreenX();
-      it.screenX = _screenX;
-      double _screenY = event.getScreenY();
-      it.screenY = _screenY;
-      XDiagram _diagram = this.root.getDiagram();
-      double _sceneX_1 = event.getSceneX();
-      double _sceneY_1 = event.getSceneY();
-      Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX_1, _sceneY_1);
-      it.pivotInDiagram = _sceneToLocal;
+      it.screenX = event.getScreenX();
+      it.screenY = event.getScreenY();
+      it.pivotInDiagram = this.root.getDiagram().sceneToLocal(event.getSceneX(), event.getSceneY());
     };
     DiagramMouseTool.DragContext _doubleArrow = ObjectExtensions.<DiagramMouseTool.DragContext>operator_doubleArrow(_dragContext, _function);
     return this.dragContext = _doubleArrow;

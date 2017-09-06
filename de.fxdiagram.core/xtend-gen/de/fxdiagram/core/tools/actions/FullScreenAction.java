@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -29,8 +28,7 @@ public class FullScreenAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    Scene _scene = root.getScene();
-    final Window window = _scene.getWindow();
+    final Window window = root.getScene().getWindow();
     if ((window instanceof Stage)) {
       ((Stage)window).setFullScreen(true);
       return;

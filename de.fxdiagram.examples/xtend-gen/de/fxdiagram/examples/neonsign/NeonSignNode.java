@@ -11,7 +11,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,7 +20,6 @@ import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -50,13 +48,10 @@ public class NeonSignNode extends FlipNode {
     Node _xblockexpression = null;
     {
       final Node node = super.createNode();
-      VBox _neonSign = this.getNeonSign();
-      this.setFront(_neonSign);
+      this.setFront(this.getNeonSign());
       ImageView _imageView = new ImageView();
       final Procedure1<ImageView> _function = (ImageView it) -> {
-        ImageCache _get = ImageCache.get();
-        Image _image = _get.getImage(this, "code.png");
-        it.setImage(_image);
+        it.setImage(ImageCache.get().getImage(this, "code.png"));
       };
       ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
       this.setBack(_doubleArrow);
@@ -114,7 +109,7 @@ public class NeonSignNode extends FlipNode {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("-fx-background-image: url(\"");
       String _uRI = ClassLoaderExtensions.toURI(this, "brick.jpg");
-      _builder.append(_uRI, "");
+      _builder.append(_uRI);
       _builder.append("\");");
       _builder.newLineIfNotEmpty();
       it.setStyle(_builder.toString());
@@ -131,16 +126,12 @@ public class NeonSignNode extends FlipNode {
       ObservableList<Node> _children_1 = it.getChildren();
       Text _text = new Text();
       final Procedure1<Text> _function_2 = (Text it_1) -> {
-        StringProperty _textProperty = it_1.textProperty();
-        StringProperty _textProperty_1 = this.textField.textProperty();
-        _textProperty.bind(_textProperty_1);
+        it_1.textProperty().bind(this.textField.textProperty());
         it_1.setWrappingWidth(580);
         it_1.setTextAlignment(TextAlignment.CENTER);
         it_1.setRotate((-7));
-        Font _font = Font.font("Nanum Pen Script", 100);
-        it_1.setFont(_font);
-        Color _web = Color.web("#feeb42");
-        it_1.setFill(_web);
+        it_1.setFont(Font.font("Nanum Pen Script", 100));
+        it_1.setFill(Color.web("#feeb42"));
         Blend _blend = new Blend();
         final Procedure1<Blend> _function_3 = (Blend it_2) -> {
           it_2.setMode(BlendMode.MULTIPLY);
@@ -148,8 +139,7 @@ public class NeonSignNode extends FlipNode {
           it_2.setTopInput(_bloom);
           InnerShadow _innerShadow = new InnerShadow();
           final Procedure1<InnerShadow> _function_4 = (InnerShadow it_3) -> {
-            Color _web_1 = Color.web("#f13a00");
-            it_3.setColor(_web_1);
+            it_3.setColor(Color.web("#f13a00"));
             it_3.setRadius(5);
             it_3.setChoke(0.4);
           };

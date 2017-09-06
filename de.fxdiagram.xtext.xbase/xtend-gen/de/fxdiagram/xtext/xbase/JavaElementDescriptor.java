@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.xbase;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
@@ -14,7 +13,6 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
@@ -37,40 +35,30 @@ public class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDes
   
   @Override
   protected IResourceServiceProvider getResourceServiceProvider() {
-    URI _createURI = URI.createURI("dummy.___xbase");
-    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
+    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI("dummy.___xbase"));
   }
   
   @Override
   public <T extends Object> T withDomainObject(final Function1<? super ECLASS, ? extends T> lambda) {
     T _xblockexpression = null;
     {
-      String _handleIdentifier = this.getHandleIdentifier();
-      final IJavaElement javaElement = JavaCore.create(_handleIdentifier);
-      boolean _equals = Objects.equal(javaElement, null);
-      if (_equals) {
-        String _handleIdentifier_1 = this.getHandleIdentifier();
-        String _plus = ("Java element " + _handleIdentifier_1);
+      final IJavaElement javaElement = JavaCore.create(this.getHandleIdentifier());
+      if ((javaElement == null)) {
+        String _handleIdentifier = this.getHandleIdentifier();
+        String _plus = ("Java element " + _handleIdentifier);
         String _plus_1 = (_plus + " not found");
         throw new NoSuchElementException(_plus_1);
       }
       XtextDomainObjectProvider _provider = this.getProvider();
-      XtextEObjectID _elementID = this.getElementID();
-      URI _uRI = _elementID.getURI();
-      final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_uRI);
+      final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(this.getElementID().getURI());
       final JvmIdentifiableElement jvmElement = domainUtil.getJvmElement(javaElement);
-      boolean _equals_1 = Objects.equal(jvmElement, null);
-      if (_equals_1) {
+      if ((jvmElement == null)) {
         String _elementName = javaElement.getElementName();
         String _plus_2 = ("JVM element for " + _elementName);
         String _plus_3 = (_plus_2 + " not found");
         throw new NoSuchElementException(_plus_3);
       }
-      Resource _eResource = jvmElement.eResource();
-      XtextEObjectID _elementID_1 = this.getElementID();
-      URI _uRI_1 = _elementID_1.getURI();
-      String _fragment = _uRI_1.fragment();
-      final EObject realJvmElement = _eResource.getEObject(_fragment);
+      final EObject realJvmElement = jvmElement.eResource().getEObject(this.getElementID().getURI().fragment());
       _xblockexpression = lambda.apply(((ECLASS) realJvmElement));
     }
     return _xblockexpression;
@@ -81,8 +69,7 @@ public class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDes
     try {
       IEditorPart _xblockexpression = null;
       {
-        String _handleIdentifier = this.getHandleIdentifier();
-        final IJavaElement javaElement = JavaCore.create(_handleIdentifier);
+        final IJavaElement javaElement = JavaCore.create(this.getHandleIdentifier());
         _xblockexpression = JavaUI.openInEditor(javaElement, true, isSelect);
       }
       return _xblockexpression;

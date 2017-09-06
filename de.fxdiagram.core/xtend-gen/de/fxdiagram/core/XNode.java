@@ -126,12 +126,9 @@ public class XNode extends XDomainObjectShape {
     Node _xblockexpression = null;
     {
       final Node node = super.getNode();
-      InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
-      this.mouseOverEffect = _createMouseOverEffect;
-      DropShadow _createSelectionEffect = this.createSelectionEffect();
-      this.selectionEffect = _createSelectionEffect;
-      Anchors _createAnchors = this.createAnchors();
-      this.anchors = _createAnchors;
+      this.mouseOverEffect = this.createMouseOverEffect();
+      this.selectionEffect = this.createSelectionEffect();
+      this.anchors = this.createAnchors();
       _xblockexpression = node;
     }
     return _xblockexpression;
@@ -163,17 +160,15 @@ public class XNode extends XDomainObjectShape {
     NodeMoveBehavior _nodeMoveBehavior = new NodeMoveBehavior(this);
     this.addBehavior(_nodeMoveBehavior);
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      this.originalEffect = this.getNode().getEffect();
       Node _node = this.getNode();
-      Effect _effect = _node.getEffect();
-      this.originalEffect = _effect;
-      Node _node_1 = this.getNode();
       Effect _elvis = null;
       if (this.mouseOverEffect != null) {
         _elvis = this.mouseOverEffect;
       } else {
         _elvis = this.originalEffect;
       }
-      _node_1.setEffect(_elvis);
+      _node.setEffect(_elvis);
     };
     this.setOnMouseEntered(_function);
     final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
@@ -202,8 +197,7 @@ public class XNode extends XDomainObjectShape {
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.setEffect(this.selectionEffect);
-      DoubleProperty _scaleXProperty = this.scaleXProperty();
-      boolean _isBound = _scaleXProperty.isBound();
+      boolean _isBound = this.scaleXProperty().isBound();
       boolean _not = (!_isBound);
       if (_not) {
         this.setScaleX(1.05);
@@ -212,8 +206,7 @@ public class XNode extends XDomainObjectShape {
       this.toFront();
     } else {
       this.setEffect(null);
-      DoubleProperty _scaleXProperty_1 = this.scaleXProperty();
-      boolean _isBound_1 = _scaleXProperty_1.isBound();
+      boolean _isBound_1 = this.scaleXProperty().isBound();
       boolean _not_1 = (!_isBound_1);
       if (_not_1) {
         this.setScaleX(1.0);
@@ -227,20 +220,15 @@ public class XNode extends XDomainObjectShape {
     super.toFront();
     ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
     ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
-    Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
     final Consumer<XConnection> _function = (XConnection it) -> {
       it.toFront();
     };
-    _plus.forEach(_function);
+    Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections).forEach(_function);
   }
   
   @Override
   public Bounds getSnapBounds() {
-    Node _node = this.getNode();
-    Bounds _boundsInParent = _node.getBoundsInParent();
-    double _layoutX = this.placementGroup.getLayoutX();
-    double _layoutY = this.placementGroup.getLayoutY();
-    BoundingBox _translate = BoundsExtensions.translate(_boundsInParent, _layoutX, _layoutY);
+    BoundingBox _translate = BoundsExtensions.translate(this.getNode().getBoundsInParent(), this.placementGroup.getLayoutX(), this.placementGroup.getLayoutY());
     double _scaleX = this.getScaleX();
     double _divide = (1 / _scaleX);
     double _scaleY = this.getScaleY();

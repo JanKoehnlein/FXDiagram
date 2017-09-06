@@ -1,6 +1,5 @@
 package de.fxdiagram.eclipse.xtext.hyperlink;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -23,7 +22,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.xtend.lib.annotations.Data;
-import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.hyperlinking.HyperlinkHelper;
@@ -213,10 +211,8 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
   public IHyperlink[] createHyperlinksByOffset(final XtextResource resource, final int offset, final boolean createMultipleHyperlinks) {
     Iterable<IHyperlink> _xblockexpression = null;
     {
-      IHyperlink[] _createHyperlinksByOffset = this.delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
-      List<IHyperlink> _emptyListIfNull = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset);
-      IHyperlink[] _createHyperlinksByOffset_1 = super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
-      List<IHyperlink> _emptyListIfNull_1 = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset_1);
+      List<IHyperlink> _emptyListIfNull = this.<IHyperlink>emptyListIfNull(this.delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks));
+      List<IHyperlink> _emptyListIfNull_1 = this.<IHyperlink>emptyListIfNull(super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks));
       final Iterable<IHyperlink> hyperlinks = Iterables.<IHyperlink>concat(_emptyListIfNull, _emptyListIfNull_1);
       Iterable<IHyperlink> _xifexpression = null;
       boolean _isEmpty = IterableExtensions.isEmpty(hyperlinks);
@@ -243,8 +239,7 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
   
   @Override
   public void createHyperlinksByOffset(final XtextResource resource, final int offset, final IHyperlinkAcceptor acceptor) {
-    EObjectAtOffsetHelper _eObjectAtOffsetHelper = this.getEObjectAtOffsetHelper();
-    final EObject selectedElement = _eObjectAtOffsetHelper.resolveElementAt(resource, offset);
+    final EObject selectedElement = this.getEObjectAtOffsetHelper().resolveElementAt(resource, offset);
     IWorkbenchWindow _activeWorkbenchWindow = null;
     if (this.workbench!=null) {
       _activeWorkbenchWindow=this.workbench.getActiveWorkbenchWindow();
@@ -258,28 +253,22 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
       _activeEditor=_activePage.getActiveEditor();
     }
     final IEditorPart editor = _activeEditor;
-    boolean _notEquals = (!Objects.equal(selectedElement, null));
-    if (_notEquals) {
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+    if ((selectedElement != null)) {
       final Function1<XDiagramConfig, Iterable<? extends EntryCall<EObject>>> _function = (XDiagramConfig it) -> {
         return it.<EObject>getEntryCalls(selectedElement);
       };
-      Iterable<Iterable<? extends EntryCall<EObject>>> _map = IterableExtensions.map(_configurations, _function);
-      final Iterable<EntryCall<EObject>> entryCalls = Iterables.<EntryCall<EObject>>concat(_map);
+      final Iterable<EntryCall<EObject>> entryCalls = Iterables.<EntryCall<EObject>>concat(IterableExtensions.map(XDiagramConfig.Registry.getInstance().getConfigurations(), _function));
       boolean _isEmpty = IterableExtensions.isEmpty(entryCalls);
       boolean _not = (!_isEmpty);
       if (_not) {
         final ITextRegion region = this.locationInFileProvider.getSignificantTextRegion(selectedElement);
         for (final EntryCall<EObject> entryCall : entryCalls) {
           {
-            XDiagramConfig _config = entryCall.getConfig();
-            final IMappedElementDescriptorProvider domainObjectProvider = _config.getDomainObjectProvider();
+            final IMappedElementDescriptorProvider domainObjectProvider = entryCall.getConfig().getDomainObjectProvider();
             if ((domainObjectProvider instanceof XtextDomainObjectProvider)) {
-              XDiagramConfig _config_1 = entryCall.getConfig();
-              IMappedElementDescriptorProvider _domainObjectProvider = _config_1.getDomainObjectProvider();
-              XDiagramConfig _config_2 = entryCall.getConfig();
-              NodeMapping<EObject> _nodeMapping = new NodeMapping<EObject>(_config_2, "dummy", "dummy");
+              IMappedElementDescriptorProvider _domainObjectProvider = entryCall.getConfig().getDomainObjectProvider();
+              XDiagramConfig _config = entryCall.getConfig();
+              NodeMapping<EObject> _nodeMapping = new NodeMapping<EObject>(_config, "dummy", "dummy");
               final IMappedElementDescriptor<EObject> descriptor = _domainObjectProvider.<EObject>createMappedElementDescriptor(selectedElement, _nodeMapping);
               FXDiagramHyperlinkHelper.FXDiagramHyperlink _fXDiagramHyperlink = new FXDiagramHyperlinkHelper.FXDiagramHyperlink(descriptor, entryCall, region, editor);
               acceptor.accept(_fXDiagramHyperlink);

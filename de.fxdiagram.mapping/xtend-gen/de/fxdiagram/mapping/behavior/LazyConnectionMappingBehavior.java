@@ -6,7 +6,6 @@ import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonBehavior;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.behavior.LazyConnectionRapidButtonAction;
@@ -36,11 +35,10 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
       AbstractMapping<T> _mapping_1 = descriptor.getMapping();
       final NodeMapping<T> nodeMapping = ((NodeMapping<T>) _mapping_1);
       LazyConnectionMappingBehavior<T> lazyBehavior = null;
-      List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
       final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = (AbstractConnectionMappingCall<?, T> it) -> {
         return Boolean.valueOf(it.isOnDemand());
       };
-      final Iterable<AbstractConnectionMappingCall<?, T>> lazyOutgoing = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_outgoing, _function);
+      final Iterable<AbstractConnectionMappingCall<?, T>> lazyOutgoing = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(nodeMapping.getOutgoing(), _function);
       boolean _isEmpty = IterableExtensions.isEmpty(lazyOutgoing);
       boolean _not = (!_isEmpty);
       if (_not) {
@@ -54,15 +52,13 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         lazyBehavior = _elvis;
         for (final AbstractConnectionMappingCall<?, T> out : lazyOutgoing) {
           XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter();
-          List<Side> _buttonSides = LazyConnectionMappingBehavior.getButtonSides(node, out);
-          lazyBehavior.addConnectionMappingCall(out, _xDiagramConfigInterpreter, true, ((Side[])Conversions.unwrapArray(_buttonSides, Side.class)));
+          lazyBehavior.addConnectionMappingCall(out, _xDiagramConfigInterpreter, true, ((Side[])Conversions.unwrapArray(LazyConnectionMappingBehavior.getButtonSides(node, out), Side.class)));
         }
       }
-      List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
         return Boolean.valueOf(it.isOnDemand());
       };
-      final Iterable<AbstractConnectionMappingCall<?, T>> lazyIncoming = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_incoming, _function_1);
+      final Iterable<AbstractConnectionMappingCall<?, T>> lazyIncoming = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(nodeMapping.getIncoming(), _function_1);
       boolean _isEmpty_1 = IterableExtensions.isEmpty(lazyIncoming);
       boolean _not_1 = (!_isEmpty_1);
       if (_not_1) {
@@ -76,8 +72,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         lazyBehavior = _elvis_1;
         for (final AbstractConnectionMappingCall<?, T> in : lazyIncoming) {
           XDiagramConfigInterpreter _xDiagramConfigInterpreter_1 = new XDiagramConfigInterpreter();
-          List<Side> _buttonSides_1 = LazyConnectionMappingBehavior.getButtonSides(node, in);
-          lazyBehavior.addConnectionMappingCall(in, _xDiagramConfigInterpreter_1, false, ((Side[])Conversions.unwrapArray(_buttonSides_1, Side.class)));
+          lazyBehavior.addConnectionMappingCall(in, _xDiagramConfigInterpreter_1, false, ((Side[])Conversions.unwrapArray(LazyConnectionMappingBehavior.getButtonSides(node, in), Side.class)));
         }
       }
       boolean _notEquals = (!Objects.equal(lazyBehavior, null));
@@ -90,8 +85,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
   public static List<Side> getButtonSides(final XNode node, final AbstractConnectionMappingCall<?, ?> out) {
     List<Side> _xifexpression = null;
     if ((node instanceof INodeWithLazyMappings)) {
-      ConnectionMapping<?> _connectionMapping = out.getConnectionMapping();
-      _xifexpression = ((INodeWithLazyMappings)node).getButtonSides(_connectionMapping);
+      _xifexpression = ((INodeWithLazyMappings)node).getButtonSides(out.getConnectionMapping());
     } else {
       _xifexpression = Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
     }

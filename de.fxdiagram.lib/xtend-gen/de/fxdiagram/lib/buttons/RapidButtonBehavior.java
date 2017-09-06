@@ -1,8 +1,6 @@
 package de.fxdiagram.lib.buttons;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
@@ -13,7 +11,6 @@ import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.lib.buttons.RapidButton;
-import de.fxdiagram.lib.buttons.RapidButtonAction;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -36,7 +33,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -62,10 +58,8 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   
   private final FadeTransition fadeTransition = ObjectExtensions.<FadeTransition>operator_doubleArrow(new FadeTransition(), ((Procedure1<FadeTransition>) (FadeTransition it) -> {
     it.setNode(this.allButtons);
-    Duration _millis = DurationExtensions.millis(500);
-    it.setDelay(_millis);
-    Duration _millis_1 = DurationExtensions.millis(500);
-    it.setDuration(_millis_1);
+    it.setDelay(DurationExtensions.millis(500));
+    it.setDuration(DurationExtensions.millis(500));
     it.setFromValue(1);
     it.setToValue(0);
     final EventHandler<ActionEvent> _function = (ActionEvent it_1) -> {
@@ -107,18 +101,14 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     CoreExtensions.<RapidButton>addInitializingListener(this.buttonsProperty, _doubleArrow);
     this.updateButtons();
     this.layout();
-    HOST _host = this.getHost();
-    Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
       this.show();
     };
-    _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function_1);
-    HOST _host_1 = this.getHost();
-    Node _node_1 = _host_1.getNode();
+    this.getHost().getNode().<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function_1);
     final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
       this.fade();
     };
-    _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_2);
+    this.getHost().getNode().<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_2);
     final EventHandler<MouseEvent> _function_3 = (MouseEvent it) -> {
       this.show();
     };
@@ -127,32 +117,24 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       this.fade();
     };
     this.allButtons.setOnMouseExited(_function_4);
-    HOST _host_2 = this.getHost();
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_2.boundsInParentProperty();
     final ChangeListener<Bounds> _function_5 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
       boolean _isVisible = this.allButtons.isVisible();
       if (_isVisible) {
         this.layout();
       }
     };
-    _boundsInParentProperty.addListener(_function_5);
-    HOST _host_3 = this.getHost();
-    ReadOnlyObjectProperty<Parent> _parentProperty = _host_3.parentProperty();
+    this.getHost().boundsInParentProperty().addListener(_function_5);
+    ReadOnlyObjectProperty<Parent> _parentProperty = this.getHost().parentProperty();
     InitializingListener<Parent> _initializingListener = new InitializingListener<Parent>();
     final Procedure1<InitializingListener<Parent>> _function_6 = (InitializingListener<Parent> it) -> {
       final Procedure1<Parent> _function_7 = (Parent it_1) -> {
-        XDiagram _diagram = CoreExtensions.getDiagram(it_1);
-        Group _buttonLayer = _diagram.getButtonLayer();
-        ObservableList<Node> _children = _buttonLayer.getChildren();
+        ObservableList<Node> _children = CoreExtensions.getDiagram(it_1).getButtonLayer().getChildren();
         _children.add(this.allButtons);
       };
       it.setSet(_function_7);
       final Procedure1<Parent> _function_8 = (Parent it_1) -> {
-        boolean _notEquals = (!Objects.equal(it_1, null));
-        if (_notEquals) {
-          XDiagram _diagram = CoreExtensions.getDiagram(it_1);
-          Group _buttonLayer = _diagram.getButtonLayer();
-          ObservableList<Node> _children = _buttonLayer.getChildren();
+        if ((it_1 != null)) {
+          ObservableList<Node> _children = CoreExtensions.getDiagram(it_1).getButtonLayer().getChildren();
           _children.remove(this.allButtons);
         }
       };
@@ -165,10 +147,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   public Group show() {
     Group _xblockexpression = null;
     {
-      HOST _host = this.getHost();
-      XDiagram _diagram = CoreExtensions.getDiagram(_host);
-      Group _buttonLayer = _diagram.getButtonLayer();
-      final ObservableList<Node> blChildren = _buttonLayer.getChildren();
+      final ObservableList<Node> blChildren = CoreExtensions.getDiagram(this.getHost()).getButtonLayer().getChildren();
       boolean _contains = blChildren.contains(this.allButtons);
       boolean _not = (!_contains);
       if (_not) {
@@ -203,12 +182,8 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   protected void updateButtons() {
     for (final RapidButton button : this.buttonsProperty) {
       {
-        Side _position = button.getPosition();
-        Pane _get = this.pos2group.get(_position);
-        final ObservableList<Node> group = _get.getChildren();
-        RapidButtonAction _action = button.getAction();
-        HOST _host = this.getHost();
-        boolean _isEnabled = _action.isEnabled(_host);
+        final ObservableList<Node> group = this.pos2group.get(button.getPosition()).getChildren();
+        boolean _isEnabled = button.getAction().isEnabled(this.getHost());
         if (_isEnabled) {
           boolean _contains = group.contains(button);
           boolean _not = (!_contains);
@@ -226,17 +201,13 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   }
   
   protected void layout() {
-    HOST _host = this.getHost();
-    HOST _host_1 = this.getHost();
-    Bounds _layoutBounds = _host_1.getLayoutBounds();
-    final Bounds hostBounds = CoreExtensions.localToRootDiagram(_host, _layoutBounds);
+    final Bounds hostBounds = CoreExtensions.localToRootDiagram(this.getHost(), this.getHost().getLayoutBounds());
     Point2D _center = null;
     if (hostBounds!=null) {
       _center=BoundsExtensions.center(hostBounds);
     }
     final Point2D hostCenter = _center;
-    boolean _notEquals = (!Objects.equal(hostCenter, null));
-    if (_notEquals) {
+    if ((hostCenter != null)) {
       Set<Map.Entry<Side, Pane>> _entrySet = this.pos2group.entrySet();
       for (final Map.Entry<Side, Pane> entry : _entrySet) {
         {

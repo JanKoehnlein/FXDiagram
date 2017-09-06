@@ -46,8 +46,7 @@ public class BrickBreakerNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
-          String _name = this.getName();
-          it_1.setText(_name);
+          it_1.setText(this.getName());
           it_1.setTextOrigin(VPos.TOP);
           Insets _insets = new Insets(10, 20, 10, 20);
           StackPane.setMargin(it_1, _insets);
@@ -111,13 +110,11 @@ public class BrickBreakerNode extends FlipNode {
         final Constructor<Main.MainFrame> constructor = Main.MainFrame.class.getDeclaredConstructor(Main.class, Group.class);
         constructor.setAccessible(true);
         final Main.MainFrame mainFrame = constructor.newInstance(main, root);
-        Field[] _declaredFields = Main.class.getDeclaredFields();
         final Function1<Field, Boolean> _function_1 = (Field it) -> {
           String _name = it.getName();
           return Boolean.valueOf(Objects.equal(_name, "mainFrame"));
         };
-        Iterable<Field> _filter = IterableExtensions.<Field>filter(((Iterable<Field>)Conversions.doWrapArray(_declaredFields)), _function_1);
-        final Field mainFrameField = IterableExtensions.<Field>head(_filter);
+        final Field mainFrameField = IterableExtensions.<Field>head(IterableExtensions.<Field>filter(((Iterable<Field>)Conversions.doWrapArray(Main.class.getDeclaredFields())), _function_1));
         mainFrameField.setAccessible(true);
         mainFrameField.set(main, mainFrame);
         mainFrame.changeState(Main.MainFrame.SPLASH);

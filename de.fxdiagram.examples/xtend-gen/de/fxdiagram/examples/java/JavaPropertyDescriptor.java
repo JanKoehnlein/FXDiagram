@@ -20,11 +20,9 @@ public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaPro
     try {
       JavaProperty _xblockexpression = null;
       {
-        String _id = this.getId();
-        final String[] split = _id.split(" ");
+        final String[] split = this.getId().split(" ");
         String _get = split[1];
-        String _get_1 = split[0];
-        Class<?> _forName = Class.forName(_get_1);
+        Class<?> _forName = Class.forName(split[0]);
         _xblockexpression = new JavaProperty(_get, _forName);
       }
       return _xblockexpression;

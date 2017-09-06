@@ -18,8 +18,7 @@ public class NameShortener {
     if (_find) {
       return matcher.replaceAll(" ");
     }
-    Matcher _matcher = this.parenthesesPattern.matcher(name);
-    matcher = _matcher;
+    matcher = this.parenthesesPattern.matcher(name);
     boolean _find_1 = matcher.find();
     if (_find_1) {
       return matcher.replaceAll("()");
@@ -28,8 +27,7 @@ public class NameShortener {
     int _size = ((List<String>)Conversions.doWrapArray(subnames)).size();
     switch (_size) {
       case 1:
-        String _head = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
-        String _substring = _head.substring(0, 8);
+        String _substring = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames))).substring(0, 8);
         return (_substring + "...");
       case 2:
         final String firstName = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
@@ -44,8 +42,8 @@ public class NameShortener {
           return (_plus + _last);
         }
       default:
-        String _head_1 = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
-        String _plus_1 = (_head_1 + " ");
+        String _head = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
+        String _plus_1 = (_head + " ");
         String _last_1 = IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(subnames)));
         return (_plus_1 + _last_1);
     }

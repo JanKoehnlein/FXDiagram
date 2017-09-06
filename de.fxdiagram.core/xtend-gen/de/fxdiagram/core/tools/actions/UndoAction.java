@@ -2,7 +2,6 @@ package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.scene.input.KeyEvent;
@@ -26,7 +25,6 @@ public class UndoAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.undo();
+    root.getCommandStack().undo();
   }
 }

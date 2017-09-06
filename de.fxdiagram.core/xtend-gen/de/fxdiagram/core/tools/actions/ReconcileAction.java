@@ -10,13 +10,11 @@ import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.SequentialAnimationCommand;
@@ -25,7 +23,6 @@ import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
@@ -48,8 +45,7 @@ public class ReconcileAction implements DiagramAction {
     public void execute(final CommandContext context) {
       final ReconcileBehavior diagramReconcileBehavior = this.diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
       if (diagramReconcileBehavior!=null) {
-        DirtyState _dirtyState = diagramReconcileBehavior.getDirtyState();
-        diagramReconcileBehavior.showDirtyState(_dirtyState);
+        diagramReconcileBehavior.showDirtyState(diagramReconcileBehavior.getDirtyState());
       }
       final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
       ObservableList<XConnection> _connections = this.diagram.getConnections();
@@ -61,8 +57,7 @@ public class ReconcileAction implements DiagramAction {
         boolean _notEquals = (!Objects.equal(behavior, null));
         if (_notEquals) {
           if (this.isShow) {
-            DirtyState _dirtyState_1 = behavior.getDirtyState();
-            behavior.showDirtyState(_dirtyState_1);
+            behavior.showDirtyState(behavior.getDirtyState());
           } else {
             behavior.hideDirtyState();
           }
@@ -119,8 +114,7 @@ public class ReconcileAction implements DiagramAction {
       it.operator_add(_updateDirtyStateCommand_1);
     };
     final SequentialAnimationCommand command = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function);
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.execute(command);
+    root.getCommandStack().execute(command);
   }
   
   protected LazyCommand getReconcileCommand(final XRoot root) {
@@ -150,24 +144,18 @@ public class ReconcileAction implements DiagramAction {
             if ((shape instanceof XNode)) {
               ObservableList<XConnection> _outgoingConnections = ((XNode)shape).getOutgoingConnections();
               ObservableList<XConnection> _incomingConnections = ((XNode)shape).getIncomingConnections();
-              Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
               final Consumer<XConnection> _function = (XConnection it) -> {
-                XDiagram _diagram = CoreExtensions.getDiagram(it);
-                this.delete(it, _diagram);
+                this.delete(it, CoreExtensions.getDiagram(it));
               };
-              _plus.forEach(_function);
+              Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections).forEach(_function);
             }
             if ((shape instanceof XDiagramContainer)) {
-              XDiagram _innerDiagram = ((XDiagramContainer)shape).getInnerDiagram();
-              ObservableList<XNode> _nodes = _innerDiagram.getNodes();
-              XDiagram _innerDiagram_1 = ((XDiagramContainer)shape).getInnerDiagram();
-              ObservableList<XConnection> _connections = _innerDiagram_1.getConnections();
-              Iterable<XDomainObjectShape> _plus_1 = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+              ObservableList<XNode> _nodes = ((XDiagramContainer)shape).getInnerDiagram().getNodes();
+              ObservableList<XConnection> _connections = ((XDiagramContainer)shape).getInnerDiagram().getConnections();
               final Consumer<XDomainObjectShape> _function_1 = (XDomainObjectShape it) -> {
-                XDiagram _diagram = CoreExtensions.getDiagram(it);
-                this.delete(it, _diagram);
+                this.delete(it, CoreExtensions.getDiagram(it));
               };
-              _plus_1.forEach(_function_1);
+              Iterables.<XDomainObjectShape>concat(_nodes, _connections).forEach(_function_1);
             }
           }
           
@@ -195,20 +183,16 @@ public class ReconcileAction implements DiagramAction {
           }
         };
         allShapes.forEach(_function);
-        Set<XDiagram> _keySet = deleteShapes.keySet();
         final Consumer<XDiagram> _function_1 = (XDiagram it) -> {
-          Set<XShape> _get = deleteShapes.get(it);
-          AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(it, ((XShape[])Conversions.unwrapArray(_get, XShape.class)));
+          AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(it, ((XShape[])Conversions.unwrapArray(deleteShapes.get(it), XShape.class)));
           commands.add(_newRemoveCommand);
         };
-        _keySet.forEach(_function_1);
-        Set<XDiagram> _keySet_1 = addShapes.keySet();
+        deleteShapes.keySet().forEach(_function_1);
         final Consumer<XDiagram> _function_2 = (XDiagram it) -> {
-          Set<XShape> _get = addShapes.get(it);
-          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(it, ((XShape[])Conversions.unwrapArray(_get, XShape.class)));
+          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(it, ((XShape[])Conversions.unwrapArray(addShapes.get(it), XShape.class)));
           commands.add(_newAddCommand);
         };
-        _keySet_1.forEach(_function_2);
+        addShapes.keySet().forEach(_function_2);
         ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
         final Procedure1<ParallelAnimationCommand> _function_3 = (ParallelAnimationCommand it) -> {
           it.operator_add(commands);

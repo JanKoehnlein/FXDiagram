@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -109,16 +108,12 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
       super.showDirtyState(dirtyState);
       de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior = this.getInnerDiagramReconcileBehavior();
       if (_innerDiagramReconcileBehavior!=null) {
-        de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior_1 = this.getInnerDiagramReconcileBehavior();
-        DirtyState _dirtyState = _innerDiagramReconcileBehavior_1.getDirtyState();
-        _innerDiagramReconcileBehavior.showDirtyState(_dirtyState);
+        _innerDiagramReconcileBehavior.showDirtyState(this.getInnerDiagramReconcileBehavior().getDirtyState());
       }
     }
     
     protected de.fxdiagram.core.behavior.ReconcileBehavior getInnerDiagramReconcileBehavior() {
-      BaseContainerNode<T> _host = this.getHost();
-      XDiagram _innerDiagram = _host.getInnerDiagram();
-      return _innerDiagram.<de.fxdiagram.core.behavior.ReconcileBehavior>getBehavior(de.fxdiagram.core.behavior.ReconcileBehavior.class);
+      return this.getHost().getInnerDiagram().<de.fxdiagram.core.behavior.ReconcileBehavior>getBehavior(de.fxdiagram.core.behavior.ReconcileBehavior.class);
     }
   }
   
@@ -163,8 +158,7 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
       final VBox titleArea = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function_1 = (RectangleBorderPane it) -> {
-        Insets _insets = this.getInsets();
-        it.setPadding(_insets);
+        it.setPadding(this.getInsets());
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox_1 = new VBox();
         final Procedure1<VBox> _function_2 = (VBox it_1) -> {
@@ -195,33 +189,26 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
     InitializingListener<XDiagram> _initializingListener = new InitializingListener<XDiagram>();
     final Procedure1<InitializingListener<XDiagram>> _function = (InitializingListener<XDiagram> it) -> {
       final Procedure1<XDiagram> _function_1 = (XDiagram newDiagram) -> {
-        ObservableList<Node> _children = this.diagramGroup.getChildren();
-        _children.clear();
+        this.diagramGroup.getChildren().clear();
         final Procedure1<XDiagram> _function_2 = (XDiagram it_1) -> {
           it_1.setIsRootDiagram(false);
-          XDiagram _diagram = CoreExtensions.getDiagram(this);
-          it_1.setParentDiagram(_diagram);
+          it_1.setParentDiagram(CoreExtensions.getDiagram(this));
         };
         ObjectExtensions.<XDiagram>operator_doubleArrow(newDiagram, _function_2);
-        ObservableList<Node> _children_1 = this.diagramGroup.getChildren();
-        _children_1.add(newDiagram);
+        this.diagramGroup.getChildren().add(newDiagram);
         newDiagram.activate();
       };
       it.setSet(_function_1);
       final Procedure1<XDiagram> _function_2 = (XDiagram it_1) -> {
-        ObservableList<Node> _children = this.diagramGroup.getChildren();
-        _children.clear();
+        this.diagramGroup.getChildren().clear();
       };
       it.setUnset(_function_2);
     };
     InitializingListener<XDiagram> _doubleArrow = ObjectExtensions.<InitializingListener<XDiagram>>operator_doubleArrow(_initializingListener, _function);
     CoreExtensions.<XDiagram>addInitializingListener(this.innerDiagramProperty, _doubleArrow);
-    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, this.getDomainObjectDescriptor());
     BaseContainerNode.ReconcileBehavior<T> _reconcileBehavior = new BaseContainerNode.ReconcileBehavior<T>(this);
     this.addBehavior(_reconcileBehavior);
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
       if (((!this.layoutXProperty().isBound()) && (!this.layoutYProperty().isBound()))) {
         double _layoutX = this.getLayoutX();
@@ -238,7 +225,7 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
         this.setLayoutY(_plus_1);
       }
     };
-    _boundsInLocalProperty.addListener(_function_1);
+    this.getInnerDiagram().boundsInLocalProperty().addListener(_function_1);
   }
   
   @Override
@@ -259,15 +246,12 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
   @Override
   public void toFront() {
     super.toFront();
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    ObservableList<XNode> _nodes = _innerDiagram.getNodes();
-    XDiagram _innerDiagram_1 = this.getInnerDiagram();
-    ObservableList<XConnection> _connections = _innerDiagram_1.getConnections();
-    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+    ObservableList<XNode> _nodes = this.getInnerDiagram().getNodes();
+    ObservableList<XConnection> _connections = this.getInnerDiagram().getConnections();
     final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
       it.toFront();
     };
-    _plus.forEach(_function);
+    Iterables.<XDomainObjectShape>concat(_nodes, _connections).forEach(_function);
   }
   
   @Override

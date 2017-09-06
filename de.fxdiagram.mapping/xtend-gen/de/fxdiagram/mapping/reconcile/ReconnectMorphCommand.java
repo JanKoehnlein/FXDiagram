@@ -1,9 +1,7 @@
 package de.fxdiagram.mapping.reconcile;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.EmptyTransition;
@@ -11,7 +9,6 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.SequentialTransition;
-import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -41,20 +38,17 @@ public class ReconnectMorphCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
-    Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
-    return this.morph(this.newNode, _defaultExecuteDuration);
+    return this.morph(this.newNode, context.getDefaultExecuteDuration());
   }
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.morph(this.oldNode, _defaultUndoDuration);
+    return this.morph(this.oldNode, context.getDefaultUndoDuration());
   }
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-    return this.morph(this.newNode, _defaultUndoDuration);
+    return this.morph(this.newNode, context.getDefaultUndoDuration());
   }
   
   protected SequentialTransition morph(final XNode nodeAfterMorph, final Duration duration) {
@@ -62,39 +56,27 @@ public class ReconnectMorphCommand extends AbstractAnimationCommand {
     {
       Point2D _xifexpression = null;
       if (this.isSource) {
-        ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
-        XNode _source = this.connection.getSource();
-        _xifexpression = _connectionRouter.findClosestSourceAnchor(_source, false);
+        _xifexpression = this.connection.getConnectionRouter().findClosestSourceAnchor(this.connection.getSource(), false);
       } else {
-        ConnectionRouter _connectionRouter_1 = this.connection.getConnectionRouter();
-        XNode _target = this.connection.getTarget();
-        _xifexpression = _connectionRouter_1.findClosestTargetAnchor(_target, false);
+        _xifexpression = this.connection.getConnectionRouter().findClosestTargetAnchor(this.connection.getTarget(), false);
       }
       final Point2D from = _xifexpression;
       Point2D _xifexpression_1 = null;
       if (this.isSource) {
-        ConnectionRouter _connectionRouter_2 = this.connection.getConnectionRouter();
-        _xifexpression_1 = _connectionRouter_2.findClosestSourceAnchor(nodeAfterMorph, false);
+        _xifexpression_1 = this.connection.getConnectionRouter().findClosestSourceAnchor(nodeAfterMorph, false);
       } else {
-        ConnectionRouter _connectionRouter_3 = this.connection.getConnectionRouter();
-        _xifexpression_1 = _connectionRouter_3.findClosestTargetAnchor(nodeAfterMorph, false);
+        _xifexpression_1 = this.connection.getConnectionRouter().findClosestTargetAnchor(nodeAfterMorph, false);
       }
       final Point2D to = _xifexpression_1;
       Group _group = new Group();
       final Procedure1<Group> _function = (Group it) -> {
-        double _x = from.getX();
-        it.setTranslateX(_x);
-        double _y = from.getY();
-        it.setTranslateY(_y);
+        it.setTranslateX(from.getX());
+        it.setTranslateY(from.getY());
       };
       final Group dummy = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       final Procedure1<XNode> _function_1 = (XNode it) -> {
-        DoubleProperty _layoutXProperty = it.layoutXProperty();
-        DoubleProperty _translateXProperty = dummy.translateXProperty();
-        _layoutXProperty.bind(_translateXProperty);
-        DoubleProperty _layoutYProperty = it.layoutYProperty();
-        DoubleProperty _translateYProperty = dummy.translateYProperty();
-        _layoutYProperty.bind(_translateYProperty);
+        it.layoutXProperty().bind(dummy.translateXProperty());
+        it.layoutYProperty().bind(dummy.translateYProperty());
       };
       final XNode dummyNode = ObjectExtensions.<XNode>operator_doubleArrow(new XNode() {
         @Override
@@ -108,8 +90,7 @@ public class ReconnectMorphCommand extends AbstractAnimationCommand {
         EmptyTransition _emptyTransition = new EmptyTransition();
         final Procedure1<EmptyTransition> _function_3 = (EmptyTransition it_1) -> {
           final EventHandler<ActionEvent> _function_4 = (ActionEvent it_2) -> {
-            XDiagram _diagram = CoreExtensions.getDiagram(this.connection);
-            ObservableList<XNode> _nodes = _diagram.getNodes();
+            ObservableList<XNode> _nodes = CoreExtensions.getDiagram(this.connection).getNodes();
             _nodes.add(dummyNode);
             if (this.isSource) {
               this.connection.setSource(dummyNode);
@@ -157,8 +138,7 @@ public class ReconnectMorphCommand extends AbstractAnimationCommand {
         } else {
           this.connection.setTarget(nodeAfterMorph);
         }
-        XDiagram _diagram = CoreExtensions.getDiagram(this.connection);
-        ObservableList<XNode> _nodes = _diagram.getNodes();
+        ObservableList<XNode> _nodes = CoreExtensions.getDiagram(this.connection).getNodes();
         _nodes.remove(dummyNode);
       };
       it.setOnFinished(_function_2);

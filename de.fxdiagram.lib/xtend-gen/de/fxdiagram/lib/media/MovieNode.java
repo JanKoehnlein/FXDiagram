@@ -13,7 +13,6 @@ import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -71,8 +70,7 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
-          String _name = this.getName();
-          it_1.setText(_name);
+          it_1.setText(this.getName());
           it_1.setTextOrigin(VPos.TOP);
           Insets _insets = new Insets(10, 20, 10, 20);
           StackPane.setMargin(it_1, _insets);
@@ -109,7 +107,6 @@ public class MovieNode extends FlipNode {
     super.doActivate();
     Node _front = this.getFront();
     TooltipExtensions.setTooltip(_front, "Double-click to watch");
-    BooleanProperty _visibleProperty = this.pane.visibleProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> prop, Boolean oldVal, Boolean newVal) -> {
       MediaPlayer _xifexpression = null;
       if ((newVal).booleanValue()) {
@@ -119,17 +116,15 @@ public class MovieNode extends FlipNode {
       }
       this.view.setMediaPlayer(_xifexpression);
     };
-    _visibleProperty.addListener(_function);
-    HBox _createControlBar = this.createControlBar();
-    this.controlBar = _createControlBar;
+    this.pane.visibleProperty().addListener(_function);
+    this.controlBar = this.createControlBar();
     final Procedure1<StackPane> _function_1 = (StackPane it) -> {
       final EventHandler<MouseEvent> _function_2 = (MouseEvent it_1) -> {
         FadeTransition _fadeTransition = new FadeTransition();
         final Procedure1<FadeTransition> _function_3 = (FadeTransition it_2) -> {
           it_2.setNode(this.controlBar);
           it_2.setToValue(1.0);
-          Duration _millis = Duration.millis(200);
-          it_2.setDuration(_millis);
+          it_2.setDuration(Duration.millis(200));
           it_2.setInterpolator(Interpolator.EASE_OUT);
           it_2.play();
         };
@@ -141,8 +136,7 @@ public class MovieNode extends FlipNode {
         final Procedure1<FadeTransition> _function_4 = (FadeTransition it_2) -> {
           it_2.setNode(this.controlBar);
           it_2.setToValue(0);
-          Duration _millis = Duration.millis(200);
-          it_2.setDuration(_millis);
+          it_2.setDuration(Duration.millis(200));
           it_2.setInterpolator(Interpolator.EASE_OUT);
           it_2.play();
         };
@@ -229,11 +223,8 @@ public class MovieNode extends FlipNode {
         it_1.setId("forward-button");
         it_1.setText("Forward");
         final EventHandler<ActionEvent> _function_6 = (ActionEvent it_2) -> {
-          Duration _currentTime = this.player.getCurrentTime();
-          double _seconds = _currentTime.toSeconds();
-          double _plus = (_seconds + 10);
-          Duration _seconds_1 = Duration.seconds(_plus);
-          this.player.seek(_seconds_1);
+          double _seconds = this.player.getCurrentTime().toSeconds();
+          this.player.seek(Duration.seconds((_seconds + 10)));
         };
         it_1.setOnAction(_function_6);
       };

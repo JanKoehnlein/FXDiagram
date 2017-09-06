@@ -1,14 +1,11 @@
 package de.fxdiagram.pde;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.CommandStack;
-import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.Layouter;
@@ -20,8 +17,6 @@ import de.fxdiagram.lib.chooser.CarusselChoice;
 import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
-import de.fxdiagram.mapping.ConnectionMapping;
-import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
@@ -35,7 +30,6 @@ import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import javafx.geometry.Side;
-import javafx.util.Duration;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -58,12 +52,10 @@ public class AddDependencyPathAction extends RapidButtonAction {
     final Function1<BundleDescription, Boolean> _function = (BundleDescription it) -> {
       boolean _xifexpression = false;
       if (this.isInverse) {
-        Iterable<BundleDescription> _dependentBundles = BundleUtil.getDependentBundles(it);
-        boolean _isEmpty = IterableExtensions.isEmpty(_dependentBundles);
+        boolean _isEmpty = IterableExtensions.isEmpty(BundleUtil.getDependentBundles(it));
         _xifexpression = (!_isEmpty);
       } else {
-        Iterable<BundleDescription> _dependencyBundles = BundleUtil.getDependencyBundles(it);
-        boolean _isEmpty_1 = IterableExtensions.isEmpty(_dependencyBundles);
+        boolean _isEmpty_1 = IterableExtensions.isEmpty(BundleUtil.getDependencyBundles(it));
         _xifexpression = (!_isEmpty_1);
       }
       return Boolean.valueOf(_xifexpression);
@@ -73,8 +65,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
   
   @Override
   public void perform(final RapidButton button) {
-    XNode _host = button.getHost();
-    DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+    DomainObjectDescriptor _domainObjectDescriptor = button.getHost().getDomainObjectDescriptor();
     final BundleDescriptor descriptor = ((BundleDescriptor) _domainObjectDescriptor);
     final Function1<BundleDescription, Object> _function = (BundleDescription it) -> {
       return this.doPerform(button, it);
@@ -85,15 +76,12 @@ public class AddDependencyPathAction extends RapidButtonAction {
   public Object doPerform(final RapidButton button, final BundleDescription hostBundle) {
     Object _xblockexpression = null;
     {
-      XNode _host = button.getHost();
-      final XRoot root = CoreExtensions.getRoot(_host);
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
+      final XRoot root = CoreExtensions.getRoot(button.getHost());
+      XDiagramConfig _configByID = XDiagramConfig.Registry.getInstance().getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
       final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
       final XNode host = button.getHost();
       AbstractChoiceGraphics _xifexpression = null;
-      Side _position = button.getPosition();
-      boolean _isVertical = _position.isVertical();
+      boolean _isVertical = button.getPosition().isVertical();
       if (_isVertical) {
         _xifexpression = new CarusselChoice();
       } else {
@@ -101,13 +89,12 @@ public class AddDependencyPathAction extends RapidButtonAction {
       }
       final AbstractChoiceGraphics choiceGraphics = _xifexpression;
       final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
-      Side _position_1 = button.getPosition();
-      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position_1, choiceGraphics) {
+      Side _position = button.getPosition();
+      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position, choiceGraphics) {
         @Override
         public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
           try {
-            Iterable<? extends XShape> _additionalShapesToAdd = super.getAdditionalShapesToAdd(choice, choiceInfo);
-            Iterable<XConnection> _filter = Iterables.<XConnection>filter(_additionalShapesToAdd, XConnection.class);
+            Iterable<XConnection> _filter = Iterables.<XConnection>filter(super.getAdditionalShapesToAdd(choice, choiceInfo), XConnection.class);
             for (final XConnection it : _filter) {
               this.removeConnection(it);
             }
@@ -124,24 +111,18 @@ public class AddDependencyPathAction extends RapidButtonAction {
               }
               return _xifexpression;
             };
-            ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor).<ArrayList<BundleDependency>>withDomainObject(_function);
             final Consumer<BundleDependency> _function_1 = (BundleDependency bundleDependency) -> {
               context.setIsCreateConnections(false);
-              BundleDescription _owner = bundleDependency.getOwner();
-              NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-              final XNode source = interpreter.<BundleDescription>createNode(_owner, _pluginNode, context);
-              BundleDescription _dependency = bundleDependency.getDependency();
-              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-              final XNode target = interpreter.<BundleDescription>createNode(_dependency, _pluginNode_1, context);
+              final XNode source = interpreter.<BundleDescription>createNode(bundleDependency.getOwner(), config.getPluginNode(), context);
+              final XNode target = interpreter.<BundleDescription>createNode(bundleDependency.getDependency(), config.getPluginNode(), context);
               context.setIsCreateConnections(true);
-              ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
               final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
                 it_1.setSource(source);
                 it_1.setTarget(target);
               };
-              interpreter.<BundleDependency>createConnection(bundleDependency, _dependencyConnection, _function_2, context);
+              interpreter.<BundleDependency>createConnection(bundleDependency, config.getDependencyConnection(), _function_2, context);
             };
-            _withDomainObject.forEach(_function_1);
+            ((BundleDescriptor) _domainObjectDescriptor).<ArrayList<BundleDependency>>withDomainObject(_function).forEach(_function_1);
             return context.getAddedShapes();
           } catch (final Throwable _t) {
             if (_t instanceof NoSuchElementException) {
@@ -156,16 +137,9 @@ public class AddDependencyPathAction extends RapidButtonAction {
         @Override
         protected void nodeChosen(final XNode choice) {
           super.nodeChosen(choice);
-          boolean _notEquals = (!Objects.equal(choice, null));
-          if (_notEquals) {
-            XRoot _root = this.getRoot();
-            CommandStack _commandStack = _root.getCommandStack();
-            Layouter _layouter = new Layouter();
-            XRoot _root_1 = CoreExtensions.getRoot(host);
-            XDiagram _diagram = _root_1.getDiagram();
-            Duration _millis = DurationExtensions.millis(500);
-            LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(_diagram, _millis);
-            _commandStack.execute(_createLayoutCommand);
+          if ((choice != null)) {
+            this.getRoot().getCommandStack().execute(
+              new Layouter().createLayoutCommand(CoreExtensions.getRoot(host).getDiagram(), DurationExtensions.millis(500)));
           }
         }
       };
@@ -190,8 +164,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
       };
       final InterpreterContext context = ObjectExtensions.<InterpreterContext>operator_doubleArrow(_interpreterContext, _function_1);
       final Consumer<BundleDescription> _function_2 = (BundleDescription it) -> {
-        NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-        final XNode candidateNode = interpreter.<BundleDescription>createNode(it, _pluginNode, context);
+        final XNode candidateNode = interpreter.<BundleDescription>createNode(it, config.getPluginNode(), context);
         chooser.addChoice(candidateNode);
       };
       candidates.forEach(_function_2);

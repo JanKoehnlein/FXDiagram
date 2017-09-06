@@ -9,10 +9,8 @@ import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EReferenceDescriptor;
 import de.fxdiagram.examples.ecore.ESuperTypeDescriptor;
 import de.fxdiagram.examples.ecore.ESuperTypeHandle;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -54,21 +52,18 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
   }
   
   public String getId(final EObject it) {
-    URI _uRI = EcoreUtil.getURI(it);
-    return _uRI.toString();
+    return EcoreUtil.getURI(it).toString();
   }
   
   public String getFqn(final EClass it) {
-    EPackage _ePackage = it.getEPackage();
-    String _name = _ePackage.getName();
+    String _name = it.getEPackage().getName();
     String _plus = (_name + ".");
     String _name_1 = it.getName();
     return (_plus + _name_1);
   }
   
   public String getFqn(final EReference it) {
-    EClass _eContainingClass = it.getEContainingClass();
-    String _fqn = this.getFqn(_eContainingClass);
+    String _fqn = this.getFqn(it.getEContainingClass());
     String _plus = (_fqn + ".");
     String _name = it.getName();
     return (_plus + _name);
