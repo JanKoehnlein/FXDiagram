@@ -357,8 +357,7 @@ public class LcarsNode extends XNode {
       return ((byte[]) _get_1);
     };
     final Image image = imageCache.getImage(imageUrl, _function);
-    boolean _notEquals = (!Objects.equal(image, null));
-    if (_notEquals) {
+    if ((image != null)) {
       this.currentImageUrl = imageUrl;
       final Procedure1<ImageView> _function_1 = (ImageView it) -> {
         it.setImage(image);

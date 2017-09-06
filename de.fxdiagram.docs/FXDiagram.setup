@@ -29,6 +29,11 @@
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
+      name="mwe.release"
+      value="http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.9.0"
+      label=""/>
+  <setupTask
+      xsi:type="setup:VariableTask"
       name="efxclipse.ide.release"
       value="http://download.eclipse.org/efxclipse/updates-released/2.4.0/site"
       label=""/>
@@ -226,13 +231,14 @@
       <requirement
           name="org.eclipse.jdt.feature.group"/>
       <requirement
-          name="org.eclipse.mwe2.launcher.feature.feature.group"/>
+          name="org.eclipse.emf.mwe2.launcher.feature.group"/>
       <sourceLocator
           rootFolder="${fxdiagram.git.clone.location}"/>
       <sourceLocator
           rootFolder="${fxdiagram.swtfx.git.clone.location}"/>
       <sourceLocator
-          rootFolder="${fxdiagram.xtext.examples.git.clone.location}"/>
+          rootFolder="${fxdiagram.xtext.examples.git.clone.location}"
+          locateNestedProjects="true"/>
       <sourceLocator
           rootFolder="${kieler.git.clone.location}"/>
       <repositoryList
@@ -245,6 +251,8 @@
             url="${efxclipse.runtime.release}"/>
         <repository
             url="${efxclipse.ide.release}"/>
+        <repository
+            url="${mwe.release}"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -337,8 +345,8 @@
     <workingSet
         name="Xtext examples">
       <predicate
-          xsi:type="predicates:NamePredicate"
-          pattern="org\.eclipse\.xtext\.example\.*"/>
+          xsi:type="predicates:RepositoryPredicate"
+          project="org.eclipse.xtext.example.domainmodel"/>
     </workingSet>
   </setupTask>
   <stream name="master"/>

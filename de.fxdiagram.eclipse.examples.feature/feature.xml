@@ -112,7 +112,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
          version="0.0.0"/>
 
    <requires>
-      <import feature="de.fxdiagram.sdk.feature" version="0.26.0.qualifier"/>
+      <import feature="de.fxdiagram.sdk.feature" version="0.0.0"/>
    </requires>
 
    <plugin

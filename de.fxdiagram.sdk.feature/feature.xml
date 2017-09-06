@@ -110,9 +110,8 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="de.cau.cs.kieler.kiml.graphviz.dot" version="0.6.1" match="greaterOrEqual"/>
       <import plugin="de.cau.cs.kieler.kiml.graphviz.layouter" version="0.6.2" match="greaterOrEqual"/>
       <import plugin="de.cau.cs.kieler.kiml.service" version="0.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.domainmodel.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.fowlerdsl.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.example.domainmodel" version="2.6.2" match="greaterOrEqual"/>
+      <import feature="org.eclipse.xtext.example.domainmodel.feature" version="2.12.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.xtext.example.fowlerdsl.feature" version="2.12.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.fx.ide.basic.feature" version="2.1.0" match="greaterOrEqual"/>
    </requires>
 
